@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2020",
+    "target": "ES2023",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable", "ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "paths": {
+      "$blogs/*": ["src/blogs/*"],
+      "$components/*": ["src/components/*"],
+      "$assets/*": ["src/assets/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "Bundler",

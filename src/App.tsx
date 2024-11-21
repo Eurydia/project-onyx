@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import createThemeNoVars from "@mui/material/styles/createThemeNoVars";
 import { FC, useState } from "react";
+import { AboutBlog } from "./blogs/AboutBlog/AboutBlog";
 import { BinaryTruthTable } from "./components/BinaryTruthTable";
 import { Latex } from "./components/Latex";
 import { OperatorButton } from "./components/OperatorButton";
@@ -247,61 +248,12 @@ export const App: FC = () => {
       </Container>
       <Box
         sx={{
+          height: "100vh",
+          padding: 4,
           backgroundColor: "primary.light",
-          height: "100vh",
-          padding: 4,
-          alignContent: "center",
         }}
       >
-        <Typography variant="h1">About</Typography>
-        <Typography
-          gutterBottom
-          component="p"
-        >
-          Lorem ipsum odor amet, consectetuer adipiscing
-          elit. Parturient tortor class dignissim
-          vestibulum; dolor congue. Feugiat mauris magna
-          lacus malesuada class iaculis facilisi. Praesent
-          quis non; viverra sodales hac himenaeos
-          suspendisse. Libero sagittis volutpat ultricies
-          litora varius. Volutpat faucibus feugiat vel class
-          amet hac porta amet.
-        </Typography>
-        <Typography
-          gutterBottom
-          component="p"
-        >
-          Quis mauris vel nec per at turpis pretium.
-          Himenaeos platea diam porttitor commodo leo mollis
-          pharetra; ex dapibus. Maximus egestas magnis in,
-          porta nunc ligula. Parturient platea amet ante
-          lacus aenean mauris faucibus! Efficitur eros
-          molestie cubilia convallis nascetur himenaeos.
-          Ante dolor diam conubia iaculis aliquet senectus
-          taciti facilisi. Pharetra taciti metus cras ligula
-          mus netus bibendum.
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          height: "100vh",
-          padding: 4,
-        }}
-      >
-        <Typography variant="h2">
-          A couple of defintions and theorem
-        </Typography>
-        <Typography
-          gutterBottom
-          component="section"
-        >
-          <Typography variant="h3">
-            1.1 Introduction to Conjunction
-          </Typography>
-          <Typography component="p">
-            จีดีพีเพทนาการสกายบรา ครัวซองต์ อุปสงค์โดนัท
-          </Typography>
-        </Typography>
+        <AboutBlog />
       </Box>
     </ThemeProvider>
   );
