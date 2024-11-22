@@ -65,7 +65,7 @@ export const OperatorButton: FC<OperatorButtonProps> = (
               </List>
             </ListItem> */}
           </List>
-          {truthTable}
+          {/* {truthTable} */}
         </Stack>
       }
     >

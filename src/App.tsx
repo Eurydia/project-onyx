@@ -1,3 +1,12 @@
+import { BinaryTruthTable } from "$components/BinaryTruthTable";
+import { Latex } from "$components/Latex";
+import { OperatorButton } from "$components/OperatorButton";
+import { UnaryTruthTable } from "$components/UnaryTruthTable";
+import { Lexer } from "$core/interpreter/lexer";
+import {
+  OperationExpression,
+  Parser,
+} from "$core/interpreter/parser";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Box,
@@ -9,6 +18,8 @@ import {
   FormControlLabel,
   FormLabel,
   GlobalStyles,
+  List,
+  ListItem,
   Radio,
   RadioGroup,
   Stack,
@@ -21,11 +32,6 @@ import {
 } from "@mui/material";
 import createThemeNoVars from "@mui/material/styles/createThemeNoVars";
 import { FC, useState } from "react";
-import { AboutBlog } from "./blogs/AboutBlog/AboutBlog";
-import { BinaryTruthTable } from "./components/BinaryTruthTable";
-import { Latex } from "./components/Latex";
-import { OperatorButton } from "./components/OperatorButton";
-import { UnaryTruthTable } from "./components/UnaryTruthTable";
 
 const theme = createThemeNoVars({
   typography: {
@@ -98,8 +104,53 @@ const BooleanSwicher: FC = () => {
   );
 };
 
+type TreeProps = {
+  tree: OperationExpression | string | null;
+};
+const Tree: FC<TreeProps> = (props) => {
+  const { tree } = props;
+  if (tree === null) {
+    return null;
+  }
+
+  if (typeof tree === "string") {
+    return <Latex tex={tree} />;
+  }
+
+  const rightTree = <Tree tree={tree.right} />;
+  const leftTree = <Tree tree={tree.left} />;
+
+  return (
+    <List>
+      <ListItem>{tree.operator}</ListItem>
+      <ListItem>{leftTree}</ListItem>
+      <ListItem>{rightTree}</ListItem>
+    </List>
+  );
+};
+
 export const App: FC = () => {
   const [tab, setTab] = useState(0);
+  const [value, setValue] = useState("");
+  const [tree, setTree] = useState<
+    OperationExpression | string | null
+  >(null);
+
+  const handleExecute = () => {
+    const l = new Lexer(value);
+    const tokens = l.lex();
+
+    const p = new Parser(tokens);
+    console.log(
+      p
+        .parse()
+        .map((x) => x.value)
+        .join(" ")
+    );
+    const tree = p.parseTree();
+
+    setTree(tree);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -161,6 +212,8 @@ export const App: FC = () => {
             multiline
             rows={5}
             fullWidth
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
           />
           <Toolbar
             variant="dense"
@@ -177,6 +230,8 @@ export const App: FC = () => {
               disableElevation
               variant="contained"
               startIcon={<PlayArrowRounded />}
+              onClick={handleExecute}
+              type="submit"
             >
               Run
             </Button>
@@ -209,15 +264,6 @@ export const App: FC = () => {
                 >
                   <Typography>Propositions</Typography>
                   <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
-                  <BooleanSwicher />
                 </Stack>
                 <Box
                   sx={{
@@ -240,21 +286,12 @@ export const App: FC = () => {
                   borderColor: "black",
                 }}
               >
-                Visualizer
+                <Tree tree={tree} />
               </Box>
             )}
           </Box>
         </Stack>
       </Container>
-      <Box
-        sx={{
-          height: "100vh",
-          padding: 4,
-          backgroundColor: "primary.light",
-        }}
-      >
-        <AboutBlog />
-      </Box>
     </ThemeProvider>
   );
 };

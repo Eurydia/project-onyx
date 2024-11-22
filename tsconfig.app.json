@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "paths": {
       "$blogs/*": ["src/blogs/*"],
+      "$core/*": ["src/core/*"],
       "$components/*": ["src/components/*"],
       "$assets/*": ["src/assets/*"],
     },
@@ -20,6 +21,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "allowJs": true,
 
     /* Linting */
     "strict": true,
