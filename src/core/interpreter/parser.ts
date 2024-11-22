@@ -16,25 +16,56 @@ export class Parser {
   }
 }
 
-export type OperationExpression = {
-  operator: Operator;
+export type BinaryOperatorExpression = {
+  operator:
+    | Operator.AND
+    | Operator.OR
+    | Operator.IMPLIES
+    | Operator.IFF;
   left: OperationExpression | string;
   right: OperationExpression | string;
 };
+
+export type UnaryOperatorExpression = {
+  operator: Operator.NOT;
+  value: OperationExpression | string;
+};
+
+export type OperationExpression =
+  | BinaryOperatorExpression
+  | UnaryOperatorExpression;
+
+export type AST = OperationExpression | string;
 
 const tokenToTrees = (
   tokens: Token[]
 ): OperationExpression | string | null => {
   const tok = tokens.pop();
   if (tok === undefined) {
-    throw new Error("Unexpected end of input");
+    return null;
   }
 
   if (tok.tokenType === TokenType.IDENTIFIER) {
     return tok.value;
   }
 
-  if (tok.tokenType === TokenType.OPERATOR) {
+  if (
+    tok.tokenType === TokenType.OPERATOR &&
+    tok.value === Operator.NOT
+  ) {
+    const value = tokenToTrees(tokens);
+    if (value === null) {
+      return null;
+    }
+    return {
+      operator: tok.value,
+      value,
+    };
+  }
+  if (
+    tok.tokenType === TokenType.OPERATOR &&
+    tok.value !== Operator.NOT
+  ) {
     const right = tokenToTrees(tokens);
     if (right === null) {
       return null;

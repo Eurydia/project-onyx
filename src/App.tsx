@@ -2,6 +2,7 @@ import { BinaryTruthTable } from "$components/BinaryTruthTable";
 import { Latex } from "$components/Latex";
 import { OperatorButton } from "$components/OperatorButton";
 import { UnaryTruthTable } from "$components/UnaryTruthTable";
+import { treeToLatex } from "$core/ast/traverse";
 import { Lexer } from "$core/interpreter/lexer";
 import {
   OperationExpression,
@@ -33,11 +34,7 @@ import {
 import createThemeNoVars from "@mui/material/styles/createThemeNoVars";
 import { FC, useState } from "react";
 
-const theme = createThemeNoVars({
-  typography: {
-    fontFamily: "monospace",
-  },
-});
+const theme = createThemeNoVars();
 
 const BINARY_OP_REPR: {
   symbol: string;
@@ -141,13 +138,14 @@ export const App: FC = () => {
     const tokens = l.lex();
 
     const p = new Parser(tokens);
-    console.log(
+    console.debug(
       p
         .parse()
-        .map((x) => x.value)
+        .map((t) => t.value)
         .join(" ")
     );
     const tree = p.parseTree();
+    console.debug(tree);
 
     setTree(tree);
   };
@@ -236,6 +234,15 @@ export const App: FC = () => {
               Run
             </Button>
           </Toolbar>
+          <Typography>
+            <Latex
+              tex={treeToLatex(tree)}
+              options={{
+                displayMode: true,
+                output: "html",
+              }}
+            />
+          </Typography>
           <Box>
             <Tabs
               variant="scrollable"

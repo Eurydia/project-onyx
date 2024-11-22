@@ -55,7 +55,7 @@ const OPERATOR_TABLE: Record<string, Operator> = {
   or: Operator.OR,
   implies: Operator.IMPLIES,
   iff: Operator.IFF,
-  neg: Operator.NOT,
+  not: Operator.NOT,
 };
 
 const IS_WHITESPACE_MANY = /\s+/g;
