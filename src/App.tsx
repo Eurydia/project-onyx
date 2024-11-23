@@ -2,7 +2,7 @@ import { EditorAcceptedInputFeedback } from "$components/EditorAcceptedInputFeed
 import { EditorExecuteToolbaGroup } from "$components/EditorExecuteToolbaGroup";
 import { EditorExpressionInput } from "$components/EditorExpressionInput";
 import { EditorOperatorButtonGroup } from "$components/EditorOperatorButtonToolbarGroup";
-import { Lexer } from "$core/interpreter/lexer";
+import { lexer } from "$core/interpreter/lexer";
 import { ASTNode, parse } from "$core/interpreter/parser";
 import {
   alpha,
@@ -56,8 +56,7 @@ export const App: FC = () => {
   const [tree, setTree] = useState<ASTNode | null>(null);
 
   const handleExecute = () => {
-    const l = new Lexer(inputValue);
-    const tokens = l.lex();
+    const tokens = lexer(inputValue);
     if (tokens.length === 0) {
       setTree(null);
       return;

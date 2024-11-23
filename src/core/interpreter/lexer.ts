@@ -1,53 +1,10 @@
-export enum TokenType {
-  IDENTIFIER,
-  OPERATOR,
-  LEFT_PARENTHESIS,
-  RIGHT_PARENTHESIS,
-  EOF,
-  ERROR,
-}
-
-export enum Operator {
-  AND = "AND",
-  OR = "OR",
-  IMPLIES = "IMPLIES",
-  IFF = "IFF",
-  NOT = "NOT",
-}
-
-type TokenError = {
-  tokenType: TokenType.ERROR;
-  reason: string;
-  pos: number;
-  value: string;
-};
-
-type TokenIdentifier = {
-  tokenType: TokenType.IDENTIFIER;
-  value: string;
-};
-
-type TokenOperator = {
-  tokenType: TokenType.OPERATOR;
-  value: Operator;
-};
-
-type TokenLeftParen = {
-  tokenType: TokenType.LEFT_PARENTHESIS;
-  value: "(";
-};
-
-type TokenRightParen = {
-  tokenType: TokenType.RIGHT_PARENTHESIS;
-  value: ")";
-};
-
-export type Token =
-  | TokenError
-  | TokenIdentifier
-  | TokenOperator
-  | TokenLeftParen
-  | TokenRightParen;
+import {
+  Operator,
+  Token,
+  TokenLeftParen,
+  TokenRightParen,
+  TokenType,
+} from "$types/lexer";
 
 const OPERATOR_TABLE: Record<string, Operator> = {
   "and": Operator.AND,
@@ -65,90 +22,91 @@ const OPERATOR_TABLE: Record<string, Operator> = {
 const IS_WHITESPACE_MANY = /\s+/g;
 const IS_IDENTIFIER = /^\w+/m;
 
-export class Lexer {
-  private source: string;
-  private pos: number;
+const TOKEN_LEFT_PARENTHESIS: TokenLeftParen = {
+  tokenType: TokenType.LEFT_PARENTHESIS,
+  value: "(",
+};
 
-  constructor(source: string) {
-    this.source = source.replaceAll(
-      IS_WHITESPACE_MANY,
-      " "
-    );
-    this.pos = 0;
+const TOKEN_RIGHT_PARENTHESIS: TokenRightParen = {
+  tokenType: TokenType.RIGHT_PARENTHESIS,
+  value: ")",
+};
+
+const collapseWhitespace = (source: string): string => {
+  return source.replaceAll(IS_WHITESPACE_MANY, " ");
+};
+
+const collectIdentifier = (
+  source: string
+): string | null => {
+  const match = IS_IDENTIFIER.exec(source);
+  if (match === null) {
+    return null;
   }
+  return match[0];
+};
 
-  private collectIdentifier(start: number) {
-    const match = IS_IDENTIFIER.exec(
-      this.source.slice(start)
-    );
-    if (match === null) {
-      return null;
-    }
-    return match[0];
-  }
+const lex = (source: string): Token[] => {
+  const tokens: Token[] = [];
+  const sourceLength = source.length;
+  let pos = 0;
 
-  public lex(): Token[] {
-    const tokens: Token[] = [];
+  while (pos < sourceLength) {
+    const char = source[pos];
 
-    while (this.pos < this.source.length) {
-      const char = this.source[this.pos];
-
-      switch (char) {
-        case " ":
-          this.pos++;
-          continue;
-        case "(":
-          this.pos++;
-          tokens.push({
-            tokenType: TokenType.LEFT_PARENTHESIS,
-            value: "(",
-          });
-          continue;
-        case ")":
-          this.pos++;
-          tokens.push({
-            tokenType: TokenType.RIGHT_PARENTHESIS,
-            value: ")",
-          });
-          continue;
-      }
-
-      const opSign = OPERATOR_TABLE[char];
-      if (opSign !== undefined) {
-        this.pos++;
-        tokens.push({
-          tokenType: TokenType.OPERATOR,
-          value: opSign,
-        });
-      }
-
-      const id = this.collectIdentifier(this.pos);
-      if (id === null || id.length === 0) {
-        tokens.push({
-          tokenType: TokenType.ERROR,
-          reason: `Invalid identifier: ${id}`,
-          pos: this.pos,
-          value: this.source[this.pos],
-        });
-        break;
-      }
-
-      const opWord = OPERATOR_TABLE[id];
-      if (opWord !== undefined) {
-        this.pos += id.length;
-        tokens.push({
-          tokenType: TokenType.OPERATOR,
-          value: opWord,
-        });
+    switch (char) {
+      case " ":
+        pos++;
         continue;
-      }
-      this.pos += id.length;
+      case "(":
+        pos++;
+        tokens.push(TOKEN_LEFT_PARENTHESIS);
+        continue;
+      case ")":
+        pos++;
+        tokens.push(TOKEN_RIGHT_PARENTHESIS);
+        continue;
+    }
+
+    const opSign = OPERATOR_TABLE[char];
+    if (opSign !== undefined) {
+      pos++;
       tokens.push({
-        tokenType: TokenType.IDENTIFIER,
-        value: id,
+        tokenType: TokenType.OPERATOR,
+        value: opSign,
+      });
+    }
+
+    const iden = collectIdentifier(source.slice(pos));
+    if (iden === null || iden.length === 0) {
+      tokens.push({
+        tokenType: TokenType.ERROR,
+        reason: `Lexical Error: Invalid identifier found "${iden}" at position "${pos}"`,
+      });
+      break;
+    }
+
+    const opName = OPERATOR_TABLE[iden];
+    if (opName !== undefined) {
+      pos += iden.length;
+      tokens.push({
+        tokenType: TokenType.OPERATOR,
+        value: opName,
       });
       continue;
     }
-    return tokens;
+
+    pos += iden.length;
+    tokens.push({
+      tokenType: TokenType.IDENTIFIER,
+      value: iden,
+    });
+    continue;
   }
-}
+  return tokens;
+};
+
+export const lexer = (source: string): Token[] => {
+  const sourceCollapsed = collapseWhitespace(source);
+  return lex(sourceCollapsed);
+};

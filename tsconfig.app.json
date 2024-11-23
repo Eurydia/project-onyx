@@ -8,10 +8,11 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "paths": {
-      "$blogs/*": ["src/blogs/*"],
-      "$core/*": ["src/core/*"],
-      "$components/*": ["src/components/*"],
       "$assets/*": ["src/assets/*"],
+      "$blogs/*": ["src/blogs/*"],
+      "$components/*": ["src/components/*"],
+      "$core/*": ["src/core/*"],
+      "$types/*": ["src/types/*"],
     },
 
     /* Bundler mode */
