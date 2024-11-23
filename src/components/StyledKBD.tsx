@@ -1,19 +1,24 @@
-import { Typography, TypographyProps } from "@mui/material";
+import {
+  Typography,
+  TypographyProps,
+  useTheme,
+} from "@mui/material";
 import { FC } from "react";
 
 export const StyledKBD: FC<TypographyProps> = (props) => {
   const { children } = props;
+
+  const t = useTheme();
   return (
     <Typography
       sx={{
-        backgroundColor: (t) => t.palette.primary.main,
-        color: (t) => t.palette.primary.contrastText,
-        paddingY: (s) => s.spacing(0.25),
-        paddingX: (t) => t.spacing(0.75),
+        backgroundColor: t.palette.primary.main,
+        color: t.palette.primary.contrastText,
+        borderRadius: 1,
+        paddingY: 0.25,
+        paddingX: 1,
         fontFamily: "monospace",
         textTransform: "capitalize",
-        fontSize: (t) => t.typography.body2.fontSize,
-        borderRadius: (t) => t.spacing(1),
       }}
     >
       {children}
