@@ -1,70 +1,49 @@
-import { Operator, Token, TokenType } from "./lexer";
+import { Operator, Token, TokenType } from "$types/lexer";
+import { ASTNode, ASTNodeType } from "$types/parser";
 
-export enum ASTNodeType {
-  BINARY_OPERATOR,
-  UNARY_OPERATOR,
-  ERROR,
-  IDENTIFIER,
-}
-
-export type BinaryOperatorNode = {
-  nodeType: ASTNodeType.BINARY_OPERATOR;
-  operator:
-    | Operator.AND
-    | Operator.OR
-    | Operator.IMPLIES
-    | Operator.IFF;
-  left: ASTNode;
-  right: ASTNode;
+const OPERATOR_PRECEDENCE = {
+  [Operator.NOT]: 6,
+  [Operator.AND]: 5,
+  [Operator.OR]: 4,
+  [Operator.IMPLIES]: 3,
+  [Operator.IFF]: 2,
 };
-
-export type UnaryOperatorNode = {
-  nodeType: ASTNodeType.UNARY_OPERATOR;
-  operator: Operator.NOT;
-  value: ASTNode;
-};
-
-export type ErrorNode = {
-  nodeType: ASTNodeType.ERROR;
-  reason: string;
-};
-
-export type IdentifierNode = {
-  nodeType: ASTNodeType.IDENTIFIER;
-  value: string;
-};
-
-export type ASTNode =
-  | BinaryOperatorNode
-  | UnaryOperatorNode
-  | ErrorNode
-  | IdentifierNode;
 
 const polishToAST = (tokens: Token[]): ASTNode => {
   const tok = tokens.pop();
   if (tok === undefined) {
     return {
       nodeType: ASTNodeType.ERROR,
-      reason: "Unexpected end of input",
+      reason: "Parser Error: Unexpected end of input",
     };
   }
 
-  if (tok.tokenType === TokenType.IDENTIFIER) {
-    return {
-      nodeType: ASTNodeType.IDENTIFIER,
-      value: tok.value,
-    };
+  switch (tok.tokenType) {
+    case TokenType.ERROR:
+      return {
+        nodeType: ASTNodeType.ERROR,
+        reason: tok.reason,
+      };
+    case TokenType.RIGHT_PARENTHESIS:
+    case TokenType.LEFT_PARENTHESIS:
+      return {
+        nodeType: ASTNodeType.ERROR,
+        reason: `Parser Error: Unexpected token "${tok.value}"`,
+      };
+    case TokenType.IDENTIFIER:
+      return {
+        nodeType: ASTNodeType.IDENTIFIER,
+        value: tok.value,
+      };
   }
 
-  if (
-    tok.tokenType === TokenType.OPERATOR &&
-    tok.value === Operator.NOT
-  ) {
+  if (tok.value === Operator.NOT) {
     const value = polishToAST(tokens);
     if (value === null) {
       return {
         nodeType: ASTNodeType.ERROR,
-        reason: "Expected a proposition after NOT",
+        reason:
+          "Parser Error: Expected a proposition after NOT",
       };
     }
     return {
@@ -73,46 +52,29 @@ const polishToAST = (tokens: Token[]): ASTNode => {
       value,
     };
   }
-  if (
-    tok.tokenType === TokenType.OPERATOR &&
-    tok.value !== Operator.NOT
-  ) {
-    const right = polishToAST(tokens);
-    if (right === null) {
-      return {
-        nodeType: ASTNodeType.ERROR,
-        reason: `Expected a right operand for: "${tok.value}"`,
-      };
-    }
 
-    const left = polishToAST(tokens);
-    if (left === null) {
-      return {
-        nodeType: ASTNodeType.ERROR,
-        reason: `Expected a left operand for: "${tok.value}"`,
-      };
-    }
-
+  const right = polishToAST(tokens);
+  if (right === null) {
     return {
-      nodeType: ASTNodeType.BINARY_OPERATOR,
-      operator: tok.value,
-      left,
-      right,
+      nodeType: ASTNodeType.ERROR,
+      reason: `Parser Error: Expected a right operand for "${tok.value}"`,
+    };
+  }
+
+  const left = polishToAST(tokens);
+  if (left === null) {
+    return {
+      nodeType: ASTNodeType.ERROR,
+      reason: `Parser Error: Expected a left operand for "${tok.value}"`,
     };
   }
 
   return {
-    nodeType: ASTNodeType.ERROR,
-    reason: `Unexpected token: ${tok.value} ${tok.tokenType}`,
+    nodeType: ASTNodeType.BINARY_OPERATOR,
+    operator: tok.value,
+    left,
+    right,
   };
-};
-
-const PRECEDENCE = {
-  [Operator.NOT]: 6,
-  [Operator.AND]: 5,
-  [Operator.OR]: 4,
-  [Operator.IMPLIES]: 3,
-  [Operator.IFF]: 2,
 };
 
 const infixToPolish = (tokens: Token[]): Token[] => {
@@ -135,7 +97,7 @@ const infixToPolish = (tokens: Token[]): Token[] => {
         break;
 
       case TokenType.OPERATOR: {
-        const precedence = PRECEDENCE[token.value];
+        const precedence = OPERATOR_PRECEDENCE[token.value];
 
         while (opStack.length > 0) {
           const lastOp = opStack[opStack.length - 1];
@@ -146,7 +108,7 @@ const infixToPolish = (tokens: Token[]): Token[] => {
           }
           if (
             lastOp.tokenType === TokenType.OPERATOR &&
-            PRECEDENCE[lastOp.value] < precedence
+            OPERATOR_PRECEDENCE[lastOp.value] < precedence
           ) {
             break;
           }
@@ -189,7 +151,7 @@ const infixToPolish = (tokens: Token[]): Token[] => {
   return outStack;
 };
 
-export const parse = (tokens: Token[]): ASTNode => {
+export const parser = (tokens: Token[]): ASTNode => {
   const polish = infixToPolish(tokens);
   const ast = polishToAST(polish);
   return ast;

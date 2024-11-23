@@ -3,7 +3,7 @@ import { EditorExecuteToolbaGroup } from "$components/EditorExecuteToolbaGroup";
 import { EditorExpressionInput } from "$components/EditorExpressionInput";
 import { EditorOperatorButtonGroup } from "$components/EditorOperatorButtonToolbarGroup";
 import { lexer } from "$core/interpreter/lexer";
-import { ASTNode, parse } from "$core/interpreter/parser";
+import { ASTNode, parser } from "$core/interpreter/parser";
 import {
   alpha,
   Container,
@@ -61,7 +61,7 @@ export const App: FC = () => {
       setTree(null);
       return;
     }
-    const tree = parse(tokens);
+    const tree = parser(tokens);
     setTree(tree);
   };
 

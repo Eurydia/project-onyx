@@ -3,7 +3,6 @@ export enum TokenType {
   OPERATOR,
   LEFT_PARENTHESIS,
   RIGHT_PARENTHESIS,
-  EOF,
   ERROR,
 }
 
