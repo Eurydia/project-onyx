@@ -5,15 +5,13 @@ export const StyledKBD: FC<TypographyProps> = (props) => {
   const { children } = props;
   return (
     <Typography
-      component="kbd"
       sx={{
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderColor: (t) => t.palette.primary.main,
-        padding: (t) => t.spacing(0.75),
+        backgroundColor: (t) => t.palette.primary.main,
+        color: (t) => t.palette.primary.contrastText,
+        paddingY: (s) => s.spacing(0.25),
+        paddingX: (t) => t.spacing(0.75),
         fontFamily: "monospace",
         textTransform: "capitalize",
-
         fontSize: (t) => t.typography.body2.fontSize,
         borderRadius: (t) => t.spacing(1),
       }}

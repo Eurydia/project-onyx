@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
-import { Latex } from "./Latex";
+import { StyledLatex } from "./StyledLatex";
 
 type OperatorButtonProps = {
   name: string;
@@ -48,7 +48,7 @@ export const OperatorButton: FC<OperatorButtonProps> = (
       }
     >
       <Button onClick={onClick}>
-        <Latex
+        <StyledLatex
           tex={label}
           options={{
             displayMode: false,

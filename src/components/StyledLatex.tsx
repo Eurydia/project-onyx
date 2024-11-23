@@ -2,11 +2,13 @@ import { Typography } from "@mui/material";
 import katex, { KatexOptions } from "katex";
 import { FC, useEffect, useRef } from "react";
 
-type LatexProps = {
+type StyledLatexProps = {
   tex: string;
   options?: KatexOptions;
 };
-export const Latex: FC<LatexProps> = (props) => {
+export const StyledLatex: FC<StyledLatexProps> = (
+  props
+) => {
   const { tex, options } = props;
   const ref = useRef<HTMLSpanElement>(null);
 

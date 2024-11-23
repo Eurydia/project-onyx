@@ -2,7 +2,7 @@ import { treeToLatex } from "$core/ast/traverse";
 import { ASTNode } from "$core/interpreter/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";
-import { Latex } from "./Latex";
+import { StyledLatex } from "./StyledLatex";
 
 type AcceptedInputFeedbackProps = {
   tree: ASTNode | null;
@@ -12,12 +12,16 @@ export const AcceptedInputFeedback: FC<
   AcceptedInputFeedbackProps
 > = (props) => {
   const { tree, emptyMessage } = props;
-
+  const texContent =
+    tree === null
+      ? `\\text{${emptyMessage}}`
+      : treeToLatex(tree);
   return (
     <Box>
       <Typography>Interpreted as:</Typography>
       <Box
-        padding={4}
+        paddingX={2}
+        paddingY={1}
         display="flex"
         justifyContent="center"
         alignItems="center"
@@ -27,19 +31,13 @@ export const AcceptedInputFeedback: FC<
             alpha(t.palette.primary.light, 0.2),
         }}
       >
-        {tree === null ? (
-          <Typography fontStyle="italic">
-            {emptyMessage}
-          </Typography>
-        ) : (
-          <Latex
-            tex={treeToLatex(tree)}
-            options={{
-              displayMode: true,
-              output: "htmlAndMathml",
-            }}
-          />
-        )}
+        <StyledLatex
+          tex={texContent}
+          options={{
+            displayMode: true,
+            output: "htmlAndMathml",
+          }}
+        />
       </Box>
     </Box>
   );
