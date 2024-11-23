@@ -1,6 +1,7 @@
 import { AcceptedInputFeedback } from "$components/AcceptedInputFeedback";
 import { ExpressionInput } from "$components/ExpressionInput";
 import { OperatorButton } from "$components/OperatorButton";
+import { StyledKBD } from "$components/StyledKBD";
 import { Lexer } from "$core/interpreter/lexer";
 import { ASTNode, parse } from "$core/interpreter/parser";
 import { PlayArrowRounded } from "@mui/icons-material";
@@ -8,16 +9,31 @@ import {
   Button,
   ButtonGroup,
   Container,
+  createTheme,
   CssBaseline,
   GlobalStyles,
   Stack,
   ThemeProvider,
   Toolbar,
+  Typography,
 } from "@mui/material";
-import createThemeNoVars from "@mui/material/styles/createThemeNoVars";
+import { brown } from "@mui/material/colors";
 import { FC, useState } from "react";
 
-const theme = createThemeNoVars();
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    primary: brown,
+  },
+});
+const globalStyles = (
+  <GlobalStyles
+    styles={{
+      tableLayout: "auto",
+      borderCollapse: "collapse",
+    }}
+  />
+);
 
 const BINARY_OP_REPR: {
   name: string;
@@ -91,12 +107,7 @@ export const App: FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GlobalStyles
-        styles={{
-          tableLayout: "auto",
-          borderCollapse: "collapse",
-        }}
-      />
+      {globalStyles}
       <Container maxWidth="lg">
         <Stack
           spacing={1}
@@ -141,11 +152,10 @@ export const App: FC = () => {
             variant="dense"
             disableGutters
             sx={{
-              justifyContent: "space-between",
               display: "flex",
               flexDirection: "row",
-              gap: 2,
               flexWrap: "wrap",
+              gap: 2,
             }}
           >
             <Button
@@ -153,10 +163,22 @@ export const App: FC = () => {
               variant="contained"
               startIcon={<PlayArrowRounded />}
               onClick={handleExecute}
-              type="submit"
             >
               Run
             </Button>
+
+            <Typography>or</Typography>
+            <Stack
+              useFlexGap
+              gap={(t) => t.spacing(0.5)}
+              spacing={0.5}
+              direction="row"
+              alignItems="center"
+            >
+              <StyledKBD>CTRL</StyledKBD>
+              <Typography>+</Typography>
+              <StyledKBD>ENTER</StyledKBD>
+            </Stack>
           </Toolbar>
 
           <AcceptedInputFeedback
@@ -223,4 +245,3 @@ export const App: FC = () => {
     </ThemeProvider>
   );
 };
-
