@@ -1,5 +1,5 @@
 import { treeToLatex } from "$core/ast/traverse";
-import { ASTNode } from "$core/interpreter/parser";
+import { ASTNode, ASTNodeType } from "$types/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
@@ -15,15 +15,18 @@ export const EditorAcceptedInputFeedback: FC<
 
   let texContent = <Typography>{emptyMessage}</Typography>;
   if (tree !== null) {
-    texContent = (
-      <StyledLatex
-        tex={treeToLatex(tree)}
-        options={{
-          displayMode: true,
-          output: "htmlAndMathml",
-        }}
-      />
-    );
+    texContent =
+      tree.nodeType === ASTNodeType.ERROR ? (
+        <Typography color="error">{tree.reason}</Typography>
+      ) : (
+        <StyledLatex
+          tex={treeToLatex(tree)}
+          options={{
+            displayMode: true,
+            output: "htmlAndMathml",
+          }}
+        />
+      );
   }
   return (
     <Box>

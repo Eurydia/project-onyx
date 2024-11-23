@@ -38,42 +38,32 @@ const polishToAST = (tokens: Token[]): ASTNode => {
   }
 
   if (tok.value === Operator.NOT) {
-    const value = polishToAST(tokens);
-    if (value === null) {
-      return {
-        nodeType: ASTNodeType.ERROR,
-        reason:
-          "Parser Error: Expected a proposition after NOT",
-      };
+    const operand = polishToAST(tokens);
+    if (operand.nodeType === ASTNodeType.ERROR) {
+      return operand;
     }
     return {
       nodeType: ASTNodeType.UNARY_OPERATOR,
       operator: tok.value,
-      value,
+      operand,
     };
   }
 
-  const right = polishToAST(tokens);
-  if (right === null) {
-    return {
-      nodeType: ASTNodeType.ERROR,
-      reason: `Parser Error: Expected a right operand for "${tok.value}"`,
-    };
+  const rightOperand = polishToAST(tokens);
+  if (rightOperand.nodeType === ASTNodeType.ERROR) {
+    return rightOperand;
   }
 
-  const left = polishToAST(tokens);
-  if (left === null) {
-    return {
-      nodeType: ASTNodeType.ERROR,
-      reason: `Parser Error: Expected a left operand for "${tok.value}"`,
-    };
+  const leftOperand = polishToAST(tokens);
+  if (leftOperand.nodeType === ASTNodeType.ERROR) {
+    return leftOperand;
   }
 
   return {
     nodeType: ASTNodeType.BINARY_OPERATOR,
     operator: tok.value,
-    left,
-    right,
+    leftOperand,
+    rightOperand,
   };
 };
 
@@ -154,5 +144,6 @@ const infixToPolish = (tokens: Token[]): Token[] => {
 export const parser = (tokens: Token[]): ASTNode => {
   const polish = infixToPolish(tokens);
   const ast = polishToAST(polish);
+
   return ast;
 };

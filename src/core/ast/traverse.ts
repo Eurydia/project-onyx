@@ -1,22 +1,19 @@
-import { Operator } from "$core/interpreter/lexer";
-import {
-  ASTNode,
-  ASTNodeType,
-} from "$core/interpreter/parser";
+import { Operator } from "$types/lexer";
+import { ASTNode, ASTNodeType } from "$types/parser";
 
 export const treeToLatex = (tree: ASTNode): string => {
   switch (tree.nodeType) {
     case ASTNodeType.IDENTIFIER:
       return tree.value;
     case ASTNodeType.ERROR:
-      return `\\textcolor{red}{\\text{Error: ${tree.reason}}}`;
+      return `\\textcolor{red}{\\text{${tree.reason}}}`;
   }
 
   if (
     tree.nodeType === ASTNodeType.UNARY_OPERATOR &&
     tree.operator === Operator.NOT
   ) {
-    const value = treeToLatex(tree.value);
+    const value = treeToLatex(tree.operand);
     return `\\lnot ${value}`;
   }
 
@@ -35,8 +32,8 @@ export const treeToLatex = (tree: ASTNode): string => {
       operator = "\\iff";
       break;
   }
-  const rightTree = treeToLatex(tree.right);
-  const leftTree = treeToLatex(tree.left);
+  const rightTree = treeToLatex(tree.rightOperand);
+  const leftTree = treeToLatex(tree.leftOperand);
 
   const tex = `${leftTree} ${operator} ${rightTree}`;
   return tex;

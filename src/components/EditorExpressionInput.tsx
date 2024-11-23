@@ -37,6 +37,9 @@ export const EditorExpressionInput: FC<
           autoComplete: "off",
           autoCorrect: "off",
           spellCheck: false,
+          sx: {
+            fontFamily: "monospace",
+          },
         },
       }}
     />

@@ -14,14 +14,14 @@ export type BinaryOperatorNode = {
     | Operator.OR
     | Operator.IMPLIES
     | Operator.IFF;
-  left: ASTNode;
-  right: ASTNode;
+  leftOperand: ASTNode;
+  rightOperand: ASTNode;
 };
 
 export type UnaryOperatorNode = {
   nodeType: ASTNodeType.UNARY_OPERATOR;
   operator: Operator.NOT;
-  value: ASTNode;
+  operand: ASTNode;
 };
 
 export type ErrorNode = {
