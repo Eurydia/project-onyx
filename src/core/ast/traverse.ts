@@ -1,16 +1,23 @@
 import { Operator } from "$core/interpreter/lexer";
-import { OperationExpression } from "$core/interpreter/parser";
+import {
+  ASTNode,
+  ASTNodeType,
+} from "$core/interpreter/parser";
 
-export const treeToLatex = (
-  tree: OperationExpression | string | null,
-  level: number = 0
-): string => {
-  if (tree === null) {
-    return "";
+export const treeToLatex = (tree: ASTNode): string => {
+  switch (tree.nodeType) {
+    case ASTNodeType.IDENTIFIER:
+      return tree.value;
+    case ASTNodeType.ERROR:
+      return `\\textcolor{red}{\\text{Error: ${tree.reason}}}`;
   }
 
-  if (typeof tree === "string") {
-    return tree;
+  if (
+    tree.nodeType === ASTNodeType.UNARY_OPERATOR &&
+    tree.operator === Operator.NOT
+  ) {
+    const value = treeToLatex(tree.value);
+    return `\\lnot ${value}`;
   }
 
   let operator = "";
@@ -27,25 +34,10 @@ export const treeToLatex = (
     case Operator.IFF:
       operator = "\\iff";
       break;
-    case Operator.NOT:
-      operator = "\\lnot";
-      break;
-    default:
-      operator = "unknown operator";
-      break;
   }
-
-  if (tree.operator === Operator.NOT) {
-    tree.value = treeToLatex(tree.value, level + 1);
-    return `${operator} ${tree.value}`;
-  }
-
-  const rightTree = treeToLatex(tree.right, level + 1);
-  const leftTree = treeToLatex(tree.left, level + 1);
+  const rightTree = treeToLatex(tree.right);
+  const leftTree = treeToLatex(tree.left);
 
   const tex = `${leftTree} ${operator} ${rightTree}`;
-  if (level > 0) {
-    return `( ${tex} )`;
-  }
   return tex;
 };

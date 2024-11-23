@@ -7,20 +7,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { Latex } from "./Latex";
 
 type OperatorButtonProps = {
   name: string;
   label: string;
-  alias: string;
-  truthTable: ReactNode;
+  alias: string[];
+  onClick: () => void;
 };
 
 export const OperatorButton: FC<OperatorButtonProps> = (
   props
 ) => {
-  const { alias, name, label, truthTable } = props;
+  const { alias, name, label, onClick } = props;
   return (
     <Tooltip
       arrow
@@ -39,45 +39,20 @@ export const OperatorButton: FC<OperatorButtonProps> = (
               disableGutters
               dense
             >
-              <ListItemText>Alias: {alias}</ListItemText>
+              <ListItemText>
+                Aliases: {alias.join(", ")}
+              </ListItemText>
             </ListItem>
-            {/* <ListItem
-              dense
-              disableGutters
-              disablePadding
-            >
-              <List
-                disablePadding
-                dense
-              >
-                {example.map((ex, i) => (
-                  <ListItem
-                    key={i}
-                    disablePadding
-                    disableGutters
-                    dense
-                  >
-                    <ListItemText>
-                      Example {i + 1}: {ex}
-                    </ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-            </ListItem> */}
           </List>
-          {/* {truthTable} */}
         </Stack>
       }
     >
-      <Button
-        sx={{
-          textTransform: "none",
-        }}
-      >
+      <Button onClick={onClick}>
         <Latex
           tex={label}
           options={{
-            output: "htmlAndMathml",
+            displayMode: false,
+            output: "html",
           }}
         />
       </Button>
