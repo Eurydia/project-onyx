@@ -1,63 +1,74 @@
 import { Operator, Token, TokenType } from "./lexer";
 
-export class Parser {
-  private tokens: Token[];
-
-  public constructor(tokens: Token[]) {
-    this.tokens = tokens;
-  }
-
-  public parse(): Token[] {
-    return infixToPolish(this.tokens);
-  }
-
-  public parseTree(): OperationExpression | string | null {
-    return tokenToTrees(infixToPolish(this.tokens));
-  }
+export enum ASTNodeType {
+  BINARY_OPERATOR,
+  UNARY_OPERATOR,
+  ERROR,
+  IDENTIFIER,
 }
 
-export type BinaryOperatorExpression = {
+export type BinaryOperatorNode = {
+  nodeType: ASTNodeType.BINARY_OPERATOR;
   operator:
     | Operator.AND
     | Operator.OR
     | Operator.IMPLIES
     | Operator.IFF;
-  left: OperationExpression | string;
-  right: OperationExpression | string;
+  left: ASTNode;
+  right: ASTNode;
 };
 
-export type UnaryOperatorExpression = {
+export type UnaryOperatorNode = {
+  nodeType: ASTNodeType.UNARY_OPERATOR;
   operator: Operator.NOT;
-  value: OperationExpression | string;
+  value: ASTNode;
 };
 
-export type OperationExpression =
-  | BinaryOperatorExpression
-  | UnaryOperatorExpression;
+export type ErrorNode = {
+  nodeType: ASTNodeType.ERROR;
+  reason: string;
+};
 
-export type AST = OperationExpression | string;
+export type IdentifierNode = {
+  nodeType: ASTNodeType.IDENTIFIER;
+  value: string;
+};
 
-const tokenToTrees = (
-  tokens: Token[]
-): OperationExpression | string | null => {
+export type ASTNode =
+  | BinaryOperatorNode
+  | UnaryOperatorNode
+  | ErrorNode
+  | IdentifierNode;
+
+const polishToAST = (tokens: Token[]): ASTNode => {
   const tok = tokens.pop();
   if (tok === undefined) {
-    return null;
+    return {
+      nodeType: ASTNodeType.ERROR,
+      reason: "Unexpected end of input",
+    };
   }
 
   if (tok.tokenType === TokenType.IDENTIFIER) {
-    return tok.value;
+    return {
+      nodeType: ASTNodeType.IDENTIFIER,
+      value: tok.value,
+    };
   }
 
   if (
     tok.tokenType === TokenType.OPERATOR &&
     tok.value === Operator.NOT
   ) {
-    const value = tokenToTrees(tokens);
+    const value = polishToAST(tokens);
     if (value === null) {
-      return null;
+      return {
+        nodeType: ASTNodeType.ERROR,
+        reason: "Expected a proposition after NOT",
+      };
     }
     return {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
       operator: tok.value,
       value,
     };
@@ -66,23 +77,34 @@ const tokenToTrees = (
     tok.tokenType === TokenType.OPERATOR &&
     tok.value !== Operator.NOT
   ) {
-    const right = tokenToTrees(tokens);
+    const right = polishToAST(tokens);
     if (right === null) {
-      return null;
+      return {
+        nodeType: ASTNodeType.ERROR,
+        reason: `Expected a right operand for: "${tok.value}"`,
+      };
     }
 
-    const left = tokenToTrees(tokens);
+    const left = polishToAST(tokens);
     if (left === null) {
-      return null;
+      return {
+        nodeType: ASTNodeType.ERROR,
+        reason: `Expected a left operand for: "${tok.value}"`,
+      };
     }
 
     return {
+      nodeType: ASTNodeType.BINARY_OPERATOR,
       operator: tok.value,
       left,
       right,
     };
   }
-  return null;
+
+  return {
+    nodeType: ASTNodeType.ERROR,
+    reason: `Unexpected token: ${tok.value} ${tok.tokenType}`,
+  };
 };
 
 const PRECEDENCE = {
@@ -104,6 +126,10 @@ const infixToPolish = (tokens: Token[]): Token[] => {
     pos++;
 
     switch (token.tokenType) {
+      case TokenType.ERROR:
+        tokens.push(token);
+        return tokens;
+
       case TokenType.IDENTIFIER:
         outStack.push(token);
         break;
@@ -161,4 +187,10 @@ const infixToPolish = (tokens: Token[]): Token[] => {
     outStack.push(lastOp);
   }
   return outStack;
+};
+
+export const parse = (tokens: Token[]): ASTNode => {
+  const polish = infixToPolish(tokens);
+  const ast = polishToAST(polish);
+  return ast;
 };

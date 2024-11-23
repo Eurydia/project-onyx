@@ -1,7 +1,6 @@
 export enum TokenType {
   IDENTIFIER,
   OPERATOR,
-
   LEFT_PARENTHESIS,
   RIGHT_PARENTHESIS,
   EOF,
@@ -51,11 +50,16 @@ export type Token =
   | TokenRightParen;
 
 const OPERATOR_TABLE: Record<string, Operator> = {
-  and: Operator.AND,
-  or: Operator.OR,
-  implies: Operator.IMPLIES,
-  iff: Operator.IFF,
-  not: Operator.NOT,
+  "and": Operator.AND,
+  "or": Operator.OR,
+  "implies": Operator.IMPLIES,
+  "iff": Operator.IFF,
+  "not": Operator.NOT,
+  "\u{2227}": Operator.AND,
+  "\u{2228}": Operator.OR,
+  "\u{21D2}": Operator.IMPLIES,
+  "\u{21D4}": Operator.IFF,
+  "\u{00AC}": Operator.NOT,
 };
 
 const IS_WHITESPACE_MANY = /\s+/g;
@@ -73,71 +77,77 @@ export class Lexer {
     this.pos = 0;
   }
 
-  private collectIdentifier(start: number): string {
+  private collectIdentifier(start: number) {
     const match = IS_IDENTIFIER.exec(
       this.source.slice(start)
     );
     if (match === null) {
-      return "";
+      return null;
     }
     return match[0];
   }
 
-  private hasNext(): boolean {
-    return this.pos < this.source.length;
-  }
-
-  private nextToken(): Token {
-    const char = this.source[this.pos];
-
-    switch (char) {
-      case " ":
-        this.pos++;
-        return this.nextToken();
-      case "(":
-        this.pos++;
-        return {
-          tokenType: TokenType.LEFT_PARENTHESIS,
-          value: "(",
-        };
-      case ")":
-        this.pos++;
-        return {
-          tokenType: TokenType.RIGHT_PARENTHESIS,
-          value: ")",
-        };
-    }
-
-    const id = this.collectIdentifier(this.pos);
-    if (id === "") {
-      return {
-        tokenType: TokenType.ERROR,
-        reason: "Invalid identifier",
-        pos: this.pos,
-        value: this.source[this.pos],
-      };
-    }
-
-    const operator = OPERATOR_TABLE[id];
-    if (operator !== undefined) {
-      this.pos += id.length;
-      return {
-        tokenType: TokenType.OPERATOR,
-        value: operator,
-      };
-    }
-
-    this.pos += id.length;
-    return {
-      tokenType: TokenType.IDENTIFIER,
-      value: id,
-    };
-  }
-
   public lex(): Token[] {
     const tokens: Token[] = [];
-    while (this.hasNext()) {
-      tokens.push(this.nextToken());
+
+    while (this.pos < this.source.length) {
+      const char = this.source[this.pos];
+
+      switch (char) {
+        case " ":
+          this.pos++;
+          continue;
+        case "(":
+          this.pos++;
+          tokens.push({
+            tokenType: TokenType.LEFT_PARENTHESIS,
+            value: "(",
+          });
+          continue;
+        case ")":
+          this.pos++;
+          tokens.push({
+            tokenType: TokenType.RIGHT_PARENTHESIS,
+            value: ")",
+          });
+          continue;
+      }
+
+      const opSign = OPERATOR_TABLE[char];
+      if (opSign !== undefined) {
+        this.pos++;
+        tokens.push({
+          tokenType: TokenType.OPERATOR,
+          value: opSign,
+        });
+      }
+
+      const id = this.collectIdentifier(this.pos);
+      if (id === null || id.length === 0) {
+        tokens.push({
+          tokenType: TokenType.ERROR,
+          reason: `Invalid identifier: ${id}`,
+          pos: this.pos,
+          value: this.source[this.pos],
+        });
+        break;
+      }
+
+      const opWord = OPERATOR_TABLE[id];
+      if (opWord !== undefined) {
+        this.pos += id.length;
+        tokens.push({
+          tokenType: TokenType.OPERATOR,
+          value: opWord,
+        });
+        continue;
+      }
+      this.pos += id.length;
+      tokens.push({
+        tokenType: TokenType.IDENTIFIER,
+        value: id,
+      });
+      continue;
     }
     return tokens;
   }

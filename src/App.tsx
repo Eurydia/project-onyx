@@ -1,35 +1,18 @@
-import { BinaryTruthTable } from "$components/BinaryTruthTable";
-import { Latex } from "$components/Latex";
+import { AcceptedInputFeedback } from "$components/AcceptedInputFeedback";
+import { ExpressionInput } from "$components/ExpressionInput";
 import { OperatorButton } from "$components/OperatorButton";
-import { UnaryTruthTable } from "$components/UnaryTruthTable";
-import { treeToLatex } from "$core/ast/traverse";
 import { Lexer } from "$core/interpreter/lexer";
-import {
-  OperationExpression,
-  Parser,
-} from "$core/interpreter/parser";
+import { ASTNode, parse } from "$core/interpreter/parser";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
-  Box,
   Button,
   ButtonGroup,
   Container,
   CssBaseline,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   GlobalStyles,
-  List,
-  ListItem,
-  Radio,
-  RadioGroup,
   Stack,
-  Tab,
-  Tabs,
-  TextField,
   ThemeProvider,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import createThemeNoVars from "@mui/material/styles/createThemeNoVars";
 import { FC, useState } from "react";
@@ -37,117 +20,72 @@ import { FC, useState } from "react";
 const theme = createThemeNoVars();
 
 const BINARY_OP_REPR: {
-  symbol: string;
-  op: (x: boolean, y: boolean) => boolean;
   name: string;
-  alias: string;
+  alias: string[];
+  label: string;
+  insertChar: string;
 }[] = [
   {
-    symbol: "\\land",
-    op: (x, y) => x && y,
+    name: "Negation",
+    label: "\\lnot",
+    alias: ["not"],
+    insertChar: "\u{00AC}",
+  },
+  {
     name: "Conjunction",
-    alias: "and",
+    alias: ["and"],
+    label: "\\land",
+    insertChar: "\u{2227}",
   },
   {
-    symbol: "\\lor",
-    op: (x, y) => x || y,
     name: "Disjunction",
-    alias: "or",
+    alias: ["or"],
+    label: "\\lor",
+    insertChar: "\u{2228}",
   },
   {
-    symbol: "\\implies",
-    op: (x, y) => (x && !y ? false : true),
     name: "Implication",
-    alias: "implies",
+    alias: ["implies"],
+    label: "\\implies",
+    insertChar: "\u{21D2}",
   },
   {
-    symbol: "\\iff",
-    op: (x, y) => x === y,
     name: "Equivalence",
-    alias: "iff",
+    alias: ["iff"],
+    label: "\\iff",
+    insertChar: "\u{21D4}",
   },
 ];
 
-const BooleanSwicher: FC = () => {
-  return (
-    <FormControl
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: 4,
-      }}
-    >
-      <FormLabel>
-        <Latex tex="p" />
-      </FormLabel>
-      <RadioGroup
-        row
-        defaultValue="true"
-      >
-        <FormControlLabel
-          value="true"
-          control={<Radio disableRipple />}
-          label="true"
-        />
-        <FormControlLabel
-          value="false"
-          control={<Radio disableRipple />}
-          label="false"
-        />
-      </RadioGroup>
-    </FormControl>
-  );
-};
-
-type TreeProps = {
-  tree: OperationExpression | string | null;
-};
-const Tree: FC<TreeProps> = (props) => {
-  const { tree } = props;
-  if (tree === null) {
-    return null;
-  }
-
-  if (typeof tree === "string") {
-    return <Latex tex={tree} />;
-  }
-
-  const rightTree = <Tree tree={tree.right} />;
-  const leftTree = <Tree tree={tree.left} />;
-
-  return (
-    <List>
-      <ListItem>{tree.operator}</ListItem>
-      <ListItem>{leftTree}</ListItem>
-      <ListItem>{rightTree}</ListItem>
-    </List>
-  );
-};
-
 export const App: FC = () => {
   const [tab, setTab] = useState(0);
-  const [value, setValue] = useState("");
-  const [tree, setTree] = useState<
-    OperationExpression | string | null
+
+  const [inputValue, setInputVlue] = useState("");
+  const [inputCursorPos, setInputCursorPos] = useState<
+    number | null
   >(null);
+  const [tree, setTree] = useState<ASTNode | null>(null);
 
   const handleExecute = () => {
-    const l = new Lexer(value);
+    const l = new Lexer(inputValue);
     const tokens = l.lex();
-
-    const p = new Parser(tokens);
-    console.debug(
-      p
-        .parse()
-        .map((t) => t.value)
-        .join(" ")
-    );
-    const tree = p.parseTree();
-    console.debug(tree);
-
+    if (tokens.length === 0) {
+      setTree(null);
+      return;
+    }
+    const tree = parse(tokens);
     setTree(tree);
+  };
+
+  const handleInsertChar = (char: string) => {
+    if (inputCursorPos === null) {
+      return;
+    }
+    setInputVlue((prev) => {
+      const before = prev.slice(0, inputCursorPos);
+      const after = prev.slice(inputCursorPos);
+      return `${before}${char}${after}`;
+    });
   };
 
   return (
@@ -176,43 +114,29 @@ export const App: FC = () => {
               flexWrap: "wrap",
             }}
           >
-            <ButtonGroup>
-              <OperatorButton
-                alias="not"
-                name="Negation"
-                label={"\u{00AC}"}
-                truthTable={
-                  <UnaryTruthTable
-                    operator={(x) => !x}
-                    symbol={"\u{00AC}"}
-                  />
-                }
-              />
-            </ButtonGroup>
             <ButtonGroup disableElevation>
               {BINARY_OP_REPR.map((repr, index) => (
                 <OperatorButton
-                  key={"binary" + index}
+                  key={"op-btn" + index}
                   alias={repr.alias}
                   name={repr.name}
-                  label={repr.symbol}
-                  truthTable={
-                    <BinaryTruthTable
-                      operator={repr.op}
-                      symbol={repr.symbol}
-                    />
+                  label={repr.label}
+                  onClick={() =>
+                    handleInsertChar(repr.insertChar)
                   }
                 />
               ))}
             </ButtonGroup>
           </Toolbar>
-          <TextField
-            multiline
+
+          <ExpressionInput
+            value={inputValue}
+            onChange={setInputVlue}
+            onExecute={handleExecute}
+            onCursorMove={setInputCursorPos}
             rows={5}
-            fullWidth
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
           />
+
           <Toolbar
             variant="dense"
             disableGutters
@@ -234,16 +158,13 @@ export const App: FC = () => {
               Run
             </Button>
           </Toolbar>
-          <Typography>
-            <Latex
-              tex={treeToLatex(tree)}
-              options={{
-                displayMode: true,
-                output: "html",
-              }}
-            />
-          </Typography>
-          <Box>
+
+          <AcceptedInputFeedback
+            tree={tree}
+            emptyMessage="Evaluate an expression to see how it is interpreted."
+          />
+
+          {/* <Box>
             <Tabs
               variant="scrollable"
               value={tab}
@@ -296,7 +217,7 @@ export const App: FC = () => {
                 <Tree tree={tree} />
               </Box>
             )}
-          </Box>
+          </Box> */}
         </Stack>
       </Container>
     </ThemeProvider>
