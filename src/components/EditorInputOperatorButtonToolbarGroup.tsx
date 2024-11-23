@@ -36,11 +36,11 @@ const OPERATOR = [
   },
 ];
 
-type EditorOperatorButtonGroupProps = {
+type EditorInputOperatorButtonToolbarGroupProps = {
   onInsertChar: (char: string) => void;
 };
-export const EditorOperatorButtonGroup: FC<
-  EditorOperatorButtonGroupProps
+export const EditorInputOperatorButtonToolbarGroup: FC<
+  EditorInputOperatorButtonToolbarGroupProps
 > = (props) => {
   const { onInsertChar } = props;
 

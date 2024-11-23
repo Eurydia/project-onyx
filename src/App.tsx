@@ -1,17 +1,28 @@
-import { EditorAcceptedInputFeedback } from "$components/EditorAcceptedInputFeedback";
-import { EditorExecuteToolbaGroup } from "$components/EditorExecuteToolbaGroup";
-import { EditorExpressionInput } from "$components/EditorExpressionInput";
-import { EditorOperatorButtonGroup } from "$components/EditorOperatorButtonToolbarGroup";
+import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
+import { DisplayPlayground } from "$components/DisplayPlayground";
+import { EditorInputExecuteToolbarGroup } from "$components/EditorInputExecuteToolbaGroup";
+import { EditorInputExpressionTextField } from "$components/EditorInputExpressionTextField";
+import { EditorInputOperatorButtonToolbarGroup } from "$components/EditorInputOperatorButtonToolbarGroup";
+import { EditorInputPropositionGroup } from "$components/EditorInputPropositionGroup";
 import { lexer } from "$core/interpreter/lexer";
-import { ASTNode, parser } from "$core/interpreter/parser";
+import { parser } from "$core/interpreter/parser";
+import {
+  ASTNode,
+  ASTNodeType,
+  IdentifierTable,
+} from "$types/parser";
 import {
   alpha,
+  Box,
   Container,
   createTheme,
   CssBaseline,
   GlobalStyles,
   Stack,
+  Tab,
+  Tabs,
   ThemeProvider,
+  Typography,
 } from "@mui/material";
 import { brown } from "@mui/material/colors";
 import { FC, useState } from "react";
@@ -22,6 +33,17 @@ const theme = createTheme({
     primary: brown,
   },
   components: {
+    MuiList: {
+      defaultProps: {
+        disablePadding: true,
+        dense: true,
+      },
+    },
+    MuiListItem: {
+      defaultProps: {
+        dense: true,
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         arrow: {
@@ -45,7 +67,7 @@ const globalStyles = (
 );
 
 export const App: FC = () => {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState<number>(0);
 
   const [inputValue, setInputVlue] = useState(
     "not (p and q) iff (not p) or (not q)"
@@ -54,14 +76,18 @@ export const App: FC = () => {
     number | null
   >(null);
   const [tree, setTree] = useState<ASTNode | null>(null);
+  const [idenTable, setIdentifierTable] =
+    useState<IdentifierTable | null>(null);
 
   const handleExecute = () => {
     const tokens = lexer(inputValue);
     if (tokens.length === 0) {
       setTree(null);
+      setIdentifierTable({});
       return;
     }
-    const tree = parser(tokens);
+    const { tree, identifierTable } = parser(tokens);
+    setIdentifierTable(identifierTable);
     setTree(tree);
   };
 
@@ -89,6 +115,9 @@ export const App: FC = () => {
     }
   };
 
+  const isTreeInvalid =
+    tree === null || tree.nodeType === ASTNodeType.ERROR;
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -100,24 +129,93 @@ export const App: FC = () => {
           padding={2}
           minHeight="100vh"
         >
-          <EditorOperatorButtonGroup
+          <EditorInputOperatorButtonToolbarGroup
             onInsertChar={handleInsertChar}
           />
-          <EditorExpressionInput
+          <EditorInputExpressionTextField
             value={inputValue}
             onChange={setInputVlue}
             onKeyDown={handleKeyDown}
             onCursorMove={setInputCursorPos}
             rows={5}
           />
-          <EditorExecuteToolbaGroup
+          <EditorInputExecuteToolbarGroup
             onExecute={handleExecute}
             keyCombinationHint={["CTRL", "ENTER"]}
           />
-          <EditorAcceptedInputFeedback
+          <DisplayInputFeedback
             tree={tree}
             emptyMessage="Evaluate an expression to see how it is interpreted."
           />
+          <Tabs
+            variant="scrollable"
+            value={tab}
+            onChange={(_, value) => setTab(value)}
+          >
+            <Tab
+              value={1}
+              disabled={isTreeInvalid}
+              label={
+                <Typography
+                  sx={{
+                    textDecoration: isTreeInvalid
+                      ? "line-through"
+                      : undefined,
+                  }}
+                >
+                  Evaluate
+                </Typography>
+              }
+            />
+            <Tab
+              value={2}
+              disabled={isTreeInvalid}
+              label={
+                <Typography
+                  sx={{
+                    textDecoration: isTreeInvalid
+                      ? "line-through"
+                      : undefined,
+                  }}
+                >
+                  Visualize
+                </Typography>
+              }
+            />
+          </Tabs>
+          {tab === 1 && (
+            <Stack flexDirection="row">
+              <Box width="fit-content">
+                <EditorInputPropositionGroup
+                  idenTable={idenTable}
+                  onIdenChange={(k, v) =>
+                    setIdentifierTable((prev) => {
+                      if (prev === null) {
+                        return null;
+                      }
+                      const next = { ...prev };
+                      next[k] = v;
+                      return next;
+                    })
+                  }
+                />
+              </Box>
+              <Box
+                flexGrow={1}
+                sx={{
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "primary.main",
+                  overflowX: "auto",
+                }}
+              >
+                <DisplayPlayground
+                  identifierTable={idenTable!}
+                  tree={tree!}
+                />
+              </Box>
+            </Stack>
+          )}
 
           {/* <Box>
             <Tabs

@@ -1,5 +1,9 @@
 import { Operator, Token, TokenType } from "$types/lexer";
-import { ASTNode, ASTNodeType } from "$types/parser";
+import {
+  ASTNode,
+  ASTNodeType,
+  IdentifierTable,
+} from "$types/parser";
 
 const OPERATOR_PRECEDENCE = {
   [Operator.NOT]: 6,
@@ -9,7 +13,10 @@ const OPERATOR_PRECEDENCE = {
   [Operator.IFF]: 2,
 };
 
-const polishToAST = (tokens: Token[]): ASTNode => {
+const polishToAST = (
+  tokens: Token[],
+  identifierTable: Set<string>
+): ASTNode => {
   const tok = tokens.pop();
   if (tok === undefined) {
     return {
@@ -31,6 +38,7 @@ const polishToAST = (tokens: Token[]): ASTNode => {
         reason: `Parser Error: Unexpected token "${tok.value}"`,
       };
     case TokenType.IDENTIFIER:
+      identifierTable.add(tok.value);
       return {
         nodeType: ASTNodeType.IDENTIFIER,
         value: tok.value,
@@ -38,7 +46,7 @@ const polishToAST = (tokens: Token[]): ASTNode => {
   }
 
   if (tok.value === Operator.NOT) {
-    const operand = polishToAST(tokens);
+    const operand = polishToAST(tokens, identifierTable);
     if (operand.nodeType === ASTNodeType.ERROR) {
       return operand;
     }
@@ -49,12 +57,12 @@ const polishToAST = (tokens: Token[]): ASTNode => {
     };
   }
 
-  const rightOperand = polishToAST(tokens);
+  const rightOperand = polishToAST(tokens, identifierTable);
   if (rightOperand.nodeType === ASTNodeType.ERROR) {
     return rightOperand;
   }
 
-  const leftOperand = polishToAST(tokens);
+  const leftOperand = polishToAST(tokens, identifierTable);
   if (leftOperand.nodeType === ASTNodeType.ERROR) {
     return leftOperand;
   }
@@ -141,9 +149,21 @@ const infixToPolish = (tokens: Token[]): Token[] => {
   return outStack;
 };
 
-export const parser = (tokens: Token[]): ASTNode => {
+export const parser = (
+  tokens: Token[]
+): { tree: ASTNode; identifierTable: IdentifierTable } => {
   const polish = infixToPolish(tokens);
-  const ast = polishToAST(polish);
 
-  return ast;
+  const idSet = new Set<string>();
+  const ast = polishToAST(polish, idSet);
+
+  const idTable: IdentifierTable = {};
+  idSet.forEach((identifier) => {
+    idTable[identifier] = true;
+  });
+
+  return {
+    tree: ast,
+    identifierTable: idTable,
+  };
 };

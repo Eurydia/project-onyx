@@ -5,6 +5,7 @@ export enum ASTNodeType {
   UNARY_OPERATOR,
   ERROR,
   IDENTIFIER,
+  CONSTANT,
 }
 
 export type BinaryOperatorNode = {
@@ -24,6 +25,12 @@ export type UnaryOperatorNode = {
   operand: ASTNode;
 };
 
+export type ConstantNode = {
+  nodeType: ASTNodeType.CONSTANT;
+  expr: ASTNode;
+  value: boolean;
+};
+
 export type ErrorNode = {
   nodeType: ASTNodeType.ERROR;
   reason: string;
@@ -37,5 +44,8 @@ export type IdentifierNode = {
 export type ASTNode =
   | BinaryOperatorNode
   | UnaryOperatorNode
+  | ConstantNode
   | ErrorNode
   | IdentifierNode;
+
+export type IdentifierTable = Record<string, boolean>;
