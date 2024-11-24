@@ -3,7 +3,6 @@ import { ExpressionTree } from "$types/ast";
 import { ASTNode } from "$types/parser";
 import { ControlCameraRounded } from "@mui/icons-material";
 import {
-  alpha,
   Box,
   Fab,
   Typography,
@@ -72,18 +71,9 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
     return (
       <Box
         height="100%"
-        alignItems="center"
-        justifyContent="center"
         display="flex"
-        gap={2}
-        flexWrap="wrap"
-        sx={{
-          borderRadius: 2,
-          borderStyle: "solid",
-          borderColor: (t) =>
-            alpha(t.palette.primary.main, 0.2),
-          borderWidth: 4,
-        }}
+        justifyContent="center"
+        alignItems="center"
       >
         <Typography>
           Evaluate an expression to see its syntax tree
@@ -110,13 +100,6 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
       position="relative"
       height="100%"
       ref={containerRef}
-      sx={{
-        borderRadius: 2,
-        borderStyle: "solid",
-        borderColor: (t) =>
-          alpha(t.palette.primary.main, 0.2),
-        borderWidth: 4,
-      }}
     >
       <Zoom<SVGSVGElement>
         width={width}

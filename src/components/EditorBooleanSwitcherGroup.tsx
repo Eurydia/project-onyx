@@ -6,13 +6,12 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type EditorBooleanSwitcherProps = {
-  idenTable: IdentifierTable | null;
+  idenTable: IdentifierTable;
   onIdenChange: (iden: string, value: boolean) => void;
 };
 export const EditorBooleanSwitcher: FC<
@@ -20,19 +19,14 @@ export const EditorBooleanSwitcher: FC<
 > = (props) => {
   const { idenTable, onIdenChange } = props;
 
-  if (idenTable === null) {
-    return (
-      <Typography>The playground is not ready</Typography>
-    );
-  }
-
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 1,
-      }}
+      padding={2}
+      display="flex"
+      flexDirection="column"
+      flexWrap="nowrap"
+      gap={1}
+      width="100%"
     >
       {Object.entries(idenTable).map(([iden, value]) => (
         <FormControl

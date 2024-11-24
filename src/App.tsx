@@ -1,5 +1,6 @@
 import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
 import { DisplayTreeGraph } from "$components/DisplayTreeGraph";
+import { EditorBooleanSwitcher } from "$components/EditorBooleanSwitcherGroup";
 import { EditorExecuteToolbarGroup } from "$components/EditorExecuteToolbaGroup";
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
 import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
@@ -16,6 +17,7 @@ import {
   Container,
   createTheme,
   CssBaseline,
+  Divider,
   GlobalStyles,
   Stack,
   ThemeProvider,
@@ -117,6 +119,16 @@ export const App: FC = () => {
     }
   };
 
+  const handleIdenChange = (k: string, v: boolean) =>
+    setIdentifierTable((prev) => {
+      if (prev === null) {
+        return null;
+      }
+      const next = { ...prev };
+      next[k] = v;
+      return next;
+    });
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -146,43 +158,44 @@ export const App: FC = () => {
             tree={tree}
             emptyMessage="Evaluate an expression to see how it is interpreted."
           />
-          <Box
-            flexGrow={1}
-            height="75vh"
-          >
-            <DisplayTreeGraph
-              idenTable={idenTable}
-              tree={tree}
-            />
-          </Box>
-          {/* <Stack
-            flexDirection="row"
-            spacing={1}
+
+          <Stack
             useFlexGap
+            flexDirection="row"
+            spacing={2}
             divider={
               <Divider
-                orientation="vertical"
                 flexItem
                 variant="middle"
+                orientation="vertical"
               />
             }
+            sx={{
+              borderRadius: 2,
+              borderStyle: "solid",
+              borderColor: (t) =>
+                alpha(t.palette.primary.main, 0.2),
+              borderWidth: 4,
+            }}
           >
-            <Box minWidth="fit-content">
-              <EditorInputPropositionGroup
+            {idenTable !== null && (
+              <Box minWidth="fit-content">
+                <EditorBooleanSwitcher
+                  idenTable={idenTable}
+                  onIdenChange={handleIdenChange}
+                />
+              </Box>
+            )}
+            <Box
+              flexGrow={1}
+              height="75vh"
+            >
+              <DisplayTreeGraph
                 idenTable={idenTable}
-                onIdenChange={(k, v) =>
-                  setIdentifierTable((prev) => {
-                    if (prev === null) {
-                      return null;
-                    }
-                    const next = { ...prev };
-                    next[k] = v;
-                    return next;
-                  })
-                }
+                tree={tree}
               />
             </Box>
-          </Stack> */}
+          </Stack>
         </Stack>
       </Container>
     </ThemeProvider>
