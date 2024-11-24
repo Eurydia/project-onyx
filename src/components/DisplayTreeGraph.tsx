@@ -7,6 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import * as d3 from "d3";
+import katex from "katex";
 import { FC, useRef } from "react";
 
 type DisplayTreeGraphProps = {
@@ -45,34 +46,35 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
   }
 
   d3.select(ref.current).selectAll("*").remove();
-
   const data = astToExpressionTree(tree, idenTable);
   const root = d3.hierarchy(data);
-
-  const cluster = d3.cluster().size([600, 800]);
+  const cluster = d3.cluster().nodeSize([50, 50]);
   cluster(root);
 
-  const width = 1000;
-  const dx = 10;
-  const dy = width / (root.height + 1);
-  let x0 = Infinity;
-  let x1 = -x0;
-  root.each((d) => {
-    if (d.x > x1) x1 = d.x;
-    if (d.x < x0) x0 = d.x;
-  });
+  let minY: number = root.y;
+  let maxY: number | null = null;
+  let minX: number | null = null;
+  let maxX: number | null = null;
 
-  // Compute the adjusted height of the tree.
-  const height = x1 - x0 + dx * 2;
+  root.each((d) => {
+    maxY = maxY === null ? d.y : Math.max(maxY, d.y);
+    minX = minX === null ? d.x : Math.min(minX, d.x);
+    maxX = maxX === null ? d.x : Math.max(maxX, d.x);
+  });
 
   const svg = d3
     .select(ref.current)
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [x0 - dx, -dy / 3, width, height])
-    .attr("style", "max-width: 100%; height: auto");
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", [
+      minX - 25,
+      minY - 25,
+      maxX + 100,
+      maxY + 100,
+    ])
+    .attr("style", "font-size: 10px");
 
-  const link = svg
+  svg
     .append("g")
     .attr("fill", "none")
     .attr("stroke", "#555")
@@ -101,15 +103,19 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
   node
     .append("circle")
     .attr("fill", theme.palette.primary.main)
-    .attr("r", 25);
+    .attr("r", 17);
 
   node
     .append("text")
     .attr("x", 0)
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
-    .text((d) => d.data.name)
-    .attr("fill", theme.palette.primary.contrastText);
+    .attr("fill", theme.palette.primary.contrastText)
+    .html((d) =>
+      katex
+        .renderToString(d.data.name)
+        .replaceAll("span", "tspan")
+    );
 
   return (
     <Box

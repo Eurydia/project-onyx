@@ -1,15 +1,15 @@
 import { TextField } from "@mui/material";
 import { FC, useRef } from "react";
 
-type EditorInputExpressionTextFieldProps = {
+type EditorExpressionTextFieldProps = {
   value: string;
   rows: number;
   onChange: (value: string) => void;
   onCursorMove: (position: number | null) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
 };
-export const EditorInputExpressionTextField: FC<
-  EditorInputExpressionTextFieldProps
+export const EditorExpressionTextField: FC<
+  EditorExpressionTextFieldProps
 > = (props) => {
   const { rows, value, onChange, onCursorMove, onKeyDown } =
     props;

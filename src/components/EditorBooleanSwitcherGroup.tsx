@@ -11,12 +11,12 @@ import {
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
-type EditorInputPropositionGroupProps = {
+type EditorBooleanSwitcherProps = {
   idenTable: IdentifierTable | null;
   onIdenChange: (iden: string, value: boolean) => void;
 };
-export const EditorInputPropositionGroup: FC<
-  EditorInputPropositionGroupProps
+export const EditorBooleanSwitcher: FC<
+  EditorBooleanSwitcherProps
 > = (props) => {
   const { idenTable, onIdenChange } = props;
 

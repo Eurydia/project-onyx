@@ -44,6 +44,7 @@ export const astToLatexString = (ast: ASTNode): string => {
 
 type ExpressionTree = {
   name: string;
+  value: boolean;
   children: ExpressionTree[];
 };
 
@@ -54,26 +55,32 @@ const traverseASTToExpressionTree = (
   switch (ast.nodeType) {
     case ASTNodeType.CONSTANT:
       return {
-        name: ast.value ? "T" : "F",
+        name: ast.value ? "\\text{T}" : "\\text{F}",
+        value: ast.value,
         children: [
           traverseASTToExpressionTree(ast.expr, idenTable),
         ],
       };
     case ASTNodeType.ERROR:
       return {
+        value: false,
         name: ast.reason,
         children: [],
       };
-    case ASTNodeType.IDENTIFIER:
+    case ASTNodeType.IDENTIFIER: {
+      const value = idenTable[ast.value];
       return {
-        name: idenTable[ast.value] ? "T" : "F",
+        name: value ? "\\text{T}" : "\\text{F}",
+        value,
         children: [
           {
+            value,
             name: ast.value,
             children: [],
           },
         ],
       };
+    }
   }
 
   if (ast.nodeType === ASTNodeType.UNARY_OPERATOR) {
@@ -83,23 +90,35 @@ const traverseASTToExpressionTree = (
     );
 
     return {
-      name: child.name === "T" ? "F" : "T",
-      children: [{ name: ast.operator, children: [child] }],
+      name: child.value ? "\\text{F}" : "\\text{F}",
+      value: !child.value,
+      children: [
+        {
+          name: "\\lnot",
+          value: !child.value,
+          children: [child],
+        },
+      ],
     };
   }
 
   let op: (a: boolean, b: boolean) => boolean;
+  let opLabel = "";
   switch (ast.operator) {
     case Operator.AND:
+      opLabel = "\\land";
       op = (a, b) => a && b;
       break;
     case Operator.OR:
+      opLabel = "\\lor";
       op = (a, b) => a || b;
       break;
     case Operator.IMPLIES:
+      opLabel = "\\implies";
       op = (a, b) => !a || b;
       break;
     case Operator.IFF:
+      opLabel = "\\iff";
       op = (a, b) => a === b;
       break;
   }
@@ -114,13 +133,14 @@ const traverseASTToExpressionTree = (
     idenTable
   );
 
+  const value = op(left.value, right.value);
   return {
-    name: op(left.name === "T", right.name === "T")
-      ? "T"
-      : "F",
+    name: value ? "\\text{T}" : "\\text{F}",
+    value,
     children: [
       {
-        name: ast.operator,
+        value,
+        name: opLabel,
         children: [left, right],
       },
     ],

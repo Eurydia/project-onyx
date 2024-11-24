@@ -8,12 +8,12 @@ import {
 import { FC, Fragment, ReactNode } from "react";
 import { StyledKBD } from "./StyledKBD";
 
-type EditorInputExecuteToolbarGroupProps = {
+type EditorExecuteToolbarGroupProps = {
   onExecute: () => void;
   keyCombinationHint: string[];
 };
-export const EditorInputExecuteToolbarGroup: FC<
-  EditorInputExecuteToolbarGroupProps
+export const EditorExecuteToolbarGroup: FC<
+  EditorExecuteToolbarGroupProps
 > = (props) => {
   const { onExecute, keyCombinationHint } = props;
 

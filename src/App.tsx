@@ -1,8 +1,8 @@
 import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
 import { DisplayTreeGraph } from "$components/DisplayTreeGraph";
-import { EditorInputExecuteToolbarGroup } from "$components/EditorInputExecuteToolbaGroup";
-import { EditorInputExpressionTextField } from "$components/EditorInputExpressionTextField";
-import { EditorInputOperatorToolbarGroup } from "$components/EditorInputOperatorToolbarGroup";
+import { EditorExecuteToolbarGroup } from "$components/EditorExecuteToolbaGroup";
+import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
+import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
 import { ASTNode, IdentifierTable } from "$types/parser";
@@ -119,17 +119,17 @@ export const App: FC = () => {
           padding={2}
           minHeight="100vh"
         >
-          <EditorInputOperatorToolbarGroup
+          <EditorOperatorToolbarGroup
             onInsertChar={handleInsertChar}
           />
-          <EditorInputExpressionTextField
+          <EditorExpressionTextField
             value={inputValue}
             onChange={setInputVlue}
             onKeyDown={handleKeyDown}
             onCursorMove={setInputCursorPos}
             rows={5}
           />
-          <EditorInputExecuteToolbarGroup
+          <EditorExecuteToolbarGroup
             onExecute={handleExecute}
             keyCombinationHint={["CTRL", "ENTER"]}
           />
