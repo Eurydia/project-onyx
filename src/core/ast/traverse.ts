@@ -4,7 +4,6 @@ import {
   ASTNodeType,
   IdentifierTable,
 } from "$types/parser";
-import { RawNodeDatum } from "react-d3-tree";
 
 export const astToLatexString = (ast: ASTNode): string => {
   switch (ast.nodeType) {
@@ -43,42 +42,49 @@ export const astToLatexString = (ast: ASTNode): string => {
   return tex;
 };
 
-let counter = 0;
+type ExpressionTree = {
+  name: string;
+  children: ExpressionTree[];
+};
 
-const traverseASTToRawNodeDatum = (
+const traverseASTToExpressionTree = (
   ast: ASTNode,
   idenTable: IdentifierTable
-): RawNodeDatum => {
+): ExpressionTree => {
   switch (ast.nodeType) {
     case ASTNodeType.CONSTANT:
-      return traverseASTToRawNodeDatum(ast.expr, idenTable);
+      return {
+        name: ast.value ? "T" : "F",
+        children: [
+          traverseASTToExpressionTree(ast.expr, idenTable),
+        ],
+      };
     case ASTNodeType.ERROR:
-      throw new Error(ast.reason);
+      return {
+        name: ast.reason,
+        children: [],
+      };
     case ASTNodeType.IDENTIFIER:
       return {
-        name: idenTable[ast.value] ? "True" : "False",
+        name: idenTable[ast.value] ? "T" : "F",
         children: [
           {
             name: ast.value,
+            children: [],
           },
         ],
       };
   }
 
   if (ast.nodeType === ASTNodeType.UNARY_OPERATOR) {
-    const node = traverseASTToRawNodeDatum(
+    const child = traverseASTToExpressionTree(
       ast.operand,
       idenTable
     );
-    const v = node.name === "True";
+
     return {
-      name: !v ? "True" : "False",
-      children: [
-        {
-          name: "NOT",
-          children: [node],
-        },
-      ],
+      name: child.name === "T" ? "F" : "T",
+      children: [{ name: ast.operator, children: [child] }],
     };
   }
 
@@ -98,21 +104,20 @@ const traverseASTToRawNodeDatum = (
       break;
   }
 
-  const left = traverseASTToRawNodeDatum(
+  const left = traverseASTToExpressionTree(
     ast.leftOperand,
     idenTable
   );
-  const vLeft = left.name === "True";
 
-  const right = traverseASTToRawNodeDatum(
+  const right = traverseASTToExpressionTree(
     ast.rightOperand,
     idenTable
   );
-  const vRight = right.name === "True";
-  const v = op(vLeft, vRight);
-  console.log(ast.operator, v);
+
   return {
-    name: v ? "True" : "False",
+    name: op(left.name === "T", right.name === "T")
+      ? "T"
+      : "F",
     children: [
       {
         name: ast.operator,
@@ -122,11 +127,9 @@ const traverseASTToRawNodeDatum = (
   };
 };
 
-export const astToRawNodeDatum = (
+export const astToExpressionTree = (
   ast: ASTNode,
   idenTable: IdentifierTable
-): RawNodeDatum => {
-  counter++;
-  console.log("counter", counter);
-  return traverseASTToRawNodeDatum(ast, idenTable);
+) => {
+  return traverseASTToExpressionTree(ast, idenTable);
 };

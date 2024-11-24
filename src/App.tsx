@@ -1,9 +1,8 @@
 import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
-import { DisplayPlayground } from "$components/DisplayPlayground";
+import { DisplayTreeGraph } from "$components/DisplayTreeGraph";
 import { EditorInputExecuteToolbarGroup } from "$components/EditorInputExecuteToolbaGroup";
 import { EditorInputExpressionTextField } from "$components/EditorInputExpressionTextField";
-import { EditorInputOperatorButtonToolbarGroup } from "$components/EditorInputOperatorButtonToolbarGroup";
-import { EditorInputPropositionGroup } from "$components/EditorInputPropositionGroup";
+import { EditorInputOperatorToolbarGroup } from "$components/EditorInputOperatorToolbarGroup";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
 import { ASTNode, IdentifierTable } from "$types/parser";
@@ -13,7 +12,6 @@ import {
   Container,
   createTheme,
   CssBaseline,
-  Divider,
   GlobalStyles,
   Stack,
   ThemeProvider,
@@ -121,7 +119,7 @@ export const App: FC = () => {
           padding={2}
           minHeight="100vh"
         >
-          <EditorInputOperatorButtonToolbarGroup
+          <EditorInputOperatorToolbarGroup
             onInsertChar={handleInsertChar}
           />
           <EditorInputExpressionTextField
@@ -139,40 +137,43 @@ export const App: FC = () => {
             tree={tree}
             emptyMessage="Evaluate an expression to see how it is interpreted."
           />
-          {tree !== null && idenTable !== null && (
-            <Stack
-              flexDirection="row"
-              spacing={1}
-              useFlexGap
-              divider={
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  variant="middle"
-                />
-              }
-            >
-              <Box width="fit-content">
-                <EditorInputPropositionGroup
-                  idenTable={idenTable}
-                  onIdenChange={(k, v) =>
-                    setIdentifierTable((prev) => {
-                      if (prev === null) {
-                        return null;
-                      }
-                      const next = { ...prev };
-                      next[k] = v;
-                      return next;
-                    })
-                  }
-                />
-              </Box>
-              <DisplayPlayground
-                identifierTable={idenTable!}
-                tree={tree!}
+          <Box
+            flexGrow={1}
+            height="75vh"
+          >
+            <DisplayTreeGraph
+              idenTable={idenTable}
+              tree={tree}
+            />
+          </Box>
+          {/* <Stack
+            flexDirection="row"
+            spacing={1}
+            useFlexGap
+            divider={
+              <Divider
+                orientation="vertical"
+                flexItem
+                variant="middle"
               />
-            </Stack>
-          )}
+            }
+          >
+            <Box minWidth="fit-content">
+              <EditorInputPropositionGroup
+                idenTable={idenTable}
+                onIdenChange={(k, v) =>
+                  setIdentifierTable((prev) => {
+                    if (prev === null) {
+                      return null;
+                    }
+                    const next = { ...prev };
+                    next[k] = v;
+                    return next;
+                  })
+                }
+              />
+            </Box>
+          </Stack> */}
         </Stack>
       </Container>
     </ThemeProvider>

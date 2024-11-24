@@ -1,8 +1,7 @@
-import { astToRawNodeDatum as astToExpressionGraph } from "$core/ast/traverse";
+import { astToExpressionTree as astToExpressionGraph } from "$core/ast/traverse";
 import { ASTNode, IdentifierTable } from "$types/parser";
 import { Box } from "@mui/material";
 import { FC } from "react";
-import Tree from "react-d3-tree";
 
 type DisplayPlaygroundProps = {
   tree: ASTNode;
@@ -20,16 +19,12 @@ export const DisplayPlayground: FC<
 
   return (
     <Box
-      height="75vh"
-      flexGrow={1}
-    >
-      <Tree
-        collapsible={false}
-        onNodeClick={() => {}}
-        data={expressionTree}
-        orientation="vertical"
-        zoom={0.7}
-      />
-    </Box>
+      sx={{
+        height: "100%",
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: (t) => t.palette.primary.main,
+      }}
+    ></Box>
   );
 };
