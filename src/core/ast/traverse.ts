@@ -1,3 +1,4 @@
+import { ExpressionTree } from "$types/ast";
 import { Operator } from "$types/lexer";
 import {
   ASTNode,
@@ -40,12 +41,6 @@ export const astToLatexString = (ast: ASTNode): string => {
 
   const tex = `${leftTree} ${operator} ${rightTree}`;
   return tex;
-};
-
-type ExpressionTree = {
-  name: string;
-  value: boolean;
-  children: ExpressionTree[];
 };
 
 const traverseASTToExpressionTree = (

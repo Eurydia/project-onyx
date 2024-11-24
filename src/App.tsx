@@ -5,7 +5,11 @@ import { EditorExpressionTextField } from "$components/EditorExpressionTextField
 import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import { ASTNode, IdentifierTable } from "$types/parser";
+import {
+  ASTNode,
+  ASTNodeType,
+  IdentifierTable,
+} from "$types/parser";
 import {
   alpha,
   Box,
@@ -80,6 +84,11 @@ export const App: FC = () => {
       return;
     }
     const { tree, identifierTable } = parser(tokens);
+    if (tree.nodeType === ASTNodeType.ERROR) {
+      setTree(null);
+      setIdentifierTable(null);
+      return;
+    }
     setIdentifierTable(identifierTable);
     setTree(tree);
   };
