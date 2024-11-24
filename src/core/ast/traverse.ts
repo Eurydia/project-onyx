@@ -43,18 +43,20 @@ export const astToLatexString = (ast: ASTNode): string => {
   return tex;
 };
 
-export const astToRawNodeDatum = (
+let counter = 0;
+
+const traverseASTToRawNodeDatum = (
   ast: ASTNode,
   idenTable: IdentifierTable
 ): RawNodeDatum => {
   switch (ast.nodeType) {
     case ASTNodeType.CONSTANT:
-      throw new Error("Unexpected constant node");
+      return traverseASTToRawNodeDatum(ast.expr, idenTable);
     case ASTNodeType.ERROR:
       throw new Error(ast.reason);
     case ASTNodeType.IDENTIFIER:
       return {
-        name: String(idenTable[ast.value]),
+        name: idenTable[ast.value] ? "True" : "False",
         children: [
           {
             name: ast.value,
@@ -64,10 +66,13 @@ export const astToRawNodeDatum = (
   }
 
   if (ast.nodeType === ASTNodeType.UNARY_OPERATOR) {
-    const node = astToRawNodeDatum(ast.operand, idenTable);
-    const v = Boolean(node.name);
+    const node = traverseASTToRawNodeDatum(
+      ast.operand,
+      idenTable
+    );
+    const v = node.name === "True";
     return {
-      name: String(!v),
+      name: !v ? "True" : "False",
       children: [
         {
           name: "NOT",
@@ -93,20 +98,21 @@ export const astToRawNodeDatum = (
       break;
   }
 
-  const left = astToRawNodeDatum(
+  const left = traverseASTToRawNodeDatum(
     ast.leftOperand,
     idenTable
   );
-  const vLeft = Boolean(left.name);
+  const vLeft = left.name === "True";
 
-  const right = astToRawNodeDatum(
+  const right = traverseASTToRawNodeDatum(
     ast.rightOperand,
     idenTable
   );
-  const vRight = Boolean(right.name);
+  const vRight = right.name === "True";
   const v = op(vLeft, vRight);
+  console.log(ast.operator, v);
   return {
-    name: String(v),
+    name: v ? "True" : "False",
     children: [
       {
         name: ast.operator,
@@ -114,4 +120,13 @@ export const astToRawNodeDatum = (
       },
     ],
   };
+};
+
+export const astToRawNodeDatum = (
+  ast: ASTNode,
+  idenTable: IdentifierTable
+): RawNodeDatum => {
+  counter++;
+  console.log("counter", counter);
+  return traverseASTToRawNodeDatum(ast, idenTable);
 };

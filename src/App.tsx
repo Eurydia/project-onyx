@@ -6,23 +6,17 @@ import { EditorInputOperatorButtonToolbarGroup } from "$components/EditorInputOp
 import { EditorInputPropositionGroup } from "$components/EditorInputPropositionGroup";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import {
-  ASTNode,
-  ASTNodeType,
-  IdentifierTable,
-} from "$types/parser";
+import { ASTNode, IdentifierTable } from "$types/parser";
 import {
   alpha,
   Box,
   Container,
   createTheme,
   CssBaseline,
+  Divider,
   GlobalStyles,
   Stack,
-  Tab,
-  Tabs,
   ThemeProvider,
-  Typography,
 } from "@mui/material";
 import { brown } from "@mui/material/colors";
 import { FC, useState } from "react";
@@ -31,6 +25,9 @@ const theme = createTheme({
   palette: {
     mode: "light",
     primary: brown,
+    background: {
+      paper: alpha(brown["800"], 0.9),
+    },
   },
   components: {
     MuiList: {
@@ -46,12 +43,12 @@ const theme = createTheme({
     },
     MuiTooltip: {
       styleOverrides: {
-        arrow: {
-          color: alpha(brown["800"], 0.9),
-        },
-        tooltip: {
-          backgroundColor: alpha(brown["800"], 0.9),
-        },
+        arrow: ({ theme: t }) => ({
+          color: t.palette.background.paper,
+        }),
+        tooltip: ({ theme: t }) => ({
+          backgroundColor: t.palette.background.paper,
+        }),
       },
     },
   },
@@ -67,8 +64,6 @@ const globalStyles = (
 );
 
 export const App: FC = () => {
-  const [tab, setTab] = useState<number>(0);
-
   const [inputValue, setInputVlue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
@@ -115,9 +110,6 @@ export const App: FC = () => {
     }
   };
 
-  const isTreeInvalid =
-    tree === null || tree.nodeType === ASTNodeType.ERROR;
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -147,44 +139,19 @@ export const App: FC = () => {
             tree={tree}
             emptyMessage="Evaluate an expression to see how it is interpreted."
           />
-          <Tabs
-            variant="scrollable"
-            value={tab}
-            onChange={(_, value) => setTab(value)}
-          >
-            <Tab
-              value={1}
-              disabled={isTreeInvalid}
-              label={
-                <Typography
-                  sx={{
-                    textDecoration: isTreeInvalid
-                      ? "line-through"
-                      : undefined,
-                  }}
-                >
-                  Evaluate
-                </Typography>
+          {tree !== null && idenTable !== null && (
+            <Stack
+              flexDirection="row"
+              spacing={1}
+              useFlexGap
+              divider={
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  variant="middle"
+                />
               }
-            />
-            <Tab
-              value={2}
-              disabled={isTreeInvalid}
-              label={
-                <Typography
-                  sx={{
-                    textDecoration: isTreeInvalid
-                      ? "line-through"
-                      : undefined,
-                  }}
-                >
-                  Visualize
-                </Typography>
-              }
-            />
-          </Tabs>
-          {tab === 1 && (
-            <Stack flexDirection="row">
+            >
               <Box width="fit-content">
                 <EditorInputPropositionGroup
                   idenTable={idenTable}
@@ -200,77 +167,12 @@ export const App: FC = () => {
                   }
                 />
               </Box>
-              <Box
-                flexGrow={1}
-                sx={{
-                  borderWidth: 1,
-                  borderStyle: "solid",
-                  borderColor: "primary.main",
-                  overflowX: "auto",
-                }}
-              >
-                <DisplayPlayground
-                  identifierTable={idenTable!}
-                  tree={tree!}
-                />
-              </Box>
+              <DisplayPlayground
+                identifierTable={idenTable!}
+                tree={tree!}
+              />
             </Stack>
           )}
-
-          {/* <Box>
-            <Tabs
-              variant="scrollable"
-              value={tab}
-              onChange={(_, value) => setTab(value)}
-            >
-              <Tab
-                disableRipple
-                label="Evaluator"
-                value={0}
-              />
-              <Tab
-                disableRipple
-                label="Visualizer"
-                value={1}
-              />
-            </Tabs>
-            {tab === 0 && (
-              <Stack
-                flexDirection="row"
-                maxHeight="100vh"
-              >
-                <Stack
-                  flexGrow={0}
-                  width="fit-content"
-                >
-                  <Typography>Propositions</Typography>
-                  <BooleanSwicher />
-                </Stack>
-                <Box
-                  sx={{
-                    borderWidth: 1,
-                    borderStyle: "solid",
-                    borderColor: "primary.main",
-                  }}
-                  flexGrow={1}
-                >
-                  <Typography>Output</Typography>
-                </Box>
-              </Stack>
-            )}
-            {tab === 1 && (
-              <Box
-                sx={{
-                  padding: 2,
-                  borderWidth: 1,
-                  borderStyle: "solid",
-                  borderColor: "black",
-                }}
-              >
-                <Tree tree={tree} />
-              </Box>
-            )}
-          </Box> */}
         </Stack>
       </Container>
     </ThemeProvider>
