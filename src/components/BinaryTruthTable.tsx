@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { FC } from "react";
-import { Latex } from "./Latex";
+import { StyledLatex } from "./StyledLatex";
 
 type BinaryTruthTableProps = {
   symbol: string;
@@ -37,13 +37,13 @@ export const BinaryTruthTable: FC<BinaryTruthTableProps> = (
       <thead>
         <tr>
           <th>
-            <Latex tex="p" />
+            <StyledLatex tex="p" />
           </th>
           <th>
-            <Latex tex="q" />
+            <StyledLatex tex="q" />
           </th>
           <th>
-            <Latex tex={`p ${symbol} q`} />
+            <StyledLatex tex={`p ${symbol} q`} />
           </th>
         </tr>
       </thead>

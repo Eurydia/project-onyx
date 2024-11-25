@@ -9,7 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Group } from "@visx/group";
-import { Cluster, hierarchy } from "@visx/hierarchy";
+import { hierarchy, Tree } from "@visx/hierarchy";
 import {
   HierarchyPointLink,
   HierarchyPointNode,
@@ -95,6 +95,15 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
       ? 0
       : container.getBoundingClientRect().height;
 
+  const nodeSizeY = Math.max(
+    height / (data.height + 1),
+    100
+  );
+  const nodeSizeX = Math.max(
+    width / 3 / (data.leaves().length + 1),
+    100
+  );
+
   return (
     <Box
       position="relative"
@@ -129,13 +138,14 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
                 }}
                 transform={zoom.toString()}
               >
-                <Cluster<ExpressionTree>
+                <Tree<ExpressionTree>
                   root={data}
                   size={[width, height]}
+                  nodeSize={[nodeSizeX, nodeSizeY]}
                 >
-                  {(cluster) => (
+                  {(treeHeir) => (
                     <Group>
-                      {cluster.links().map((link, i) => (
+                      {treeHeir.links().map((link, i) => (
                         <LinkVertical<
                           HierarchyPointLink<ExpressionTree>,
                           HierarchyPointNode<ExpressionTree>
@@ -150,7 +160,7 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
                           fill="none"
                         />
                       ))}
-                      {cluster
+                      {treeHeir
                         .descendants()
                         .map((node, i) => (
                           <Node
@@ -160,7 +170,7 @@ export const DisplayTreeGraph: FC<DisplayTreeGraphProps> = (
                         ))}
                     </Group>
                   )}
-                </Cluster>
+                </Tree>
               </g>
             </svg>
             <Fab

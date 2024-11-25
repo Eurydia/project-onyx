@@ -158,7 +158,7 @@ export const parser = (
   const ast = polishToAST(polish, idSet);
 
   const idTable: IdentifierTable = {};
-  idSet.forEach((identifier) => {
+  [...idSet].toSorted().forEach((identifier) => {
     idTable[identifier] = true;
   });
 

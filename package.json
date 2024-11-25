@@ -1,13 +1,14 @@
 {
   "name": "project-onyx",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist -b gh-pages"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
@@ -15,6 +16,7 @@
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
     "@visx/visx": "^3.12.0",
+    "gh-pages": "^6.2.0",
     "katex": "^0.16.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -37,3 +39,4 @@
     "vite-tsconfig-paths": "^5.1.3"
   }
 }
+

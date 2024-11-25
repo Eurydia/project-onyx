@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { FC } from "react";
-import { Latex } from "./Latex";
+import { StyledLatex } from "./StyledLatex";
 
 type UnaryTruthTableProps = {
   symbol: string;
@@ -32,10 +32,10 @@ export const UnaryTruthTable: FC<UnaryTruthTableProps> = (
       <thead>
         <tr>
           <th>
-            <Latex tex="p" />
+            <StyledLatex tex="p" />
           </th>
           <th>
-            <Latex tex={`${symbol} p`} />
+            <StyledLatex tex={`${symbol} p`} />
           </th>
         </tr>
       </thead>

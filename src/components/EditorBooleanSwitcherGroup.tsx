@@ -6,6 +6,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
@@ -28,6 +29,7 @@ export const EditorBooleanSwitcher: FC<
       gap={1}
       width="100%"
     >
+      <Typography>Truth values</Typography>
       {Object.entries(idenTable).map(([iden, value]) => (
         <FormControl
           key={iden}

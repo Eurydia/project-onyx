@@ -138,7 +138,6 @@ export const App: FC = () => {
           useFlexGap
           spacing={1}
           padding={2}
-          minHeight="100vh"
         >
           <EditorOperatorToolbarGroup
             onInsertChar={handleInsertChar}
@@ -160,9 +159,10 @@ export const App: FC = () => {
           />
 
           <Stack
+            height="75vh"
+            maxHeight={800}
             useFlexGap
             flexDirection="row"
-            spacing={2}
             divider={
               <Divider
                 flexItem
@@ -170,16 +170,23 @@ export const App: FC = () => {
                 orientation="vertical"
               />
             }
+            borderRadius={2}
+            borderColor={(t) =>
+              alpha(t.palette.primary.main, 0.2)
+            }
             sx={{
-              borderRadius: 2,
               borderStyle: "solid",
-              borderColor: (t) =>
-                alpha(t.palette.primary.main, 0.2),
               borderWidth: 4,
             }}
           >
             {idenTable !== null && (
-              <Box minWidth="fit-content">
+              <Box
+                minWidth="fit-content"
+                overflow="auto"
+                sx={{
+                  scrollbarGutter: "stable",
+                }}
+              >
                 <EditorBooleanSwitcher
                   idenTable={idenTable}
                   onIdenChange={handleIdenChange}
@@ -188,7 +195,7 @@ export const App: FC = () => {
             )}
             <Box
               flexGrow={1}
-              height="75vh"
+              height="100%"
             >
               <DisplayTreeGraph
                 idenTable={idenTable}
