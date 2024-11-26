@@ -21,6 +21,11 @@ export const StyledLatex: FC<StyledLatexProps> = (
   return (
     <Typography
       component="span"
+      width="100%"
+      overflow="auto"
+      sx={{
+        scrollbarWidth: "thin",
+      }}
       ref={ref}
     />
   );

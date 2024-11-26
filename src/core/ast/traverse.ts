@@ -18,7 +18,14 @@ export const astToLatexString = (ast: ASTNode): string => {
 
   if (ast.nodeType === ASTNodeType.UNARY_OPERATOR) {
     const value = astToLatexString(ast.operand);
-    return `\\lnot ${value}`;
+
+    if (
+      ast.operand.nodeType === ASTNodeType.CONSTANT ||
+      ast.operand.nodeType === ASTNodeType.IDENTIFIER
+    ) {
+      return `\\lnot ${value}`;
+    }
+    return `\\lnot \\left(${value}\\right)`;
   }
 
   let operator = "";

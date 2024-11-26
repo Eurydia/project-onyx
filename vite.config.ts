@@ -4,6 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/project-onyx/",
   plugins: [react(), tsconfigPaths()],
   build: {
     rollupOptions: {
@@ -11,17 +12,6 @@ export default defineConfig({
       treeshake: true,
       output: {
         compact: true,
-        manualChunks: (id) => {
-          if (id.includes("node_modules")) {
-            if (
-              id.includes("mui") ||
-              id.includes("emotion")
-            ) {
-              return "mui";
-            }
-          }
-          return "vendor";
-        },
       },
     },
 

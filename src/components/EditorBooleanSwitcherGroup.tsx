@@ -1,12 +1,12 @@
 import { IdentifierTable } from "$types/parser";
 import {
-  Box,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
   Radio,
   RadioGroup,
-  Typography,
+  Stack,
 } from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
@@ -21,24 +21,27 @@ export const EditorBooleanSwitcher: FC<
   const { idenTable, onIdenChange } = props;
 
   return (
-    <Box
-      padding={2}
-      display="flex"
-      flexDirection="column"
-      flexWrap="nowrap"
-      gap={1}
-      width="100%"
+    <Stack
+      useFlexGap
+      spacing={1}
+      divider={
+        <Divider
+          flexItem
+          variant="middle"
+        />
+      }
+      sx={{
+        overflow: "auto",
+        height: "100%",
+        scrollbarWidth: "thin",
+      }}
     >
-      <Typography>Truth values</Typography>
       {Object.entries(idenTable).map(([iden, value]) => (
         <FormControl
           key={iden}
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 4,
+            paddingX: 2,
+            rowGap: 0,
           }}
         >
           <FormLabel>
@@ -64,6 +67,6 @@ export const EditorBooleanSwitcher: FC<
           </RadioGroup>
         </FormControl>
       ))}
-    </Box>
+    </Stack>
   );
 };

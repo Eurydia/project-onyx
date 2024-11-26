@@ -49,7 +49,10 @@ export const EditorOperatorToolbarGroup: FC<
       disableGutters
       variant="dense"
     >
-      <ButtonGroup disableElevation>
+      <ButtonGroup
+        disableElevation
+        variant="contained"
+      >
         {OPERATOR.map((btn, btnIndex) => (
           <Tooltip
             key={`btn` + btnIndex}

@@ -29,22 +29,20 @@ export const DisplayInputFeedback: FC<
       );
   }
   return (
-    <Box>
-      <Box
-        paddingX={2}
-        paddingY={1}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight={100} // Otherwise the size of the box will be smaller in its empty state
-        sx={{
-          borderRadius: (t) => t.shape.borderRadius,
-          backgroundColor: (t) =>
-            alpha(t.palette.primary.light, 0.2),
-        }}
-      >
-        {texContent}
-      </Box>
+    <Box
+      paddingX={2}
+      paddingY={0.5}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight={100} // Otherwise the size of the box will be smaller in its empty state
+      sx={{
+        borderRadius: (t) => t.shape.borderRadius,
+        backgroundColor: (t) =>
+          alpha(t.palette.secondary.light, 0.4),
+      }}
+    >
+      {texContent}
     </Box>
   );
 };

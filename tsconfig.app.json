@@ -12,7 +12,9 @@
       "$blogs/*": ["src/blogs/*"],
       "$components/*": ["src/components/*"],
       "$core/*": ["src/core/*"],
+      "$hooks/*": ["src/hooks/*"],
       "$types/*": ["src/types/*"],
+      "$views/*": ["src/views/*"],
     },
 
     /* Bundler mode */

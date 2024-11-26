@@ -1,36 +1,23 @@
 import { TextField } from "@mui/material";
-import { FC, useRef } from "react";
+import { FC } from "react";
 
 type EditorExpressionTextFieldProps = {
   value: string;
   rows: number;
   onChange: (value: string) => void;
-  onCursorMove: (position: number | null) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
 };
 export const EditorExpressionTextField: FC<
   EditorExpressionTextFieldProps
 > = (props) => {
-  const { rows, value, onChange, onCursorMove, onKeyDown } =
-    props;
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleCursorMove = () => {
-    if (inputRef.current === null) {
-      return;
-    }
-    onCursorMove(inputRef.current.selectionStart);
-  };
-
+  const { rows, value, onChange, onKeyDown } = props;
   return (
     <TextField
       fullWidth
       multiline
-      inputRef={inputRef}
       rows={rows}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      onSelect={handleCursorMove}
       onKeyDown={onKeyDown}
       slotProps={{
         input: {
