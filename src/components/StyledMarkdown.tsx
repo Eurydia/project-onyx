@@ -48,6 +48,17 @@ const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
       variant="middle"
     />
   ),
+  a: ({ href, hrefLang, referrerPolicy, children }) => (
+    <Typography
+      component="a"
+      target="_blank"
+      href={href}
+      hrefLang={hrefLang}
+      referrerPolicy={referrerPolicy}
+    >
+      {children}
+    </Typography>
+  ),
 };
 
 type StyledMarkdownProps = {

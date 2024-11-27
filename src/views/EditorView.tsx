@@ -4,11 +4,8 @@ import { EditorExecuteToolbarGroup } from "$components/EditorExecuteToolbaGroup"
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
 import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
 import { TreeGraph } from "$components/TreeGraph";
-import { toCollapsedTree } from "$core/ast/collapse";
-import { toNormalizeTree } from "$core/ast/normalize";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import { Operator } from "$types/lexer";
 import {
   ASTNode,
   ASTNodeType,
@@ -44,19 +41,20 @@ export const EditorView: FC = () => {
       return;
     }
     setIdentifierTable(identifierTable);
-    const normalizedTree = toNormalizeTree(tree);
+    setTree(tree);
+    // const normalizedTree = toNormalizeTree(tree);
 
-    const allowedOp = new Set([
-      Operator.AND,
-      // Operator.OR,
-      Operator.IMPLIES,
-      Operator.IFF,
-    ]);
-    const simplifiedTree = toCollapsedTree(
-      normalizedTree,
-      allowedOp
-    );
-    setTree(simplifiedTree);
+    // const allowedOp = new Set([
+    //   Operator.AND,
+    //   // Operator.OR,
+    //   Operator.IMPLIES,
+    //   Operator.IFF,
+    // ]);
+    // const simplifiedTree = toCollapsedTree(
+    //   normalizedTree,
+    //   allowedOp
+    // );
+    // setTree(simplifiedTree);
   };
 
   const handleInsertChar = (char: string) => {

@@ -1,4 +1,4 @@
-import AboutBlog from "$assets/blogs/UsefulTheorems/en.txt";
+import AboutBlog from "$assets/blogs/BooleanAlgebraSummary/en.txt";
 import UserManualBlog from "$assets/blogs/UserManual/en.txt";
 import { StyledMarkdown } from "$components/StyledMarkdown";
 import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
