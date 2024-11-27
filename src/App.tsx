@@ -2,16 +2,16 @@ import { EditorView } from "$views/EditorView";
 import { BlogView } from "$views/TheoremBlogView";
 import {
   alpha,
-  Box,
   createTheme,
   CssBaseline,
   GlobalStyles,
+  responsiveFontSizes,
   ThemeProvider,
 } from "@mui/material";
 import { brown, green } from "@mui/material/colors";
 import { FC } from "react";
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     mode: "light",
     primary: {
@@ -50,6 +50,8 @@ const theme = createTheme({
   },
 });
 
+theme = responsiveFontSizes(theme);
+
 const globalStyles = (
   <GlobalStyles
     styles={{
@@ -65,14 +67,7 @@ export const App: FC = () => {
       <CssBaseline />
       {globalStyles}
       <EditorView />
-      <Box
-        paddingY={2}
-        sx={{
-          backgroundColor: (t) => t.palette.primary.light,
-        }}
-      >
-        <BlogView />
-      </Box>
+      <BlogView />
     </ThemeProvider>
   );
 };

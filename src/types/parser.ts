@@ -25,12 +25,6 @@ export type UnaryOperatorNode = {
   operand: ASTNode;
 };
 
-export type ConstantNode = {
-  nodeType: ASTNodeType.CONSTANT;
-  expr: ASTNode;
-  value: boolean;
-};
-
 export type ErrorNode = {
   nodeType: ASTNodeType.ERROR;
   reason: string;
@@ -44,8 +38,22 @@ export type IdentifierNode = {
 export type ASTNode =
   | BinaryOperatorNode
   | UnaryOperatorNode
-  | ConstantNode
   | ErrorNode
   | IdentifierNode;
 
 export type IdentifierTable = Record<string, boolean>;
+
+export type NormalizedAST =
+  | IdentifierNode
+  | ErrorNode
+  | {
+      nodeType: ASTNodeType.UNARY_OPERATOR;
+      operator: Operator.NOT;
+      operand: NormalizedAST;
+    }
+  | {
+      nodeType: ASTNodeType.BINARY_OPERATOR;
+      operator: Operator.AND;
+      leftOperand: NormalizedAST;
+      rightOperand: NormalizedAST;
+    };

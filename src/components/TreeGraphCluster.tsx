@@ -1,4 +1,4 @@
-import { astToExpressionTree } from "$core/ast/traverse";
+import { toExprTree } from "$core/ast/expression";
 import { ExpressionTree } from "$types/ast";
 import { ASTNode } from "$types/parser";
 import { ControlCameraRounded } from "@mui/icons-material";
@@ -26,9 +26,18 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   const { tree, idenTable, height, width } = props;
   const theme = useTheme();
 
-  const data = hierarchy(
-    astToExpressionTree(tree, idenTable)
-  );
+  // const target = new Set([
+  //   Operator.AND,
+  //   Operator.OR,
+  //   Operator.IFF,
+  // ]);
+  // const normalizedTree = toNormalizeTree(tree);
+  // const simplifiedTree = toCollapsedTree(
+  //   normalizedTree,
+  //   target
+  // );
+  const exprTree = toExprTree(tree, idenTable);
+  const data = hierarchy(exprTree);
 
   const nodeSizeY = Math.max(
     height / (data.height + 1),

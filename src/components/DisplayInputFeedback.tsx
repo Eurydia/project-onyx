@@ -1,4 +1,4 @@
-import { astToLatexString } from "$core/ast/traverse";
+import { astToLatexString } from "$core/ast/expression";
 import { ASTNode, ASTNodeType } from "$types/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";
@@ -12,6 +12,8 @@ export const DisplayInputFeedback: FC<
   DisplayInputFeedbackProps
 > = (props) => {
   const { tree, emptyMessage } = props;
+
+  console.log("tree", tree);
 
   let texContent = <Typography>{emptyMessage}</Typography>;
   if (tree !== null) {

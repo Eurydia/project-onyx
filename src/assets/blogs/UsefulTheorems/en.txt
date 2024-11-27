@@ -1,0 +1,175 @@
+## Boolean Algebra 
+
+### Definitions of Logical Connectives
+
+Here is a collection of definitions for the logical connectives available in the interpreter.
+
+**Definition**: We define logical conjunction to be a binary operator on the Boolean set, such that
+
+$$
+\begin{align*}
+(1,1)&\to 1\\
+(1,0)&\to 0\\
+(0,1)&\to 0\\
+(0,0)&\to 0\\
+\end{align*}
+$$
+
+We denote logical conjunction with the symbol $\land$.
+
+**Definition**: We define logical negation to be a unary operator on the Boolean set, such that
+
+$$
+\begin{align*}
+1&\to 0\\
+0&\to 1\\
+\end{align*}
+$$
+
+We denote logical negation with the symbol $\lnot$.
+
+
+### Useful Theorems
+
+
+### Application of Elementary Boolean Theorems
+
+**Theorem**: Logical conjunction and logical negation can express logical disjunction.
+
+**Proof**
+
+Consider two propositions $p,q$, and the Boolean expression 
+
+$$
+\begin{align*}
+p\lor q.
+\end{align*}
+$$
+
+We first apply [double negation law](https://en.wikipedia.org/wiki/Double-negation_translation), then [De Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws);
+
+$$
+\begin{align*}
+p\lor q&\equiv \lnot\lnot(p\lor q)\\
+&\equiv\lnot (\lnot p\land \lnot q).
+\end{align*}
+$$
+
+Thus, we have $p\lor q\equiv \lnot (\lnot p\land \lnot q)$.
+
+---
+
+**Theorem**: Logical conjunction and logical negation can express logical implication.
+
+**Proof**
+
+Consider two propositions $p,q$, and the Boolean expression
+
+$$
+\begin{align*}
+p\implies q.
+\end{align*}
+$$
+
+We apply the [rule of material implication](https://en.wikipedia.org/wiki/Material_implication_%28rule_of_inference%29);
+
+$$
+\begin{align*}
+p\implies q &\equiv \lnot p\lor q.
+\end{align*}
+$$
+
+From here, we apply [double negation](https://en.wikipedia.org/wiki/Double-negation_translation), [then De Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws);
+
+$$
+\begin{align*}
+\lnot p\lor q&\equiv \lnot\lnot(\lnot p\lor q)\\
+&\equiv\lnot (p\land \lnot q)
+\end{align*}
+$$
+
+Thus, we have $p\implies q\equiv \lnot (p\land\lnot q)$.
+
+---
+
+**Thereom**: Logical conjunction and logical negation can express logical equivalence.
+
+**Proof**
+
+Consider two propositions $p,q$, and a Boolean expression
+
+$$
+\begin{align*}
+p\iff q.
+\end{align*}
+$$
+
+We expand the [definition of logical equivalence](
+https://en.wikipedia.org/wiki/Logical_biconditional);
+
+$$
+\begin{align*}
+p\iff q\equiv (p\implies q)\land(q\implies p).
+\end{align*}
+$$
+
+We apply the theorem discussed earlier to eliminate logical implication;
+
+$$
+\begin{align*}
+(p\implies q)\land(q\implies p) &\equiv (\lnot (p\land\lnot q))\land (\lnot (q\land\lnot p)).
+\end{align*}
+$$
+
+Thus, we have $p\iff q\equiv (\lnot (p\land\lnot q))\land (\lnot (q\land\lnot p))$.
+
+---
+
+**Theorem**: Logical negation and logical disjunction can express logical conjunction.
+
+**Proof**
+
+Consider two propisitions $p,q$ and a Boolean expression
+
+$$
+\begin{align*}
+p \land q.
+\end{align*}
+$$
+
+We apply double negation law, then De Morgan's law.
+
+$$
+\begin{align*}
+p \land q&\equiv \lnot\lnot(p\land q)\\
+&\equiv\lnot(\lnot p\lor \lnot q).
+\end{align*}
+$$
+
+Thus, $p\land q\equiv \lnot(\lnot p\lor \lnot q)$.
+
+---
+
+**Theorem**: Logical implication and logical negation can express logical conjunction.
+
+**Proof**
+
+Consider two propositions $p,q$ and a Boolean expression
+
+$$
+\begin{align*}
+p \land q.
+\end{align*}
+$$
+
+We apply [double negation law](https://proofwiki.org/wiki/Double_Negation), then [De Morgan's law](https://proofwiki.org/wiki/De_Morgan%27s_Laws_(Logic)), and [rule of material implication](https://proofwiki.org/wiki/Rule_of_Material_Implication) to obtain
+
+$$
+\begin{align*}
+p \land q&\equiv \lnot\lnot(p\land q)\\
+&\equiv \lnot (\lnot p\lor \lnot q)\\
+&\equiv\lnot(p\implies \lnot q).
+\end{align*}
+$$
+
+Thus $p\land q\equiv \lnot(p\implies \lnot q)$.

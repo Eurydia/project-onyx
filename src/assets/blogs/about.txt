@@ -7,7 +7,3 @@ She had mentioned that the department would do well to introduce a learning tool
 With concrete specifications and requirements laid out, I began work on this project. At its core, this project has three components; (1) evaluation, (2) visualization, and (3) experimentation.
 
 You can evaluate an arbitrary, well-formed Boolean expression and experiment with the truth value of your expression by changing the truth value of your introduced propositions. As for the visualization, you can see your expression in a syntax tree. I think they are quite neet!
-
-## About
-
-$p = q$

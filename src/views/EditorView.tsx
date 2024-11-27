@@ -4,8 +4,11 @@ import { EditorExecuteToolbarGroup } from "$components/EditorExecuteToolbaGroup"
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
 import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
 import { TreeGraph } from "$components/TreeGraph";
+import { toCollapsedTree } from "$core/ast/collapse";
+import { toNormalizeTree } from "$core/ast/normalize";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
+import { Operator } from "$types/lexer";
 import {
   ASTNode,
   ASTNodeType,
@@ -20,7 +23,7 @@ import {
 import { FC, useState } from "react";
 
 export const EditorView: FC = () => {
-  const [inputValue, setInputVlue] = useState(
+  const [inputValue, setInputValue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<ASTNode | null>(null);
@@ -41,11 +44,23 @@ export const EditorView: FC = () => {
       return;
     }
     setIdentifierTable(identifierTable);
-    setTree(tree);
+    const normalizedTree = toNormalizeTree(tree);
+
+    const allowedOp = new Set([
+      Operator.AND,
+      // Operator.OR,
+      Operator.IMPLIES,
+      Operator.IFF,
+    ]);
+    const simplifiedTree = toCollapsedTree(
+      normalizedTree,
+      allowedOp
+    );
+    setTree(simplifiedTree);
   };
 
   const handleInsertChar = (char: string) => {
-    setInputVlue((prev) => `${prev} ${char}`);
+    setInputValue((prev) => `${prev} ${char}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -76,7 +91,7 @@ export const EditorView: FC = () => {
         />
         <EditorExpressionTextField
           value={inputValue}
-          onChange={setInputVlue}
+          onChange={setInputValue}
           onKeyDown={handleKeyDown}
           rows={5}
         />

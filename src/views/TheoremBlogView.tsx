@@ -1,21 +1,43 @@
-import aboutBlog from "$assets/blogs/about.txt";
+import AboutBlog from "$assets/blogs/UsefulTheorems/en.txt";
+import UserManualBlog from "$assets/blogs/UserManual/en.txt";
+import { StyledMarkdown } from "$components/StyledMarkdown";
 import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
-import { Container } from "@mui/material";
-import { FC } from "react";
-import Markdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import remarkMath from "remark-math";
-
+import { Box, Container, Typography } from "@mui/material";
+import { FC, Fragment } from "react";
 export const BlogView: FC = () => {
-  const content = useFetchMarkdown(aboutBlog);
+  const userManualContent =
+    useFetchMarkdown(UserManualBlog);
+  const content = useFetchMarkdown(AboutBlog);
   return (
-    <Container maxWidth="md">
-      <Markdown
-        rehypePlugins={[rehypeKatex]}
-        remarkPlugins={[remarkMath]}
+    <Fragment>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "110vh",
+          backgroundColor: (t) => t.palette.secondary.light,
+          paddingY: 2,
+          marginY: 8,
+        }}
       >
-        {content}
-      </Markdown>
-    </Container>
+        <Container maxWidth="md">
+          <Typography
+            variant="h1"
+            component="h1"
+          >
+            Hi there! 👋
+          </Typography>
+          <StyledMarkdown>
+            {userManualContent ?? ""}
+          </StyledMarkdown>
+        </Container>
+      </Box>
+      <Box marginBottom={4}>
+        <Container maxWidth="md">
+          <StyledMarkdown>{content ?? ""}</StyledMarkdown>
+        </Container>
+      </Box>
+    </Fragment>
   );
 };

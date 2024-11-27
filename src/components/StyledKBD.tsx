@@ -11,6 +11,7 @@ export const StyledKBD: FC<TypographyProps> = (props) => {
   const t = useTheme();
   return (
     <Typography
+      component="span"
       sx={{
         backgroundColor: t.palette.primary.main,
         color: t.palette.primary.contrastText,
@@ -18,7 +19,7 @@ export const StyledKBD: FC<TypographyProps> = (props) => {
         paddingY: 0.25,
         paddingX: 1,
         fontFamily: "monospace",
-        textTransform: "capitalize",
+        textWrap: "nowrap",
       }}
     >
       {children}
