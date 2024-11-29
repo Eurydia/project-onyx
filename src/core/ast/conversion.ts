@@ -16,7 +16,10 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
       return tree.operand.reason;
     }
     const value = _syntaxTreeToLatex(tree.operand);
-    return `\\lnot ${value}`;
+    if (tree.operand.nodeType === ASTNodeType.IDENTIFIER) {
+      return `\\lnot ${value}`;
+    }
+    return `\\lnot (${value})`;
   }
 
   const left = tree.leftOperand;
