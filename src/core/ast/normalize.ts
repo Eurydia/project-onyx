@@ -124,6 +124,6 @@ const _normalizeTree = (tree: ASTNode): ASTNode => {
   }
 };
 
-export const toNormalizeTree = (ast: ASTNode): ASTNode => {
+export const toNormalizedTree = (ast: ASTNode): ASTNode => {
   return _normalizeTree(ast);
 };

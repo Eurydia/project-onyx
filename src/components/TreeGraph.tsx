@@ -1,3 +1,4 @@
+import { toExprTree } from "$core/ast/expression";
 import { ASTNode } from "$types/parser";
 import { Box, Typography } from "@mui/material";
 import { FC, useRef } from "react";
@@ -5,10 +6,10 @@ import { TreeGraphCluster } from "./TreeGraphCluster";
 
 type TreeGraphProps = {
   tree: ASTNode | null;
-  idenTable: Record<string, boolean> | null;
+  symTable: Record<string, boolean> | null;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, idenTable } = props;
+  const { tree, symTable: symTable } = props;
 
   const ref = useRef<HTMLDivElement>(null);
   const container = ref.current;
@@ -21,7 +22,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       ? 200
       : container.getBoundingClientRect().height;
 
-  const isActive = tree !== null && idenTable !== null;
+  // const augmentedExprTree = augmentExprTree(exprTree);
 
   return (
     <Box
@@ -32,14 +33,13 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       justifyContent="center"
       alignItems="center"
     >
-      {!isActive ? (
-        <Typography>
-          Evaluate an expression to see its syntax tree
+      {tree === null || symTable === null ? (
+        <Typography fontStyle="italic">
+          Nothing to see here
         </Typography>
       ) : (
         <TreeGraphCluster
-          tree={tree}
-          idenTable={idenTable}
+          exprTree={toExprTree(tree, symTable)}
           width={width}
           height={height}
         />

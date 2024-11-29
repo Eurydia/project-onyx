@@ -1,4 +1,4 @@
-import { ExpressionTree } from "$types/ast";
+import { ExprTree } from "$types/ast";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
@@ -6,7 +6,7 @@ import katex from "katex";
 import { FC, useEffect, useRef } from "react";
 
 type NodeProps = {
-  node: HierarchyPointNode<ExpressionTree>;
+  node: HierarchyPointNode<ExprTree>;
 };
 
 export const TreeGraphClusterNode: FC<NodeProps> = (

@@ -1,5 +1,5 @@
-export type ExpressionTree = {
+export type ExprTree = {
   name: string;
   value: boolean | null;
-  children: ExpressionTree[];
+  children: ExprTree[];
 };

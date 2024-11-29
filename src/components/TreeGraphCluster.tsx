@@ -1,6 +1,4 @@
-import { toExprTree } from "$core/ast/expression";
-import { ExpressionTree } from "$types/ast";
-import { ASTNode } from "$types/parser";
+import { ExprTree } from "$types/ast";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Fab, useTheme } from "@mui/material";
 import { Group } from "@visx/group";
@@ -15,28 +13,16 @@ import { FC, Fragment } from "react";
 import { TreeGraphClusterNode } from "./TreeGraphClusterNode";
 
 type TreeGraphClusterProps = {
-  tree: ASTNode;
-  idenTable: Record<string, boolean>;
+  exprTree: ExprTree;
   width: number;
   height: number;
 };
 export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
-  const { tree, idenTable, height, width } = props;
+  const { exprTree, height, width } = props;
   const theme = useTheme();
 
-  // const target = new Set([
-  //   Operator.AND,
-  //   Operator.OR,
-  //   Operator.IFF,
-  // ]);
-  // const normalizedTree = toNormalizeTree(tree);
-  // const simplifiedTree = toCollapsedTree(
-  //   normalizedTree,
-  //   target
-  // );
-  const exprTree = toExprTree(tree, idenTable);
   const data = hierarchy(exprTree);
 
   const nodeSizeY = Math.max(
@@ -77,7 +63,7 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
               }}
               transform={zoom.toString()}
             >
-              <Tree<ExpressionTree>
+              <Tree<ExprTree>
                 root={data}
                 size={[width, height]}
                 nodeSize={[nodeSizeX, nodeSizeY]}
@@ -86,8 +72,8 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
                   <Group>
                     {treeHeir.links().map((link, i) => (
                       <LinkVertical<
-                        HierarchyPointLink<ExpressionTree>,
-                        HierarchyPointNode<ExpressionTree>
+                        HierarchyPointLink<ExprTree>,
+                        HierarchyPointNode<ExprTree>
                       >
                         key={`cluster-link-${i}`}
                         data={link}

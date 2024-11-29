@@ -1,4 +1,4 @@
-import { IdentifierTable } from "$types/parser";
+import { SymbolTable } from "$types/parser";
 import {
   Divider,
   FormControl,
@@ -12,7 +12,7 @@ import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type EditorBooleanSwitcherProps = {
-  idenTable: IdentifierTable;
+  idenTable: SymbolTable;
   onIdenChange: (iden: string, value: boolean) => void;
 };
 export const EditorBooleanSwitcher: FC<

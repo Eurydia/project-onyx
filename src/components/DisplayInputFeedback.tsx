@@ -1,4 +1,3 @@
-import { astToLatexString } from "$core/ast/expression";
 import { ASTNode, ASTNodeType } from "$types/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";
@@ -13,8 +12,6 @@ export const DisplayInputFeedback: FC<
 > = (props) => {
   const { tree, emptyMessage } = props;
 
-  console.log("tree", tree);
-
   let texContent = <Typography>{emptyMessage}</Typography>;
   if (tree !== null) {
     texContent =
@@ -22,7 +19,7 @@ export const DisplayInputFeedback: FC<
         <Typography color="error">{tree.reason}</Typography>
       ) : (
         <StyledLatex
-          tex={astToLatexString(tree)}
+          tex={tree.latexRepr}
           options={{
             displayMode: true,
             output: "htmlAndMathml",
@@ -30,6 +27,7 @@ export const DisplayInputFeedback: FC<
         />
       );
   }
+
   return (
     <Box
       paddingX={2}

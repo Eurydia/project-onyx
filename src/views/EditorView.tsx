@@ -9,7 +9,7 @@ import { parser } from "$core/interpreter/parser";
 import {
   ASTNode,
   ASTNodeType,
-  IdentifierTable,
+  SymbolTable,
 } from "$types/parser";
 import {
   alpha,
@@ -24,24 +24,24 @@ export const EditorView: FC = () => {
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<ASTNode | null>(null);
-  const [idenTable, setIdentifierTable] =
-    useState<IdentifierTable | null>(null);
+  const [symTable, setSymTable] =
+    useState<SymbolTable | null>(null);
 
   const handleExecute = () => {
     const tokens = lexer(inputValue);
     if (tokens.length === 0) {
       setTree(null);
-      setIdentifierTable(null);
+      setSymTable(null);
       return;
     }
-    const { tree, identifierTable } = parser(tokens);
-    if (tree.nodeType === ASTNodeType.ERROR) {
-      setTree(null);
-      setIdentifierTable(null);
-      return;
-    }
-    setIdentifierTable(identifierTable);
-    setTree(tree);
+    const { tree: _tree, symTable: _symTable } =
+      parser(tokens);
+    setTree(_tree);
+    setSymTable(
+      _tree.nodeType === ASTNodeType.ERROR
+        ? null
+        : _symTable
+    );
     // const normalizedTree = toNormalizeTree(tree);
 
     // const allowedOp = new Set([
@@ -68,7 +68,7 @@ export const EditorView: FC = () => {
   };
 
   const handleIdenChange = (k: string, v: boolean) =>
-    setIdentifierTable((prev) => {
+    setSymTable((prev) => {
       if (prev === null) {
         return null;
       }
@@ -105,8 +105,8 @@ export const EditorView: FC = () => {
           container
           spacing={1}
         >
-          {idenTable !== null &&
-            Object.keys(idenTable).length > 0 && (
+          {symTable !== null &&
+            Object.keys(symTable).length > 0 && (
               <Grid2
                 size={{
                   xs: 12,
@@ -124,7 +124,7 @@ export const EditorView: FC = () => {
                 }}
               >
                 <EditorBooleanSwitcher
-                  idenTable={idenTable}
+                  idenTable={symTable}
                   onIdenChange={handleIdenChange}
                 />
               </Grid2>
@@ -141,7 +141,7 @@ export const EditorView: FC = () => {
             }}
           >
             <TreeGraph
-              idenTable={idenTable}
+              symTable={symTable}
               tree={tree}
             />
           </Grid2>

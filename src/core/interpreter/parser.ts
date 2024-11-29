@@ -2,7 +2,7 @@ import { Operator, Token, TokenType } from "$types/lexer";
 import {
   ASTNode,
   ASTNodeType,
-  IdentifierTable,
+  SymbolTable,
 } from "$types/parser";
 
 const OPERATOR_PRECEDENCE = {
@@ -57,21 +57,21 @@ const polishToAST = (
     };
   }
 
-  const rightOperand = polishToAST(tokens, identifierTable);
-  if (rightOperand.nodeType === ASTNodeType.ERROR) {
-    return rightOperand;
+  const right = polishToAST(tokens, identifierTable);
+  if (right.nodeType === ASTNodeType.ERROR) {
+    return right;
   }
 
-  const leftOperand = polishToAST(tokens, identifierTable);
-  if (leftOperand.nodeType === ASTNodeType.ERROR) {
-    return leftOperand;
+  const left = polishToAST(tokens, identifierTable);
+  if (left.nodeType === ASTNodeType.ERROR) {
+    return left;
   }
 
   return {
     nodeType: ASTNodeType.BINARY_OPERATOR,
     operator: tok.value,
-    leftOperand,
-    rightOperand,
+    leftOperand: left,
+    rightOperand: right,
   };
 };
 
@@ -151,19 +151,19 @@ const infixToPolish = (tokens: Token[]): Token[] => {
 
 export const parser = (
   tokens: Token[]
-): { tree: ASTNode; identifierTable: IdentifierTable } => {
+): { tree: ASTNode; symTable: SymbolTable } => {
   const polish = infixToPolish(tokens);
 
   const idSet = new Set<string>();
   const ast = polishToAST(polish, idSet);
 
-  const idTable: IdentifierTable = {};
+  const symTable: SymbolTable = {};
   [...idSet].toSorted().forEach((identifier) => {
-    idTable[identifier] = true;
+    symTable[identifier] = true;
   });
 
   return {
     tree: ast,
-    identifierTable: idTable,
+    symTable,
   };
 };

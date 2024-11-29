@@ -182,55 +182,55 @@ const _collapseNormalizedTree = (
       rightOperand: right,
     };
   }
-  if (target.has(Operator.OR)) {
-    const left: ASTNode = {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: _collapseNormalizedTree(
-        tree.leftOperand,
-        target
-      ),
-    };
-    const right: ASTNode = {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: _collapseNormalizedTree(
-        tree.rightOperand,
-        target
-      ),
-    };
-    return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: {
-        nodeType: ASTNodeType.BINARY_OPERATOR,
-        operator: Operator.OR,
-        leftOperand: left,
-        rightOperand: right,
-      },
-    };
-  } else if (target.has(Operator.IMPLIES)) {
-    return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: {
-        nodeType: ASTNodeType.BINARY_OPERATOR,
-        operator: Operator.IMPLIES,
-        leftOperand: _collapseNormalizedTree(
-          tree.leftOperand,
-          target
-        ),
-        rightOperand: {
-          nodeType: ASTNodeType.UNARY_OPERATOR,
-          operator: Operator.NOT,
-          operand: _collapseNormalizedTree(
-            tree.rightOperand,
-            target
-          ),
-        },
-      },
-    };
-  }
+  // if (target.has(Operator.OR)) {
+  //   const left: ASTNode = {
+  //     nodeType: ASTNodeType.UNARY_OPERATOR,
+  //     operator: Operator.NOT,
+  //     operand: _collapseNormalizedTree(
+  //       tree.leftOperand,
+  //       target
+  //     ),
+  //   };
+  //   const right: ASTNode = {
+  //     nodeType: ASTNodeType.UNARY_OPERATOR,
+  //     operator: Operator.NOT,
+  //     operand: _collapseNormalizedTree(
+  //       tree.rightOperand,
+  //       target
+  //     ),
+  //   };
+  //   return {
+  //     nodeType: ASTNodeType.UNARY_OPERATOR,
+  //     operator: Operator.NOT,
+  //     operand: {
+  //       nodeType: ASTNodeType.BINARY_OPERATOR,
+  //       operator: Operator.OR,
+  //       leftOperand: left,
+  //       rightOperand: right,
+  //     },
+  //   };
+  // } else if (target.has(Operator.IMPLIES)) {
+  //   return {
+  //     nodeType: ASTNodeType.UNARY_OPERATOR,
+  //     operator: Operator.NOT,
+  //     operand: {
+  //       nodeType: ASTNodeType.BINARY_OPERATOR,
+  //       operator: Operator.IMPLIES,
+  //       leftOperand: _collapseNormalizedTree(
+  //         tree.leftOperand,
+  //         target
+  //       ),
+  //       rightOperand: {
+  //         nodeType: ASTNodeType.UNARY_OPERATOR,
+  //         operator: Operator.NOT,
+  //         operand: _collapseNormalizedTree(
+  //           tree.rightOperand,
+  //           target
+  //         ),
+  //       },
+  //     },
+  //   };
+  // }
   return {
     nodeType: ASTNodeType.ERROR,
     reason: "Cannot transform expression to desired form",

@@ -41,7 +41,7 @@ export type ASTNode =
   | ErrorNode
   | IdentifierNode;
 
-export type IdentifierTable = Record<string, boolean>;
+export type SymbolTable = Record<string, boolean>;
 
 export type NormalizedAST =
   | IdentifierNode
