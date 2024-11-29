@@ -1,6 +1,9 @@
-import { ASTNode, ASTNodeType } from "$types/parser";
+import { ASTNodeType, SyntaxTree } from "$types/parser";
 
-const _compareAST = (a: ASTNode, b: ASTNode): boolean => {
+const _compareAST = (
+  a: SyntaxTree,
+  b: SyntaxTree
+): boolean => {
   if (
     a.nodeType === ASTNodeType.ERROR ||
     b.nodeType === ASTNodeType.ERROR
@@ -43,6 +46,9 @@ const _compareAST = (a: ASTNode, b: ASTNode): boolean => {
   return false;
 };
 
-export const compareAST = (a: ASTNode, b: ASTNode) => {
+export const compareAST = (
+  a: SyntaxTree,
+  b: SyntaxTree
+) => {
   return _compareAST(a, b);
 };

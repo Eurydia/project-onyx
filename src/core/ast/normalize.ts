@@ -1,10 +1,10 @@
 import { Operator } from "$types/lexer";
-import { ASTNode, ASTNodeType } from "$types/parser";
+import { ASTNodeType, SyntaxTree } from "$types/parser";
 
 const normalizeDisjunction = (
-  left: ASTNode,
-  right: ASTNode
-): ASTNode => {
+  left: SyntaxTree,
+  right: SyntaxTree
+): SyntaxTree => {
   return {
     nodeType: ASTNodeType.UNARY_OPERATOR,
     operator: Operator.NOT,
@@ -26,9 +26,9 @@ const normalizeDisjunction = (
 };
 
 const normalizeImplication = (
-  left: ASTNode,
-  right: ASTNode
-): ASTNode => {
+  left: SyntaxTree,
+  right: SyntaxTree
+): SyntaxTree => {
   return {
     nodeType: ASTNodeType.UNARY_OPERATOR,
     operator: Operator.NOT,
@@ -46,10 +46,10 @@ const normalizeImplication = (
 };
 
 const normalizeEquivalence = (
-  left: ASTNode,
-  right: ASTNode
-): ASTNode => {
-  const branchLeft: ASTNode = {
+  left: SyntaxTree,
+  right: SyntaxTree
+): SyntaxTree => {
+  const branchLeft: SyntaxTree = {
     nodeType: ASTNodeType.BINARY_OPERATOR,
     operator: Operator.AND,
     leftOperand: left,
@@ -60,7 +60,7 @@ const normalizeEquivalence = (
     },
   };
 
-  const branchRight: ASTNode = {
+  const branchRight: SyntaxTree = {
     nodeType: ASTNodeType.BINARY_OPERATOR,
     operator: Operator.AND,
     leftOperand: right,
@@ -87,7 +87,7 @@ const normalizeEquivalence = (
   };
 };
 
-const _normalizeTree = (tree: ASTNode): ASTNode => {
+const _normalizeTree = (tree: SyntaxTree): SyntaxTree => {
   if (
     tree.nodeType === ASTNodeType.ERROR ||
     tree.nodeType === ASTNodeType.IDENTIFIER
@@ -124,6 +124,8 @@ const _normalizeTree = (tree: ASTNode): ASTNode => {
   }
 };
 
-export const toNormalizedTree = (ast: ASTNode): ASTNode => {
+export const toNormalizedTree = (
+  ast: SyntaxTree
+): SyntaxTree => {
   return _normalizeTree(ast);
 };

@@ -1,26 +1,26 @@
 import { ExprTree } from "$types/ast";
 import { Operator } from "$types/lexer";
 import {
-  ASTNode,
   ASTNodeType,
   SymbolTable,
+  SyntaxTree,
 } from "$types/parser";
 
 const _toExprTree = (
-  tree: ASTNode,
+  tree: SyntaxTree,
   symTable: SymbolTable
 ): ExprTree => {
   if (tree.nodeType === ASTNodeType.ERROR) {
     return {
       value: null,
-      name: `\\text{${tree.reason}}`,
+      label: `\\text{${tree.reason}}`,
       children: [],
     };
   }
 
   if (tree.nodeType === ASTNodeType.IDENTIFIER) {
     return {
-      name: tree.value,
+      label: tree.value,
       value: symTable[tree.value],
       children: [],
     };
@@ -32,7 +32,7 @@ const _toExprTree = (
       return child;
     }
     return {
-      name: "\\lnot",
+      label: "\\lnot",
       value: !child.value,
       children: [child],
     };
@@ -70,13 +70,13 @@ const _toExprTree = (
 
   return {
     value,
-    name: label,
+    label: label,
     children: [left, right],
   };
 };
 
 export const toExprTree = (
-  ast: ASTNode,
+  ast: SyntaxTree,
   idenTable: SymbolTable
 ) => {
   return _toExprTree(ast, idenTable);

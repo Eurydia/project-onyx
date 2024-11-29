@@ -4,21 +4,21 @@ const _augmentExprTree = (tree: ExprTree): ExprTree => {
   if (tree.value === null) {
     return tree;
   }
-  const { children, name, value } = tree;
+  const { children, label: name, value } = tree;
   const augmentedChildren: ExprTree[] = [];
 
   const childCount = tree.children.length;
   switch (childCount) {
     case 1:
       augmentedChildren.push({
-        name,
+        label: name,
         value,
         children: [_augmentExprTree(children[0])],
       });
       break;
     case 2:
       augmentedChildren.push({
-        name,
+        label: name,
         value,
         children: [
           _augmentExprTree(children[0]),
@@ -32,7 +32,7 @@ const _augmentExprTree = (tree: ExprTree): ExprTree => {
 
   return {
     value,
-    name: value ? "\\text{T}" : "\\text{F}",
+    label: value ? "\\text{T}" : "\\text{F}",
     children: augmentedChildren,
   };
 };

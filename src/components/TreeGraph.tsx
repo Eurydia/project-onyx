@@ -1,11 +1,11 @@
 import { toExprTree } from "$core/ast/expression";
-import { ASTNode } from "$types/parser";
+import { SyntaxTree } from "$types/parser";
 import { Box, Typography } from "@mui/material";
 import { FC, useRef } from "react";
 import { TreeGraphCluster } from "./TreeGraphCluster";
 
 type TreeGraphProps = {
-  tree: ASTNode | null;
+  tree: SyntaxTree | null;
   symTable: Record<string, boolean> | null;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {

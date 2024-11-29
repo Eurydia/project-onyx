@@ -10,6 +10,7 @@ export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
   const { tex, options } = props;
+  console.log(tex);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -20,13 +21,13 @@ export const StyledLatex: FC<StyledLatexProps> = (
 
   return (
     <Typography
+      ref={ref}
       component="span"
       width="100%"
       overflow="auto"
       sx={{
         scrollbarWidth: "thin",
       }}
-      ref={ref}
     />
   );
 };

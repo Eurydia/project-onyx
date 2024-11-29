@@ -1,8 +1,8 @@
 import { Operator } from "$types/lexer";
 import {
-  ASTNode,
   ASTNodeType,
   BinaryOperatorNode,
+  SyntaxTree,
   UnaryOperatorNode,
 } from "$types/parser";
 import { compareAST } from "./compare";
@@ -98,9 +98,9 @@ const collapseToEquivalence = (
 };
 
 const _collapseNormalizedTree = (
-  tree: ASTNode,
+  tree: SyntaxTree,
   target: Set<Operator>
-): ASTNode => {
+): SyntaxTree => {
   if (
     tree.nodeType === ASTNodeType.ERROR ||
     tree.nodeType === ASTNodeType.IDENTIFIER
@@ -238,7 +238,7 @@ const _collapseNormalizedTree = (
 };
 
 export const toCollapsedTree = (
-  normalizedTree: ASTNode,
+  normalizedTree: SyntaxTree,
   target: Set<Operator>
 ) => {
   return _collapseNormalizedTree(normalizedTree, target);

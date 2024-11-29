@@ -7,9 +7,9 @@ import { TreeGraph } from "$components/TreeGraph";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
 import {
-  ASTNode,
   ASTNodeType,
   SymbolTable,
+  SyntaxTree,
 } from "$types/parser";
 import {
   alpha,
@@ -23,7 +23,7 @@ export const EditorView: FC = () => {
   const [inputValue, setInputValue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
-  const [tree, setTree] = useState<ASTNode | null>(null);
+  const [tree, setTree] = useState<SyntaxTree | null>(null);
   const [symTable, setSymTable] =
     useState<SymbolTable | null>(null);
 

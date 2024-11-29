@@ -15,14 +15,14 @@ export type BinaryOperatorNode = {
     | Operator.OR
     | Operator.IMPLIES
     | Operator.IFF;
-  leftOperand: ASTNode;
-  rightOperand: ASTNode;
+  leftOperand: SyntaxTree;
+  rightOperand: SyntaxTree;
 };
 
 export type UnaryOperatorNode = {
   nodeType: ASTNodeType.UNARY_OPERATOR;
   operator: Operator.NOT;
-  operand: ASTNode;
+  operand: SyntaxTree;
 };
 
 export type ErrorNode = {
@@ -35,7 +35,7 @@ export type IdentifierNode = {
   value: string;
 };
 
-export type ASTNode =
+export type SyntaxTree =
   | BinaryOperatorNode
   | UnaryOperatorNode
   | ErrorNode

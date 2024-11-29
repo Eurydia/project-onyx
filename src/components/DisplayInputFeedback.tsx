@@ -1,10 +1,11 @@
-import { ASTNode, ASTNodeType } from "$types/parser";
+import { syntaxTreeToLatex } from "$core/ast/conversion";
+import { ASTNodeType, SyntaxTree } from "$types/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type DisplayInputFeedbackProps = {
-  tree: ASTNode | null;
+  tree: SyntaxTree | null;
   emptyMessage: string;
 };
 export const DisplayInputFeedback: FC<
@@ -19,7 +20,7 @@ export const DisplayInputFeedback: FC<
         <Typography color="error">{tree.reason}</Typography>
       ) : (
         <StyledLatex
-          tex={tree.latexRepr}
+          tex={syntaxTreeToLatex(tree)}
           options={{
             displayMode: true,
             output: "htmlAndMathml",

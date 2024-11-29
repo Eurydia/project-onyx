@@ -1,8 +1,8 @@
 import { Operator, Token, TokenType } from "$types/lexer";
 import {
-  ASTNode,
   ASTNodeType,
   SymbolTable,
+  SyntaxTree,
 } from "$types/parser";
 
 const OPERATOR_PRECEDENCE = {
@@ -16,7 +16,7 @@ const OPERATOR_PRECEDENCE = {
 const polishToAST = (
   tokens: Token[],
   identifierTable: Set<string>
-): ASTNode => {
+): SyntaxTree => {
   const tok = tokens.pop();
   if (tok === undefined) {
     return {
@@ -151,7 +151,7 @@ const infixToPolish = (tokens: Token[]): Token[] => {
 
 export const parser = (
   tokens: Token[]
-): { tree: ASTNode; symTable: SymbolTable } => {
+): { tree: SyntaxTree; symTable: SymbolTable } => {
   const polish = infixToPolish(tokens);
 
   const idSet = new Set<string>();

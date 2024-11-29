@@ -18,10 +18,10 @@ export const TreeGraphClusterNode: FC<NodeProps> = (
   useEffect(() => {
     if (ref.current !== null) {
       ref.current.innerHTML = katex
-        .renderToString(node.data.name)
+        .renderToString(node.data.label)
         .replaceAll("span", "tspan");
     }
-  }, [ref, node.data.name]);
+  }, [ref, node.data.label]);
 
   return (
     <Group

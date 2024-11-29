@@ -51,7 +51,7 @@ export const EditorOperatorToolbarGroup: FC<
     >
       <ButtonGroup
         disableElevation
-        variant="contained"
+        variant="text"
       >
         {OPERATOR.map((btn, btnIndex) => (
           <Tooltip
