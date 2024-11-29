@@ -2,18 +2,18 @@ import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Button,
   Stack,
-  Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { FC, Fragment, ReactNode } from "react";
 import { StyledKBD } from "./StyledKBD";
 
-type EditorExecuteToolbarGroupProps = {
+type EditorExecuteButtonProps = {
   onExecute: () => void;
   keyCombinationHint: string[];
 };
-export const EditorExecuteToolbarGroup: FC<
-  EditorExecuteToolbarGroupProps
+export const EditorExecuteButton: FC<
+  EditorExecuteButtonProps
 > = (props) => {
   const { onExecute, keyCombinationHint } = props;
 
@@ -33,16 +33,18 @@ export const EditorExecuteToolbarGroup: FC<
   );
 
   return (
-    <Toolbar
-      variant="dense"
-      disableGutters
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: "center",
-        gap: 2,
-      }}
+    <Tooltip
+      title={
+        <Stack
+          useFlexGap
+          gap={0.5}
+          spacing={0.5}
+          direction="row"
+          alignItems="center"
+        >
+          {keyCombination}
+        </Stack>
+      }
     >
       <Button
         disableElevation
@@ -52,16 +54,6 @@ export const EditorExecuteToolbarGroup: FC<
       >
         Run
       </Button>
-      <Typography>or</Typography>
-      <Stack
-        useFlexGap
-        gap={0.5}
-        spacing={0.5}
-        direction="row"
-        alignItems="center"
-      >
-        {keyCombination}
-      </Stack>
-    </Toolbar>
+    </Tooltip>
   );
 };

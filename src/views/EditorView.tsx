@@ -1,8 +1,8 @@
 import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
 import { EditorBooleanSwitcher } from "$components/EditorBooleanSwitcherGroup";
-import { EditorExecuteToolbarGroup } from "$components/EditorExecuteToolbaGroup";
+import { EditorExecuteButton } from "$components/EditorExecuteButton";
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
-import { EditorOperatorToolbarGroup } from "$components/EditorOperatorToolbarGroup";
+import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { TreeGraph } from "$components/TreeGraph";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
@@ -16,6 +16,7 @@ import {
   Container,
   Grid2,
   Stack,
+  Toolbar,
 } from "@mui/material";
 import { FC, useState } from "react";
 
@@ -84,19 +85,32 @@ export const EditorView: FC = () => {
         spacing={1}
         padding={2}
       >
-        <EditorOperatorToolbarGroup
-          onInsertChar={handleInsertChar}
-        />
+        <Toolbar
+          variant="dense"
+          disableGutters
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <EditorOperatorGroup
+            onInsertChar={handleInsertChar}
+          />
+          <EditorExecuteButton
+            onExecute={handleExecute}
+            keyCombinationHint={["CTRL", "ENTER"]}
+          />
+        </Toolbar>
+
         <EditorExpressionTextField
           value={inputValue}
           onChange={setInputValue}
           onKeyDown={handleKeyDown}
           rows={5}
         />
-        <EditorExecuteToolbarGroup
-          onExecute={handleExecute}
-          keyCombinationHint={["CTRL", "ENTER"]}
-        />
+
         <DisplayInputFeedback
           tree={tree}
           emptyMessage="Evaluate an expression to see how it is interpreted."
