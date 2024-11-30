@@ -124,8 +124,8 @@ const _normalizeTree = (tree: SyntaxTree): SyntaxTree => {
   }
 };
 
-export const toNormalizedTree = (
-  ast: SyntaxTree
+export const normalizeSyntaxTree = (
+  tree: SyntaxTree
 ): SyntaxTree => {
-  return _normalizeTree(ast);
+  return _normalizeTree(tree);
 };
