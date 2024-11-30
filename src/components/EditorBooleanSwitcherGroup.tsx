@@ -31,7 +31,6 @@ export const EditorBooleanSwitcher: FC<
           sx={{
             width: "100%",
             overflow: "auto",
-            scrollbarWidth: "thin",
           }}
         >
           <StyledLatex tex={k} />
