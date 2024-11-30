@@ -93,7 +93,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
           alignItems: "center",
         }}
       >
-        {tree === null || symTable === null ? (
+        {tree === null ? (
           <Typography fontStyle="italic">
             {emptyText}
           </Typography>
@@ -109,8 +109,6 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       <Dialog
         onClose={toggleDialogVisible}
         open={dialogOpen}
-        fullWidth
-        maxWidth="xs"
       >
         <DialogTitle>Edit truth values</DialogTitle>
         <DialogContent>

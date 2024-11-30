@@ -7,11 +7,21 @@ import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
 import { SyntaxTree } from "$types/parser";
 import {
+  CloseRounded,
+  QuestionMarkRounded,
+} from "@mui/icons-material";
+import {
+  Alert,
+  AlertTitle,
   alpha,
   Box,
+  Collapse,
   Container,
+  IconButton,
   Stack,
   Toolbar,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { FC, useState } from "react";
 
@@ -20,7 +30,7 @@ export const EditorView: FC = () => {
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<SyntaxTree | null>(null);
-
+  const [tipDismissed, setTipDismissed] = useState(false);
   const handleExecute = () => {
     const tokens = lexer(inputValue);
     if (tokens.length === 0) {
@@ -72,11 +82,43 @@ export const EditorView: FC = () => {
           onKeyDown={handleKeyDown}
           rows={5}
         />
-
         <DisplayInputFeedback
           tree={tree}
           emptyMessage="Evaluate an expression to see how it is interpreted."
         />
+        <Collapse
+          in={!tipDismissed}
+          unmountOnExit
+        >
+          <Alert
+            severity="info"
+            variant="standard"
+            color="info"
+            icon={
+              <QuestionMarkRounded fontSize="inherit" />
+            }
+            action={
+              <Tooltip
+                title={<Typography>Close</Typography>}
+              >
+                <IconButton
+                  size="small"
+                  onClick={() => setTipDismissed(true)}
+                >
+                  <CloseRounded />
+                </IconButton>
+              </Tooltip>
+            }
+            sx={{
+              borderRadius: (t) => t.shape.borderRadius,
+            }}
+          >
+            <AlertTitle>Tip</AlertTitle>
+            <Typography component="p">
+              Tap on a node to modify its value
+            </Typography>
+          </Alert>
+        </Collapse>
         <Box
           sx={{
             height: "75vh",

@@ -10,7 +10,6 @@ export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
   const { tex, options } = props;
-  console.log(tex);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
