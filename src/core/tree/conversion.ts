@@ -35,8 +35,15 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
   if (right.nodeType === ASTNodeType.ERROR) {
     return right.reason;
   }
-  const labelLeft = _syntaxTreeToLatex(left);
-  const labelRight = _syntaxTreeToLatex(right);
+  let labelLeft = _syntaxTreeToLatex(left);
+  if (left.nodeType === ASTNodeType.BINARY_OPERATOR) {
+    labelLeft = `(${labelLeft})`;
+  }
+  let labelRight = _syntaxTreeToLatex(right);
+  if (right.nodeType === ASTNodeType.BINARY_OPERATOR) {
+    labelRight = `(${labelRight})`;
+  }
+
   let label = "";
   switch (tree.operator) {
     case Operator.AND:
@@ -115,4 +122,89 @@ export const exprTreeToSymbolTable = (tree: ExprTree) => {
   const table = new Map<string, boolean>();
   _exprTreeToSymbolTable(tree, table);
   return table;
+};
+
+const _syntaxTreetoExprTree = (
+  tree: SyntaxTree,
+  symTable: SymbolTable
+): ExprTree => {
+  if (tree.nodeType === ASTNodeType.ERROR) {
+    return {
+      value: null,
+      label: `\\text{${tree.reason}}`,
+      children: [],
+    };
+  }
+
+  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+    return {
+      label: tree.value,
+      value: symTable.get(tree.value) ?? false,
+      children: [],
+    };
+  }
+
+  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+    const child = _syntaxTreetoExprTree(
+      tree.operand,
+      symTable
+    );
+    if (child.value === null) {
+      return child;
+    }
+    return {
+      label: "\\lnot",
+      value: !child.value,
+      children: [child],
+    };
+  }
+
+  const left = _syntaxTreetoExprTree(
+    tree.leftOperand,
+    symTable
+  );
+  if (left.value === null) {
+    return left;
+  }
+  const right = _syntaxTreetoExprTree(
+    tree.rightOperand,
+    symTable
+  );
+  if (right.value === null) {
+    return right;
+  }
+
+  let value;
+  let label = "";
+  switch (tree.operator) {
+    case Operator.AND:
+      label = "\\land";
+      value = left.value && right.value;
+      break;
+    case Operator.OR:
+      label = "\\lor";
+      value = left.value || right.value;
+      break;
+    case Operator.IMPLIES:
+      label = "\\implies";
+      value = !left.value || right.value;
+      break;
+    case Operator.IFF:
+      label = "\\iff";
+      value = left.value === right.value;
+      break;
+  }
+
+  return {
+    value,
+    label: label,
+    children: [left, right],
+  };
+};
+
+export const syntaxTreetoExprTree = (
+  ast: SyntaxTree,
+  idenTable: SymbolTable
+) => {
+  return _syntaxTreetoExprTree(ast, idenTable);
 };

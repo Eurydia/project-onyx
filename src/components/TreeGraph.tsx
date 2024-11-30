@@ -1,9 +1,9 @@
-import { augmentExprTree } from "$core/ast/augment";
 import {
   exprTreeToSymbolTable,
+  syntaxTreetoExprTree,
   syntaxTreeToSymbolTable,
-} from "$core/ast/conversion";
-import { toExprTree } from "$core/ast/expression";
+} from "$core/tree/conversion";
+import { augmentExprTree } from "$core/tree/expr/augment";
 import { ExprTree } from "$types/ast";
 import { SymbolTable, SyntaxTree } from "$types/parser";
 import {
@@ -101,7 +101,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
         ) : (
           <TreeGraphCluster
             exprTree={augmentExprTree(
-              toExprTree(tree, symTable)
+              syntaxTreetoExprTree(tree, symTable)
             )}
             width={width}
             onNodeClick={handleNodeClick}

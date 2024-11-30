@@ -125,7 +125,10 @@ const _normalizeTree = (tree: SyntaxTree): SyntaxTree => {
 };
 
 export const normalizeSyntaxTree = (
-  tree: SyntaxTree
-): SyntaxTree => {
+  tree: SyntaxTree | null
+) => {
+  if (tree === null) {
+    return null;
+  }
   return _normalizeTree(tree);
 };

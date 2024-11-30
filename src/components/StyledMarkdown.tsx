@@ -7,20 +7,13 @@ import remarkMath from "remark-math";
 
 const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
   h2: ({ children }) => (
-    <Typography
-      variant="h2"
-      component="h2"
-    >
-      {children}
-    </Typography>
+    <Typography variant="h2">{children}</Typography>
   ),
   h3: ({ children }) => (
-    <Typography
-      variant="h3"
-      component="h3"
-    >
-      {children}
-    </Typography>
+    <Typography variant="h3">{children}</Typography>
+  ),
+  h4: ({ children }) => (
+    <Typography variant="h4">{children}</Typography>
   ),
   p: ({ children }) => (
     <Typography

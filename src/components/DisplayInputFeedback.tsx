@@ -1,4 +1,4 @@
-import { syntaxTreeToLatex } from "$core/ast/conversion";
+import { syntaxTreeToLatex } from "$core/tree/conversion";
 import { ASTNodeType, SyntaxTree } from "$types/parser";
 import { alpha, Box, Typography } from "@mui/material";
 import { FC } from "react";

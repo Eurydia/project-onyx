@@ -5,7 +5,7 @@ import {
   SyntaxTree,
   UnaryOperatorNode,
 } from "$types/parser";
-import { compareAST } from "./compare";
+import { compareSyntaxTree } from "./compare";
 
 const collapseToDisjunction = (
   normalizedTree: UnaryOperatorNode
@@ -79,13 +79,13 @@ const collapseToEquivalence = (
 
   const lcl = cl.leftOperand;
   const lcr = cr.leftOperand;
-  if (!compareAST(lcl, lcr)) {
+  if (!compareSyntaxTree(lcl, lcr)) {
     return null;
   }
 
   const rcl = cl.rightOperand;
   const rcr = cr.rightOperand;
-  if (!compareAST(rcl, rcr)) {
+  if (!compareSyntaxTree(rcl, rcr)) {
     return null;
   }
 
@@ -182,64 +182,122 @@ const _collapseNormalizedTree = (
       rightOperand: right,
     };
   }
-  // if (target.has(Operator.OR)) {
-  //   const left: ASTNode = {
-  //     nodeType: ASTNodeType.UNARY_OPERATOR,
-  //     operator: Operator.NOT,
-  //     operand: _collapseNormalizedTree(
-  //       tree.leftOperand,
-  //       target
-  //     ),
-  //   };
-  //   const right: ASTNode = {
-  //     nodeType: ASTNodeType.UNARY_OPERATOR,
-  //     operator: Operator.NOT,
-  //     operand: _collapseNormalizedTree(
-  //       tree.rightOperand,
-  //       target
-  //     ),
-  //   };
-  //   return {
-  //     nodeType: ASTNodeType.UNARY_OPERATOR,
-  //     operator: Operator.NOT,
-  //     operand: {
-  //       nodeType: ASTNodeType.BINARY_OPERATOR,
-  //       operator: Operator.OR,
-  //       leftOperand: left,
-  //       rightOperand: right,
-  //     },
-  //   };
-  // } else if (target.has(Operator.IMPLIES)) {
-  //   return {
-  //     nodeType: ASTNodeType.UNARY_OPERATOR,
-  //     operator: Operator.NOT,
-  //     operand: {
-  //       nodeType: ASTNodeType.BINARY_OPERATOR,
-  //       operator: Operator.IMPLIES,
-  //       leftOperand: _collapseNormalizedTree(
-  //         tree.leftOperand,
-  //         target
-  //       ),
-  //       rightOperand: {
-  //         nodeType: ASTNodeType.UNARY_OPERATOR,
-  //         operator: Operator.NOT,
-  //         operand: _collapseNormalizedTree(
-  //           tree.rightOperand,
-  //           target
-  //         ),
-  //       },
-  //     },
-  //   };
-  // }
+  if (target.has(Operator.OR)) {
+    const left: SyntaxTree = {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
+      operator: Operator.NOT,
+      operand: _collapseNormalizedTree(
+        tree.leftOperand,
+        target
+      ),
+    };
+    const right: SyntaxTree = {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
+      operator: Operator.NOT,
+      operand: _collapseNormalizedTree(
+        tree.rightOperand,
+        target
+      ),
+    };
+    return {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
+      operator: Operator.NOT,
+      operand: {
+        nodeType: ASTNodeType.BINARY_OPERATOR,
+        operator: Operator.OR,
+        leftOperand: left,
+        rightOperand: right,
+      },
+    };
+  } else if (target.has(Operator.IMPLIES)) {
+    return {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
+      operator: Operator.NOT,
+      operand: {
+        nodeType: ASTNodeType.BINARY_OPERATOR,
+        operator: Operator.IMPLIES,
+        leftOperand: _collapseNormalizedTree(
+          tree.leftOperand,
+          target
+        ),
+        rightOperand: {
+          nodeType: ASTNodeType.UNARY_OPERATOR,
+          operator: Operator.NOT,
+          operand: _collapseNormalizedTree(
+            tree.rightOperand,
+            target
+          ),
+        },
+      },
+    };
+  }
   return {
     nodeType: ASTNodeType.ERROR,
     reason: "Cannot transform expression to desired form",
   };
 };
 
-export const toCollapsedTree = (
-  normalizedTree: SyntaxTree,
+export const collapseSyntaxTree = (
+  normalizedTree: SyntaxTree | null,
   target: Set<Operator>
 ) => {
+  if (normalizedTree === null) {
+    return null;
+  }
   return _collapseNormalizedTree(normalizedTree, target);
+};
+
+const _simplifySyntaxTree = (
+  tree: SyntaxTree
+): SyntaxTree => {
+  if (tree.nodeType === ASTNodeType.ERROR) {
+    return tree;
+  }
+
+  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+    return tree;
+  }
+
+  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+    const { operand, operator } = tree;
+    // Skip double negation
+    if (operand.nodeType === ASTNodeType.UNARY_OPERATOR) {
+      return _simplifySyntaxTree(operand.operand);
+    }
+    const child = _simplifySyntaxTree(operand);
+    if (child.nodeType === ASTNodeType.ERROR) {
+      return child;
+    }
+    return {
+      nodeType: ASTNodeType.UNARY_OPERATOR,
+      operator,
+      operand: child,
+    };
+  }
+
+  const left = _simplifySyntaxTree(tree.leftOperand);
+  if (left.nodeType === ASTNodeType.ERROR) {
+    return left;
+  }
+
+  const right = _simplifySyntaxTree(tree.rightOperand);
+  if (right.nodeType === ASTNodeType.ERROR) {
+    return right;
+  }
+
+  return {
+    nodeType: ASTNodeType.BINARY_OPERATOR,
+    operator: tree.operator,
+    leftOperand: left,
+    rightOperand: right,
+  };
+};
+
+export const simplifySyntaxTree = (
+  tree: SyntaxTree | null
+) => {
+  if (tree === null) {
+    return null;
+  }
+  return _simplifySyntaxTree(tree);
 };

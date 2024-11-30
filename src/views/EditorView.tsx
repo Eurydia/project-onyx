@@ -1,40 +1,69 @@
-import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
 import { EditorExecuteButton } from "$components/EditorExecuteButton";
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
+import { EditorLegalOperatorGroup } from "$components/EditorLegalOperatorGroup";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
+import { Playground } from "$components/Playground";
 import { StyledAlert } from "$components/StyledAlert";
 import { StyledTabs } from "$components/StyledTabs";
-import { TreeGraph } from "$components/TreeGraph";
-import { normalizeSyntaxTree } from "$core/ast/normalize";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
+import { normalizeSyntaxTree } from "$core/tree/syntax/normalize";
+import {
+  collapseSyntaxTree,
+  simplifySyntaxTree,
+} from "$core/tree/syntax/simplify";
+import { Operator } from "$types/lexer";
 import { SyntaxTree } from "$types/parser";
 import {
-  alpha,
   Box,
   Container,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { FC, Fragment, useState } from "react";
+import { FC, useMemo, useState } from "react";
 
 export const EditorView: FC = () => {
   const [inputValue, setInputValue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<SyntaxTree | null>(null);
-  const [normalTree, setNormalTree] =
-    useState<SyntaxTree | null>(null);
+
+  const [legalOp, setLegalOp] = useState(
+    new Map([
+      [Operator.AND, true],
+      [Operator.OR, true],
+      [Operator.IMPLIES, true],
+      [Operator.IFF, true],
+    ])
+  );
+
+  const normalTree = useMemo(() => {
+    return simplifySyntaxTree(normalizeSyntaxTree(tree));
+  }, [tree]);
+
+  const eliminatedTree = useMemo(() => {
+    const allowed = new Set<Operator>();
+    legalOp.forEach((v, k) => {
+      if (v) {
+        allowed.add(k);
+      }
+    });
+    if (allowed.size === 4) {
+      return tree;
+    }
+    return simplifySyntaxTree(
+      collapseSyntaxTree(normalTree, allowed)
+    );
+  }, [normalTree, tree, legalOp]);
+
   const handleExecute = () => {
     const tokens = lexer(inputValue);
     if (tokens.length === 0) {
       setTree(null);
       return;
     }
-    const interpretedTree = parser(tokens);
-    setTree(interpretedTree);
-    setNormalTree(normalizeSyntaxTree(interpretedTree));
+    setTree(parser(tokens));
   };
 
   const handleInsertChar = (char: string) => {
@@ -45,6 +74,24 @@ export const EditorView: FC = () => {
     if (e.key === "Enter" && e.ctrlKey) {
       handleExecute();
     }
+  };
+
+  const handleLegalOpChange = (k: Operator, v: boolean) => {
+    setLegalOp((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+
+      const legal = new Set();
+      next.forEach((v, k) => {
+        if (v) {
+          legal.add(k);
+        }
+      });
+      if (legal.size >= 0) {
+        return next;
+      }
+      return prev;
+    });
   };
 
   return (
@@ -58,6 +105,7 @@ export const EditorView: FC = () => {
           variant="dense"
           disableGutters
           sx={{
+            gap: 1,
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
@@ -90,57 +138,35 @@ export const EditorView: FC = () => {
             "Simplified",
           ]}
           panels={[
-            <Stack
-              spacing={1}
-              key="panel-0"
-            >
-              <DisplayInputFeedback
-                tree={tree}
-                emptyMessage="Evaluate an expression to see how it is interpreted."
-              />
-              <Box
-                sx={{
-                  height: "75vh",
-                  width: "100%",
-                  borderWidth: 4,
-                  borderStyle: "solid",
-                  borderRadius: (t) => t.shape.borderRadius,
-                  borderColor: (t) =>
-                    alpha(t.palette.secondary.main, 0.4),
-                }}
-              >
-                <TreeGraph
-                  tree={tree}
-                  emptyText="Nothing to see here"
-                />
-              </Box>
-            </Stack>,
-            <Stack
-              spacing={1}
+            <Playground
+              tree={tree}
               key="panel-1"
+            />,
+            <Playground
+              tree={simplifySyntaxTree(normalTree)}
+              key="panel-2"
+            />,
+            <Stack
+              key="panel-3"
+              spacing={1}
             >
-              <DisplayInputFeedback
-                tree={normalTree}
-                emptyMessage="Evaluate an expression to see how it is interpreted."
-              />
               <Box
                 sx={{
-                  height: "75vh",
-                  width: "100%",
-                  borderWidth: 4,
+                  padding: 2,
                   borderStyle: "solid",
                   borderRadius: (t) => t.shape.borderRadius,
+                  borderWidth: 4,
                   borderColor: (t) =>
-                    alpha(t.palette.secondary.main, 0.4),
+                    t.palette.primary.light,
                 }}
               >
-                <TreeGraph
-                  tree={normalTree}
-                  emptyText="Nothing to see here"
+                <EditorLegalOperatorGroup
+                  onChange={handleLegalOpChange}
+                  values={legalOp}
                 />
               </Box>
+              <Playground tree={eliminatedTree} />
             </Stack>,
-            <Fragment key="panel-3"></Fragment>,
           ]}
         />
       </Stack>

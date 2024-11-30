@@ -1,6 +1,6 @@
 import { ASTNodeType, SyntaxTree } from "$types/parser";
 
-const _compareAST = (
+const _compareSyntaxTree = (
   a: SyntaxTree,
   b: SyntaxTree
 ): boolean => {
@@ -26,7 +26,7 @@ const _compareAST = (
     a.nodeType === ASTNodeType.UNARY_OPERATOR &&
     b.nodeType === ASTNodeType.UNARY_OPERATOR
   ) {
-    return _compareAST(a.operand, b.operand);
+    return _compareSyntaxTree(a.operand, b.operand);
   }
 
   if (
@@ -38,17 +38,17 @@ const _compareAST = (
     }
 
     return (
-      _compareAST(a.leftOperand, b.leftOperand) &&
-      _compareAST(a.rightOperand, b.rightOperand)
+      _compareSyntaxTree(a.leftOperand, b.leftOperand) &&
+      _compareSyntaxTree(a.rightOperand, b.rightOperand)
     );
   }
 
   return false;
 };
 
-export const compareAST = (
+export const compareSyntaxTree = (
   a: SyntaxTree,
   b: SyntaxTree
 ) => {
-  return _compareAST(a, b);
+  return _compareSyntaxTree(a, b);
 };

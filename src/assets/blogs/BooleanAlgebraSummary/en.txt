@@ -1,175 +1,171 @@
-## Boolean Algebra 
+## Useful Theorems🚀
 
-### Definitions of Logical Connectives
+### De Morgan's Law
 
-Here is a collection of definitions for the logical connectives available in the interpreter.
-
-**Definition**: We define logical conjunction to be a binary operator on the Boolean set, such that
+**Theorem**: Negation is distributive over conjunction
 
 $$
 \begin{align*}
-(1,1)&\to 1\\
-(1,0)&\to 0\\
-(0,1)&\to 0\\
-(0,0)&\to 0\\
+\lnot (P \land Q) \equiv \lnot P \lor \lnot Q.
 \end{align*}
 $$
 
-We denote logical conjunction with the symbol $\land$.
-
-**Definition**: We define logical negation to be a unary operator on the Boolean set, such that
+**Theorem**: Negation is distributive over disjunction
 
 $$
 \begin{align*}
-1&\to 0\\
-0&\to 1\\
+\lnot (P \lor Q) \equiv \lnot P \land \lnot Q.
 \end{align*}
 $$
 
-We denote logical negation with the symbol $\lnot$.
+Related resources:
+- [De Morgan's law (Proofwiki)](https://proofwiki.org/wiki/De_Morgan%27s_Laws_(Logic))
 
+### Rule of Double Negation
 
-### Useful Theorems
-
-
-### Application of Elementary Boolean Theorems
-
-**Theorem**: Logical conjunction and logical negation can express logical disjunction.
-
-**Proof**
-
-Consider two propositions $p,q$, and the Boolean expression 
+**Theorem**: The truth value of the double negation of a proposition is equivalent to itself
 
 $$
 \begin{align*}
-p\lor q.
+\lnot (\lnot P) \equiv P.
 \end{align*}
 $$
 
-We first apply [double negation law](https://en.wikipedia.org/wiki/Double-negation_translation), then [De Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws);
+Related resources:
+- [Double negation (Proofwiki)](https://proofwiki.org/wiki/Double_Negation)
+
+### Rule of Idempotence
+
+**Theorem**: Disjunction is idempotent
 
 $$
 \begin{align*}
-p\lor q&\equiv \lnot\lnot(p\lor q)\\
-&\equiv\lnot (\lnot p\land \lnot q).
+P \lor P \equiv P.
 \end{align*}
 $$
 
-Thus, we have $p\lor q\equiv \lnot (\lnot p\land \lnot q)$.
-
----
-
-**Theorem**: Logical conjunction and logical negation can express logical implication.
-
-**Proof**
-
-Consider two propositions $p,q$, and the Boolean expression
+**Theorem**: Conjunction is idempotent
 
 $$
 \begin{align*}
-p\implies q.
+P \land P \equiv P.
 \end{align*}
 $$
 
-We apply the [rule of material implication](https://en.wikipedia.org/wiki/Material_implication_%28rule_of_inference%29);
+Related resources:
+- [Rule of Idempotence (Proofwiki)](https://proofwiki.org/wiki/https://proofwiki.org/wiki/Rule_of_Idempotence)
+- [Idempotence (Wikipedia)](https://en.wikipedia.org/wiki/Idempotence)
+
+### Rule of Commutation
+
+**Theorem**: Disjunction is commutative
 
 $$
 \begin{align*}
-p\implies q &\equiv \lnot p\lor q.
+P \lor Q \equiv Q \lor P.
 \end{align*}
 $$
 
-From here, we apply [double negation](https://en.wikipedia.org/wiki/Double-negation_translation), [then De Morgan's law](https://en.wikipedia.org/wiki/De_Morgan%27s_laws);
+**Theorem**: Conjunction is commutative
 
 $$
 \begin{align*}
-\lnot p\lor q&\equiv \lnot\lnot(\lnot p\lor q)\\
-&\equiv\lnot (p\land \lnot q)
+P \land Q \equiv Q \land P.
 \end{align*}
 $$
 
-Thus, we have $p\implies q\equiv \lnot (p\land\lnot q)$.
+Related resources:
+- [Rule of Commutation (Proofwiki)](https://proofwiki.org/wiki/Rule_of_Commutation)
+- [Commutative property (Wikipedia)](https://en.wikipedia.org/wiki/Commutative_property)
 
----
+### Rule of Association
 
-**Thereom**: Logical conjunction and logical negation can express logical equivalence.
-
-**Proof**
-
-Consider two propositions $p,q$, and a Boolean expression
+**Theorem**: Disjunction is associative
 
 $$
 \begin{align*}
-p\iff q.
+P \lor (Q \lor R) \equiv (P \lor Q) \lor R.
 \end{align*}
 $$
 
-We expand the [definition of logical equivalence](
-https://en.wikipedia.org/wiki/Logical_biconditional);
+**Theorem**: Conjunction is associative
 
 $$
 \begin{align*}
-p\iff q\equiv (p\implies q)\land(q\implies p).
+P \land (Q \land R) \equiv (P \land Q) \land R.
 \end{align*}
 $$
 
-We apply the theorem discussed earlier to eliminate logical implication;
+Related resources:
+- [Rule of Association (Proofwiki)](https://proofwiki.org/wiki/Rule_of_Association)
+- [Associative property (Wikipedia)](https://en.wikipedia.org/wiki/Associative_property)
+
+### Rule of Distribution
+
+**Theorem**: Conjunction is distributive over disjunction
 
 $$
 \begin{align*}
-(p\implies q)\land(q\implies p) &\equiv (\lnot (p\land\lnot q))\land (\lnot (q\land\lnot p)).
+P \land (Q \lor R) \equiv (P \land Q) \lor (P \land R).
 \end{align*}
 $$
 
-Thus, we have $p\iff q\equiv (\lnot (p\land\lnot q))\land (\lnot (q\land\lnot p))$.
-
----
-
-**Theorem**: Logical negation and logical disjunction can express logical conjunction.
-
-**Proof**
-
-Consider two propisitions $p,q$ and a Boolean expression
+**Theorem**: Disjunction is distributive over conjunction
 
 $$
 \begin{align*}
-p \land q.
+P \lor (Q \land R) \equiv (P \lor Q) \land (P \lor R).
 \end{align*}
 $$
 
-We apply double negation law, then De Morgan's law.
+Related resources:
+- [Rule of distribution (Proofwiki)](https://proofwiki.org/wiki/Rule_of_Distribution)
+- [Distributive property (Wikipedia)](https://en.wikipedia.org/wiki/Distributive_property)
+
+### Absorption Laws 
+
+**Theorem**: Disjunction absorbs conjunction
 
 $$
 \begin{align*}
-p \land q&\equiv \lnot\lnot(p\land q)\\
-&\equiv\lnot(\lnot p\lor \lnot q).
+P \lor (P \land Q) \equiv P.
 \end{align*}
 $$
 
-Thus, $p\land q\equiv \lnot(\lnot p\lor \lnot q)$.
-
----
-
-**Theorem**: Logical implication and logical negation can express logical conjunction.
-
-**Proof**
-
-Consider two propositions $p,q$ and a Boolean expression
+**Theorem**: Conjunction absorbs disjunction
 
 $$
 \begin{align*}
-p \land q.
+P \land (P \lor Q) \equiv P.
 \end{align*}
 $$
 
-We apply [double negation law](https://proofwiki.org/wiki/Double_Negation), then [De Morgan's law](https://proofwiki.org/wiki/De_Morgan%27s_Laws_(Logic)), and [rule of material implication](https://proofwiki.org/wiki/Rule_of_Material_Implication) to obtain
+Related resources:
+- [Absorption Laws  (Proofwiki)](https://proofwiki.org/wiki/Absorption_Laws_(Boolean_Algebras))
+
+### Law of Excluded Middle
+
+**Theorem**: Every proposition is either true or false.
 
 $$
 \begin{align*}
-p \land q&\equiv \lnot\lnot(p\land q)\\
-&\equiv \lnot (\lnot p\lor \lnot q)\\
-&\equiv\lnot(p\implies \lnot q).
+P \lor \lnot P \equiv \top.
 \end{align*}
 $$
 
-Thus $p\land q\equiv \lnot(p\implies \lnot q)$.
+Related resources:
+- [Law of Excluded Middle (Proofwiki)](https://proofwiki.org/wiki/Law_of_Excluded_Middle)
+
+### Principle of Non-Contradiction
+
+**Theorem**: A proposition cannot be both true and false at the same time.
+
+$$
+\begin{align*}
+\lnot (P \land \lnot P) \equiv \top.
+\end{align*}
+$$
+
+Related resources:
+- [Principle of Non-Contradiction (Proofwiki)]( https://proofwiki.org/wiki/Principle_of_Non-Contradiction)
+
