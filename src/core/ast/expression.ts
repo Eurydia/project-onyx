@@ -21,7 +21,7 @@ const _toExprTree = (
   if (tree.nodeType === ASTNodeType.IDENTIFIER) {
     return {
       label: tree.value,
-      value: symTable[tree.value],
+      value: symTable.get(tree.value) ?? false,
       children: [],
     };
   }

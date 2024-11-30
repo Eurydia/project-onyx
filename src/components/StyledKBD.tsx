@@ -1,4 +1,5 @@
 import {
+  alpha,
   Typography,
   TypographyProps,
   useTheme,
@@ -13,8 +14,8 @@ export const StyledKBD: FC<TypographyProps> = (props) => {
     <Typography
       component="span"
       sx={{
-        backgroundColor: t.palette.primary.main,
-        color: t.palette.primary.contrastText,
+        backgroundColor: t.palette.common.black,
+        color: (t) => alpha(t.palette.common.white, 0.87),
         borderRadius: 1,
         paddingY: 0.25,
         paddingX: 1,

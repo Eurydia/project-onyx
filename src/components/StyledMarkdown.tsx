@@ -4,7 +4,6 @@ import { FC } from "react";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
-import { StyledKBD } from "./StyledKBD";
 
 const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
   h2: ({ children }) => (
@@ -31,7 +30,7 @@ const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
       {children}
     </Typography>
   ),
-  code: ({ children }) => <StyledKBD>{children}</StyledKBD>,
+  // code: ({ children }) => <StyledKBD>{children}</StyledKBD>,
   em: ({ children }) => (
     <Typography
       fontWeight="bold"

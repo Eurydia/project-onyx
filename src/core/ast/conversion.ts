@@ -1,5 +1,10 @@
+import { ExprTree } from "$types/ast";
 import { Operator } from "$types/lexer";
-import { ASTNodeType, SyntaxTree } from "$types/parser";
+import {
+  ASTNodeType,
+  SymbolTable,
+  SyntaxTree,
+} from "$types/parser";
 
 const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
   const { nodeType } = tree;
@@ -51,4 +56,63 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
 };
 export const syntaxTreeToLatex = (tree: SyntaxTree) => {
   return _syntaxTreeToLatex(tree);
+};
+
+const _syntaxTreeToSymbolTable = (
+  tree: SyntaxTree,
+  table: SymbolTable
+) => {
+  if (tree.nodeType === ASTNodeType.ERROR) {
+    table.clear();
+    return;
+  }
+
+  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+    if (!table.has(tree.value)) {
+      table.set(tree.value, true);
+    }
+    return;
+  }
+
+  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+    _syntaxTreeToSymbolTable(tree.operand, table);
+    return;
+  }
+
+  _syntaxTreeToSymbolTable(tree.leftOperand, table);
+  _syntaxTreeToSymbolTable(tree.rightOperand, table);
+};
+
+export const syntaxTreeToSymbolTable = (
+  tree: SyntaxTree | null
+) => {
+  const table: SymbolTable = new Map();
+  if (tree !== null) {
+    _syntaxTreeToSymbolTable(tree, table);
+  }
+  return table;
+};
+
+const _exprTreeToSymbolTable = (
+  tree: ExprTree,
+  table: SymbolTable
+) => {
+  const { children, label, value } = tree;
+  if (value === null) {
+    table.clear();
+    return;
+  }
+  if (children.length === 0 && !table.has(label)) {
+    table.set(label, true);
+    return;
+  }
+  for (const child of children) {
+    _exprTreeToSymbolTable(child, table);
+  }
+};
+
+export const exprTreeToSymbolTable = (tree: ExprTree) => {
+  const table = new Map<string, boolean>();
+  _exprTreeToSymbolTable(tree, table);
+  return table;
 };

@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, Fragment, ReactNode } from "react";
-import { StyledKBD } from "./StyledKBD";
 
 type EditorExecuteButtonProps = {
   onExecute: () => void;
@@ -25,7 +24,7 @@ export const EditorExecuteButton: FC<
       }
       return (
         <Fragment key={"key-hint" + index}>
-          <StyledKBD>{key}</StyledKBD>
+          {key}
           {plusElem}
         </Fragment>
       );

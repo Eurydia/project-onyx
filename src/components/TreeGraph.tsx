@@ -1,6 +1,10 @@
+import {
+  exprTreeToSymbolTable,
+  syntaxTreeToSymbolTable,
+} from "$core/ast/conversion";
 import { toExprTree } from "$core/ast/expression";
-import { SyntaxTree } from "$types/parser";
-import { EditRounded } from "@mui/icons-material";
+import { ExprTree } from "$types/ast";
+import { SymbolTable, SyntaxTree } from "$types/parser";
 import {
   Box,
   Button,
@@ -8,25 +12,35 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Fab,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import { FC, Fragment, useRef, useState } from "react";
+import {
+  FC,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { EditorBooleanSwitcher } from "./EditorBooleanSwitcherGroup";
 import { TreeGraphCluster } from "./TreeGraphCluster";
 
 type TreeGraphProps = {
   tree: SyntaxTree | null;
-  symTable: Record<string, boolean> | null;
   emptyText: string;
-  onSymChange: (k: string, v: boolean) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, symTable, emptyText, onSymChange } = props;
-  const [dialogVisible, setDialogVisible] = useState(
-    symTable !== null
+  const { tree, emptyText } = props;
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [symTable, setSymTable] = useState(
+    syntaxTreeToSymbolTable(tree)
   );
+  const [visibleSymbols, setVisibleSymbols] =
+    useState(symTable);
+
+  useEffect(() => {
+    setSymTable(syntaxTreeToSymbolTable(tree));
+  }, [tree]);
 
   const ref = useRef<HTMLDivElement>(null);
   const container = ref.current;
@@ -40,10 +54,32 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       : container.getBoundingClientRect().height;
 
   const toggleDialogVisible = () => {
-    setDialogVisible((prev) => !prev);
+    setDialogOpen((prev) => !prev);
   };
 
-  // const augmentedExprTree = augmentExprTree(exprTree);
+  const handleNodeClick = (exprTree: ExprTree) => {
+    const selectedBranch = exprTreeToSymbolTable(exprTree);
+    const next: SymbolTable = new Map();
+    selectedBranch.forEach((_, k) => {
+      const v = symTable.get(k) ?? false;
+      next.set(k, v);
+    });
+    setVisibleSymbols(next);
+    setDialogOpen(true);
+  };
+
+  const handleSymChange = (k: string, v: boolean) => {
+    setSymTable((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+      return next;
+    });
+    setVisibleSymbols((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+      return next;
+    });
+  };
 
   return (
     <Fragment>
@@ -65,40 +101,22 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
           <TreeGraphCluster
             exprTree={toExprTree(tree, symTable)}
             width={width}
+            onNodeClick={handleNodeClick}
             height={height}
           />
         )}
-        <Fab
-          sx={{
-            position: "absolute",
-            bottom: "70px",
-            left: "16px",
-          }}
-          onClick={toggleDialogVisible}
-          size="medium"
-          color="primary"
-        >
-          <Tooltip
-            placement="right"
-            title={
-              <Typography>Edit truth values</Typography>
-            }
-          >
-            <EditRounded />
-          </Tooltip>
-        </Fab>
       </Box>
       <Dialog
         onClose={toggleDialogVisible}
-        open={dialogVisible}
+        open={dialogOpen}
         fullWidth
         maxWidth="xs"
       >
         <DialogTitle>Edit truth values</DialogTitle>
         <DialogContent>
           <EditorBooleanSwitcher
-            symTable={symTable!}
-            onSymChange={onSymChange}
+            symTable={visibleSymbols}
+            onSymChange={handleSymChange}
           />
         </DialogContent>
         <DialogActions disableSpacing>

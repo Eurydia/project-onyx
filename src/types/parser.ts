@@ -41,7 +41,7 @@ export type SyntaxTree =
   | ErrorNode
   | IdentifierNode;
 
-export type SymbolTable = Record<string, boolean>;
+export type SymbolTable = Map<string, boolean>;
 
 export type NormalizedAST =
   | IdentifierNode

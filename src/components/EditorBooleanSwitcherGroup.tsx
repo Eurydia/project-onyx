@@ -8,7 +8,7 @@ import {
   RadioGroup,
   Stack,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type EditorBooleanSwitcherProps = {
@@ -19,6 +19,44 @@ export const EditorBooleanSwitcher: FC<
   EditorBooleanSwitcherProps
 > = (props) => {
   const { symTable, onSymChange } = props;
+
+  const switchers: ReactNode[] = [];
+  symTable.forEach((v, k) => {
+    switchers.push(
+      <FormControl
+        key={"synbol-" + k}
+        fullWidth
+      >
+        <FormLabel
+          sx={{
+            width: "100%",
+            overflow: "auto",
+            scrollbarWidth: "thin",
+          }}
+        >
+          <StyledLatex tex={k} />
+        </FormLabel>
+        <RadioGroup
+          row
+          value={v ? "T" : "F"}
+          onChange={(e) =>
+            onSymChange(k, e.target.value === "T")
+          }
+        >
+          <FormControlLabel
+            control={<Radio disableRipple />}
+            value="T"
+            label="True"
+          />
+          <FormControlLabel
+            control={<Radio disableRipple />}
+            value="F"
+            label="False"
+          />
+        </RadioGroup>
+      </FormControl>
+    );
+  });
 
   return (
     <Stack
@@ -32,40 +70,7 @@ export const EditorBooleanSwitcher: FC<
         />
       }
     >
-      {Object.entries(symTable).map(([iden, value]) => (
-        <FormControl
-          key={iden}
-          fullWidth
-        >
-          <FormLabel
-            sx={{
-              width: "100%",
-              overflow: "auto",
-              scrollbarWidth: "thin",
-            }}
-          >
-            <StyledLatex tex={iden} />
-          </FormLabel>
-          <RadioGroup
-            row
-            value={value.toString()}
-            onChange={(e) =>
-              onSymChange(iden, e.target.value === "true")
-            }
-          >
-            <FormControlLabel
-              control={<Radio disableRipple />}
-              value="true"
-              label="True"
-            />
-            <FormControlLabel
-              control={<Radio disableRipple />}
-              value="false"
-              label="False"
-            />
-          </RadioGroup>
-        </FormControl>
-      ))}
+      {switchers}
     </Stack>
   );
 };

@@ -7,14 +7,19 @@ import { FC, useEffect, useRef } from "react";
 
 type NodeProps = {
   node: HierarchyPointNode<ExprTree>;
+  onClick: (exprTree: ExprTree) => void;
 };
 
 export const TreeGraphClusterNode: FC<NodeProps> = (
   props
 ) => {
-  const { node } = props;
+  const { node, onClick } = props;
   const theme = useTheme();
   const ref = useRef<SVGTextElement>(null);
+
+  const handleClick = () => {
+    onClick(node.data);
+  };
   useEffect(() => {
     if (ref.current !== null) {
       ref.current.innerHTML = katex
@@ -27,6 +32,7 @@ export const TreeGraphClusterNode: FC<NodeProps> = (
     <Group
       top={node.y}
       left={node.x}
+      onClick={handleClick}
     >
       <circle
         r={30}

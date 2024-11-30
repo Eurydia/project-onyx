@@ -1,9 +1,5 @@
 import { Operator, Token, TokenType } from "$types/lexer";
-import {
-  ASTNodeType,
-  SymbolTable,
-  SyntaxTree,
-} from "$types/parser";
+import { ASTNodeType, SyntaxTree } from "$types/parser";
 
 const OPERATOR_PRECEDENCE = {
   [Operator.NOT]: 6,
@@ -13,10 +9,7 @@ const OPERATOR_PRECEDENCE = {
   [Operator.IFF]: 2,
 };
 
-const polishToAST = (
-  tokens: Token[],
-  identifierTable: Set<string>
-): SyntaxTree => {
+const polishToAST = (tokens: Token[]): SyntaxTree => {
   const tok = tokens.pop();
   if (tok === undefined) {
     return {
@@ -38,7 +31,6 @@ const polishToAST = (
         reason: `Parser Error: Unexpected token "${tok.value}"`,
       };
     case TokenType.IDENTIFIER:
-      identifierTable.add(tok.value);
       return {
         nodeType: ASTNodeType.IDENTIFIER,
         value: tok.value,
@@ -46,7 +38,7 @@ const polishToAST = (
   }
 
   if (tok.value === Operator.NOT) {
-    const operand = polishToAST(tokens, identifierTable);
+    const operand = polishToAST(tokens);
     if (operand.nodeType === ASTNodeType.ERROR) {
       return operand;
     }
@@ -57,12 +49,12 @@ const polishToAST = (
     };
   }
 
-  const right = polishToAST(tokens, identifierTable);
+  const right = polishToAST(tokens);
   if (right.nodeType === ASTNodeType.ERROR) {
     return right;
   }
 
-  const left = polishToAST(tokens, identifierTable);
+  const left = polishToAST(tokens);
   if (left.nodeType === ASTNodeType.ERROR) {
     return left;
   }
@@ -149,21 +141,8 @@ const infixToPolish = (tokens: Token[]): Token[] => {
   return outStack;
 };
 
-export const parser = (
-  tokens: Token[]
-): { tree: SyntaxTree; symTable: SymbolTable } => {
+export const parser = (tokens: Token[]) => {
   const polish = infixToPolish(tokens);
 
-  const idSet = new Set<string>();
-  const ast = polishToAST(polish, idSet);
-
-  const symTable: SymbolTable = {};
-  [...idSet].toSorted().forEach((identifier) => {
-    symTable[identifier] = true;
-  });
-
-  return {
-    tree: ast,
-    symTable,
-  };
+  return polishToAST(polish);
 };

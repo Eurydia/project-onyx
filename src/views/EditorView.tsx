@@ -5,11 +5,7 @@ import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { TreeGraph } from "$components/TreeGraph";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import {
-  ASTNodeType,
-  SymbolTable,
-  SyntaxTree,
-} from "$types/parser";
+import { SyntaxTree } from "$types/parser";
 import {
   alpha,
   Box,
@@ -24,37 +20,14 @@ export const EditorView: FC = () => {
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<SyntaxTree | null>(null);
-  const [symTable, setSymTable] =
-    useState<SymbolTable | null>(null);
 
   const handleExecute = () => {
     const tokens = lexer(inputValue);
     if (tokens.length === 0) {
       setTree(null);
-      setSymTable(null);
       return;
     }
-    const { tree: _tree, symTable: _symTable } =
-      parser(tokens);
-    setTree(_tree);
-    setSymTable(
-      _tree.nodeType === ASTNodeType.ERROR
-        ? null
-        : _symTable
-    );
-    // const normalizedTree = toNormalizeTree(tree);
-
-    // const allowedOp = new Set([
-    //   Operator.AND,
-    //   // Operator.OR,
-    //   Operator.IMPLIES,
-    //   Operator.IFF,
-    // ]);
-    // const simplifiedTree = toCollapsedTree(
-    //   normalizedTree,
-    //   allowedOp
-    // );
-    // setTree(simplifiedTree);
+    setTree(parser(tokens));
   };
 
   const handleInsertChar = (char: string) => {
@@ -66,16 +39,6 @@ export const EditorView: FC = () => {
       handleExecute();
     }
   };
-
-  const handleIdenChange = (k: string, v: boolean) =>
-    setSymTable((prev) => {
-      if (prev === null) {
-        return null;
-      }
-      const next = { ...prev };
-      next[k] = v;
-      return next;
-    });
 
   return (
     <Container maxWidth="lg">
@@ -126,8 +89,6 @@ export const EditorView: FC = () => {
           }}
         >
           <TreeGraph
-            onSymChange={handleIdenChange}
-            symTable={symTable}
             tree={tree}
             emptyText="Nothing to see here"
           />
