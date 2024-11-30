@@ -12,46 +12,45 @@ import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type EditorBooleanSwitcherProps = {
-  idenTable: SymbolTable;
-  onIdenChange: (iden: string, value: boolean) => void;
+  symTable: SymbolTable;
+  onSymChange: (k: string, v: boolean) => void;
 };
 export const EditorBooleanSwitcher: FC<
   EditorBooleanSwitcherProps
 > = (props) => {
-  const { idenTable, onIdenChange } = props;
+  const { symTable, onSymChange } = props;
 
   return (
     <Stack
       useFlexGap
       spacing={1}
+      width="100%"
       divider={
         <Divider
           flexItem
           variant="middle"
         />
       }
-      sx={{
-        overflow: "auto",
-        height: "100%",
-        scrollbarWidth: "thin",
-      }}
     >
-      {Object.entries(idenTable).map(([iden, value]) => (
+      {Object.entries(symTable).map(([iden, value]) => (
         <FormControl
           key={iden}
-          sx={{
-            paddingX: 2,
-            rowGap: 0,
-          }}
+          fullWidth
         >
-          <FormLabel>
+          <FormLabel
+            sx={{
+              width: "100%",
+              overflow: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
             <StyledLatex tex={iden} />
           </FormLabel>
           <RadioGroup
             row
             value={value.toString()}
             onChange={(e) =>
-              onIdenChange(iden, e.target.value === "true")
+              onSymChange(iden, e.target.value === "true")
             }
           >
             <FormControlLabel

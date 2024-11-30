@@ -15,7 +15,6 @@ export const BlogView: FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "110vh",
           backgroundColor: (t) => t.palette.secondary.light,
           paddingY: 2,
           marginY: 8,

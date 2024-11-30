@@ -1,6 +1,11 @@
 import { ExprTree } from "$types/ast";
 import { ControlCameraRounded } from "@mui/icons-material";
-import { Fab, useTheme } from "@mui/material";
+import {
+  Fab,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
 import {
@@ -106,7 +111,12 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
               bottom: 16,
             }}
           >
-            <ControlCameraRounded />
+            <Tooltip
+              placement="right"
+              title={<Typography>Center graph</Typography>}
+            >
+              <ControlCameraRounded />
+            </Tooltip>
           </Fab>
         </Fragment>
       )}

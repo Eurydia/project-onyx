@@ -1,5 +1,4 @@
 import { DisplayInputFeedback } from "$components/DisplayInputFeedback";
-import { EditorBooleanSwitcher } from "$components/EditorBooleanSwitcherGroup";
 import { EditorExecuteButton } from "$components/EditorExecuteButton";
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
@@ -13,8 +12,8 @@ import {
 } from "$types/parser";
 import {
   alpha,
+  Box,
   Container,
-  Grid2,
   Stack,
   Toolbar,
 } from "@mui/material";
@@ -115,51 +114,24 @@ export const EditorView: FC = () => {
           tree={tree}
           emptyMessage="Evaluate an expression to see how it is interpreted."
         />
-        <Grid2
-          container
-          spacing={1}
+        <Box
+          sx={{
+            height: "75vh",
+            width: "100%",
+            borderWidth: 4,
+            borderStyle: "solid",
+            borderRadius: (t) => t.shape.borderRadius,
+            borderColor: (t) =>
+              alpha(t.palette.secondary.main, 0.4),
+          }}
         >
-          {symTable !== null &&
-            Object.keys(symTable).length > 0 && (
-              <Grid2
-                size={{
-                  xs: 12,
-                  sm: 12,
-                  md: 3,
-                }}
-                sx={{
-                  padding: 1,
-                  maxHeight: "600px",
-                  borderRadius: (t) => t.shape.borderRadius,
-                  borderColor: (t) =>
-                    alpha(t.palette.primary.main, 0.67),
-                  borderWidth: 4,
-                  borderStyle: "solid",
-                }}
-              >
-                <EditorBooleanSwitcher
-                  idenTable={symTable}
-                  onIdenChange={handleIdenChange}
-                />
-              </Grid2>
-            )}
-          <Grid2
-            size={{ xs: 12, sm: 12, md: "grow" }}
-            minHeight="600px"
-            sx={{
-              borderRadius: (t) => t.shape.borderRadius,
-              borderColor: (t) =>
-                alpha(t.palette.secondary.main, 0.4),
-              borderWidth: 4,
-              borderStyle: "solid",
-            }}
-          >
-            <TreeGraph
-              symTable={symTable}
-              tree={tree}
-            />
-          </Grid2>
-        </Grid2>
+          <TreeGraph
+            onSymChange={handleIdenChange}
+            symTable={symTable}
+            tree={tree}
+            emptyText="Nothing to see here"
+          />
+        </Box>
       </Stack>
     </Container>
   );

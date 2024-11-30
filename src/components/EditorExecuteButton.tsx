@@ -34,6 +34,7 @@ export const EditorExecuteButton: FC<
 
   return (
     <Tooltip
+      arrow
       title={
         <Stack
           useFlexGap
