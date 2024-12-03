@@ -16,10 +16,10 @@ const LIST = [
 ];
 
 const SYMBOL_LABEL = new Map([
-  [Operator.AND, "Conjunction"],
-  [Operator.OR, "Disjunction"],
-  [Operator.IMPLIES, "Implication"],
-  [Operator.IFF, "Equivalence"],
+  [Operator.AND, "และ"],
+  [Operator.OR, "หรือ"],
+  [Operator.IMPLIES, "ถ้า...แล้ว..."],
+  [Operator.IFF, "...ก็ต่อเมื่อ..."],
 ]);
 
 type EditorLegalOperatorGroupProp = {
@@ -46,7 +46,7 @@ export const EditorLegalOperatorGroup: FC<
         disabled
         checked
         control={<Checkbox />}
-        label="Negation"
+        label="นิเสธ"
       />
       {LIST.map((op, index) => (
         <FormControlLabel

@@ -115,7 +115,9 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
           >
             <Tooltip
               placement="right"
-              title={<Typography>Center graph</Typography>}
+              title={
+                <Typography>กลับเข้าศูนย์กลาง</Typography>
+              }
             >
               <ControlCameraRounded />
             </Tooltip>

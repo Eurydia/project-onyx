@@ -128,14 +128,14 @@ export const EditorView: FC = () => {
         />
         <StyledAlert>
           <Typography component="p">
-            Tap on a node to modify its truth value
+            แตะที่โหนดของต้นไม้เพื่อแก้ไขค่าความจริง
           </Typography>
         </StyledAlert>
         <StyledTabs
           tabLabels={[
-            "Interpreted",
-            "Conjunctive normal form",
-            "Simplified",
+            "รูปรับเข้า",
+            "รูปนิเสธ-และ",
+            "รูปอย่างง่าย",
           ]}
           panels={[
             <Playground
@@ -143,7 +143,7 @@ export const EditorView: FC = () => {
               key="panel-1"
             />,
             <Playground
-              tree={simplifySyntaxTree(normalTree)}
+              tree={normalTree}
               key="panel-2"
             />,
             <Stack

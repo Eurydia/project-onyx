@@ -113,7 +113,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
         onClose={toggleDialogVisible}
         open={dialogOpen}
       >
-        <DialogTitle>Edit truth values</DialogTitle>
+        <DialogTitle>แก้ไขค่าความจริง</DialogTitle>
         <DialogContent>
           <EditorBooleanSwitcher
             symTable={visibleSymbols}
@@ -125,7 +125,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
             onClick={toggleDialogVisible}
             variant="text"
           >
-            Close
+            ปิด
           </Button>
         </DialogActions>
       </Dialog>

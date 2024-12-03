@@ -45,12 +45,12 @@ export const EditorBooleanSwitcher: FC<
           <FormControlLabel
             control={<Radio disableRipple />}
             value="T"
-            label="True"
+            label="จริง"
           />
           <FormControlLabel
             control={<Radio disableRipple />}
             value="F"
-            label="False"
+            label="เท็จ"
           />
         </RadioGroup>
       </FormControl>

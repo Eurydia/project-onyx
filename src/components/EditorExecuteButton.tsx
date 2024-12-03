@@ -52,7 +52,7 @@ export const EditorExecuteButton: FC<
         startIcon={<PlayArrowRounded />}
         onClick={onExecute}
       >
-        Run
+        คำนวณ
       </Button>
     </Tooltip>
   );

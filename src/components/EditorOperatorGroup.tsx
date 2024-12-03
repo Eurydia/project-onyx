@@ -9,27 +9,27 @@ import { StyledLatex } from "./StyledLatex";
 
 const OPERATOR = [
   {
-    name: "Negation",
+    name: "นิเสธ",
     label: "\\lnot",
     insertChar: "\u{00AC}",
   },
   {
-    name: "Conjunction",
+    name: "และ",
     label: "\\land",
     insertChar: "\u{2227}",
   },
   {
-    name: "Disjunction",
+    name: "หรือ",
     label: "\\lor",
     insertChar: "\u{2228}",
   },
   {
-    name: "Implication",
+    name: "ถ้า...แล้ว...",
     label: "\\implies",
     insertChar: "\u{21D2}",
   },
   {
-    name: "Equivalence",
+    name: "...ก็ต้องเมื่อ...",
     label: "\\iff",
     insertChar: "\u{21D4}",
   },

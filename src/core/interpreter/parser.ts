@@ -14,7 +14,8 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
   if (tok === undefined) {
     return {
       nodeType: ASTNodeType.ERROR,
-      reason: "Parser Error: Unexpected end of input",
+      // reason: "Parser Error: Unexpected end of input",
+      reason: "เกิดข้อผิดพลาด นิพจน์ไม่ถูกต้อง",
     };
   }
 
@@ -28,7 +29,7 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
     case TokenType.LEFT_PARENTHESIS:
       return {
         nodeType: ASTNodeType.ERROR,
-        reason: `Parser Error: Unexpected token "${tok.value}"`,
+        reason: `เกิดข้อผิดพลาด`,
       };
     case TokenType.IDENTIFIER:
       return {

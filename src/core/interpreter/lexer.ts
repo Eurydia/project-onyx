@@ -81,7 +81,8 @@ const lex = (source: string): Token[] => {
     if (iden === null || iden.length === 0) {
       tokens.push({
         tokenType: TokenType.ERROR,
-        reason: `Lexical Error: Invalid identifier found "${iden}" at position "${pos}"`,
+        // reason: `Lexical Error: Invalid identifier found "${iden}" at position "${pos}"`,
+        reason: `เกิดข้อผิดพลาด`,
       });
       break;
     }

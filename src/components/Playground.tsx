@@ -13,7 +13,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     <Stack spacing={1}>
       <DisplayInputFeedback
         tree={tree}
-        emptyMessage="Evaluate an expression to see how it is interpreted."
+        emptyMessage="ไม่มีประพจน์ให้แสดงในขณะนี้"
       />
       <Box
         sx={{
@@ -28,7 +28,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       >
         <TreeGraph
           tree={tree}
-          emptyText="Nothing to see here"
+          emptyText="ไม่มีประพจน์ให้แสดงในขณะนี้"
         />
       </Box>
     </Stack>

@@ -233,7 +233,9 @@ const _collapseNormalizedTree = (
   }
   return {
     nodeType: ASTNodeType.ERROR,
-    reason: "Cannot transform expression to desired form",
+    reason:
+      "ไม่สามารถแปลงนิพจน์ให้อยู่ในรูปแบบที่ต้องการได้",
+    // reason: "Cannot transform expression to desired form",
   };
 };
 

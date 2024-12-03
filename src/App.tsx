@@ -1,5 +1,4 @@
 import { EditorView } from "$views/EditorView";
-import { BlogView } from "$views/TheoremBlogView";
 import {
   alpha,
   createTheme,
@@ -67,7 +66,7 @@ export const App: FC = () => {
       <CssBaseline />
       {globalStyles}
       <EditorView />
-      <BlogView />
+      {/* <BlogView /> */}
     </ThemeProvider>
   );
 };

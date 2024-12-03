@@ -26,6 +26,7 @@ export const StyledTabs: FC<StyledTabsProps> = (props) => {
         >
           {tabLabels.map((label, index) => (
             <Tab
+              key={"tab-lable" + index}
               label={label}
               value={index}
             />
@@ -34,6 +35,7 @@ export const StyledTabs: FC<StyledTabsProps> = (props) => {
       </Box>
       {panels.map((panel, index) => (
         <TabPanel
+          key={"tab-pane" + index}
           sx={{ padding: 0 }}
           value={index}
         >

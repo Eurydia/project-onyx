@@ -31,7 +31,7 @@ export const StyledAlert: FC<StyledAlertProps> = (
         color="info"
         icon={<QuestionMarkRounded fontSize="inherit" />}
         action={
-          <Tooltip title={<Typography>Close</Typography>}>
+          <Tooltip title={<Typography>ปิด</Typography>}>
             <IconButton
               size="small"
               onClick={() => setDismissed(true)}
