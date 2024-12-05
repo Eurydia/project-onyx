@@ -36,6 +36,7 @@ export const StyledTabs: FC<StyledTabsProps> = (props) => {
       {panels.map((panel, index) => (
         <TabPanel
           key={"tab-pane" + index}
+          keepMounted
           sx={{ padding: 0 }}
           value={index}
         >

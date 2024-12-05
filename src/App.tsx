@@ -1,6 +1,6 @@
 import { EditorView } from "$views/EditorView";
+import { BlogView } from "$views/TheoremBlogView";
 import {
-  alpha,
   createTheme,
   CssBaseline,
   GlobalStyles,
@@ -36,13 +36,10 @@ let theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         arrow: ({ theme: t }) => ({
-          color: alpha(t.palette.primary.dark, 0.87),
+          color: t.palette.primary.dark,
         }),
         tooltip: ({ theme: t }) => ({
-          backgroundColor: alpha(
-            t.palette.primary.dark,
-            0.87
-          ),
+          backgroundColor: t.palette.primary.dark,
         }),
       },
     },
@@ -66,7 +63,7 @@ export const App: FC = () => {
       <CssBaseline />
       {globalStyles}
       <EditorView />
-      {/* <BlogView /> */}
+      <BlogView />
     </ThemeProvider>
   );
 };

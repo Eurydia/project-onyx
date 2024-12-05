@@ -21,12 +21,11 @@ type TreeGraphClusterProps = {
   exprTree: ExprTree;
   width: number;
   height: number;
-  onNodeClick: (exptTree: ExprTree) => void;
 };
 export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
-  const { exprTree, height, width, onNodeClick } = props;
+  const { exprTree, height, width } = props;
   const theme = useTheme();
 
   const data = hierarchy(exprTree);
@@ -95,7 +94,6 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
                         <TreeGraphClusterNode
                           key={`cluster-node-${i}`}
                           node={node}
-                          onClick={onNodeClick}
                         />
                       ))}
                   </Group>
@@ -115,9 +113,7 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
           >
             <Tooltip
               placement="right"
-              title={
-                <Typography>กลับเข้าศูนย์กลาง</Typography>
-              }
+              title={<Typography>Center graph</Typography>}
             >
               <ControlCameraRounded />
             </Tooltip>

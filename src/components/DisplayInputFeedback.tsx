@@ -6,14 +6,14 @@ import { StyledLatex } from "./StyledLatex";
 
 type DisplayInputFeedbackProps = {
   tree: SyntaxTree | null;
-  emptyMessage: string;
+  emptyText: string;
 };
 export const DisplayInputFeedback: FC<
   DisplayInputFeedbackProps
 > = (props) => {
-  const { tree, emptyMessage } = props;
+  const { tree, emptyText } = props;
 
-  let texContent = <Typography>{emptyMessage}</Typography>;
+  let texContent = <Typography>{emptyText}</Typography>;
   if (tree !== null) {
     texContent =
       tree.nodeType === ASTNodeType.ERROR ? (

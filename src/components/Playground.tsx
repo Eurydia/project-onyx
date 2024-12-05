@@ -6,14 +6,15 @@ import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
   tree: SyntaxTree | null;
+  emptyText: string;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
-  const { tree } = props;
+  const { tree, emptyText } = props;
   return (
     <Stack spacing={1}>
       <DisplayInputFeedback
         tree={tree}
-        emptyMessage="ไม่มีประพจน์ให้แสดงในขณะนี้"
+        emptyText={emptyText}
       />
       <Box
         sx={{
@@ -28,7 +29,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       >
         <TreeGraph
           tree={tree}
-          emptyText="ไม่มีประพจน์ให้แสดงในขณะนี้"
+          emptyText={emptyText}
         />
       </Box>
     </Stack>

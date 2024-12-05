@@ -3,7 +3,6 @@ import { EditorExpressionTextField } from "$components/EditorExpressionTextField
 import { EditorLegalOperatorGroup } from "$components/EditorLegalOperatorGroup";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { Playground } from "$components/Playground";
-import { StyledAlert } from "$components/StyledAlert";
 import { StyledTabs } from "$components/StyledTabs";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
@@ -19,7 +18,6 @@ import {
   Container,
   Stack,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { FC, useMemo, useState } from "react";
 
@@ -38,10 +36,6 @@ export const EditorView: FC = () => {
     ])
   );
 
-  const normalTree = useMemo(() => {
-    return simplifySyntaxTree(normalizeSyntaxTree(tree));
-  }, [tree]);
-
   const eliminatedTree = useMemo(() => {
     const allowed = new Set<Operator>();
     legalOp.forEach((v, k) => {
@@ -53,9 +47,9 @@ export const EditorView: FC = () => {
       return tree;
     }
     return simplifySyntaxTree(
-      collapseSyntaxTree(normalTree, allowed)
+      collapseSyntaxTree(normalizeSyntaxTree(tree), allowed)
     );
-  }, [normalTree, tree, legalOp]);
+  }, [tree, legalOp]);
 
   const handleExecute = () => {
     const tokens = lexer(inputValue);
@@ -126,28 +120,16 @@ export const EditorView: FC = () => {
           onKeyDown={handleKeyDown}
           rows={5}
         />
-        <StyledAlert>
-          <Typography component="p">
-            แตะที่โหนดของต้นไม้เพื่อแก้ไขค่าความจริง
-          </Typography>
-        </StyledAlert>
         <StyledTabs
-          tabLabels={[
-            "รูปรับเข้า",
-            "รูปนิเสธ-และ",
-            "รูปอย่างง่าย",
-          ]}
+          tabLabels={["Intepreted", "Simplified"]}
           panels={[
             <Playground
-              tree={tree}
               key="panel-1"
-            />,
-            <Playground
-              tree={normalTree}
-              key="panel-2"
+              tree={tree}
+              emptyText="Nothing to see here"
             />,
             <Stack
-              key="panel-3"
+              key="panel-2"
               spacing={1}
             >
               <Box
@@ -165,7 +147,10 @@ export const EditorView: FC = () => {
                   values={legalOp}
                 />
               </Box>
-              <Playground tree={eliminatedTree} />
+              <Playground
+                tree={eliminatedTree}
+                emptyText="Nothing to see here"
+              />
             </Stack>,
           ]}
         />
