@@ -18,7 +18,7 @@ import { FC, Fragment } from "react";
 import { TreeGraphClusterNode } from "./TreeGraphClusterNode";
 
 type TreeGraphClusterProps = {
-  exprTree: ExprTree;
+  tree: ExprTree;
   width: number;
   height: number;
   onNodeClick: (node: ExprTree) => void;
@@ -26,10 +26,10 @@ type TreeGraphClusterProps = {
 export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
-  const { exprTree, height, width, onNodeClick } = props;
+  const { tree, height, width, onNodeClick } = props;
   const theme = useTheme();
 
-  const data = hierarchy(exprTree);
+  const data = hierarchy(tree);
 
   const nodeSizeY = Math.max(
     height / (data.height + 1),
@@ -77,7 +77,7 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
               }}
               transform={zoom.toString()}
             >
-              <Tree<ExprTree>
+              <Tree
                 root={data}
                 size={[width, height]}
                 nodeSize={[nodeSizeX, nodeSizeY]}

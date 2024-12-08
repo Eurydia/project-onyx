@@ -7,14 +7,17 @@ const _exprTreeToLatex = (exprTree: ExprTree): string => {
   if (exprTree.children.length === 0) {
     return exprTree.label;
   }
-  if (exprTree.children.length === 1) {
-    const child = exprTree.children[0];
-    if (child.children.length === 0) {
-      return `${exprTree.label} ${child.label}`;
-    }
-    const childLatex = _exprTreeToLatex(child);
 
-    return `${exprTree.label} (${childLatex})`;
+  if (exprTree.children.length === 1) {
+    if (exprTree.label !== "\\lnot") {
+      return _exprTreeToLatex(exprTree.children[0]);
+    }
+    const child = exprTree.children[0];
+    let childLatex = _exprTreeToLatex(child);
+    if (child.children.length > 1) {
+      childLatex = `(${childLatex})`;
+    }
+    return `${exprTree.label} ${childLatex}`;
   }
   const left = exprTree.children[0];
   const right = exprTree.children[1];

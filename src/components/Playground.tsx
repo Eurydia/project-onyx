@@ -1,4 +1,5 @@
 import { syntaxTreetoExprTree } from "$core/tree/conversion";
+import { augmentExprTree } from "$core/tree/expr/augment";
 import { collectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
@@ -65,12 +66,15 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           </Typography>
         ) : (
           <TreeGraph
-            tree={syntaxTreetoExprTree(tree, truthTable)}
+            tree={augmentExprTree(
+              syntaxTreetoExprTree(tree, truthTable)
+            )}
             onNodeClick={handleNodeClick}
           />
         )}
       </Box>
       <Dialog
+        PaperProps={{ elevation: 0 }}
         maxWidth="md"
         fullWidth
         open={dialogOpen}

@@ -30,7 +30,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       }}
     >
       <TreeGraphCluster
-        exprTree={tree}
+        tree={tree}
         width={width}
         height={height}
         onNodeClick={onNodeClick}
