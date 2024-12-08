@@ -104,6 +104,7 @@ const lex = (source: string): Token[] => {
     });
     continue;
   }
+  
   return tokens;
 };
 

@@ -8,13 +8,6 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 
-const LIST = [
-  Operator.AND,
-  Operator.OR,
-  Operator.IMPLIES,
-  Operator.IFF,
-];
-
 const SYMBOL_LABEL = new Map([
   [Operator.AND, "Conjunction"],
   [Operator.OR, "Disjunction"],
@@ -40,7 +33,7 @@ export const EditorLegalOperatorGroup: FC<
       }}
     >
       <FormLabel>
-        <Typography>Operators</Typography>
+        <Typography>Operators:</Typography>
       </FormLabel>
       <FormControlLabel
         disabled
@@ -48,7 +41,7 @@ export const EditorLegalOperatorGroup: FC<
         control={<Checkbox />}
         label="Negation"
       />
-      {LIST.map((op, index) => (
+      {[...SYMBOL_LABEL.keys()].map((op, index) => (
         <FormControlLabel
           key={"include-op" + index}
           control={<Checkbox />}
