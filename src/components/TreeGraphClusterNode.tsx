@@ -7,12 +7,13 @@ import { FC, useEffect, useRef } from "react";
 
 type NodeProps = {
   node: HierarchyPointNode<ExprTree>;
+  onClick: (node: ExprTree) => void;
 };
 
 export const TreeGraphClusterNode: FC<NodeProps> = (
   props
 ) => {
-  const { node } = props;
+  const { node, onClick } = props;
   const theme = useTheme();
   const ref = useRef<SVGTextElement>(null);
 
@@ -28,6 +29,7 @@ export const TreeGraphClusterNode: FC<NodeProps> = (
     <Group
       top={node.y}
       left={node.x}
+      onClick={() => onClick(node.data)}
     >
       <circle
         r={30}

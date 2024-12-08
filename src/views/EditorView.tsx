@@ -3,7 +3,6 @@ import { EditorExpressionTextField } from "$components/EditorExpressionTextField
 import { EditorLegalOperatorGroup } from "$components/EditorLegalOperatorGroup";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { Playground } from "$components/Playground";
-import { SimulatedTable } from "$components/SimulatedTable";
 import { StyledTabs } from "$components/StyledTabs";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
@@ -155,7 +154,6 @@ export const EditorView: FC = () => {
             </Stack>,
           ]}
         />
-        <SimulatedTable tree={tree} />
       </Stack>
     </Container>
   );

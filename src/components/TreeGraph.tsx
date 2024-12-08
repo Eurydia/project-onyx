@@ -1,16 +1,14 @@
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
-import { augmentExprTree } from "$core/tree/expr/augment";
-import { SyntaxTree } from "$types/parser";
-import { Box, Typography } from "@mui/material";
+import { ExprTree } from "$types/ast";
+import { Box } from "@mui/material";
 import { FC, useRef } from "react";
 import { TreeGraphCluster } from "./TreeGraphCluster";
 
 type TreeGraphProps = {
-  tree: SyntaxTree | null;
-  emptyText: string;
+  tree: ExprTree;
+  onNodeClick: (node: ExprTree) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, emptyText } = props;
+  const { tree, onNodeClick } = props;
 
   const ref = useRef<HTMLDivElement>(null);
   const container = ref.current;
@@ -29,24 +27,14 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       sx={{
         height: "100%",
         position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      {tree === null ? (
-        <Typography fontStyle="italic">
-          {emptyText}
-        </Typography>
-      ) : (
-        <TreeGraphCluster
-          exprTree={augmentExprTree(
-            syntaxTreetoExprTree(tree)
-          )}
-          width={width}
-          height={height}
-        />
-      )}
+      <TreeGraphCluster
+        exprTree={tree}
+        width={width}
+        height={height}
+        onNodeClick={onNodeClick}
+      />
     </Box>
   );
 };

@@ -63,65 +63,87 @@ export const syntaxTreeToLatex = (tree: SyntaxTree) => {
 };
 
 const _syntaxTreetoExprTree = (
-  tree: SyntaxTree
+  tree: SyntaxTree,
+  symbolTable: Map<string, boolean>
 ): ExprTree => {
   if (tree.nodeType === ASTNodeType.ERROR) {
     return {
       isError: true,
       label: `\\text{${tree.reason}}`,
       children: [],
+      value: null,
     };
   }
 
   if (tree.nodeType === ASTNodeType.IDENTIFIER) {
     return {
       label: tree.value,
+      value: symbolTable.get(tree.value) ?? false,
       children: [],
     };
   }
 
   if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
-    const child = _syntaxTreetoExprTree(tree.operand);
+    const child = _syntaxTreetoExprTree(
+      tree.operand,
+      symbolTable
+    );
     if (child.isError) {
       return child;
     }
     return {
       label: "\\lnot",
       children: [child],
+      value: !child.value,
     };
   }
 
-  const left = _syntaxTreetoExprTree(tree.leftOperand);
+  const left = _syntaxTreetoExprTree(
+    tree.leftOperand,
+    symbolTable
+  );
   if (left.isError === null) {
     return left;
   }
-  const right = _syntaxTreetoExprTree(tree.rightOperand);
+  const right = _syntaxTreetoExprTree(
+    tree.rightOperand,
+    symbolTable
+  );
   if (right.isError === null) {
     return right;
   }
 
-  let label = "";
+  let label;
+  let value;
   switch (tree.operator) {
     case Operator.AND:
       label = "\\land";
+      value = left.value && right.value;
       break;
     case Operator.OR:
       label = "\\lor";
+      value = left.value || right.value;
       break;
     case Operator.IMPLIES:
       label = "\\implies";
+      value = !left.value || right.value;
       break;
     case Operator.IFF:
       label = "\\iff";
+      value = left.value === right.value;
       break;
   }
 
   return {
     label: label,
     children: [left, right],
+    value,
   };
 };
 
-export const syntaxTreetoExprTree = (ast: SyntaxTree) => {
-  return _syntaxTreetoExprTree(ast);
+export const syntaxTreetoExprTree = (
+  tree: SyntaxTree,
+  symbolTable: Map<string, boolean>
+) => {
+  return _syntaxTreetoExprTree(tree, symbolTable);
 };

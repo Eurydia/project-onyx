@@ -21,11 +21,12 @@ type TreeGraphClusterProps = {
   exprTree: ExprTree;
   width: number;
   height: number;
+  onNodeClick: (node: ExprTree) => void;
 };
 export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
-  const { exprTree, height, width } = props;
+  const { exprTree, height, width, onNodeClick } = props;
   const theme = useTheme();
 
   const data = hierarchy(exprTree);
@@ -47,6 +48,14 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
       scaleXMax={4}
       scaleYMin={1 / 3}
       scaleYMax={4}
+      initialTransformMatrix={{
+        scaleX: 1,
+        scaleY: 1,
+        translateX: -width / 2,
+        translateY: -height / 2,
+        skewX: 0,
+        skewY: 0,
+      }}
     >
       {(zoom) => (
         <Fragment>
@@ -94,6 +103,7 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
                         <TreeGraphClusterNode
                           key={`cluster-node-${i}`}
                           node={node}
+                          onClick={onNodeClick}
                         />
                       ))}
                   </Group>
