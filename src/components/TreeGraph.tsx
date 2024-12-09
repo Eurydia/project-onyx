@@ -14,11 +14,11 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
   const container = ref.current;
   const width =
     container === null
-      ? 200
+      ? 400
       : container.getBoundingClientRect().width;
   const height =
     container === null
-      ? 200
+      ? 400
       : container.getBoundingClientRect().height;
 
   return (

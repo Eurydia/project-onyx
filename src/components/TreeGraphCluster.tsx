@@ -31,15 +31,6 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
 
   const data = hierarchy(tree);
 
-  const nodeSizeY = Math.max(
-    height / (data.height + 1),
-    100
-  );
-  const nodeSizeX = Math.max(
-    width / 3 / (data.leaves().length + 1),
-    100
-  );
-
   return (
     <Zoom<SVGSVGElement>
       width={width}
@@ -48,14 +39,6 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
       scaleXMax={4}
       scaleYMin={1 / 3}
       scaleYMax={4}
-      initialTransformMatrix={{
-        scaleX: 1,
-        scaleY: 1,
-        translateX: -width / 2,
-        translateY: -height / 2,
-        skewX: 0,
-        skewY: 0,
-      }}
     >
       {(zoom) => (
         <Fragment>
@@ -80,7 +63,6 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
               <Tree
                 root={data}
                 size={[width, height]}
-                nodeSize={[nodeSizeX, nodeSizeY]}
               >
                 {(treeHeir) => (
                   <Group>
