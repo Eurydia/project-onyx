@@ -3,17 +3,33 @@ import { JsxRuntimeComponents } from "node_modules/react-markdown/lib";
 import { FC } from "react";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
+import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 
 const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
-  h2: ({ children }) => (
-    <Typography variant="h2">{children}</Typography>
+  h2: ({ children, id }) => (
+    <Typography
+      variant="h2"
+      id={id}
+    >
+      {children}
+    </Typography>
   ),
-  h3: ({ children }) => (
-    <Typography variant="h3">{children}</Typography>
+  h3: ({ children, id }) => (
+    <Typography
+      id={id}
+      variant="h3"
+    >
+      {children}
+    </Typography>
   ),
-  h4: ({ children }) => (
-    <Typography variant="h4">{children}</Typography>
+  h4: ({ id, children }) => (
+    <Typography
+      id={id}
+      variant="h4"
+    >
+      {children}
+    </Typography>
   ),
   p: ({ children }) => (
     <Typography
@@ -63,7 +79,7 @@ export const StyledMarkdown: FC<StyledMarkdownProps> = (
   return (
     <Markdown
       components={COMPONENTS_OVERRIDE}
-      rehypePlugins={[rehypeKatex]}
+      rehypePlugins={[rehypeKatex, rehypeSlug]}
       remarkPlugins={[remarkMath]}
     >
       {children}

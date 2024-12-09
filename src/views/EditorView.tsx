@@ -18,6 +18,7 @@ import {
   Container,
   Stack,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { FC, useMemo, useState } from "react";
 
@@ -102,13 +103,29 @@ export const EditorView: FC = () => {
             gap: 1,
             display: "flex",
             flexWrap: "wrap",
-            alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <EditorOperatorGroup
-            onInsertChar={handleInsertChar}
-          />
+          <Stack
+            direction="row"
+            alignItems="end"
+            spacing={4}
+            useFlexGap
+          >
+            <EditorOperatorGroup
+              onInsertChar={handleInsertChar}
+            />
+            <Typography
+              color="primary"
+              component="a"
+              href="#user-manual"
+              sx={{
+                textDecorationLine: "underline",
+              }}
+            >
+              How to use?
+            </Typography>
+          </Stack>
           <EditorExecuteButton
             onExecute={handleExecute}
             keyCombinationHint={["CTRL", "ENTER"]}
