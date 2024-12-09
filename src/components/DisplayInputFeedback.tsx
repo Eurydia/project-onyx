@@ -22,8 +22,8 @@ export const DisplayInputFeedback: FC<
   DisplayInputFeedbackProps
 > = (props) => {
   const { tree, emptyText } = props;
-
   const theme = useTheme();
+
   let texContent = <Typography>{emptyText}</Typography>;
   if (
     tree !== null &&
@@ -33,19 +33,17 @@ export const DisplayInputFeedback: FC<
     const left = tree.source.slice(tree.pos - 20, tree.pos);
     const err = tree.source.slice(tree.pos);
 
-    let msg = `\\texttt{${left}}\\textcolor{${theme.palette.error.main}}{\\textbf {\\underline{${err}}}}`;
+    let msg = `\\texttt{${left}}\\textcolor{${theme.palette.error.main}}{\\textbf{\\underline{${err}}}}`;
     if (tree.pos - 20 > 0) {
-      msg = `\\ldots${msg}`;
+      msg = `[\\ldots]${msg}`;
     }
 
     texContent = (
-      <Stack spacing={0.5}>
-        <Typography
-          fontWeight="bold"
-          component="span"
-        >
-          Unknown character found at position {tree.pos}:
-        </Typography>
+      <Typography
+        fontWeight="bold"
+        component="span"
+      >
+        Unrecognized character found at position {tree.pos}:
         <StyledLatex
           tex={msg}
           options={{
@@ -53,6 +51,26 @@ export const DisplayInputFeedback: FC<
             output: "htmlAndMathml",
           }}
         />
+      </Typography>
+    );
+  } else if (
+    tree !== null &&
+    tree.nodeType === SyntaxTreeNodeType.ERROR &&
+    tree.errorType === ErrorType.PARSER_ERROR
+  ) {
+    texContent = (
+      <Stack
+        useFlexGap
+        direction="row"
+        spacing={0.5}
+      >
+        <Typography
+          fontWeight="bold"
+          component="span"
+        >
+          {tree.reason}
+        </Typography>
+        <Typography component="span"></Typography>
       </Stack>
     );
   } else if (tree !== null) {

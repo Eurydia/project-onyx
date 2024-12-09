@@ -1,10 +1,4 @@
-import {
-  Operator,
-  Token,
-  TokenLeftParen,
-  TokenRightParen,
-  TokenType,
-} from "$types/lexer";
+import { Operator, Token, TokenType } from "$types/lexer";
 
 const OPERATOR_TABLE: Record<string, Operator> = {
   "and": Operator.AND,
@@ -20,28 +14,15 @@ const OPERATOR_TABLE: Record<string, Operator> = {
 };
 
 const IS_WHITESPACE_MANY = /\s+/g;
-const IS_IDENTIFIER = /[a-zA-Z]+/m;
-
-const TOKEN_LEFT_PARENTHESIS: TokenLeftParen = {
-  tokenType: TokenType.LEFT_PARENTHESIS,
-  value: "(",
-};
-
-const TOKEN_RIGHT_PARENTHESIS: TokenRightParen = {
-  tokenType: TokenType.RIGHT_PARENTHESIS,
-  value: ")",
-};
-
+const IS_SYMBOL = /^[a-zA-Z\p{Script=Thai}]+/mu;
 const collapseWhitespace = (source: string): string => {
   return source.replaceAll(IS_WHITESPACE_MANY, " ");
 };
 
-const collectIdentifier = (
-  source: string
-): string | null => {
-  const match = IS_IDENTIFIER.exec(source);
-  if (match === null) {
-    return null;
+const collectSymbol = (source: string): string => {
+  const match = IS_SYMBOL.exec(source);
+  if (match === null || match.length === 0) {
+    return "";
   }
   return match[0];
 };
@@ -58,50 +39,60 @@ const lex = (source: string): Token[] => {
         pos++;
         continue;
       case "(":
+        tokens.push({
+          tokenType: TokenType.LEFT_PARENTHESIS,
+          pos,
+        });
         pos++;
-        tokens.push(TOKEN_LEFT_PARENTHESIS);
         continue;
       case ")":
+        tokens.push({
+          tokenType: TokenType.RIGHT_PARENTHESIS,
+          pos,
+        });
         pos++;
-        tokens.push(TOKEN_RIGHT_PARENTHESIS);
         continue;
     }
 
     const opSign = OPERATOR_TABLE[char];
     if (opSign !== undefined) {
-      pos++;
       tokens.push({
         tokenType: TokenType.OPERATOR,
-        value: opSign,
+        name: opSign,
+        pos,
       });
+      pos++;
     }
 
-    const iden = collectIdentifier(source.slice(pos));
-    if (iden === null || iden.length === 0) {
+    const symbol = collectSymbol(source.slice(pos));
+    if (symbol.length === 0) {
       tokens = [];
       tokens.push({
         tokenType: TokenType.ERROR,
         pos,
-        source: source.slice(0, pos + 1),
+        source,
       });
       break;
     }
 
-    const opName = OPERATOR_TABLE[iden];
+    const opName = OPERATOR_TABLE[symbol];
     if (opName !== undefined) {
-      pos += iden.length;
       tokens.push({
         tokenType: TokenType.OPERATOR,
-        value: opName,
+        name: opName,
+        pos,
       });
+      pos += symbol.length;
       continue;
     }
 
-    pos += iden.length;
     tokens.push({
       tokenType: TokenType.IDENTIFIER,
-      value: iden,
+      symbol,
+      length: symbol.length,
+      pos,
     });
+    pos += symbol.length;
     continue;
   }
 

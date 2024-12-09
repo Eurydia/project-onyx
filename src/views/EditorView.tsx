@@ -56,7 +56,8 @@ export const EditorView: FC = () => {
       setTree(null);
       return;
     }
-    setTree(parser(tokens));
+    const _tree = parser(tokens);
+    setTree(_tree);
   };
 
   const handleInsertChar = (char: string) => {

@@ -22,22 +22,25 @@ export type TokenError = {
 
 export type TokenIdentifier = {
   tokenType: TokenType.IDENTIFIER;
-  value: string;
+  symbol: string;
+  pos: number;
+  length: number;
 };
 
 export type TokenOperator = {
   tokenType: TokenType.OPERATOR;
-  value: Operator;
+  name: Operator;
+  pos: number;
 };
 
 export type TokenLeftParen = {
   tokenType: TokenType.LEFT_PARENTHESIS;
-  value: "(";
+  pos: number;
 };
 
 export type TokenRightParen = {
   tokenType: TokenType.RIGHT_PARENTHESIS;
-  value: ")";
+  pos: number;
 };
 
 export type Token =

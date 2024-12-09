@@ -19,8 +19,7 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
     return {
       nodeType: SyntaxTreeNodeType.ERROR,
       errorType: ErrorType.PARSER_ERROR,
-      reason: "Parser Error: Bad input",
-      // reason: "เกิดข้อผิดพลาด นิพจน์ไม่ถูกต้อง",
+      reason: "Expression ended unexpectedly",
     };
   }
 
@@ -37,30 +36,25 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
       return {
         nodeType: SyntaxTreeNodeType.ERROR,
         errorType: ErrorType.PARSER_ERROR,
-        reason: "Parser Error: Bad input",
+        reason: `Found unexpected parenthesis at position ${tok.pos}`,
       };
     case TokenType.IDENTIFIER:
       return {
         nodeType: SyntaxTreeNodeType.IDENTIFIER,
-        value: tok.value,
+        value: tok.symbol,
       };
   }
 
-  if (tok.value === Operator.NOT) {
+  if (tok.name === Operator.NOT) {
     const operand = polishToAST(tokens);
     if (operand.nodeType === SyntaxTreeNodeType.ERROR) {
       return operand;
     }
     return {
       nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: tok.value,
+      operator: tok.name,
       operand,
     };
-  }
-
-  const left = polishToAST(tokens);
-  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
-    return left;
   }
 
   const right = polishToAST(tokens);
@@ -68,14 +62,19 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
     return right;
   }
 
+  const left = polishToAST(tokens);
+  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
+    return left;
+  }
   return {
     nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
-    operator: tok.value,
+    operator: tok.name,
     leftOperand: left,
     rightOperand: right,
   };
 };
 
+// https://en.wikipedia.org/wiki/Shunting_yard_algorithm
 const infixToPolish = (tokens: Token[]): Token[] => {
   const outStack: Token[] = [];
   const opStack: Token[] = [];
@@ -88,69 +87,106 @@ const infixToPolish = (tokens: Token[]): Token[] => {
 
     switch (token.tokenType) {
       case TokenType.ERROR:
-        tokens.push(token);
-        return tokens;
-
+        outStack.push(token);
+        return outStack;
       case TokenType.IDENTIFIER:
         outStack.push(token);
         break;
-
-      case TokenType.OPERATOR: {
-        const precedence = OPERATOR_PRECEDENCE[token.value];
-
-        while (opStack.length > 0) {
-          const lastOp = opStack[opStack.length - 1];
-          if (
-            lastOp.tokenType === TokenType.LEFT_PARENTHESIS
-          ) {
-            break;
-          }
-          if (
-            lastOp.tokenType === TokenType.OPERATOR &&
-            OPERATOR_PRECEDENCE[lastOp.value] < precedence
-          ) {
-            break;
-          }
-          opStack.pop();
-          outStack.push(lastOp);
-        }
-        opStack.push(token);
-        break;
-      }
-
       case TokenType.LEFT_PARENTHESIS:
         opStack.push(token);
         break;
+    }
 
-      case TokenType.RIGHT_PARENTHESIS: {
-        while (opStack.length > 0) {
-          const lastOp = opStack.pop();
-          if (lastOp === undefined) {
-            break;
-          }
+    if (token.tokenType === TokenType.OPERATOR) {
+      const precedence = OPERATOR_PRECEDENCE[token.name];
 
-          if (
-            lastOp.tokenType === TokenType.LEFT_PARENTHESIS
-          ) {
-            break;
-          }
-          outStack.push(lastOp);
+      while (opStack.length > 0) {
+        const last = opStack[opStack.length - 1];
+        if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
+          break;
         }
+        if (
+          last.tokenType === TokenType.OPERATOR &&
+          OPERATOR_PRECEDENCE[last.name] < precedence
+        ) {
+          break;
+        }
+        opStack.pop();
+        outStack.push(last);
       }
+
+      opStack.push(token);
+    }
+
+    if (token.tokenType === TokenType.RIGHT_PARENTHESIS) {
+      while (opStack.length > 0) {
+        const last = opStack[opStack.length - 1];
+        if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
+          break;
+        }
+        if (opStack.length === 1) {
+          throw Error(
+            `Found unpaired right parenthesis at position ${token.pos}`
+          );
+        }
+        opStack.pop();
+        outStack.push(last);
+      }
+      if (
+        opStack.length === 0 ||
+        opStack[opStack.length - 1].tokenType !==
+          TokenType.LEFT_PARENTHESIS
+      ) {
+        throw Error(
+          `Found unpaired right at position ${token.pos}`
+        );
+      }
+      opStack.pop(); // pop left parenthesis
     }
   }
 
   while (opStack.length > 0) {
-    const lastOp = opStack.pop();
-    if (lastOp === undefined) {
-      break;
+    const last = opStack[opStack.length - 1];
+    if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
+      throw Error(
+        `Found unclosed left parenthesis at position ${last.pos}`
+      );
     }
-    outStack.push(lastOp);
+    opStack.pop();
+    outStack.push(last);
   }
   return outStack;
 };
 
-export const parser = (tokens: Token[]) => {
-  const polish = infixToPolish(tokens);
-  return polishToAST(polish);
+export const parser = (tokens: Token[]): SyntaxTree => {
+  try {
+    const polish = infixToPolish(tokens);
+
+    if (
+      polish.length === 1 &&
+      polish[0].tokenType === TokenType.ERROR
+    ) {
+      return {
+        nodeType: SyntaxTreeNodeType.ERROR,
+        errorType: ErrorType.LEXICAL_ERROR,
+        pos: polish[0].pos,
+        source: polish[0].source,
+      };
+    }
+    const tree = polishToAST(polish);
+    if (polish.length === 0) {
+      return tree;
+    }
+    return {
+      nodeType: SyntaxTreeNodeType.ERROR,
+      errorType: ErrorType.PARSER_ERROR,
+      reason: "Invalid Boolean expression",
+    };
+  } catch (e) {
+    return {
+      nodeType: SyntaxTreeNodeType.ERROR,
+      errorType: ErrorType.PARSER_ERROR,
+      reason: (e as Error).message,
+    };
+  }
 };

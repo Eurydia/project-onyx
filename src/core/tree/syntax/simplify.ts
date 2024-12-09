@@ -1,6 +1,7 @@
 import { Operator } from "$types/lexer";
 import {
   BinaryOperatorNode,
+  ErrorType,
   SyntaxTree,
   SyntaxTreeNodeType,
   UnaryOperatorNode,
@@ -233,9 +234,10 @@ const _collapseNormalizedTree = (
   }
   return {
     nodeType: SyntaxTreeNodeType.ERROR,
-    reason:
-      "ไม่สามารถแปลงนิพจน์ให้อยู่ในรูปแบบที่ต้องการได้",
-    // reason: "Cannot transform expression to desired form",
+    errorType: ErrorType.PARSER_ERROR,
+    // reason: ""
+    //   "ไม่สามารถแปลงนิพจน์ให้อยู่ในรูปแบบที่ต้องการได้",
+    reason: "Cannot transform expression to desired form",
   };
 };
 
