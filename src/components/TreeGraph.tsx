@@ -1,6 +1,5 @@
 import { ExprTree } from "$types/ast";
-import { Box } from "@mui/material";
-import { FC, useRef } from "react";
+import { FC } from "react";
 import { TreeGraphCluster } from "./TreeGraphCluster";
 
 type TreeGraphProps = {
@@ -10,31 +9,10 @@ type TreeGraphProps = {
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
   const { tree, onNodeClick } = props;
 
-  const ref = useRef<HTMLDivElement>(null);
-  const container = ref.current;
-  const width =
-    container === null
-      ? 400
-      : container.getBoundingClientRect().width;
-  const height =
-    container === null
-      ? 400
-      : container.getBoundingClientRect().height;
-
   return (
-    <Box
-      ref={ref}
-      sx={{
-        height: "100%",
-        position: "relative",
-      }}
-    >
-      <TreeGraphCluster
-        tree={tree}
-        width={width}
-        height={height}
-        onNodeClick={onNodeClick}
-      />
-    </Box>
+    <TreeGraphCluster
+      tree={tree}
+      onNodeClick={onNodeClick}
+    />
   );
 };

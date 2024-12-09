@@ -19,18 +19,17 @@ import { TreeGraphClusterNode } from "./TreeGraphClusterNode";
 
 type TreeGraphClusterProps = {
   tree: ExprTree;
-  width: number;
-  height: number;
   onNodeClick: (node: ExprTree) => void;
 };
 export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
-  const { tree, height, width, onNodeClick } = props;
+  const { tree, onNodeClick } = props;
   const theme = useTheme();
 
   const data = hierarchy(tree);
-
+  const height = (data.height + 1) * 75;
+  const width = (data.leaves().length + 1) * 100;
   return (
     <Zoom<SVGSVGElement>
       width={width}
