@@ -1,5 +1,9 @@
 import { Operator, Token, TokenType } from "$types/lexer";
-import { ASTNodeType, SyntaxTree } from "$types/parser";
+import {
+  ErrorType,
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/parser";
 
 const OPERATOR_PRECEDENCE = {
   [Operator.NOT]: 6,
@@ -13,8 +17,9 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
   const tok = tokens.pop();
   if (tok === undefined) {
     return {
-      nodeType: ASTNodeType.ERROR,
-      reason: "Parser Error: Invalid syntax",
+      nodeType: SyntaxTreeNodeType.ERROR,
+      errorType: ErrorType.PARSER_ERROR,
+      reason: "Parser Error: Bad input",
       // reason: "เกิดข้อผิดพลาด นิพจน์ไม่ถูกต้อง",
     };
   }
@@ -22,46 +27,49 @@ const polishToAST = (tokens: Token[]): SyntaxTree => {
   switch (tok.tokenType) {
     case TokenType.ERROR:
       return {
-        nodeType: ASTNodeType.ERROR,
-        reason: tok.reason,
+        nodeType: SyntaxTreeNodeType.ERROR,
+        errorType: ErrorType.LEXICAL_ERROR,
+        pos: tok.pos,
+        source: tok.source,
       };
     case TokenType.RIGHT_PARENTHESIS:
     case TokenType.LEFT_PARENTHESIS:
       return {
-        nodeType: ASTNodeType.ERROR,
-        reason: `Parser Error: Invalid syntax`,
+        nodeType: SyntaxTreeNodeType.ERROR,
+        errorType: ErrorType.PARSER_ERROR,
+        reason: "Parser Error: Bad input",
       };
     case TokenType.IDENTIFIER:
       return {
-        nodeType: ASTNodeType.IDENTIFIER,
+        nodeType: SyntaxTreeNodeType.IDENTIFIER,
         value: tok.value,
       };
   }
 
   if (tok.value === Operator.NOT) {
     const operand = polishToAST(tokens);
-    if (operand.nodeType === ASTNodeType.ERROR) {
+    if (operand.nodeType === SyntaxTreeNodeType.ERROR) {
       return operand;
     }
     return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator: tok.value,
       operand,
     };
   }
 
-  const right = polishToAST(tokens);
-  if (right.nodeType === ASTNodeType.ERROR) {
-    return right;
-  }
-
   const left = polishToAST(tokens);
-  if (left.nodeType === ASTNodeType.ERROR) {
+  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
     return left;
   }
 
+  const right = polishToAST(tokens);
+  if (right.nodeType === SyntaxTreeNodeType.ERROR) {
+    return right;
+  }
+
   return {
-    nodeType: ASTNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
     operator: tok.value,
     leftOperand: left,
     rightOperand: right,
@@ -144,6 +152,5 @@ const infixToPolish = (tokens: Token[]): Token[] => {
 
 export const parser = (tokens: Token[]) => {
   const polish = infixToPolish(tokens);
-
   return polishToAST(polish);
 };

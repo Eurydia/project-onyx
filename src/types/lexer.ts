@@ -16,7 +16,8 @@ export enum Operator {
 
 export type TokenError = {
   tokenType: TokenType.ERROR;
-  reason: string;
+  pos: number;
+  source: string;
 };
 
 export type TokenIdentifier = {

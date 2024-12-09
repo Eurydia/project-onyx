@@ -7,7 +7,7 @@ const _augmentExprTree = (tree: ExprTree) => {
 
   if (tree.children.length === 0) {
     const augmented: ExprTree = {
-      label: tree.value ? "\\checkmark" : "\\times",
+      label: tree.value ? "\\text{T}" : "\\text{F}",
       value: tree.value,
       children: [tree],
     };

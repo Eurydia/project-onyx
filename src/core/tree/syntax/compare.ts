@@ -1,12 +1,15 @@
-import { ASTNodeType, SyntaxTree } from "$types/parser";
+import {
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/parser";
 
 const _compareSyntaxTree = (
   a: SyntaxTree,
   b: SyntaxTree
 ): boolean => {
   if (
-    a.nodeType === ASTNodeType.ERROR ||
-    b.nodeType === ASTNodeType.ERROR
+    a.nodeType === SyntaxTreeNodeType.ERROR ||
+    b.nodeType === SyntaxTreeNodeType.ERROR
   ) {
     return false;
   }
@@ -16,22 +19,22 @@ const _compareSyntaxTree = (
   }
 
   if (
-    a.nodeType === ASTNodeType.IDENTIFIER &&
-    b.nodeType === ASTNodeType.IDENTIFIER
+    a.nodeType === SyntaxTreeNodeType.IDENTIFIER &&
+    b.nodeType === SyntaxTreeNodeType.IDENTIFIER
   ) {
     return a.value === b.value;
   }
 
   if (
-    a.nodeType === ASTNodeType.UNARY_OPERATOR &&
-    b.nodeType === ASTNodeType.UNARY_OPERATOR
+    a.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR &&
+    b.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR
   ) {
     return _compareSyntaxTree(a.operand, b.operand);
   }
 
   if (
-    a.nodeType === ASTNodeType.BINARY_OPERATOR &&
-    b.nodeType === ASTNodeType.BINARY_OPERATOR
+    a.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR &&
+    b.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR
   ) {
     if (a.operator !== b.operator) {
       return false;

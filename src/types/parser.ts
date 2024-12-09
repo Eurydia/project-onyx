@@ -1,6 +1,11 @@
 import { Operator } from "./lexer";
 
-export enum ASTNodeType {
+export enum ErrorType {
+  LEXICAL_ERROR,
+  PARSER_ERROR,
+}
+
+export enum SyntaxTreeNodeType {
   BINARY_OPERATOR,
   UNARY_OPERATOR,
   ERROR,
@@ -9,7 +14,7 @@ export enum ASTNodeType {
 }
 
 export type BinaryOperatorNode = {
-  nodeType: ASTNodeType.BINARY_OPERATOR;
+  nodeType: SyntaxTreeNodeType.BINARY_OPERATOR;
   operator:
     | Operator.AND
     | Operator.OR
@@ -20,20 +25,30 @@ export type BinaryOperatorNode = {
 };
 
 export type UnaryOperatorNode = {
-  nodeType: ASTNodeType.UNARY_OPERATOR;
+  nodeType: SyntaxTreeNodeType.UNARY_OPERATOR;
   operator: Operator.NOT;
   operand: SyntaxTree;
 };
 
-export type ErrorNode = {
-  nodeType: ASTNodeType.ERROR;
+export type LexicalErrorNode = {
+  nodeType: SyntaxTreeNodeType.ERROR;
+  source: string;
+  pos: number;
+  errorType: ErrorType.LEXICAL_ERROR;
+};
+
+export type ParserErrorNode = {
+  nodeType: SyntaxTreeNodeType.ERROR;
   reason: string;
+  errorType: ErrorType.PARSER_ERROR;
 };
 
 export type IdentifierNode = {
-  nodeType: ASTNodeType.IDENTIFIER;
+  nodeType: SyntaxTreeNodeType.IDENTIFIER;
   value: string;
 };
+
+export type ErrorNode = LexicalErrorNode | ParserErrorNode;
 
 export type SyntaxTree =
   | BinaryOperatorNode
@@ -47,12 +62,12 @@ export type NormalizedAST =
   | IdentifierNode
   | ErrorNode
   | {
-      nodeType: ASTNodeType.UNARY_OPERATOR;
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR;
       operator: Operator.NOT;
       operand: NormalizedAST;
     }
   | {
-      nodeType: ASTNodeType.BINARY_OPERATOR;
+      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR;
       operator: Operator.AND;
       leftOperand: NormalizedAST;
       rightOperand: NormalizedAST;

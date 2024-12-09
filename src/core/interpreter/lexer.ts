@@ -20,7 +20,7 @@ const OPERATOR_TABLE: Record<string, Operator> = {
 };
 
 const IS_WHITESPACE_MANY = /\s+/g;
-const IS_IDENTIFIER = /^\w+/m;
+const IS_IDENTIFIER = /[a-zA-Z]+/m;
 
 const TOKEN_LEFT_PARENTHESIS: TokenLeftParen = {
   tokenType: TokenType.LEFT_PARENTHESIS,
@@ -47,10 +47,9 @@ const collectIdentifier = (
 };
 
 const lex = (source: string): Token[] => {
-  const tokens: Token[] = [];
   const sourceLength = source.length;
+  let tokens: Token[] = [];
   let pos = 0;
-
   while (pos < sourceLength) {
     const char = source[pos];
 
@@ -79,10 +78,11 @@ const lex = (source: string): Token[] => {
 
     const iden = collectIdentifier(source.slice(pos));
     if (iden === null || iden.length === 0) {
+      tokens = [];
       tokens.push({
         tokenType: TokenType.ERROR,
-        reason: `Lexical Error: Invalid identifier found "${iden}" at position "${pos}"`,
-        // reason: `เกิดข้อผิดพลาด`,
+        pos,
+        source: source.slice(0, pos + 1),
       });
       break;
     }
@@ -104,11 +104,13 @@ const lex = (source: string): Token[] => {
     });
     continue;
   }
-  
+
   return tokens;
 };
 
 export const lexer = (source: string): Token[] => {
-  const sourceCollapsed = collapseWhitespace(source);
+  const sourceCollapsed = collapseWhitespace(
+    source.normalize()
+  );
   return lex(sourceCollapsed);
 };

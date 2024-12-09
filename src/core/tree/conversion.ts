@@ -1,42 +1,54 @@
 import { ExprTree } from "$types/ast";
 import { Operator } from "$types/lexer";
-import { ASTNodeType, SyntaxTree } from "$types/parser";
+import {
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/parser";
 
 const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
   const { nodeType } = tree;
 
-  if (nodeType === ASTNodeType.ERROR) {
+  if (nodeType === SyntaxTreeNodeType.ERROR) {
     return tree.reason;
   }
-  if (nodeType === ASTNodeType.IDENTIFIER) {
+  if (nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return tree.value;
   }
 
-  if (nodeType === ASTNodeType.UNARY_OPERATOR) {
-    if (tree.operand.nodeType === ASTNodeType.ERROR) {
+  if (nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
+    if (
+      tree.operand.nodeType === SyntaxTreeNodeType.ERROR
+    ) {
       return tree.operand.reason;
     }
     const value = _syntaxTreeToLatex(tree.operand);
-    if (tree.operand.nodeType === ASTNodeType.IDENTIFIER) {
+    if (
+      tree.operand.nodeType ===
+      SyntaxTreeNodeType.IDENTIFIER
+    ) {
       return `\\lnot ${value}`;
     }
     return `\\lnot (${value})`;
   }
 
   const left = tree.leftOperand;
-  if (left.nodeType === ASTNodeType.ERROR) {
+  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
     return left.reason;
   }
   const right = tree.rightOperand;
-  if (right.nodeType === ASTNodeType.ERROR) {
+  if (right.nodeType === SyntaxTreeNodeType.ERROR) {
     return right.reason;
   }
   let labelLeft = _syntaxTreeToLatex(left);
-  if (left.nodeType === ASTNodeType.BINARY_OPERATOR) {
+  if (
+    left.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR
+  ) {
     labelLeft = `(${labelLeft})`;
   }
   let labelRight = _syntaxTreeToLatex(right);
-  if (right.nodeType === ASTNodeType.BINARY_OPERATOR) {
+  if (
+    right.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR
+  ) {
     labelRight = `(${labelRight})`;
   }
 
@@ -66,7 +78,7 @@ const _syntaxTreetoExprTree = (
   tree: SyntaxTree,
   symbolTable: Map<string, boolean>
 ): ExprTree => {
-  if (tree.nodeType === ASTNodeType.ERROR) {
+  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
     return {
       isError: true,
       label: `\\text{${tree.reason}}`,
@@ -75,7 +87,7 @@ const _syntaxTreetoExprTree = (
     };
   }
 
-  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return {
       label: tree.value,
       value: symbolTable.get(tree.value) ?? false,
@@ -83,7 +95,7 @@ const _syntaxTreetoExprTree = (
     };
   }
 
-  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     const child = _syntaxTreetoExprTree(
       tree.operand,
       symbolTable

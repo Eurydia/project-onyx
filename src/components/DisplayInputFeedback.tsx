@@ -1,6 +1,16 @@
 import { syntaxTreeToLatex } from "$core/tree/conversion";
-import { ASTNodeType, SyntaxTree } from "$types/parser";
-import { alpha, Box, Typography } from "@mui/material";
+import {
+  ErrorType,
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/parser";
+import {
+  alpha,
+  Box,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
@@ -13,20 +23,41 @@ export const DisplayInputFeedback: FC<
 > = (props) => {
   const { tree, emptyText } = props;
 
+  const theme = useTheme();
   let texContent = <Typography>{emptyText}</Typography>;
-  if (tree !== null) {
-    texContent =
-      tree.nodeType === ASTNodeType.ERROR ? (
-        <Typography color="error">{tree.reason}</Typography>
-      ) : (
+  if (
+    tree !== null &&
+    tree.nodeType === SyntaxTreeNodeType.ERROR &&
+    tree.errorType === ErrorType.LEXICAL_ERROR
+  ) {
+    const left = tree.source.slice(tree.pos - 20, tree.pos);
+    const err = tree.source.slice(tree.pos);
+
+    let msg = `\\texttt{${left}}\\textcolor{${theme.palette.error.main}}{\\textbf {\\underline{${err}}}}`;
+    if (tree.pos - 20 > 0) {
+      msg = `\\ldots${msg}`;
+    }
+
+    texContent = (
+      <Stack spacing={0.5}>
+        <Typography
+          fontWeight="bold"
+          component="span"
+        >
+          Unknown character found at position {tree.pos}:
+        </Typography>
         <StyledLatex
-          tex={syntaxTreeToLatex(tree)}
+          tex={msg}
           options={{
             displayMode: true,
             output: "htmlAndMathml",
           }}
         />
-      );
+      </Stack>
+    );
+  } else if (tree !== null) {
+    const tex = syntaxTreeToLatex(tree);
+    texContent = <StyledLatex tex={tex} />;
   }
 
   return (

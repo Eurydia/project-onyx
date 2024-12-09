@@ -1,20 +1,23 @@
 import { Operator } from "$types/lexer";
-import { ASTNodeType, SyntaxTree } from "$types/parser";
+import {
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/parser";
 
 const _collectSymbols = (
   tree: SyntaxTree,
   symbolTable: Set<string>
 ): void => {
-  if (tree.nodeType === ASTNodeType.ERROR) {
+  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
     symbolTable.clear();
     return;
   }
-  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     symbolTable.add(tree.value);
     return;
   }
 
-  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     _collectSymbols(tree.operand, symbolTable);
     return;
   }
@@ -57,14 +60,14 @@ const _evaluateSyntaxTree = (
   tree: SyntaxTree,
   truthTable: Map<string, boolean>
 ): null | boolean => {
-  if (tree.nodeType === ASTNodeType.ERROR) {
+  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
     return null;
   }
-  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return truthTable.get(tree.value) ?? null;
   }
 
-  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     const value = _evaluateSyntaxTree(
       tree.operand,
       truthTable

@@ -26,7 +26,6 @@ export const EditorView: FC = () => {
     "not (p and q) iff (not p) or (not q)"
   );
   const [tree, setTree] = useState<SyntaxTree | null>(null);
-
   const [legalOp, setLegalOp] = useState(
     new Map([
       [Operator.AND, true],

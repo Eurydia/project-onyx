@@ -1,8 +1,8 @@
 import { Operator } from "$types/lexer";
 import {
-  ASTNodeType,
   BinaryOperatorNode,
   SyntaxTree,
+  SyntaxTreeNodeType,
   UnaryOperatorNode,
 } from "$types/parser";
 import { compareSyntaxTree } from "./compare";
@@ -12,21 +12,21 @@ const collapseToDisjunction = (
 ): BinaryOperatorNode | null => {
   const root = normalizedTree;
   const c = root.operand;
-  if (c.nodeType !== ASTNodeType.BINARY_OPERATOR) {
+  if (c.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR) {
     return null;
   }
 
   const lc = c.leftOperand;
-  if (lc.nodeType !== ASTNodeType.UNARY_OPERATOR) {
+  if (lc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
     return null;
   }
   const rc = c.rightOperand;
-  if (rc.nodeType !== ASTNodeType.UNARY_OPERATOR) {
+  if (rc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
     return null;
   }
 
   return {
-    nodeType: ASTNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
     operator: Operator.OR,
     leftOperand: lc.operand,
     rightOperand: rc.operand,
@@ -38,16 +38,16 @@ const collapseToImplication = (
 ): BinaryOperatorNode | null => {
   const root = normalizedTree;
   const c = root.operand;
-  if (c.nodeType !== ASTNodeType.BINARY_OPERATOR) {
+  if (c.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR) {
     return null;
   }
 
   const rc = c.rightOperand;
-  if (rc.nodeType !== ASTNodeType.UNARY_OPERATOR) {
+  if (rc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
     return null;
   }
   return {
-    nodeType: ASTNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
     operator: Operator.IMPLIES,
     leftOperand: c.leftOperand,
     rightOperand: rc.operand,
@@ -62,8 +62,8 @@ const collapseToEquivalence = (
   const r = root.rightOperand;
 
   if (
-    l.nodeType !== ASTNodeType.UNARY_OPERATOR ||
-    r.nodeType !== ASTNodeType.UNARY_OPERATOR
+    l.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR ||
+    r.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR
   ) {
     return null;
   }
@@ -71,8 +71,8 @@ const collapseToEquivalence = (
   const cl = l.operand;
   const cr = r.operand;
   if (
-    cl.nodeType !== ASTNodeType.BINARY_OPERATOR ||
-    cr.nodeType !== ASTNodeType.BINARY_OPERATOR
+    cl.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR ||
+    cr.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR
   ) {
     return null;
   }
@@ -90,7 +90,7 @@ const collapseToEquivalence = (
   }
 
   return {
-    nodeType: ASTNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
     operator: Operator.IFF,
     leftOperand: lcl,
     rightOperand: lcr,
@@ -102,13 +102,13 @@ const _collapseNormalizedTree = (
   target: Set<Operator>
 ): SyntaxTree => {
   if (
-    tree.nodeType === ASTNodeType.ERROR ||
-    tree.nodeType === ASTNodeType.IDENTIFIER
+    tree.nodeType === SyntaxTreeNodeType.ERROR ||
+    tree.nodeType === SyntaxTreeNodeType.IDENTIFIER
   ) {
     return tree;
   }
 
-  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     let collapsed: BinaryOperatorNode | null = null;
     if (target.has(Operator.OR)) {
       collapsed = collapseToDisjunction(tree);
@@ -122,7 +122,7 @@ const _collapseNormalizedTree = (
         target
       );
       return {
-        nodeType: ASTNodeType.UNARY_OPERATOR,
+        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
         operator: Operator.NOT,
         operand: child,
       };
@@ -132,19 +132,19 @@ const _collapseNormalizedTree = (
       collapsed.leftOperand,
       target
     );
-    if (left.nodeType === ASTNodeType.ERROR) {
+    if (left.nodeType === SyntaxTreeNodeType.ERROR) {
       return left;
     }
     const right = _collapseNormalizedTree(
       collapsed.rightOperand,
       target
     );
-    if (right.nodeType === ASTNodeType.ERROR) {
+    if (right.nodeType === SyntaxTreeNodeType.ERROR) {
       return right;
     }
 
     return {
-      nodeType: ASTNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
       operator: collapsed.operator,
       leftOperand: left,
       rightOperand: right,
@@ -163,7 +163,7 @@ const _collapseNormalizedTree = (
       collapsed.leftOperand,
       target
     );
-    if (left.nodeType === ASTNodeType.ERROR) {
+    if (left.nodeType === SyntaxTreeNodeType.ERROR) {
       return left;
     }
 
@@ -171,12 +171,12 @@ const _collapseNormalizedTree = (
       collapsed.rightOperand,
       target
     );
-    if (right.nodeType === ASTNodeType.ERROR) {
+    if (right.nodeType === SyntaxTreeNodeType.ERROR) {
       return right;
     }
 
     return {
-      nodeType: ASTNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
       operator: collapsed.operator,
       leftOperand: left,
       rightOperand: right,
@@ -184,7 +184,7 @@ const _collapseNormalizedTree = (
   }
   if (target.has(Operator.OR)) {
     const left: SyntaxTree = {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator: Operator.NOT,
       operand: _collapseNormalizedTree(
         tree.leftOperand,
@@ -192,7 +192,7 @@ const _collapseNormalizedTree = (
       ),
     };
     const right: SyntaxTree = {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator: Operator.NOT,
       operand: _collapseNormalizedTree(
         tree.rightOperand,
@@ -200,10 +200,10 @@ const _collapseNormalizedTree = (
       ),
     };
     return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator: Operator.NOT,
       operand: {
-        nodeType: ASTNodeType.BINARY_OPERATOR,
+        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
         operator: Operator.OR,
         leftOperand: left,
         rightOperand: right,
@@ -211,17 +211,17 @@ const _collapseNormalizedTree = (
     };
   } else if (target.has(Operator.IMPLIES)) {
     return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator: Operator.NOT,
       operand: {
-        nodeType: ASTNodeType.BINARY_OPERATOR,
+        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
         operator: Operator.IMPLIES,
         leftOperand: _collapseNormalizedTree(
           tree.leftOperand,
           target
         ),
         rightOperand: {
-          nodeType: ASTNodeType.UNARY_OPERATOR,
+          nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
           operator: Operator.NOT,
           operand: _collapseNormalizedTree(
             tree.rightOperand,
@@ -232,7 +232,7 @@ const _collapseNormalizedTree = (
     };
   }
   return {
-    nodeType: ASTNodeType.ERROR,
+    nodeType: SyntaxTreeNodeType.ERROR,
     reason:
       "ไม่สามารถแปลงนิพจน์ให้อยู่ในรูปแบบที่ต้องการได้",
     // reason: "Cannot transform expression to desired form",
@@ -252,43 +252,45 @@ export const collapseSyntaxTree = (
 const _simplifySyntaxTree = (
   tree: SyntaxTree
 ): SyntaxTree => {
-  if (tree.nodeType === ASTNodeType.ERROR) {
+  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
     return tree;
   }
 
-  if (tree.nodeType === ASTNodeType.IDENTIFIER) {
+  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return tree;
   }
 
-  if (tree.nodeType === ASTNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     const { operand, operator } = tree;
     // Skip double negation
-    if (operand.nodeType === ASTNodeType.UNARY_OPERATOR) {
+    if (
+      operand.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR
+    ) {
       return _simplifySyntaxTree(operand.operand);
     }
     const child = _simplifySyntaxTree(operand);
-    if (child.nodeType === ASTNodeType.ERROR) {
+    if (child.nodeType === SyntaxTreeNodeType.ERROR) {
       return child;
     }
     return {
-      nodeType: ASTNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
       operator,
       operand: child,
     };
   }
 
   const left = _simplifySyntaxTree(tree.leftOperand);
-  if (left.nodeType === ASTNodeType.ERROR) {
+  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
     return left;
   }
 
   const right = _simplifySyntaxTree(tree.rightOperand);
-  if (right.nodeType === ASTNodeType.ERROR) {
+  if (right.nodeType === SyntaxTreeNodeType.ERROR) {
     return right;
   }
 
   return {
-    nodeType: ASTNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
     operator: tree.operator,
     leftOperand: left,
     rightOperand: right,
