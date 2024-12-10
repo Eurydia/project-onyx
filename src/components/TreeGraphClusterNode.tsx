@@ -8,39 +8,49 @@ import { FC, useEffect, useRef } from "react";
 type NodeProps = {
   node: HierarchyPointNode<ExprTree>;
   onClick: (node: ExprTree) => void;
+  order: number;
 };
-
 export const TreeGraphClusterNode: FC<NodeProps> = (
   props
 ) => {
-  const { node, onClick } = props;
-  const theme = useTheme();
+  const { order, node, onClick } = props;
+  const { x, y, data } = node;
+
+  const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
 
   useEffect(() => {
     if (ref.current !== null) {
       ref.current.innerHTML = katex
-        .renderToString(node.data.label)
+        .renderToString(data.label)
         .replaceAll("span", "tspan");
     }
-  }, [ref, node.data.label]);
+  }, [ref, data.label]);
 
   return (
     <Group
-      top={node.y}
-      left={node.x}
-      onClick={() => onClick(node.data)}
+      top={y}
+      left={x}
+      onClick={() => onClick(data)}
+      visibility={
+        data.order <= order + 1 ? "visible" : "hidden"
+      }
     >
       <circle
         r={30}
-        fill={theme.palette.secondary.light}
+        fill={palette.secondary.light}
+        opacity={data.order <= order ? 1 : 0.5}
+        strokeWidth={data.order === order ? 5 : 0}
+        stroke={palette.primary.light}
+        strokeOpacity={0.8}
       />
       <text
         ref={ref}
-        fontSize={theme.typography.body1.fontSize}
+        fontSize={typography.body1.fontSize}
         dy="0.33rem"
         textAnchor="middle"
         pointerEvents="none"
+        color={palette.secondary.contrastText}
         style={{ userSelect: "none" }}
       />
     </Group>

@@ -9,11 +9,12 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Slider,
   Stack,
   Typography,
   alpha,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { DisplayInputFeedback } from "./DisplayInputFeedback";
 import { EditorBooleanSwitcher } from "./EditorBooleanSwitcherGroup";
 import { StyledLatex } from "./StyledLatex";
@@ -29,6 +30,10 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   const [truthTable, setTruthTable] = useState(
     new Map<string, boolean>()
   );
+
+  const [order, setOrder] = useState(0);
+  const [maxOrder, setMaxOrder] = useState(0);
+
   const [selectedNode, setSelectedNode] =
     useState<ExprTree | null>(null);
   const [selected, setSelected] = useState(
@@ -42,11 +47,35 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setSelected(symbols);
   };
 
+  const exprTree = useMemo(() => {
+    return tree === null
+      ? null
+      : syntaxTreetoExprTree(tree, truthTable);
+  }, [tree, truthTable]);
+
+  useEffect(() => {
+    if (exprTree === null) {
+      setMaxOrder(0);
+      setOrder(0);
+      return;
+    }
+    setMaxOrder(exprTree.order + 1);
+    setOrder(0);
+  }, [exprTree]);
+
   return (
     <Stack spacing={1}>
       <DisplayInputFeedback
         tree={tree}
         emptyText={emptyText}
+      />
+
+      <Slider
+        value={order}
+        onChange={(_, v) => setOrder(v as number)}
+        max={maxOrder}
+        min={0}
+        step={1}
       />
       <Box
         sx={{
@@ -60,15 +89,14 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             alpha(t.palette.secondary.main, 0.4),
         }}
       >
-        {tree === null ? (
+        {exprTree === null ? (
           <Typography fontStyle="italic">
             {emptyText}
           </Typography>
         ) : (
           <TreeGraph
-            tree={augmentExprTree(
-              syntaxTreetoExprTree(tree, truthTable)
-            )}
+            order={order}
+            tree={augmentExprTree(exprTree)}
             onNodeClick={handleNodeClick}
           />
         )}

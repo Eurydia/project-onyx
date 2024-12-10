@@ -5,11 +5,13 @@ import {
   SyntaxTreeNodeType,
 } from "$types/parser";
 
-const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
+const _syntaxTreeToLatex = (
+  tree: SyntaxTree
+): string | null => {
   const { nodeType } = tree;
 
   if (nodeType === SyntaxTreeNodeType.ERROR) {
-    return tree.reason;
+    return null;
   }
   if (nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return tree.value;
@@ -19,8 +21,9 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
     if (
       tree.operand.nodeType === SyntaxTreeNodeType.ERROR
     ) {
-      return tree.operand.reason;
+      return null;
     }
+
     const value = _syntaxTreeToLatex(tree.operand);
     if (
       tree.operand.nodeType ===
@@ -33,12 +36,13 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
 
   const left = tree.leftOperand;
   if (left.nodeType === SyntaxTreeNodeType.ERROR) {
-    return left.reason;
+    return null;
   }
   const right = tree.rightOperand;
   if (right.nodeType === SyntaxTreeNodeType.ERROR) {
-    return right.reason;
+    return null;
   }
+
   let labelLeft = _syntaxTreeToLatex(left);
   if (
     left.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR
@@ -76,15 +80,11 @@ export const syntaxTreeToLatex = (tree: SyntaxTree) => {
 
 const _syntaxTreetoExprTree = (
   tree: SyntaxTree,
-  symbolTable: Map<string, boolean>
-): ExprTree => {
+  symbolTable: Map<string, boolean>,
+  orderStart: number
+): ExprTree | null => {
   if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
-    return {
-      isError: true,
-      label: `\\text{${tree.reason}}`,
-      children: [],
-      value: null,
-    };
+    return null;
   }
 
   if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
@@ -92,37 +92,42 @@ const _syntaxTreetoExprTree = (
       label: tree.value,
       value: symbolTable.get(tree.value) ?? false,
       children: [],
+      order: orderStart + 1,
     };
   }
 
   if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     const child = _syntaxTreetoExprTree(
       tree.operand,
-      symbolTable
+      symbolTable,
+      orderStart
     );
-    if (child.isError) {
-      return child;
+    if (child === null) {
+      return null;
     }
     return {
       label: "\\lnot",
       children: [child],
       value: !child.value,
+      order: child.order + 1,
     };
   }
 
   const left = _syntaxTreetoExprTree(
     tree.leftOperand,
-    symbolTable
+    symbolTable,
+    orderStart
   );
-  if (left.isError === null) {
-    return left;
+  if (left === null) {
+    return null;
   }
   const right = _syntaxTreetoExprTree(
     tree.rightOperand,
-    symbolTable
+    symbolTable,
+    left.order
   );
-  if (right.isError === null) {
-    return right;
+  if (right === null) {
+    return null;
   }
 
   let label;
@@ -150,6 +155,7 @@ const _syntaxTreetoExprTree = (
     label: label,
     children: [left, right],
     value,
+    order: right.order + 1,
   };
 };
 
@@ -157,5 +163,5 @@ export const syntaxTreetoExprTree = (
   tree: SyntaxTree,
   symbolTable: Map<string, boolean>
 ) => {
-  return _syntaxTreetoExprTree(tree, symbolTable);
+  return _syntaxTreetoExprTree(tree, symbolTable, 0);
 };
