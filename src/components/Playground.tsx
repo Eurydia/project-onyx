@@ -5,6 +5,10 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
+  SportsScoreRounded,
+  ToysRounded,
+} from "@mui/icons-material";
+import {
   Box,
   Dialog,
   DialogContent,
@@ -70,18 +74,8 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         emptyText={emptyText}
       />
 
-      <Slider
-        value={order}
-        onChange={(_, v) => setOrder(v as number)}
-        max={maxOrder}
-        min={0}
-        step={1}
-      />
       <Box
         sx={{
-          height: "75vh",
-          width: "100%",
-          position: "relative",
           borderWidth: 4,
           borderStyle: "solid",
           borderRadius: (t) => t.shape.borderRadius,
@@ -89,16 +83,53 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             alpha(t.palette.secondary.main, 0.4),
         }}
       >
-        {exprTree === null ? (
-          <Typography fontStyle="italic">
-            {emptyText}
-          </Typography>
-        ) : (
-          <TreeGraph
-            order={order}
-            tree={augmentExprTree(exprTree)}
-            onNodeClick={handleNodeClick}
-          />
+        <Box
+          sx={{
+            height: "75vh",
+            width: "100%",
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {exprTree === null ? (
+            <Typography fontStyle="italic">
+              {emptyText}
+            </Typography>
+          ) : (
+            <TreeGraph
+              order={order}
+              tree={augmentExprTree(exprTree)}
+              onNodeClick={handleNodeClick}
+            />
+          )}
+        </Box>
+        {maxOrder > 0 && (
+          <Stack
+            direction="row"
+            spacing={1}
+            useFlexGap
+            padding={2}
+            alignItems="center"
+          >
+            <ToysRounded
+              color="primary"
+              fontSize="medium"
+            />
+            <Slider
+              valueLabelDisplay="auto"
+              value={order}
+              onChange={(_, v) => setOrder(v as number)}
+              max={maxOrder}
+              min={0}
+              step={1}
+            />
+            <SportsScoreRounded
+              color="primary"
+              fontSize="medium"
+            />
+          </Stack>
         )}
       </Box>
       <Dialog
