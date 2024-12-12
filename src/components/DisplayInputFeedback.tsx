@@ -75,7 +75,7 @@ export const DisplayInputFeedback: FC<
     );
   } else if (tree !== null) {
     const tex = syntaxTreeToLatex(tree);
-    texContent = <StyledLatex tex={tex} />;
+    texContent = <StyledLatex tex={tex ?? "Uh oh"} />;
   }
 
   return (

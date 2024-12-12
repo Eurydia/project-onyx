@@ -1,9 +1,9 @@
-import { EditorExecuteButton } from "$components/EditorExecuteButton";
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
 import { EditorLegalOperatorGroup } from "$components/EditorLegalOperatorGroup";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { Playground } from "$components/Playground";
 import { StyledTabs } from "$components/StyledTabs";
+import { EditorExecuteButton } from "$components/StyledTooltipButton";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
 import { normalizeSyntaxTree } from "$core/tree/syntax/normalize";

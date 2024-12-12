@@ -8,13 +8,15 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "paths": {
+      "$App/*": ["src/App/*"],
       "$assets/*": ["src/assets/*"],
       "$blogs/*": ["src/blogs/*"],
       "$components/*": ["src/components/*"],
       "$core/*": ["src/core/*"],
       "$hooks/*": ["src/hooks/*"],
+      "$locales/*": ["src/locales/*"],
       "$types/*": ["src/types/*"],
-      "$views/*": ["src/views/*"],
+      "$views/*": ["src/views/*"]
     },
 
     /* Bundler mode */
@@ -33,5 +35,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "public/locales", "public/locales"]
 }
+

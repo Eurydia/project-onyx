@@ -15,6 +15,7 @@ import {
 import { LinkVertical } from "@visx/shape";
 import { Zoom } from "@visx/zoom";
 import { FC, Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import { TreeGraphClusterNode } from "./TreeGraphClusterNode";
 
 type TreeGraphClusterProps = {
@@ -27,6 +28,9 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
 ) => {
   const { tree, order, onNodeClick } = props;
   const theme = useTheme();
+  const { t } = useTranslation("translation", {
+    keyPrefix: "editor.playground",
+  });
 
   const data = hierarchy(tree);
   const height = (data.height + 1) * 75;
@@ -113,7 +117,9 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
           >
             <Tooltip
               placement="right"
-              title={<Typography>Center graph</Typography>}
+              title={
+                <Typography>{t("centerGraph")}</Typography>
+              }
             >
               <ControlCameraRounded />
             </Tooltip>

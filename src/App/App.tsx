@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { brown, green } from "@mui/material/colors";
 import { FC } from "react";
+console.log("App");
 
 let theme = createTheme({
   palette: {

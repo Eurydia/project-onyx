@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, Fragment, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 type EditorExecuteButtonProps = {
   onExecute: () => void;
@@ -15,6 +16,8 @@ export const EditorExecuteButton: FC<
   EditorExecuteButtonProps
 > = (props) => {
   const { onExecute, keyCombinationHint } = props;
+
+  const { t } = useTranslation();
 
   const keyCombination = keyCombinationHint.map(
     (key, index) => {
@@ -52,7 +55,7 @@ export const EditorExecuteButton: FC<
         startIcon={<PlayArrowRounded />}
         onClick={onExecute}
       >
-        Run
+        {t("editor.toolbar.run")}
       </Button>
     </Tooltip>
   );
