@@ -5,25 +5,24 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
-  KeyboardArrowLeftRounded,
-  KeyboardArrowRightRounded,
-} from "@mui/icons-material";
-import {
   Box,
   Dialog,
   DialogContent,
   DialogTitle,
   Divider,
-  Slider,
-  Stack,
-  Typography,
   alpha,
   useTheme,
 } from "@mui/material";
-import { FC, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import {
+  FC,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
-import { StyledIconButton } from "./StyledIconButton";
+import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { StyledLatex } from "./StyledLatex";
 import { TreeGraph } from "./TreeGraph";
 
@@ -33,8 +32,8 @@ type PlaygroundProps = {
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
 
-  const { t } = useTranslation();
   const { palette, shape } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [truthTable, setTruthTable] = useState(
     new Map<string, boolean>()
@@ -49,13 +48,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     new Set<string>()
   );
 
-  const handleNodeClick = (node: ExprTree) => {
-    setDialogOpen(true);
-    setSelectedNode(node);
-    const symbols = collectSymbols(node);
-    setSelected(symbols);
-  };
-
   const exprTree = useMemo(() => {
     return tree === null
       ? null
@@ -63,13 +55,35 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   }, [tree, truthTable]);
 
   useEffect(() => {
+    if (exprTree === null) {
+      setOrder(0);
+      setMaxOrder(0);
+      return;
+    }
     setOrder(1);
-    setMaxOrder(exprTree === null ? 0 : exprTree.order + 1);
+    setMaxOrder(exprTree.order + 1);
   }, [exprTree]);
 
+  const handleNodeClick = (node: ExprTree) => {
+    setDialogOpen(true);
+    setSelectedNode(node);
+    const symbols = collectSymbols(node);
+    setSelected(symbols);
+  };
+
+  const handleOrderChange = (v: number) => {
+    setOrder(v);
+    if (containerRef.current !== null) {
+      containerRef.current.scrollIntoView({
+        block: "end",
+      });
+    }
+  };
+
   return (
-    <Stack spacing={1}>
+    <Fragment>
       <Box
+        ref={containerRef}
         sx={{
           borderWidth: 4,
           borderStyle: "solid",
@@ -91,44 +105,13 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           )}
         </Box>
         <Divider flexItem />
-        <Stack
-          spacing={1.5}
-          useFlexGap
-          direction="row"
-          alignItems="center"
-          paddingX={2}
-          paddingY={1}
-        >
-          <StyledIconButton
-            title={t("playground.rewind")}
-            disabled={order === 0}
-            onClick={() => setOrder((p) => p - 1)}
-          >
-            <KeyboardArrowLeftRounded />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("playground.forward")}
-            disabled={order >= maxOrder}
-            onClick={() => setOrder((p) => p + 1)}
-          >
-            <KeyboardArrowRightRounded />
-          </StyledIconButton>
-          <Typography>{`${order
-            .toString()
-            .padStart(
-              maxOrder.toString().length,
-              "0"
-            )}/${maxOrder}`}</Typography>
-          <Slider
-            disabled={maxOrder === 0}
-            valueLabelDisplay="auto"
-            value={order}
-            onChange={(_, v) => setOrder(v as number)}
-            max={maxOrder}
-            min={1}
-            step={1}
-          />
-        </Stack>
+        <PlaygroundPlaybackControl
+          disabled={exprTree === null}
+          maxValue={maxOrder}
+          minValue={1}
+          value={order}
+          onChange={handleOrderChange}
+        />
       </Box>
       <Dialog
         PaperProps={{ elevation: 0 }}
@@ -156,6 +139,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           />
         </DialogContent>
       </Dialog>
-    </Stack>
+    </Fragment>
   );
 };

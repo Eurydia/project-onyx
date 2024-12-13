@@ -21,34 +21,38 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
       sx={{
         gap: 1,
         display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        flexDirection: "column",
       }}
     >
       <Stack
-        direction="row"
-        alignItems="end"
-        spacing={4}
+        sx={{ width: "100%" }}
+        gap={1}
         useFlexGap
+        flexWrap="wrap"
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
       >
         <EditorRibbonInsert onInsertChar={onInsertChar} />
-        <Typography
-          color="primary"
-          component="a"
-          href="#user-manual"
-          sx={{
-            textDecorationLine: "underline",
-          }}
+        <StyledTooltipButton
+          onExecute={onExecute}
+          shortcutHint={"CTRL + ENTER"}
         >
-          {t("editor.howToUse")}
-        </Typography>
+          {t("editor.run")}
+        </StyledTooltipButton>
       </Stack>
-      <StyledTooltipButton
-        onExecute={onExecute}
-        shortcutHint={"CTRL + ENTER"}
+      <Typography
+        color="primary"
+        component="a"
+        href="#user-manual"
+        sx={{
+          textDecorationLine: "underline",
+        }}
       >
-        {t("editor.run")}
-      </StyledTooltipButton>
+        {t("editor.howToUse")}
+      </Typography>
     </Toolbar>
   );
 };

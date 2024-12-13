@@ -14,6 +14,9 @@ const globalStyles = (
     styles={{
       tableLayout: "auto",
       borderCollapse: "collapse",
+      html: {
+        scrollBehavior: "smooth",
+      },
     }}
   />
 );
