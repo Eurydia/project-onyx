@@ -74,7 +74,12 @@ const _syntaxTreeToLatex = (
   return `${labelLeft} ${label} ${labelRight}`;
 };
 
-export const syntaxTreeToLatex = (tree: SyntaxTree) => {
+export const syntaxTreeToLatex = (
+  tree: SyntaxTree | null
+) => {
+  if (tree === null) {
+    return null;
+  }
   return _syntaxTreeToLatex(tree);
 };
 

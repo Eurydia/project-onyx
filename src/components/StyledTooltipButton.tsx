@@ -5,33 +5,29 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { FC, Fragment, ReactNode } from "react";
+import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
-type EditorExecuteButtonProps = {
+type StyledTooltipButtonProps = {
   onExecute: () => void;
   keyCombinationHint: string[];
 };
-export const EditorExecuteButton: FC<
-  EditorExecuteButtonProps
+export const StyledTooltipButton: FC<
+  StyledTooltipButtonProps
 > = (props) => {
   const { onExecute, keyCombinationHint } = props;
 
   const { t } = useTranslation();
 
   const keyCombination = keyCombinationHint.map(
-    (key, index) => {
-      let plusElem: ReactNode = <Typography>+</Typography>;
-      if (index >= keyCombinationHint.length - 1) {
-        plusElem = null;
-      }
-      return (
-        <Fragment key={"key-hint" + index}>
-          {key}
-          {plusElem}
-        </Fragment>
-      );
-    }
+    (key, index) => (
+      <Fragment key={"key-hint" + index}>
+        <Typography>{key}</Typography>
+        {index + 1 < keyCombinationHint.length && (
+          <Typography>+</Typography>
+        )}
+      </Fragment>
+    )
   );
 
   return (

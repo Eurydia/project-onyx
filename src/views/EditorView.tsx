@@ -1,60 +1,21 @@
-import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
-import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
+import { Editor } from "$components/Editor";
+import { LatexDisplay } from "$components/LatexDisplay";
 import { Playground } from "$components/Playground";
-import { EditorLegalOperatorGroup } from "$components/PlaygroundLegalOperatorGroup";
 import { StyledTabs } from "$components/StyledTabs";
-import { EditorExecuteButton } from "$components/StyledTooltipButton";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import { normalizeSyntaxTree } from "$core/tree/syntax/normalize";
-import {
-  collapseSyntaxTree,
-  simplifySyntaxTree,
-} from "$core/tree/syntax/simplify";
-import { Operator } from "$types/lexer";
+import { syntaxTreeToLatex } from "$core/tree/conversion";
 import { SyntaxTree } from "$types/parser";
-import {
-  Box,
-  Container,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { FC, useMemo, useState } from "react";
+import { Container, Stack } from "@mui/material";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const EditorView: FC = () => {
   const { t } = useTranslation();
-  const [inputValue, setInputValue] = useState(
-    "not (p and q) iff (not p) or (not q)"
-  );
   const [tree, setTree] = useState<SyntaxTree | null>(null);
-  const [legalOp, setLegalOp] = useState(
-    new Map([
-      [Operator.AND, true],
-      [Operator.OR, true],
-      [Operator.IMPLIES, true],
-      [Operator.IFF, true],
-    ])
-  );
 
-  const eliminatedTree = useMemo(() => {
-    const allowed = new Set<Operator>();
-    legalOp.forEach((v, k) => {
-      if (v) {
-        allowed.add(k);
-      }
-    });
-    if (allowed.size === 4) {
-      return tree;
-    }
-    return simplifySyntaxTree(
-      collapseSyntaxTree(normalizeSyntaxTree(tree), allowed)
-    );
-  }, [tree, legalOp]);
-
-  const handleExecute = () => {
-    const tokens = lexer(inputValue);
+  const handleExecute = (value: string) => {
+    const tokens = lexer(value);
     if (tokens.length === 0) {
       setTree(null);
       return;
@@ -62,35 +23,6 @@ export const EditorView: FC = () => {
     const _tree = parser(tokens);
     setTree(_tree);
   };
-
-  const handleInsertChar = (char: string) => {
-    setInputValue((prev) => `${prev} ${char}`);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.ctrlKey) {
-      handleExecute();
-    }
-  };
-
-  const handleLegalOpChange = (k: Operator, v: boolean) => {
-    setLegalOp((prev) => {
-      const next = new Map(prev);
-      next.set(k, v);
-
-      const legal = new Set();
-      next.forEach((v, k) => {
-        if (v) {
-          legal.add(k);
-        }
-      });
-      if (legal.size >= 0) {
-        return next;
-      }
-      return prev;
-    });
-  };
-
   return (
     <Container maxWidth="lg">
       <Stack
@@ -98,78 +30,23 @@ export const EditorView: FC = () => {
         spacing={1}
         padding={2}
       >
-        <Toolbar
-          variant="dense"
-          disableGutters
-          sx={{
-            gap: 1,
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-          }}
-        >
-          <Stack
-            direction="row"
-            alignItems="end"
-            spacing={4}
-            useFlexGap
-          >
-            <EditorOperatorGroup
-              onInsertChar={handleInsertChar}
-            />
-            <Typography
-              color="primary"
-              component="a"
-              href="#user-manual"
-              sx={{
-                textDecorationLine: "underline",
-              }}
-            >
-              {t("editor.toolbar.howToUse")}
-            </Typography>
-          </Stack>
-          <EditorExecuteButton
-            onExecute={handleExecute}
-            keyCombinationHint={["CTRL", "ENTER"]}
-          />
-        </Toolbar>
-        <EditorExpressionTextField
-          value={inputValue}
-          onChange={setInputValue}
-          onKeyDown={handleKeyDown}
-          rows={5}
-        />
+        <Editor onExecute={handleExecute} />
         <StyledTabs
-          tabLabels={["Intepreted", "Simplified"]}
+          tabLabels={["Original", "Simplified"]}
           panels={[
-            <Playground
-              key="panel-1"
-              tree={tree}
-              emptyText="Nothing to see here"
-            />,
-            <Stack
-              key="panel-2"
-              spacing={1}
-            >
-              <Box
-                sx={{
-                  padding: 2,
-                  borderStyle: "solid",
-                  borderRadius: (t) => t.shape.borderRadius,
-                  borderWidth: 4,
-                  borderColor: (t) =>
-                    t.palette.primary.light,
-                }}
-              >
-                <EditorLegalOperatorGroup
-                  onChange={handleLegalOpChange}
-                  values={legalOp}
-                />
-              </Box>
-              <Playground
-                tree={eliminatedTree}
-                emptyText="Nothing to see here"
+            <Stack spacing={1}>
+              <LatexDisplay
+                tex={syntaxTreeToLatex(tree)}
+                emptyText={t("common.emptyText")}
               />
+              <Playground tree={tree} />
+            </Stack>,
+            <Stack spacing={1}>
+              <LatexDisplay
+                tex={syntaxTreeToLatex(tree)}
+                emptyText={t("common.emptyText")}
+              />
+              <Playground tree={tree} />
             </Stack>,
           ]}
         />

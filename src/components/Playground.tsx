@@ -5,31 +5,24 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
-  SportsScoreRounded,
-  ToysRounded,
-} from "@mui/icons-material";
-import {
   Box,
   Dialog,
   DialogContent,
   DialogTitle,
   Slider,
   Stack,
-  Typography,
   alpha,
 } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
-import { DisplayInputFeedback } from "./DisplayInputFeedback";
 import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
 import { StyledLatex } from "./StyledLatex";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
   tree: SyntaxTree | null;
-  emptyText: string;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
-  const { tree, emptyText } = props;
+  const { tree } = props;
   const [dialogOpen, setDialogOpen] = useState(false);
   const [truthTable, setTruthTable] = useState(
     new Map<string, boolean>()
@@ -69,11 +62,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
 
   return (
     <Stack spacing={1}>
-      <DisplayInputFeedback
-        tree={tree}
-        emptyText={emptyText}
-      />
-
       <Box
         sx={{
           borderWidth: 4,
@@ -83,6 +71,16 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             alpha(t.palette.secondary.main, 0.4),
         }}
       >
+        {maxOrder > 0 && (
+          <Slider
+            valueLabelDisplay="auto"
+            value={order}
+            onChange={(_, v) => setOrder(v as number)}
+            max={maxOrder}
+            min={0}
+            step={1}
+          />
+        )}
         <Box
           sx={{
             height: "75vh",
@@ -93,11 +91,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             justifyContent: "center",
           }}
         >
-          {exprTree === null ? (
-            <Typography fontStyle="italic">
-              {emptyText}
-            </Typography>
-          ) : (
+          {exprTree && (
             <TreeGraph
               order={order}
               tree={augmentExprTree(exprTree)}
@@ -105,32 +99,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             />
           )}
         </Box>
-        {maxOrder > 0 && (
-          <Stack
-            direction="row"
-            spacing={1}
-            useFlexGap
-            padding={2}
-            alignItems="center"
-          >
-            <ToysRounded
-              color="primary"
-              fontSize="medium"
-            />
-            <Slider
-              valueLabelDisplay="auto"
-              value={order}
-              onChange={(_, v) => setOrder(v as number)}
-              max={maxOrder}
-              min={0}
-              step={1}
-            />
-            <SportsScoreRounded
-              color="primary"
-              fontSize="medium"
-            />
-          </Stack>
-        )}
       </Box>
       <Dialog
         PaperProps={{ elevation: 0 }}
@@ -149,7 +117,11 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             selected={selected}
             table={truthTable}
             onChange={(k, v) =>
-              setTruthTable(new Map(truthTable).set(k, v))
+              setTruthTable((prev) => {
+                const next = new Map(prev);
+                next.set(k, v);
+                return next;
+              })
             }
           />
         </DialogContent>

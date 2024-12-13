@@ -1,13 +1,24 @@
 import i18next from "i18next";
+import {
+  default as Backend,
+  default as LangDectector,
+} from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import { en } from "./en/translation";
 import { th } from "./th/translation";
 
-i18next.use(initReactI18next).init({
-  fallbackLng: "th",
-  debug: true,
-  resources: {
-    en,
-    th,
-  },
-});
+i18next
+  .use(Backend)
+  .use(LangDectector)
+  .use(initReactI18next)
+  .init({
+    detection: {
+      lookupLocalStorage: "language",
+    },
+    fallbackLng: "en",
+    debug: true,
+    resources: {
+      en,
+      th,
+    },
+  });

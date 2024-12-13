@@ -36,11 +36,11 @@ const OPERATOR = [
   },
 ];
 
-type EditorOperatorGroupProps = {
+type EditorRibbonInsertProps = {
   onInsertChar: (char: string) => void;
 };
-export const EditorOperatorGroup: FC<
-  EditorOperatorGroupProps
+export const EditorRibbonInsert: FC<
+  EditorRibbonInsertProps
 > = (props) => {
   const { onInsertChar } = props;
   const { t } = useTranslation("translation", {
@@ -55,23 +55,17 @@ export const EditorOperatorGroup: FC<
       {OPERATOR.map((btn, btnIndex) => (
         <Tooltip
           key={`btn` + btnIndex}
+          arrow
           title={
             <Typography sx={{ userSelect: "none" }}>
               {t(btn.name)}
             </Typography>
           }
-          arrow
         >
           <Button
             onClick={() => onInsertChar(btn.insertChar)}
           >
-            <StyledLatex
-              tex={btn.label}
-              options={{
-                displayMode: false,
-                output: "htmlAndMathml",
-              }}
-            />
+            <StyledLatex tex={btn.label} />
           </Button>
         </Tooltip>
       ))}

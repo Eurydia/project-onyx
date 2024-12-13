@@ -1,15 +1,15 @@
 import { TextField } from "@mui/material";
 import { FC } from "react";
 
-type EditorExpressionTextFieldProps = {
+type EditorTextFieldProps = {
   value: string;
   rows: number;
   onChange: (value: string) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
 };
-export const EditorExpressionTextField: FC<
-  EditorExpressionTextFieldProps
-> = (props) => {
+export const EditorTextField: FC<EditorTextFieldProps> = (
+  props
+) => {
   const { rows, value, onChange, onKeyDown } = props;
   return (
     <TextField
@@ -23,6 +23,7 @@ export const EditorExpressionTextField: FC<
         input: {
           autoComplete: "off",
           autoCorrect: "off",
+          autoCapitalize: "none",
           spellCheck: false,
           sx: {
             fontFamily: "monospace",
