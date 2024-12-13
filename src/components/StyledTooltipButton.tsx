@@ -1,49 +1,21 @@
 import { PlayArrowRounded } from "@mui/icons-material";
-import {
-  Button,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { FC, Fragment } from "react";
-import { useTranslation } from "react-i18next";
+import { Button, Tooltip, Typography } from "@mui/material";
+import { FC, ReactNode } from "react";
 
 type StyledTooltipButtonProps = {
   onExecute: () => void;
-  keyCombinationHint: string[];
+  shortcutHint: string;
+  children: ReactNode;
 };
 export const StyledTooltipButton: FC<
   StyledTooltipButtonProps
 > = (props) => {
-  const { onExecute, keyCombinationHint } = props;
-
-  const { t } = useTranslation();
-
-  const keyCombination = keyCombinationHint.map(
-    (key, index) => (
-      <Fragment key={"key-hint" + index}>
-        <Typography>{key}</Typography>
-        {index + 1 < keyCombinationHint.length && (
-          <Typography>+</Typography>
-        )}
-      </Fragment>
-    )
-  );
+  const { children, onExecute, shortcutHint } = props;
 
   return (
     <Tooltip
       arrow
-      title={
-        <Stack
-          useFlexGap
-          gap={0.5}
-          spacing={0.5}
-          direction="row"
-          alignItems="center"
-        >
-          {keyCombination}
-        </Stack>
-      }
+      title={<Typography>{shortcutHint}</Typography>}
     >
       <Button
         disableElevation
@@ -51,7 +23,7 @@ export const StyledTooltipButton: FC<
         startIcon={<PlayArrowRounded />}
         onClick={onExecute}
       >
-        {t("editor.toolbar.run")}
+        {children}
       </Button>
     </Tooltip>
   );

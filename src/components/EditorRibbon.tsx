@@ -40,13 +40,15 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
             textDecorationLine: "underline",
           }}
         >
-          {t("editor.toolbar.howToUse")}
+          {t("editor.howToUse")}
         </Typography>
       </Stack>
       <StyledTooltipButton
         onExecute={onExecute}
-        keyCombinationHint={["CTRL", "ENTER"]}
-      />
+        shortcutHint={"CTRL + ENTER"}
+      >
+        {t("editor.run")}
+      </StyledTooltipButton>
     </Toolbar>
   );
 };

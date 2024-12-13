@@ -2,8 +2,8 @@ import { Operator } from "$types/lexer";
 import { Stack } from "@mui/material";
 import { FC, useState } from "react";
 import { EditorRibbon } from "./EditorRibbon";
+import { EditorSimplConfigGroup } from "./EditorSimplConfigGroup";
 import { EditorTextField } from "./EditorTextField";
-import { EditorLegalOperatorGroup } from "./PlaygroundLegalOperatorGroup";
 
 type EditorProps = {
   onExecute: (value: string) => void;
@@ -44,7 +44,7 @@ export const Editor: FC<EditorProps> = (props) => {
   };
 
   return (
-    <Stack>
+    <Stack spacing={1}>
       <EditorRibbon
         onExecute={handleExecute}
         onInsertChar={handleInsertChar}
@@ -55,7 +55,7 @@ export const Editor: FC<EditorProps> = (props) => {
         onKeyDown={handleKeyDown}
         rows={5}
       />
-      <EditorLegalOperatorGroup
+      <EditorSimplConfigGroup
         values={operators}
         onChange={handleOperatorChange}
       />

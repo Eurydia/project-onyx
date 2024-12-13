@@ -44,7 +44,7 @@ export const EditorRibbonInsert: FC<
 > = (props) => {
   const { onInsertChar } = props;
   const { t } = useTranslation("translation", {
-    keyPrefix: "editor.toolbar.connectives",
+    keyPrefix: "common.connectives",
   });
 
   return (
@@ -56,11 +56,7 @@ export const EditorRibbonInsert: FC<
         <Tooltip
           key={`btn` + btnIndex}
           arrow
-          title={
-            <Typography sx={{ userSelect: "none" }}>
-              {t(btn.name)}
-            </Typography>
-          }
+          title={<Typography>{t(btn.name)}</Typography>}
         >
           <Button
             onClick={() => onInsertChar(btn.insertChar)}
