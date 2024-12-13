@@ -12,7 +12,6 @@ import {
   FC,
   Fragment,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -38,29 +37,43 @@ export const Playground: FC<PlaygroundProps> = (props) => {
 
   const [selectedNode, setSelectedNode] =
     useState<ExprTree | null>(null);
-
-  const exprTree = useMemo(() => {
-    return tree === null
-      ? null
-      : syntaxTreetoExprTree(tree, truthTable);
-  }, [tree, truthTable]);
+  const [exprTree, setExprTree] = useState<ExprTree | null>(
+    null
+  );
 
   useEffect(() => {
-    if (exprTree === null) {
+    if (tree === null) {
       setOrder(0);
       setMaxOrder(0);
       return;
     }
-    setOrder(1);
-    setMaxOrder(exprTree.order + 1);
-  }, [exprTree]);
+    const nextExprTree = syntaxTreetoExprTree(
+      tree,
+      new Map()
+    );
+    updateExprTree(nextExprTree);
+  }, [tree]);
 
   const handleNodeClick = (node: ExprTree) => {
     setDialogOpen(true);
     setSelectedNode(node);
   };
 
+  const updateExprTree = (next: ExprTree | null) => {
+    if (next === null) {
+      setOrder(0);
+      setMaxOrder(0);
+      return;
+    }
+    setExprTree(next);
+    setOrder(1);
+    setMaxOrder(next.order + 1);
+  };
+
   const handleTableChange = (k: string, v: boolean) => {
+    if (tree === null) {
+      return;
+    }
     setTruthTable((p) => {
       if (p.get(k) === v) {
         return p;
@@ -69,6 +82,12 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       next.set(k, v);
       return next;
     });
+
+    const nextExprTree = syntaxTreetoExprTree(
+      tree,
+      truthTable
+    );
+    updateExprTree(nextExprTree);
   };
 
   const handleOrderChange = (v: number) => {
