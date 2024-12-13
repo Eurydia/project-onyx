@@ -15,7 +15,6 @@ export const TreeGraphClusterNode: FC<NodeProps> = (
 ) => {
   const { order, node, onClick } = props;
   const { x, y, data } = node;
-
   const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
 
@@ -27,20 +26,25 @@ export const TreeGraphClusterNode: FC<NodeProps> = (
     }
   }, [ref, data.label]);
 
+  const isNodeHighlighted = data.order === order;
+
+  const isNodeVisibleNow = data.order <= order;
+  const isNodeVisibleSoon = data.order <= order + 1;
+  const isNodeVisible =
+    isNodeVisibleNow || isNodeVisibleSoon;
+
   return (
     <Group
       top={y}
       left={x}
       onClick={() => onClick(data)}
-      visibility={
-        data.order <= order + 1 ? "visible" : "hidden"
-      }
+      visibility={isNodeVisible ? "visible" : "hidden"}
     >
       <circle
+        strokeWidth={isNodeHighlighted ? 5 : 0}
+        opacity={isNodeVisibleNow ? 1 : 0.5}
         r={30}
         fill={palette.secondary.light}
-        opacity={data.order <= order ? 1 : 0.5}
-        strokeWidth={data.order === order ? 5 : 0}
         stroke={palette.primary.light}
         strokeOpacity={0.8}
       />

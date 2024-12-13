@@ -5,31 +5,32 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
 const OPERATOR = [
   {
-    name: "Negation",
+    name: "negation",
     label: "\\lnot",
     insertChar: "\u{00AC}",
   },
   {
-    name: "Conjunction",
+    name: "conjunction",
     label: "\\land",
     insertChar: "\u{2227}",
   },
   {
-    name: "Disjunction",
+    name: "disjunction",
     label: "\\lor",
     insertChar: "\u{2228}",
   },
   {
-    name: "Implication",
+    name: "implication",
     label: "\\implies",
     insertChar: "\u{21D2}",
   },
   {
-    name: "Equivalence",
+    name: "equivalence",
     label: "\\iff",
     insertChar: "\u{21D4}",
   },
@@ -42,6 +43,9 @@ export const EditorOperatorGroup: FC<
   EditorOperatorGroupProps
 > = (props) => {
   const { onInsertChar } = props;
+  const { t } = useTranslation("translation", {
+    keyPrefix: "editor.toolbar.connectives",
+  });
 
   return (
     <ButtonGroup
@@ -53,7 +57,7 @@ export const EditorOperatorGroup: FC<
           key={`btn` + btnIndex}
           title={
             <Typography sx={{ userSelect: "none" }}>
-              {btn.name}
+              {t(btn.name)}
             </Typography>
           }
           arrow

@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
 import { DisplayInputFeedback } from "./DisplayInputFeedback";
-import { EditorBooleanSwitcher } from "./EditorBooleanSwitcherGroup";
+import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
 import { StyledLatex } from "./StyledLatex";
 import { TreeGraph } from "./TreeGraph";
 

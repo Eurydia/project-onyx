@@ -1,21 +1,12 @@
 import { ExprTree } from "$types/ast";
 import { ControlCameraRounded } from "@mui/icons-material";
-import {
-  Fab,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
-import {
-  HierarchyPointLink,
-  HierarchyPointNode,
-} from "@visx/hierarchy/lib/types";
-import { LinkVertical } from "@visx/shape";
 import { Zoom } from "@visx/zoom";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledFAB } from "./StyledFAB";
+import { TreeGraphClusterLink } from "./TreeGraphClusterLink";
 import { TreeGraphClusterNode } from "./TreeGraphClusterNode";
 
 type TreeGraphClusterProps = {
@@ -27,10 +18,7 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
   props
 ) => {
   const { tree, order, onNodeClick } = props;
-  const theme = useTheme();
-  const { t } = useTranslation("translation", {
-    keyPrefix: "editor.playground",
-  });
+  const { t } = useTranslation();
 
   const data = hierarchy(tree);
   const height = (data.height + 1) * 75;
@@ -56,8 +44,8 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
             <g
               onTouchStart={zoom.dragStart}
               onTouchMove={zoom.dragMove}
-              onTouchEnd={zoom.dragEnd}
               onMouseDown={zoom.dragStart}
+              onTouchEnd={zoom.dragEnd}
               onMouseMove={zoom.dragMove}
               onMouseUp={zoom.dragEnd}
               onMouseLeave={() => {
@@ -72,30 +60,18 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
                 {(treeHeir) => (
                   <Group>
                     {treeHeir.links().map((link, i) => (
-                      <LinkVertical<
-                        HierarchyPointLink<ExprTree>,
-                        HierarchyPointNode<ExprTree>
-                      >
+                      <TreeGraphClusterLink
                         key={`cluster-link-${i}`}
-                        data={link}
-                        strokeWidth="5"
-                        stroke={theme.palette.primary.light}
-                        strokeOpacity={0.6}
-                        fill="none"
-                        visibility={
-                          link.target.data.order <= order &&
-                          link.source.data.order <= order
-                            ? "visible"
-                            : "hidden"
-                        }
+                        order={order}
+                        link={link}
                       />
                     ))}
                     {treeHeir
                       .descendants()
                       .map((node, i) => (
                         <TreeGraphClusterNode
-                          order={order}
                           key={`cluster-node-${i}`}
+                          order={order}
                           node={node}
                           onClick={onNodeClick}
                         />
@@ -105,25 +81,12 @@ export const TreeGraphCluster: FC<TreeGraphClusterProps> = (
               </Tree>
             </g>
           </svg>
-          <Fab
-            size="medium"
-            color="primary"
+          <StyledFAB
             onClick={zoom.center}
-            sx={{
-              position: "absolute",
-              left: 16,
-              bottom: 16,
-            }}
+            title={t("graph.center")}
           >
-            <Tooltip
-              placement="right"
-              title={
-                <Typography>{t("centerGraph")}</Typography>
-              }
-            >
-              <ControlCameraRounded />
-            </Tooltip>
-          </Fab>
+            <ControlCameraRounded />
+          </StyledFAB>
         </Fragment>
       )}
     </Zoom>

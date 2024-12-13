@@ -1,7 +1,7 @@
 import { EditorExpressionTextField } from "$components/EditorExpressionTextField";
-import { EditorLegalOperatorGroup } from "$components/EditorLegalOperatorGroup";
 import { EditorOperatorGroup } from "$components/EditorOperatorGroup";
 import { Playground } from "$components/Playground";
+import { EditorLegalOperatorGroup } from "$components/PlaygroundLegalOperatorGroup";
 import { StyledTabs } from "$components/StyledTabs";
 import { EditorExecuteButton } from "$components/StyledTooltipButton";
 import { lexer } from "$core/interpreter/lexer";
@@ -21,8 +21,10 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const EditorView: FC = () => {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
@@ -123,7 +125,7 @@ export const EditorView: FC = () => {
                 textDecorationLine: "underline",
               }}
             >
-              How to use?
+              {t("editor.toolbar.howToUse")}
             </Typography>
           </Stack>
           <EditorExecuteButton

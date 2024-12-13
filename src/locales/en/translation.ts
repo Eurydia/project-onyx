@@ -1,5 +1,9 @@
 export const en = {
   translation: {
+    common: {
+      true: "True",
+      false: "False",
+    },
     editor: {
       toolbar: {
         connectives: {

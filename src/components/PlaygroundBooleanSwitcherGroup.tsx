@@ -8,6 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
 type EditorBooleanSwitcherProps = {
@@ -18,7 +19,12 @@ type EditorBooleanSwitcherProps = {
 export const EditorBooleanSwitcher: FC<
   EditorBooleanSwitcherProps
 > = (props) => {
-  const { table, selected, onChange: onSymChange } = props;
+  const { table, selected, onChange } = props;
+
+  const { t } = useTranslation("translation", {
+    keyPrefix: "common",
+  });
+
   return (
     <Stack
       useFlexGap
@@ -48,18 +54,18 @@ export const EditorBooleanSwitcher: FC<
             row
             value={table.get(k) ? "T" : "F"}
             onChange={(e) =>
-              onSymChange(k, e.target.value === "T")
+              onChange(k, e.target.value === "T")
             }
           >
             <FormControlLabel
               control={<Radio disableRipple />}
               value="T"
-              label="True"
+              label={t("true")}
             />
             <FormControlLabel
               control={<Radio disableRipple />}
               value="F"
-              label="False"
+              label={t("false")}
             />
           </RadioGroup>
         </FormControl>
