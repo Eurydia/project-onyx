@@ -21,6 +21,9 @@ export const StyledLatex: FC<StyledLatexProps> = (
   return (
     <Typography
       ref={ref}
+      sx={{
+        textWrap: "nowrap",
+      }}
       component="span"
       overflow="auto"
     />

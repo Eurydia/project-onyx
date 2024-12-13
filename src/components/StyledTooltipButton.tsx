@@ -1,27 +1,31 @@
-import { PlayArrowRounded } from "@mui/icons-material";
-import { Button, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonProps,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { FC, ReactNode } from "react";
 
 type StyledTooltipButtonProps = {
-  onExecute: () => void;
-  shortcutHint: string;
+  onClick: () => void;
+  title: string;
+  variant: ButtonProps["variant"];
   children: ReactNode;
+  startIcon?: ReactNode;
 };
 export const StyledTooltipButton: FC<
   StyledTooltipButtonProps
 > = (props) => {
-  const { children, onExecute, shortcutHint } = props;
+  const { children, variant, startIcon, onClick, title } =
+    props;
 
   return (
-    <Tooltip
-      arrow
-      title={<Typography>{shortcutHint}</Typography>}
-    >
+    <Tooltip title={<Typography>{title}</Typography>}>
       <Button
         disableElevation
-        variant="contained"
-        startIcon={<PlayArrowRounded />}
-        onClick={onExecute}
+        variant={variant}
+        startIcon={startIcon}
+        onClick={onClick}
       >
         {children}
       </Button>

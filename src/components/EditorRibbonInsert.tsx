@@ -1,12 +1,8 @@
-import {
-  Button,
-  ButtonGroup,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { ButtonGroup } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
+import { StyledTooltipButton } from "./StyledTooltipButton";
 
 const OPERATOR = [
   {
@@ -52,18 +48,15 @@ export const EditorRibbonInsert: FC<
       disableElevation
       variant="outlined"
     >
-      {OPERATOR.map((btn, btnIndex) => (
-        <Tooltip
-          key={`btn` + btnIndex}
-          arrow
-          title={<Typography>{t(btn.name)}</Typography>}
+      {OPERATOR.map((btn, index) => (
+        <StyledTooltipButton
+          variant="outlined"
+          key={"insert-btn-" + index}
+          title={t(btn.name)}
+          onClick={() => onInsertChar(btn.insertChar)}
         >
-          <Button
-            onClick={() => onInsertChar(btn.insertChar)}
-          >
-            <StyledLatex tex={btn.label} />
-          </Button>
-        </Tooltip>
+          <StyledLatex tex={btn.label} />
+        </StyledTooltipButton>
       ))}
     </ButtonGroup>
   );

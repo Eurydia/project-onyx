@@ -1,5 +1,4 @@
 import {
-  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -30,31 +29,27 @@ export const EditorBooleanSwitcher: FC<
       useFlexGap
       spacing={1}
       width="100%"
-      divider={
-        <Divider
-          flexItem
-          variant="middle"
-        />
-      }
     >
-      {[...selected].map((k) => (
+      {[...selected].map((symbol) => (
         <FormControl
-          key={"synbol-" + k}
+          key={"symbol-" + symbol}
           fullWidth
         >
           <FormLabel
             sx={{
               width: "100%",
-              overflow: "auto",
+              overflowX: "auto",
             }}
           >
-            <StyledLatex tex={k} />
+            <StyledLatex
+              tex={`\\text{\`\`$${symbol}$''}`}
+            />
           </FormLabel>
           <RadioGroup
             row
-            value={table.get(k) ? "T" : "F"}
+            value={table.get(symbol) ? "T" : "F"}
             onChange={(e) =>
-              onChange(k, e.target.value === "T")
+              onChange(symbol, e.target.value === "T")
             }
           >
             <FormControlLabel

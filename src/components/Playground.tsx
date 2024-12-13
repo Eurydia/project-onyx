@@ -6,7 +6,9 @@ import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
   Box,
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
@@ -21,6 +23,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { StyledLatex } from "./StyledLatex";
@@ -32,6 +35,7 @@ type PlaygroundProps = {
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
 
+  const { t } = useTranslation();
   const { palette, shape } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -114,18 +118,31 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         />
       </Box>
       <Dialog
-        PaperProps={{ elevation: 0 }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            borderRadius: shape.borderRadius,
+            borderStyle: "solid",
+            borderWidth: 4,
+            borderColor: palette.primary.main,
+          },
+        }}
         maxWidth="md"
         fullWidth
         open={dialogOpen}
+        scroll="body"
         onClose={() => setDialogOpen(false)}
       >
         <DialogTitle>
           <StyledLatex
             tex={exprTreeToLatex(selectedNode)}
+            options={{
+              displayMode: true,
+              output: "htmlAndMathml",
+            }}
           />
         </DialogTitle>
-        <DialogContent>
+        <DialogContent dividers>
           <EditorBooleanSwitcher
             selected={selected}
             table={truthTable}
@@ -138,6 +155,15 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             }
           />
         </DialogContent>
+        <DialogActions
+          sx={{
+            justifyContent: "flex-start",
+          }}
+        >
+          <Button variant="text">
+            {t("playground.dialog.close")}
+          </Button>
+        </DialogActions>
       </Dialog>
     </Fragment>
   );

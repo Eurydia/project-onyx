@@ -1,8 +1,12 @@
-import { IconButton, Tooltip } from "@mui/material";
+import {
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { FC, KeyboardEvent, ReactNode } from "react";
 
 type StyledIconButtonProps = {
-  title: ReactNode;
+  title: string;
   children: ReactNode;
   disabled?: boolean;
   onClick: () => void;
@@ -15,8 +19,8 @@ export const StyledIconButton: FC<StyledIconButtonProps> = (
     props;
   return (
     <Tooltip
-      arrow
-      title={title}
+      placement="top"
+      title={<Typography>{title}</Typography>}
     >
       <span>
         <IconButton

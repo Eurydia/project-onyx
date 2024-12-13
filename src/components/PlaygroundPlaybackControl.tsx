@@ -20,16 +20,18 @@ export const PlaygroundPlaybackControl: FC<
   const { disabled, maxValue, minValue, onChange, value } =
     props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("translation", {
+    keyPrefix: "playground.playback",
+  });
 
-  const handleForwardOrder = () => {
+  const handleForward = () => {
     if (value >= maxValue) {
       return;
     }
     onChange(value + 1);
   };
 
-  const handleRewindOrder = () => {
+  const handleRewind = () => {
     if (value <= minValue) {
       return;
     }
@@ -42,13 +44,19 @@ export const PlaygroundPlaybackControl: FC<
     const { key } = e;
     if (key === "ArrowUp" || key === "ArrowRight") {
       e.preventDefault();
-      handleForwardOrder();
+      handleForward();
     } else if (key === "ArrowLeft" || key === "ArrowDown") {
       e.preventDefault();
-      handleRewindOrder();
+      handleRewind();
     }
   };
 
+  // There is a possibility for the ui to fall apart due to overflow
+  // **IF** the order is large enough eg 20 digits long
+  // in such a case, the label would over and pushes the forward arrow
+  // and the slider out of view
+  // but let's be real, we run into other problem any way
+  // if the evaluation of a tree that large
   const maxLabel = disabled ? "0" : maxValue.toString();
   const valueLabel = disabled
     ? "0"
@@ -57,7 +65,7 @@ export const PlaygroundPlaybackControl: FC<
 
   return (
     <Stack
-      spacing={1.5}
+      spacing={1}
       useFlexGap
       direction="row"
       alignItems="center"
@@ -66,8 +74,8 @@ export const PlaygroundPlaybackControl: FC<
     >
       <StyledIconButton
         disabled={disabled}
-        title={t("playground.rewind")}
-        onClick={handleRewindOrder}
+        title={t("rewind")}
+        onClick={handleRewind}
         onKeyPress={handleKeyPress}
       >
         <KeyboardArrowLeftRounded />
@@ -77,13 +85,12 @@ export const PlaygroundPlaybackControl: FC<
       </Typography>
       <StyledIconButton
         disabled={disabled}
-        title={t("playground.forward")}
+        title={t("forward")}
         onKeyPress={handleKeyPress}
-        onClick={handleForwardOrder}
+        onClick={handleForward}
       >
         <KeyboardArrowRightRounded />
       </StyledIconButton>
-
       <Slider
         disabled={disabled}
         valueLabelDisplay="auto"

@@ -16,5 +16,19 @@ export const en = {
       run: " Run",
       allowedOperatorLabel: "Connectives to keep",
     },
+    playground: {
+      graph: {
+        center: "Center Graph",
+      },
+      dialog: {
+        close: "Close",
+      },
+      playback: {
+        start: "Start",
+        forward: "Forward",
+        rewind: "Rewind",
+        end: "End",
+      },
+    },
   },
 } as const;

@@ -1,3 +1,4 @@
+import { PlayArrowRounded } from "@mui/icons-material";
 import { Stack, Toolbar, Typography } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,8 +38,10 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
       >
         <EditorRibbonInsert onInsertChar={onInsertChar} />
         <StyledTooltipButton
-          onExecute={onExecute}
-          shortcutHint={"CTRL + ENTER"}
+          variant="contained"
+          startIcon={<PlayArrowRounded />}
+          onClick={onExecute}
+          title={"CTRL + ENTER"}
         >
           {t("editor.run")}
         </StyledTooltipButton>
