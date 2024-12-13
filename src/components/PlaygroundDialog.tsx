@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Typography,
   useTheme,
 } from "@mui/material";
 import { FC } from "react";
@@ -56,6 +57,15 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
             output: "htmlAndMathml",
           }}
         />
+        {node !== null && (
+          <Typography>
+            (
+            {node.fn(value)
+              ? t("common.true")
+              : t("common.false")}
+            )
+          </Typography>
+        )}
       </DialogTitle>
       <DialogContent dividers>
         <PlaygroundDialogConfig

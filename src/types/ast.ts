@@ -2,6 +2,6 @@ export type ExprTree = {
   label: string;
   isError?: boolean | undefined;
   children: ExprTree[];
-  value: boolean | null;
+  fn: (table: Map<string, boolean>) => boolean;
   order: number;
 };

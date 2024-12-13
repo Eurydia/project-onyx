@@ -10,6 +10,7 @@ export const en = {
         implication: "Implication",
         equivalence: "Equivalence",
       },
+      emptyText: "Nothing to see here",
     },
     editor: {
       howToUse: "How to use?",

@@ -1,6 +1,7 @@
 import { ExprTree } from "$types/ast";
 import { Operator } from "$types/lexer";
 import {
+  SymbolTable,
   SyntaxTree,
   SyntaxTreeNodeType,
 } from "$types/parser";
@@ -85,42 +86,45 @@ export const syntaxTreeToLatex = (
 
 const _syntaxTreetoExprTree = (
   tree: SyntaxTree,
-  symbolTable: Map<string, boolean>,
   orderStart: number
-): ExprTree | null => {
-  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
+) => {
+  const { nodeType } = tree;
+
+  if (nodeType === SyntaxTreeNodeType.ERROR) {
     return null;
   }
 
-  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
-    return {
+  if (nodeType === SyntaxTreeNodeType.IDENTIFIER) {
+    const exprNode: ExprTree = {
       label: tree.value,
-      value: symbolTable.get(tree.value) ?? false,
-      children: [],
       order: orderStart + 1,
+      fn: (t) => t.get(tree.value) ?? false,
+      children: [],
     };
+    return exprNode;
   }
 
   if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
     const child = _syntaxTreetoExprTree(
       tree.operand,
-      symbolTable,
       orderStart
     );
     if (child === null) {
       return null;
     }
-    return {
+
+    const exprNode: ExprTree = {
       label: "\\lnot",
       children: [child],
-      value: !child.value,
+      fn: (t) => !child.fn(t),
       order: child.order + 1,
     };
+
+    return exprNode;
   }
 
   const left = _syntaxTreetoExprTree(
     tree.leftOperand,
-    symbolTable,
     orderStart
   );
   if (left === null) {
@@ -128,7 +132,6 @@ const _syntaxTreetoExprTree = (
   }
   const right = _syntaxTreetoExprTree(
     tree.rightOperand,
-    symbolTable,
     left.order
   );
   if (right === null) {
@@ -136,37 +139,40 @@ const _syntaxTreetoExprTree = (
   }
 
   let label;
-  let value;
+  let fn: (t: SymbolTable) => boolean;
   switch (tree.operator) {
     case Operator.AND:
       label = "\\land";
-      value = left.value && right.value;
+      fn = (t) => left.fn(t) && right.fn(t);
       break;
     case Operator.OR:
       label = "\\lor";
-      value = left.value || right.value;
+      fn = (t) => left.fn(t) || right.fn(t);
       break;
     case Operator.IMPLIES:
       label = "\\implies";
-      value = !left.value || right.value;
+      fn = (t) => !left.fn(t) || right.fn(t);
       break;
     case Operator.IFF:
       label = "\\iff";
-      value = left.value === right.value;
+      fn = (t) => left.fn(t) === right.fn(t);
       break;
   }
 
-  return {
-    label: label,
+  const exprNode: ExprTree = {
+    label,
+    fn,
     children: [left, right],
-    value,
     order: right.order + 1,
   };
+  return exprNode;
 };
 
 export const syntaxTreetoExprTree = (
-  tree: SyntaxTree,
-  symbolTable: Map<string, boolean>
+  tree: SyntaxTree | null
 ) => {
-  return _syntaxTreetoExprTree(tree, symbolTable, 1);
+  if (tree === null) {
+    return null;
+  }
+  return _syntaxTreetoExprTree(tree, 1);
 };

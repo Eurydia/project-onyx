@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { TreeGraph } from "./TreeGraph";
@@ -25,10 +26,13 @@ type PlaygroundProps = {
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
 
+  const { t } = useTranslation("translation", {
+    keyPrefix: "common",
+  });
   const { palette, shape } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [truthTable, setTruthTable] = useState(
+  const [symbolTable, setSymbolTable] = useState(
     new Map<string, boolean>()
   );
 
@@ -42,16 +46,15 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   );
 
   useEffect(() => {
-    if (tree === null) {
+    const nextExprTree = syntaxTreetoExprTree(tree);
+    if (nextExprTree === null) {
       setOrder(0);
       setMaxOrder(0);
       return;
     }
-    const nextExprTree = syntaxTreetoExprTree(
-      tree,
-      new Map()
-    );
-    updateExprTree(nextExprTree);
+    setExprTree(nextExprTree);
+    setOrder(1);
+    setMaxOrder(nextExprTree.order + 1);
   }, [tree]);
 
   const handleNodeClick = (node: ExprTree) => {
@@ -59,35 +62,19 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setSelectedNode(node);
   };
 
-  const updateExprTree = (next: ExprTree | null) => {
-    if (next === null) {
-      setOrder(0);
-      setMaxOrder(0);
-      return;
-    }
-    setExprTree(next);
-    setOrder(1);
-    setMaxOrder(next.order + 1);
-  };
-
   const handleTableChange = (k: string, v: boolean) => {
     if (tree === null) {
       return;
     }
-    setTruthTable((p) => {
-      if (p.get(k) === v) {
-        return p;
-      }
-      const next = new Map(p);
+    setSymbolTable((prev) => {
+      const next = new Map(prev);
       next.set(k, v);
       return next;
     });
-
-    const nextExprTree = syntaxTreetoExprTree(
-      tree,
-      truthTable
-    );
-    updateExprTree(nextExprTree);
+    // Technically change the truth value of the same tree
+    // this action should not cause the playback to reset
+    const nextExprTree = syntaxTreetoExprTree(tree);
+    setExprTree(nextExprTree);
   };
 
   const handleOrderChange = (v: number) => {
@@ -118,7 +105,12 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           {exprTree !== null && (
             <TreeGraph
               order={order}
-              tree={augmentExprTree(exprTree)}
+              tree={
+                augmentExprTree(exprTree, symbolTable, {
+                  tLabel: t("true"),
+                  fLabel: t("false"),
+                })!
+              }
               onNodeClick={handleNodeClick}
             />
           )}
@@ -134,8 +126,8 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       </Box>
       <PlaygroundDialog
         node={selectedNode}
-        open={dialogOpen}
-        value={truthTable}
+        open={dialogOpen && selectedNode !== null}
+        value={symbolTable}
         onChange={handleTableChange}
         onClose={() => setDialogOpen(false)}
       />
