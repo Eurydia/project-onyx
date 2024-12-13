@@ -10,13 +10,13 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
-type EditorBooleanSwitcherProps = {
+type PlaygroundDialogConfigProps = {
   table: Map<string, boolean>;
   selected: Set<string>;
   onChange: (k: string, v: boolean) => void;
 };
-export const EditorBooleanSwitcher: FC<
-  EditorBooleanSwitcherProps
+export const PlaygroundDialogConfig: FC<
+  PlaygroundDialogConfigProps
 > = (props) => {
   const { table, selected, onChange } = props;
 

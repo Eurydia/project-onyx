@@ -44,6 +44,11 @@ export let theme = createTheme({
         },
       },
     },
+    MuiDialogActions: {
+      defaultProps: {
+        sx: { justifyContent: "flex-start" },
+      },
+    },
   },
 });
 

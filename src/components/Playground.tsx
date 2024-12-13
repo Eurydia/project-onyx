@@ -1,16 +1,9 @@
 import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { augmentExprTree } from "$core/tree/expr/augment";
-import { collectSymbols } from "$core/tree/expr/evaluate";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   alpha,
   useTheme,
@@ -23,10 +16,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
-import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
+import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
-import { StyledLatex } from "./StyledLatex";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
@@ -35,7 +26,6 @@ type PlaygroundProps = {
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
 
-  const { t } = useTranslation();
   const { palette, shape } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -48,9 +38,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
 
   const [selectedNode, setSelectedNode] =
     useState<ExprTree | null>(null);
-  const [selected, setSelected] = useState(
-    new Set<string>()
-  );
 
   const exprTree = useMemo(() => {
     return tree === null
@@ -71,8 +58,17 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   const handleNodeClick = (node: ExprTree) => {
     setDialogOpen(true);
     setSelectedNode(node);
-    const symbols = collectSymbols(node);
-    setSelected(symbols);
+  };
+
+  const handleTableChange = (k: string, v: boolean) => {
+    setTruthTable((p) => {
+      if (p.get(k) === v) {
+        return p;
+      }
+      const next = new Map(p);
+      next.set(k, v);
+      return next;
+    });
   };
 
   const handleOrderChange = (v: number) => {
@@ -117,54 +113,13 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           onChange={handleOrderChange}
         />
       </Box>
-      <Dialog
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            borderRadius: shape.borderRadius,
-            borderStyle: "solid",
-            borderWidth: 4,
-            borderColor: palette.primary.main,
-          },
-        }}
-        maxWidth="md"
-        fullWidth
+      <PlaygroundDialog
+        node={selectedNode}
         open={dialogOpen}
-        scroll="body"
+        value={truthTable}
+        onChange={handleTableChange}
         onClose={() => setDialogOpen(false)}
-      >
-        <DialogTitle>
-          <StyledLatex
-            tex={exprTreeToLatex(selectedNode)}
-            options={{
-              displayMode: true,
-              output: "htmlAndMathml",
-            }}
-          />
-        </DialogTitle>
-        <DialogContent dividers>
-          <EditorBooleanSwitcher
-            selected={selected}
-            table={truthTable}
-            onChange={(k, v) =>
-              setTruthTable((prev) => {
-                const next = new Map(prev);
-                next.set(k, v);
-                return next;
-              })
-            }
-          />
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: "flex-start",
-          }}
-        >
-          <Button variant="text">
-            {t("playground.dialog.close")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      />
     </Fragment>
   );
 };
