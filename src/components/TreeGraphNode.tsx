@@ -5,12 +5,12 @@ import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import katex from "katex";
 import { FC, useEffect, useRef } from "react";
 
-type NodeProps = {
+type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
   onClick: (node: ExprTree) => void;
   order: number;
 };
-export const TreeGraphClusterNode: FC<NodeProps> = (
+export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
   const { order, node, onClick } = props;

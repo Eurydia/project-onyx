@@ -5,16 +5,25 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import { SyntaxTree } from "$types/parser";
 import {
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
+} from "@mui/icons-material";
+import {
   Box,
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Slider,
   Stack,
+  Typography,
   alpha,
+  useTheme,
 } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { EditorBooleanSwitcher } from "./PlaygroundBooleanSwitcherGroup";
+import { StyledIconButton } from "./StyledIconButton";
 import { StyledLatex } from "./StyledLatex";
 import { TreeGraph } from "./TreeGraph";
 
@@ -23,6 +32,9 @@ type PlaygroundProps = {
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
+
+  const { t } = useTranslation();
+  const { palette, shape } = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [truthTable, setTruthTable] = useState(
     new Map<string, boolean>()
@@ -51,13 +63,8 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   }, [tree, truthTable]);
 
   useEffect(() => {
-    if (exprTree === null) {
-      setMaxOrder(0);
-      setOrder(0);
-      return;
-    }
-    setMaxOrder(exprTree.order + 1);
-    setOrder(0);
+    setOrder(1);
+    setMaxOrder(exprTree === null ? 0 : exprTree.order + 1);
   }, [exprTree]);
 
   return (
@@ -66,32 +73,16 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         sx={{
           borderWidth: 4,
           borderStyle: "solid",
-          borderRadius: (t) => t.shape.borderRadius,
-          borderColor: (t) =>
-            alpha(t.palette.secondary.main, 0.4),
+          borderRadius: shape.borderRadius,
+          borderColor: alpha(palette.secondary.main, 0.4),
         }}
       >
-        {maxOrder > 0 && (
-          <Slider
-            valueLabelDisplay="auto"
-            value={order}
-            onChange={(_, v) => setOrder(v as number)}
-            max={maxOrder}
-            min={0}
-            step={1}
-          />
-        )}
         <Box
-          sx={{
-            height: "75vh",
-            width: "100%",
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          position="relative"
+          height="75vh"
+          width="100%"
         >
-          {exprTree && (
+          {exprTree !== null && (
             <TreeGraph
               order={order}
               tree={augmentExprTree(exprTree)}
@@ -99,6 +90,45 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             />
           )}
         </Box>
+        <Divider flexItem />
+        <Stack
+          spacing={1.5}
+          useFlexGap
+          direction="row"
+          alignItems="center"
+          paddingX={2}
+          paddingY={1}
+        >
+          <StyledIconButton
+            title={t("playground.rewind")}
+            disabled={order === 0}
+            onClick={() => setOrder((p) => p - 1)}
+          >
+            <KeyboardArrowLeftRounded />
+          </StyledIconButton>
+          <StyledIconButton
+            title={t("playground.forward")}
+            disabled={order >= maxOrder}
+            onClick={() => setOrder((p) => p + 1)}
+          >
+            <KeyboardArrowRightRounded />
+          </StyledIconButton>
+          <Typography>{`${order
+            .toString()
+            .padStart(
+              maxOrder.toString().length,
+              "0"
+            )}/${maxOrder}`}</Typography>
+          <Slider
+            disabled={maxOrder === 0}
+            valueLabelDisplay="auto"
+            value={order}
+            onChange={(_, v) => setOrder(v as number)}
+            max={maxOrder}
+            min={1}
+            step={1}
+          />
+        </Stack>
       </Box>
       <Dialog
         PaperProps={{ elevation: 0 }}

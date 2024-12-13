@@ -7,13 +7,13 @@ import {
 import { LinkVertical } from "@visx/shape";
 import { FC } from "react";
 
-type TreeGraphClusterLinkProps = {
+type TreeGraphLinkProps = {
   link: HierarchyPointLink<ExprTree>;
   order: number;
 };
-export const TreeGraphClusterLink: FC<
-  TreeGraphClusterLinkProps
-> = (props) => {
+export const TreeGraphLink: FC<TreeGraphLinkProps> = (
+  props
+) => {
   const { link, order } = props;
   const { palette } = useTheme();
   const { source, target } = link;

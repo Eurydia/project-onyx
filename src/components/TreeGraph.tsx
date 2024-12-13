@@ -1,8 +1,13 @@
 import { ExprTree } from "$types/ast";
-import { hierarchy } from "@visx/hierarchy";
+import { ControlCameraRounded } from "@mui/icons-material";
+import { Group } from "@visx/group";
+import { hierarchy, Tree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
-import { FC } from "react";
-import { TreeGraphCluster } from "./TreeGraphCluster";
+import { t } from "i18next";
+import { FC, Fragment } from "react";
+import { StyledFAB } from "./StyledFAB";
+import { TreeGraphLink } from "./TreeGraphLink";
+import { TreeGraphNode } from "./TreeGraphNode";
 
 type TreeGraphProps = {
   tree: ExprTree;
@@ -26,12 +31,60 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       scaleYMax={4}
     >
       {(zoom) => (
-        <TreeGraphCluster
-          order={order}
-          data={data}
-          onNodeClick={onNodeClick}
-          zoom={zoom}
-        />
+        <Fragment>
+          <svg
+            width="100%"
+            height="100%"
+            ref={zoom.containerRef}
+            style={{ touchAction: "none" }}
+          >
+            <g
+              onTouchStart={zoom.dragStart}
+              onTouchMove={zoom.dragMove}
+              onMouseDown={zoom.dragStart}
+              onTouchEnd={zoom.dragEnd}
+              onMouseMove={zoom.dragMove}
+              onMouseUp={zoom.dragEnd}
+              transform={zoom.toString()}
+              onMouseLeave={() => {
+                if (zoom.isDragging) zoom.dragEnd();
+              }}
+            >
+              <Tree
+                root={data}
+                size={[width, height]}
+              >
+                {(treeHeir) => (
+                  <Group>
+                    {treeHeir.links().map((link, i) => (
+                      <TreeGraphLink
+                        key={`link-${i}`}
+                        order={order}
+                        link={link}
+                      />
+                    ))}
+                    {treeHeir
+                      .descendants()
+                      .map((node, i) => (
+                        <TreeGraphNode
+                          key={`node-${i}`}
+                          order={order}
+                          node={node}
+                          onClick={onNodeClick}
+                        />
+                      ))}
+                  </Group>
+                )}
+              </Tree>
+            </g>
+          </svg>
+          <StyledFAB
+            onClick={zoom.center}
+            title={t("playground.graph.center")}
+          >
+            <ControlCameraRounded />
+          </StyledFAB>
+        </Fragment>
       )}
     </Zoom>
   );

@@ -168,5 +168,5 @@ export const syntaxTreetoExprTree = (
   tree: SyntaxTree,
   symbolTable: Map<string, boolean>
 ) => {
-  return _syntaxTreetoExprTree(tree, symbolTable, 0);
+  return _syntaxTreetoExprTree(tree, symbolTable, 1);
 };
