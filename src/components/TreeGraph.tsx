@@ -1,25 +1,59 @@
 import { ExprTree } from "$types/ast";
+import { SymbolTable } from "$types/parser";
 import { ControlCameraRounded } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
+import {
+  TooltipWithBounds,
+  useTooltip,
+  useTooltipInPortal,
+} from "@visx/tooltip";
 import { Zoom } from "@visx/zoom";
-import { t } from "i18next";
-import { FC, Fragment } from "react";
+import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { StyledFAB } from "./StyledFAB";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
-
 type TreeGraphProps = {
+  symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
   onNodeClick: (node: ExprTree) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, order, onNodeClick } = props;
+  const { tree, symbolTable, order, onNodeClick } = props;
 
+  const { t } = useTranslation();
   const data = hierarchy(tree);
   const height = (data.height + 1) * 75;
   const width = (data.leaves().length + 1) * 100;
+
+  const { containerRef } = useTooltipInPortal({
+    scroll: true,
+    detectBounds: true,
+  });
+
+  const {
+    showTooltip,
+    hideTooltip,
+    tooltipData,
+    tooltipOpen,
+    tooltipLeft,
+    tooltipTop,
+  } = useTooltip<(t: SymbolTable) => boolean>();
+
+  const handleMouseHoverNode = (
+    x: number,
+    y: number,
+    fn: (t: SymbolTable) => boolean
+  ) => {
+    showTooltip({
+      tooltipLeft: x,
+      tooltipTop: y,
+      tooltipData: fn,
+    });
+  };
 
   return (
     <Zoom<SVGSVGElement>
@@ -31,24 +65,28 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       scaleYMax={4}
     >
       {(zoom) => (
-        <Fragment>
+        <>
           <svg
             width="100%"
             height="100%"
             ref={zoom.containerRef}
-            style={{ touchAction: "none" }}
+            style={{
+              touchAction: "none",
+            }}
           >
             <g
+              ref={containerRef}
               onTouchStart={zoom.dragStart}
               onTouchMove={zoom.dragMove}
-              onMouseDown={zoom.dragStart}
               onTouchEnd={zoom.dragEnd}
+              onMouseDown={zoom.dragStart}
               onMouseMove={zoom.dragMove}
-              onMouseUp={zoom.dragEnd}
-              transform={zoom.toString()}
-              onMouseLeave={() => {
-                if (zoom.isDragging) zoom.dragEnd();
+              onMouseUp={() => {
+                zoom.dragEnd();
+                hideTooltip();
               }}
+              onMouseLeave={zoom.dragEnd}
+              transform={zoom.toString()}
             >
               <Tree
                 root={data}
@@ -71,6 +109,10 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                           order={order}
                           node={node}
                           onClick={onNodeClick}
+                          onMouseEnter={
+                            handleMouseHoverNode
+                          }
+                          onMouseLeave={hideTooltip}
                         />
                       ))}
                   </Group>
@@ -84,7 +126,30 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
           >
             <ControlCameraRounded />
           </StyledFAB>
-        </Fragment>
+          {!zoom.isDragging &&
+            tooltipOpen &&
+            tooltipData !== undefined &&
+            tooltipLeft !== undefined &&
+            tooltipTop !== undefined && (
+              <TooltipWithBounds
+                left={
+                  zoom.transformMatrix.scaleX *
+                    tooltipLeft +
+                  zoom.transformMatrix.translateX
+                }
+                top={
+                  zoom.transformMatrix.scaleY * tooltipTop +
+                  zoom.transformMatrix.translateY
+                }
+              >
+                <Typography>
+                  {tooltipData(symbolTable)
+                    ? t("common.true")
+                    : t("common.false")}
+                </Typography>
+              </TooltipWithBounds>
+            )}
+        </>
       )}
     </Zoom>
   );

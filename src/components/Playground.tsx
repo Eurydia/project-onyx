@@ -15,7 +15,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
 import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { TreeGraph } from "./TreeGraph";
@@ -26,9 +25,6 @@ type PlaygroundProps = {
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { tree } = props;
 
-  const { t } = useTranslation("translation", {
-    keyPrefix: "common",
-  });
   const { palette, shape } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -104,13 +100,9 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         >
           {exprTree !== null && (
             <TreeGraph
+              symbolTable={symbolTable}
               order={order}
-              tree={
-                augmentExprTree(exprTree, symbolTable, {
-                  tLabel: t("true"),
-                  fLabel: t("false"),
-                })!
-              }
+              tree={augmentExprTree(exprTree)!}
               onNodeClick={handleNodeClick}
             />
           )}
