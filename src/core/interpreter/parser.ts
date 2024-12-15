@@ -1,192 +1,252 @@
+import { Maybe } from "$types/common";
 import { Operator, Token, TokenType } from "$types/lexer";
 import {
-  ErrorType,
   SyntaxTree,
   SyntaxTreeNodeType,
 } from "$types/parser";
 
-const OPERATOR_PRECEDENCE = {
-  [Operator.NOT]: 6,
-  [Operator.AND]: 5,
-  [Operator.OR]: 4,
-  [Operator.IMPLIES]: 3,
-  [Operator.IFF]: 2,
-};
+const OPERATOR_PRECEDENCE = new Map<Operator, number>([
+  [Operator.AND, 1],
+  [Operator.OR, 2],
+  [Operator.IMPLIES, 3],
+  [Operator.IFF, 4],
+]);
 
-const polishToAST = (tokens: Token[]): SyntaxTree => {
-  const tok = tokens.pop();
-  if (tok === undefined) {
-    return {
-      nodeType: SyntaxTreeNodeType.ERROR,
-      errorType: ErrorType.PARSER_ERROR,
-      reason: "Expression ended unexpectedly",
-    };
-  }
+// const polishToAST = (tokens: Token[]): SyntaxTree => {
+//   const tok = tokens.pop();
+//   if (tok === undefined) {
+//     throw Error(
+//       t("core.parser.errors.inputEndedUnexpectedly")
+//     );
+//   }
 
-  switch (tok.tokenType) {
-    case TokenType.ERROR:
-      return {
-        nodeType: SyntaxTreeNodeType.ERROR,
-        errorType: ErrorType.LEXICAL_ERROR,
-        pos: tok.pos,
-        source: tok.source,
-      };
-    case TokenType.RIGHT_PARENTHESIS:
-    case TokenType.LEFT_PARENTHESIS:
-      return {
-        nodeType: SyntaxTreeNodeType.ERROR,
-        errorType: ErrorType.PARSER_ERROR,
-        reason: `Found unexpected parenthesis at position ${tok.pos}`,
-      };
-    case TokenType.IDENTIFIER:
-      return {
-        nodeType: SyntaxTreeNodeType.IDENTIFIER,
-        value: tok.symbol,
-      };
-  }
+//   switch (tok.tokenType) {
+//     case TokenType.RIGHT_PARENTHESIS:
+//     case TokenType.LEFT_PARENTHESIS: {
+//       const msg = t(
+//         "core.parser.errors.unexpectedParenthesis"
+//       );
+//       throw Error(`${msg} ${tok.pos}`);
+//     }
+//     case TokenType.IDENTIFIER:
+//       return {
+//         nodeType: SyntaxTreeNodeType.IDENTIFIER,
+//         value: tok.symbol,
+//       };
+//   }
 
-  if (tok.name === Operator.NOT) {
-    const operand = polishToAST(tokens);
-    if (operand.nodeType === SyntaxTreeNodeType.ERROR) {
-      return operand;
-    }
-    return {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: tok.name,
-      operand,
-    };
-  }
+//   if (tok.op === Operator.NOT) {
+//     const operand = polishToAST(tokens);
+//     return {
+//       nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+//       operator: tok.op,
+//       operand,
+//     };
+//   }
 
-  const right = polishToAST(tokens);
-  if (right.nodeType === SyntaxTreeNodeType.ERROR) {
-    return right;
-  }
+//   const right = polishToAST(tokens);
+//   const left = polishToAST(tokens);
+//   return {
+//     nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+//     operator: tok.op,
+//     leftOperand: left,
+//     rightOperand: right,
+//   };
+// };
 
-  const left = polishToAST(tokens);
-  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
-    return left;
-  }
-  return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
-    operator: tok.name,
-    leftOperand: left,
-    rightOperand: right,
-  };
-};
-
+// https://www.reedbeta.com/blog/the-shunting-yard-algorithm/
 // https://en.wikipedia.org/wiki/Shunting_yard_algorithm
-const infixToPolish = (tokens: Token[]): Token[] => {
-  const outStack: Token[] = [];
+
+const infixToRPN = (tokens: Token[]) => {
+  const treeStack: SyntaxTree[] = [];
   const opStack: Token[] = [];
 
-  let pos = 0;
+  while (tokens.length > 0) {
+    const tok = tokens.pop()!; // Ensured since tokens.length > 0
 
-  while (pos < tokens.length) {
-    const token = tokens[pos];
-    pos++;
-
-    switch (token.tokenType) {
-      case TokenType.ERROR:
-        outStack.push(token);
-        return outStack;
-      case TokenType.IDENTIFIER:
-        outStack.push(token);
+    switch (tok.tokenType) {
+      case TokenType.IDENTIFIER: {
+        const node: SyntaxTree = {
+          nodeType: SyntaxTreeNodeType.IDENTIFIER,
+          value: tok.symbol,
+        };
+        treeStack.push(node);
         break;
-      case TokenType.LEFT_PARENTHESIS:
-        opStack.push(token);
+      }
+      case TokenType.OPERATOR: {
+        while (opStack.length > 0) {
+          const lastOp = opStack.pop()!; // Ensured
+          if (
+            lastOp.tokenType === TokenType.LEFT_PARENTHESIS
+          ) {
+            opStack.push(lastOp);
+            break;
+          }
+
+          if (lastOp.tokenType !== TokenType.OPERATOR) {
+            throw Error(
+              "Found non-operator token on operator stack"
+            );
+          }
+
+          if (
+            lastOp.op !== Operator.NOT &&
+            tok.op !== Operator.NOT &&
+            OPERATOR_PRECEDENCE.get(lastOp.op)! <
+              OPERATOR_PRECEDENCE.get(tok.op)!
+          ) {
+            opStack.push(lastOp);
+            break;
+          }
+
+          if (tok.op === Operator.NOT) {
+            if (treeStack.length < 1) {
+              throw Error(
+                "Insufficient operands for unary operator"
+              );
+            }
+            const operand = treeStack.pop()!; // Ensured
+            const node: SyntaxTree = {
+              nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+              operand,
+              operator: tok.op,
+            };
+            treeStack.push(node);
+          } else {
+            if (treeStack.length < 2) {
+              throw Error(
+                "Insufficient operands for binary operator"
+              );
+            }
+            const right = treeStack.pop()!; // Ensured
+            const left = treeStack.pop()!; // Ensured
+            const node: SyntaxTree = {
+              nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+              operator: tok.op,
+              leftOperand: left,
+              rightOperand: right,
+            };
+            treeStack.push(node);
+          }
+        }
+        opStack.push(tok);
         break;
-    }
-
-    if (token.tokenType === TokenType.OPERATOR) {
-      const precedence = OPERATOR_PRECEDENCE[token.name];
-
-      while (opStack.length > 0) {
-        const last = opStack[opStack.length - 1];
-        if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
-          break;
-        }
-        if (
-          last.tokenType === TokenType.OPERATOR &&
-          OPERATOR_PRECEDENCE[last.name] < precedence
-        ) {
-          break;
-        }
-        opStack.pop();
-        outStack.push(last);
       }
-
-      opStack.push(token);
-    }
-
-    if (token.tokenType === TokenType.RIGHT_PARENTHESIS) {
-      while (opStack.length > 0) {
-        const last = opStack[opStack.length - 1];
-        if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
-          break;
-        }
-        if (opStack.length === 1) {
-          throw Error(
-            `Found unpaired right parenthesis at position ${token.pos}`
-          );
-        }
-        opStack.pop();
-        outStack.push(last);
+      case TokenType.LEFT_PARENTHESIS: {
+        opStack.push(tok);
+        break;
       }
-      if (
-        opStack.length === 0 ||
-        opStack[opStack.length - 1].tokenType !==
-          TokenType.LEFT_PARENTHESIS
-      ) {
-        throw Error(
-          `Found unpaired right at position ${token.pos}`
-        );
+      case TokenType.RIGHT_PARENTHESIS: {
+        while (opStack.length > 0) {
+          const lastOp = opStack.pop()!; // Ensured
+          if (
+            lastOp.tokenType === TokenType.LEFT_PARENTHESIS
+          ) {
+            break;
+          }
+
+          if (lastOp.tokenType !== TokenType.OPERATOR) {
+            throw Error(
+              "Found non-operator token on operator stack"
+            );
+          }
+
+          if (lastOp.op === Operator.NOT) {
+            if (treeStack.length < 1) {
+              throw Error(
+                "Insufficient operands for unary operator"
+              );
+            }
+            const operand = treeStack.pop()!; // Ensured
+            const node: SyntaxTree = {
+              nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+              operand,
+              operator: lastOp.op,
+            };
+            treeStack.push(node);
+          } else {
+            if (treeStack.length < 2) {
+              throw Error(
+                "Insufficient operands for binary operator"
+              );
+            }
+            const right = treeStack.pop()!; // Ensured
+            const left = treeStack.pop()!; // Ensured
+            const node: SyntaxTree = {
+              nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+              operator: lastOp.op,
+              leftOperand: left,
+              rightOperand: right,
+            };
+            treeStack.push(node);
+          }
+        }
       }
-      opStack.pop(); // pop left parenthesis
     }
   }
 
   while (opStack.length > 0) {
-    const last = opStack[opStack.length - 1];
-    if (last.tokenType === TokenType.LEFT_PARENTHESIS) {
+    const lastOp = opStack.pop()!; // Ensured
+
+    if (lastOp.tokenType !== TokenType.OPERATOR) {
       throw Error(
-        `Found unclosed left parenthesis at position ${last.pos}`
+        "Found non-operator token on operator stack"
       );
     }
-    opStack.pop();
-    outStack.push(last);
+
+    if (lastOp.op === Operator.NOT) {
+      if (treeStack.length < 1) {
+        throw Error(
+          "Insufficient operands for unary operator"
+        );
+      }
+      const operand = treeStack.pop()!; // Ensured
+      const node: SyntaxTree = {
+        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+        operand,
+        operator: lastOp.op,
+      };
+      treeStack.push(node);
+    } else {
+      if (treeStack.length < 2) {
+        throw Error(
+          "Insufficient operands for binary operator"
+        );
+      }
+
+      const right = treeStack.pop()!; // Ensured
+      const left = treeStack.pop()!; // Ensured
+      const node: SyntaxTree = {
+        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+        operator: lastOp.op,
+        leftOperand: left,
+        rightOperand: right,
+      };
+      treeStack.push(node);
+    }
   }
-  return outStack;
+
+  if (treeStack.length > 1) {
+    throw Error(
+      "Found leftover operand on the tree, possible malformed expression given"
+    );
+  }
+  return treeStack.pop()!; // Ensured
 };
 
-export const parser = (tokens: Token[]): SyntaxTree => {
+export const parser = (
+  tokens: Token[]
+): Maybe<SyntaxTree, string> => {
   try {
-    const polish = infixToPolish(tokens);
-
-    if (
-      polish.length === 1 &&
-      polish[0].tokenType === TokenType.ERROR
-    ) {
-      return {
-        nodeType: SyntaxTreeNodeType.ERROR,
-        errorType: ErrorType.LEXICAL_ERROR,
-        pos: polish[0].pos,
-        source: polish[0].source,
-      };
-    }
-    const tree = polishToAST(polish);
-    if (polish.length === 0) {
-      return tree;
-    }
+    const tree = infixToRPN(tokens);
     return {
-      nodeType: SyntaxTreeNodeType.ERROR,
-      errorType: ErrorType.PARSER_ERROR,
-      reason: "Invalid Boolean expression",
+      ok: true,
+      data: tree,
     };
   } catch (e) {
     return {
-      nodeType: SyntaxTreeNodeType.ERROR,
-      errorType: ErrorType.PARSER_ERROR,
-      reason: (e as Error).message,
+      ok: false,
+      other: (e as Error).message,
     };
   }
 };

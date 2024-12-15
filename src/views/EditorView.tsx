@@ -1,27 +1,32 @@
 import { Editor } from "$components/Editor";
-import { LatexDisplay } from "$components/LatexDisplay";
 import { Playground } from "$components/Playground";
 import { StyledTabs } from "$components/StyledTabs";
 import { lexer } from "$core/interpreter/lexer";
 import { parser } from "$core/interpreter/parser";
-import { syntaxTreeToLatex } from "$core/tree/conversion";
+import { Maybe } from "$types/common";
 import { SyntaxTree } from "$types/parser";
 import { Container, Stack } from "@mui/material";
 import { FC, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export const EditorView: FC = () => {
-  const { t } = useTranslation();
-  const [tree, setTree] = useState<SyntaxTree | null>(null);
+  const [tree, setTree] = useState<
+    Maybe<SyntaxTree, string>
+  >({
+    ok: false,
+    other: "...",
+  });
 
   const handleExecute = (value: string) => {
-    const tokens = lexer(value);
-    if (tokens.length === 0) {
-      setTree(null);
+    const maybeTokens = lexer(value);
+    if (!maybeTokens.ok) {
+      setTree({
+        ok: false,
+        other: maybeTokens.other,
+      });
       return;
     }
-    const _tree = parser(tokens);
-    setTree(_tree);
+    const maybeTree = parser(maybeTokens.data);
+    setTree(maybeTree);
   };
   return (
     <Container maxWidth="lg">
@@ -34,20 +39,8 @@ export const EditorView: FC = () => {
         <StyledTabs
           tabLabels={["Original", "Simplified"]}
           panels={[
-            <Stack spacing={1}>
-              <LatexDisplay
-                tex={syntaxTreeToLatex(tree)}
-                emptyText={t("common.emptyText")}
-              />
-              <Playground tree={tree} />
-            </Stack>,
-            <Stack spacing={1}>
-              <LatexDisplay
-                tex={syntaxTreeToLatex(tree)}
-                emptyText={t("common.emptyText")}
-              />
-              <Playground tree={tree} />
-            </Stack>,
+            <Playground maybeTree={tree} />,
+            <Playground maybeTree={tree} />,
           ]}
         />
       </Stack>

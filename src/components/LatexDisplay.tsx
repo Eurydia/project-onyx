@@ -8,13 +8,13 @@ import { FC } from "react";
 import { StyledLatex } from "./StyledLatex";
 
 type LatexDisplayProps = {
-  tex: string | null;
+  text: string | null;
   emptyText: string;
 };
 export const LatexDisplay: FC<LatexDisplayProps> = (
   props
 ) => {
-  const { tex, emptyText } = props;
+  const { text, emptyText } = props;
   const { palette, shape } = useTheme();
 
   return (
@@ -33,10 +33,10 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
         ),
       }}
     >
-      {tex === null ? (
+      {text === null ? (
         <Typography>{emptyText}</Typography>
       ) : (
-        <StyledLatex tex={tex} />
+        <StyledLatex tex={text} />
       )}
     </Box>
   );

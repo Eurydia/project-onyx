@@ -1,14 +1,7 @@
 import { ExprTree } from "$types/ast";
 
-export const augmentExprTree = (tree: ExprTree | null) => {
-  if (tree === null) {
-    return null;
-  }
-  if (tree.isError) {
-    return tree;
-  }
+export const augmentExprTree = (tree: ExprTree) => {
   const { fn, order } = tree;
-
   const augmented: ExprTree = {
     order,
     fn,

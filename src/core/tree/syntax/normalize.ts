@@ -91,10 +91,7 @@ const normalizeEquivalence = (
 };
 
 const _normalizeTree = (tree: SyntaxTree): SyntaxTree => {
-  if (
-    tree.nodeType === SyntaxTreeNodeType.ERROR ||
-    tree.nodeType === SyntaxTreeNodeType.IDENTIFIER
-  ) {
+  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
     return tree;
   }
 

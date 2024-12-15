@@ -1,6 +1,6 @@
 import { ExprTree } from "$types/ast";
 
-const _collectSymbols = (
+const _exprTreeCollectSymbols = (
   exprTree: ExprTree,
   symbols: Set<string>
 ): void => {
@@ -12,17 +12,14 @@ const _collectSymbols = (
     return;
   }
   for (const child of exprTree.children) {
-    _collectSymbols(child, symbols);
+    _exprTreeCollectSymbols(child, symbols);
   }
 };
 
-export const collectSymbols = (
-  exprTree: ExprTree | null
+export const exprTreeCollectSymbols = (
+  exprTree: ExprTree
 ): Set<string> => {
   const symbols = new Set<string>();
-  if (exprTree === null) {
-    return symbols;
-  }
-  _collectSymbols(exprTree, symbols);
+  _exprTreeCollectSymbols(exprTree, symbols);
   return symbols;
 };

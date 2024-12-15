@@ -3,7 +3,6 @@ export enum TokenType {
   OPERATOR,
   LEFT_PARENTHESIS,
   RIGHT_PARENTHESIS,
-  ERROR,
 }
 
 export enum Operator {
@@ -14,12 +13,6 @@ export enum Operator {
   NOT = "NOT",
 }
 
-export type TokenError = {
-  tokenType: TokenType.ERROR;
-  pos: number;
-  source: string;
-};
-
 export type TokenIdentifier = {
   tokenType: TokenType.IDENTIFIER;
   symbol: string;
@@ -29,7 +22,7 @@ export type TokenIdentifier = {
 
 export type TokenOperator = {
   tokenType: TokenType.OPERATOR;
-  name: Operator;
+  op: Operator;
   pos: number;
 };
 
@@ -44,7 +37,6 @@ export type TokenRightParen = {
 };
 
 export type Token =
-  | TokenError
   | TokenIdentifier
   | TokenOperator
   | TokenLeftParen

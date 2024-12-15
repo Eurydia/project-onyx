@@ -1,20 +1,23 @@
+import { Maybe } from "$types/common";
 import { Operator, Token, TokenType } from "$types/lexer";
+import { t } from "i18next";
 
-const OPERATOR_TABLE: Record<string, Operator> = {
-  "and": Operator.AND,
-  "or": Operator.OR,
-  "implies": Operator.IMPLIES,
-  "iff": Operator.IFF,
-  "not": Operator.NOT,
-  "\u{2227}": Operator.AND,
-  "\u{2228}": Operator.OR,
-  "\u{21D2}": Operator.IMPLIES,
-  "\u{21D4}": Operator.IFF,
-  "\u{00AC}": Operator.NOT,
-};
+const OPERATOR_TABLE = new Map<string, Operator>([
+  ["and", Operator.AND],
+  ["or", Operator.OR],
+  ["implies", Operator.IMPLIES],
+  ["iff", Operator.IFF],
+  ["not", Operator.NOT],
+  ["\u{2227}", Operator.AND],
+  ["\u{2228}", Operator.OR],
+  ["\u{21D2}", Operator.IMPLIES],
+  ["\u{21D4}", Operator.IFF],
+  ["\u{00AC}", Operator.NOT],
+]);
 
 const IS_WHITESPACE_MANY = /\s+/g;
 const IS_SYMBOL = /^[a-zA-Z\p{Script=Thai}]+/mu;
+
 const collapseWhitespace = (source: string): string => {
   return source.replaceAll(IS_WHITESPACE_MANY, " ");
 };
@@ -29,7 +32,7 @@ const collectSymbol = (source: string): string => {
 
 const lex = (source: string): Token[] => {
   const sourceLength = source.length;
-  let tokens: Token[] = [];
+  const tokens: Token[] = [];
   let pos = 0;
   while (pos < sourceLength) {
     const char = source[pos];
@@ -54,11 +57,11 @@ const lex = (source: string): Token[] => {
         continue;
     }
 
-    const opSign = OPERATOR_TABLE[char];
+    const opSign = OPERATOR_TABLE.get(char);
     if (opSign !== undefined) {
       tokens.push({
         tokenType: TokenType.OPERATOR,
-        name: opSign,
+        op: opSign,
         pos,
       });
       pos++;
@@ -66,20 +69,17 @@ const lex = (source: string): Token[] => {
 
     const symbol = collectSymbol(source.slice(pos));
     if (symbol.length === 0) {
-      tokens = [];
-      tokens.push({
-        tokenType: TokenType.ERROR,
-        pos,
-        source,
-      });
-      break;
+      const msg = t(
+        "core.lexer.error.foundUnsupportedCharacter"
+      );
+      throw Error(`${msg} ${pos + 1}`);
     }
 
-    const opName = OPERATOR_TABLE[symbol];
+    const opName = OPERATOR_TABLE.get(symbol);
     if (opName !== undefined) {
       tokens.push({
         tokenType: TokenType.OPERATOR,
-        name: opName,
+        op: opName,
         pos,
       });
       pos += symbol.length;
@@ -99,9 +99,16 @@ const lex = (source: string): Token[] => {
   return tokens;
 };
 
-export const lexer = (source: string): Token[] => {
+export const lexer = (
+  source: string
+): Maybe<Token[], string> => {
   const sourceCollapsed = collapseWhitespace(
     source.normalize()
   );
-  return lex(sourceCollapsed);
+  try {
+    const tokens = lex(sourceCollapsed);
+    return { ok: true, data: tokens };
+  } catch (e) {
+    return { ok: false, other: (e as Error).message };
+  }
 };

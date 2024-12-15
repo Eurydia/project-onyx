@@ -1,30 +1,32 @@
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
+import {
+  syntaxTreetoExprTree,
+  syntaxTreeToLatex,
+} from "$core/tree/conversion";
 import { augmentExprTree } from "$core/tree/expr/augment";
 import { ExprTree } from "$types/ast";
+import { Maybe } from "$types/common";
 import { SyntaxTree } from "$types/parser";
 import {
+  alpha,
   Box,
   Divider,
-  alpha,
+  Stack,
   useTheme,
 } from "@mui/material";
-import {
-  FC,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { LatexDisplay } from "./LatexDisplay";
 import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
-  tree: SyntaxTree | null;
+  maybeTree: Maybe<SyntaxTree, string>;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
-  const { tree } = props;
+  const { maybeTree } = props;
 
+  const { t } = useTranslation();
   const { palette, shape } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -42,16 +44,19 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   );
 
   useEffect(() => {
-    const nextExprTree = syntaxTreetoExprTree(tree);
-    if (nextExprTree === null) {
+    if (!maybeTree.ok) {
       setOrder(0);
       setMaxOrder(0);
+      setExprTree(null);
       return;
     }
-    setExprTree(nextExprTree);
+    const nextExprTree = syntaxTreetoExprTree(
+      maybeTree.data
+    );
     setOrder(1);
     setMaxOrder(nextExprTree.order + 1);
-  }, [tree]);
+    setExprTree(nextExprTree);
+  }, [maybeTree]);
 
   const handleNodeClick = (node: ExprTree) => {
     setDialogOpen(true);
@@ -59,7 +64,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   };
 
   const handleTableChange = (k: string, v: boolean) => {
-    if (tree === null) {
+    if (!maybeTree.ok) {
       return;
     }
     setSymbolTable((prev) => {
@@ -69,7 +74,9 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     });
     // Technically change the truth value of the same tree
     // this action should not cause the playback to reset
-    const nextExprTree = syntaxTreetoExprTree(tree);
+    const nextExprTree = syntaxTreetoExprTree(
+      maybeTree.data
+    );
     setExprTree(nextExprTree);
   };
 
@@ -82,8 +89,16 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     }
   };
 
+  const text = maybeTree.ok
+    ? syntaxTreeToLatex(maybeTree.data)
+    : `\\text{${maybeTree.other}}`;
+
   return (
-    <Fragment>
+    <Stack spacing={1}>
+      <LatexDisplay
+        text={text}
+        emptyText={t("common.emptyText")}
+      />
       <Box
         ref={containerRef}
         sx={{
@@ -102,7 +117,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             <TreeGraph
               symbolTable={symbolTable}
               order={order}
-              tree={augmentExprTree(exprTree)!}
+              tree={augmentExprTree(exprTree)}
               onNodeClick={handleNodeClick}
             />
           )}
@@ -116,13 +131,15 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           onChange={handleOrderChange}
         />
       </Box>
-      <PlaygroundDialog
-        node={selectedNode}
-        open={dialogOpen && selectedNode !== null}
-        value={symbolTable}
-        onChange={handleTableChange}
-        onClose={() => setDialogOpen(false)}
-      />
-    </Fragment>
+      {selectedNode !== null && (
+        <PlaygroundDialog
+          node={selectedNode}
+          open={dialogOpen}
+          value={symbolTable}
+          onChange={handleTableChange}
+          onClose={() => setDialogOpen(false)}
+        />
+      )}
+    </Stack>
   );
 };

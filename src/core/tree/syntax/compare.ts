@@ -7,13 +7,6 @@ const _compareSyntaxTree = (
   a: SyntaxTree,
   b: SyntaxTree
 ): boolean => {
-  if (
-    a.nodeType === SyntaxTreeNodeType.ERROR ||
-    b.nodeType === SyntaxTreeNodeType.ERROR
-  ) {
-    return false;
-  }
-
   if (a.nodeType !== b.nodeType) {
     return false;
   }

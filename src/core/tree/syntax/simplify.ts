@@ -1,7 +1,6 @@
 import { Operator } from "$types/lexer";
 import {
   BinaryOperatorNode,
-  ErrorType,
   SyntaxTree,
   SyntaxTreeNodeType,
   UnaryOperatorNode,

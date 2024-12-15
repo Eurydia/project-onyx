@@ -1,4 +1,4 @@
-import { collectSymbols } from "$core/tree/expr/evaluate";
+import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/ast";
 import {
@@ -16,7 +16,7 @@ import { PlaygroundDialogConfig } from "./PlaygroundDialogConfig";
 import { StyledLatex } from "./StyledLatex";
 
 type PlaygroundDialogProps = {
-  node: ExprTree | null;
+  node: ExprTree;
   open: boolean;
   value: Map<string, boolean>;
   onChange: (k: string, v: boolean) => void;
@@ -30,7 +30,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
   const { t } = useTranslation();
   const { palette, shape } = useTheme();
 
-  const selected = collectSymbols(node);
+  const selected = exprTreeCollectSymbols(node);
 
   return (
     <Dialog
@@ -57,15 +57,12 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
             output: "htmlAndMathml",
           }}
         />
-        {node !== null && (
-          <Typography>
-            (
-            {node.fn(value)
-              ? t("common.true")
-              : t("common.false")}
-            )
-          </Typography>
-        )}
+        <Typography>
+          Evaluation:{" "}
+          {node.fn(value)
+            ? t("common.true")
+            : t("common.false")}
+        </Typography>
       </DialogTitle>
       <DialogContent dividers>
         <PlaygroundDialogConfig
