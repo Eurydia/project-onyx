@@ -1,4 +1,4 @@
-import { Operator } from "$types/lexer";
+import { Operator } from "$types/ast";
 import {
   Checkbox,
   FormControlLabel,
@@ -9,7 +9,7 @@ import {
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
-const SYMBOL_LABEL = new Map([
+const SYMBOL_LABEL = new Map<Operator, string>([
   [Operator.AND, "conjunction"],
   [Operator.OR, "disjunction"],
   [Operator.IMPLIES, "implication"],

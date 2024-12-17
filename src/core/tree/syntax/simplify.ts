@@ -1,10 +1,3 @@
-import { Operator } from "$types/lexer";
-import {
-  BinaryOperatorNode,
-  SyntaxTree,
-  SyntaxTreeNodeType,
-  UnaryOperatorNode,
-} from "$types/parser";
 import { compareSyntaxTree } from "./compare";
 
 const collapseToDisjunction = (

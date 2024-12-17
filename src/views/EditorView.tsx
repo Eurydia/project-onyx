@@ -1,10 +1,9 @@
 import { Editor } from "$components/Editor";
 import { Playground } from "$components/Playground";
 import { StyledTabs } from "$components/StyledTabs";
-import { lexer } from "$core/interpreter/lexer";
-import { parser } from "$core/interpreter/parser";
+import { parse } from "$core/interpreter/parser";
+import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
-import { SyntaxTree } from "$types/parser";
 import { Container, Stack } from "@mui/material";
 import { FC, useState } from "react";
 
@@ -17,15 +16,7 @@ export const EditorView: FC = () => {
   });
 
   const handleExecute = (value: string) => {
-    const maybeTokens = lexer(value);
-    if (!maybeTokens.ok) {
-      setTree({
-        ok: false,
-        other: maybeTokens.other,
-      });
-      return;
-    }
-    const maybeTree = parser(maybeTokens.data);
+    const maybeTree = parse(value);
     setTree(maybeTree);
   };
   return (

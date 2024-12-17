@@ -1,3 +1,4 @@
+import "$core/interpreter/parser";
 import { EditorView } from "$views/EditorView";
 import { BlogView } from "$views/TheoremBlogView";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { theme } from "./theme";
-console.log("App");
 
 const globalStyles = (
   <GlobalStyles
