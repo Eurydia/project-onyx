@@ -1,4 +1,4 @@
-import { Operator } from "$types/lexer";
+import { Operator } from "$types/ast";
 import { Stack } from "@mui/material";
 import { FC, useState } from "react";
 import { EditorRibbon } from "./EditorRibbon";

@@ -3,19 +3,18 @@ import {
   Operator,
   SymbolTable,
   SyntaxTree,
-  SyntaxTreeNodeType,
+  SyntaxTreeNodeKind,
 } from "$types/ast";
 
 const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
   const { nodeType } = tree;
-
-  if (nodeType === SyntaxTreeNodeType.ID) {
+  if (nodeType === SyntaxTreeNodeKind.IDEN) {
     return tree.symbol;
   }
-
-  if (nodeType === SyntaxTreeNodeType.UNARY) {
-    const value = _syntaxTreeToLatex(tree.child);
-    if (tree.child.nodeType === SyntaxTreeNodeType.ID) {
+  if (nodeType === SyntaxTreeNodeKind.UNARY) {
+    const { operand } = tree;
+    const value = _syntaxTreeToLatex(operand);
+    if (operand.nodeType === SyntaxTreeNodeKind.IDEN) {
       return `\\lnot ${value}`;
     }
     return `\\lnot (${value})`;
@@ -24,24 +23,24 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
   const { left, right } = tree;
 
   let labelLeft = _syntaxTreeToLatex(left);
-  if (left.nodeType === SyntaxTreeNodeType.BINARY) {
+  if (left.nodeType === SyntaxTreeNodeKind.BINARY) {
     labelLeft = `(${labelLeft})`;
   }
 
   let labelRight = _syntaxTreeToLatex(right);
-  if (right.nodeType === SyntaxTreeNodeType.BINARY) {
+  if (right.nodeType === SyntaxTreeNodeKind.BINARY) {
     labelRight = `(${labelRight})`;
   }
 
   let label = "";
-  switch (tree.op) {
+  switch (tree.operator) {
     case Operator.AND:
       label = "\\land";
       break;
     case Operator.OR:
       label = "\\lor";
       break;
-    case Operator.IMPLIES:
+    case Operator.IMPL:
       label = "\\implies";
       break;
     case Operator.IFF:
@@ -52,6 +51,7 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
 };
 
 export const syntaxTreeToLatex = (tree: SyntaxTree) => {
+  console.log(tree);
   return _syntaxTreeToLatex(tree);
 };
 
@@ -61,7 +61,7 @@ const _syntaxTreetoExprTree = (
 ) => {
   const { nodeType } = tree;
 
-  if (nodeType === SyntaxTreeNodeType.ID) {
+  if (nodeType === SyntaxTreeNodeKind.IDEN) {
     const exprNode: ExprTree = {
       label: tree.symbol,
       order: orderStart + 1,
@@ -71,9 +71,9 @@ const _syntaxTreetoExprTree = (
     return exprNode;
   }
 
-  if (tree.nodeType === SyntaxTreeNodeType.UNARY) {
+  if (tree.nodeType === SyntaxTreeNodeKind.UNARY) {
     const child = _syntaxTreetoExprTree(
-      tree.child,
+      tree.operand,
       orderStart
     );
     const exprNode: ExprTree = {
@@ -94,7 +94,7 @@ const _syntaxTreetoExprTree = (
 
   let label;
   let fn: (t: SymbolTable) => boolean;
-  switch (tree.op) {
+  switch (tree.operator) {
     case Operator.AND:
       label = "\\land";
       fn = (t) => left.fn(t) && right.fn(t);
@@ -103,7 +103,7 @@ const _syntaxTreetoExprTree = (
       label = "\\lor";
       fn = (t) => left.fn(t) || right.fn(t);
       break;
-    case Operator.IMPLIES:
+    case Operator.IMPL:
       label = "\\implies";
       fn = (t) => !left.fn(t) || right.fn(t);
       break;

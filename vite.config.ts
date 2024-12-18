@@ -1,13 +1,12 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import commonjs from "vite-plugin-commonjs";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
   base: "/project-onyx/",
   publicDir: "public",
-  plugins: [react(), tsconfigPaths(), commonjs()],
+  plugins: [react(), tsconfigPaths()],
   build: {
     rollupOptions: {
       cache: true,

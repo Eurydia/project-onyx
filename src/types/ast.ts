@@ -5,32 +5,35 @@ export type ExprTree = {
   fn: (table: Map<string, boolean>) => boolean;
   order: number;
 };
-export enum SyntaxTreeNodeType {
-  ID = "id",
-  BINARY = "binary",
-  UNARY = "unary",
+
+export enum SyntaxTreeNodeKind {
+  IDEN = "IDEN",
+  UNARY = "UNARY",
+  BINARY = "BINARY",
 }
 
 export enum Operator {
-  AND = "and",
-  OR = "or",
-  IMPLIES = "implies",
-  IFF = "iff",
+  IFF = "IFF",
+  IMPL = "IMPL",
+  AND = "AND",
+  OR = "OR",
+  NOT = "NOT",
 }
 
 export type SyntaxTreeNodeId = {
-  nodeType: "id";
+  nodeType: SyntaxTreeNodeKind.IDEN;
   symbol: string;
 };
 export type SyntaxTreeNodeBinary = {
-  nodeType: "binary";
-  op: Operator;
+  nodeType: SyntaxTreeNodeKind.BINARY;
+  operator: Exclude<Operator, Operator.NOT>;
   left: SyntaxTree;
   right: SyntaxTree;
 };
 export type SyntaxTreeNodeUnary = {
-  nodeType: "unary";
-  child: SyntaxTree;
+  nodeType: SyntaxTreeNodeKind.UNARY;
+  operator: Operator.NOT;
+  operand: SyntaxTree;
 };
 
 export type SyntaxTree =

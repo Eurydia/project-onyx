@@ -17,6 +17,7 @@ export const EditorView: FC = () => {
 
   const handleExecute = (value: string) => {
     const maybeTree = parse(value);
+    console.log(maybeTree);
     setTree(maybeTree);
   };
   return (

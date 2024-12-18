@@ -3,9 +3,8 @@ import {
   syntaxTreeToLatex,
 } from "$core/tree/conversion";
 import { augmentExprTree } from "$core/tree/expr/augment";
-import { ExprTree } from "$types/ast";
+import { ExprTree, SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
-import { SyntaxTree } from "$types/parser";
 import {
   alpha,
   Box,
