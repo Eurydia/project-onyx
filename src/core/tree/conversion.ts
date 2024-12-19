@@ -51,7 +51,6 @@ const _syntaxTreeToLatex = (tree: SyntaxTree): string => {
 };
 
 export const syntaxTreeToLatex = (tree: SyntaxTree) => {
-  console.log(tree);
   return _syntaxTreeToLatex(tree);
 };
 

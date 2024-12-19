@@ -8,11 +8,7 @@ export const parse = (
   const m = grammar.match(content);
   if (m.succeeded()) {
     const tree = semantics(m).buildTree();
-    // console.log(tree);
-    // const tree = semantics(m).buildTree() as SyntaxTree;
-    console.log(JSON.stringify(tree, null, 2));
-
-    return { ok: false, other: "" };
+    return { ok: true, data: tree };
   } else {
     return {
       ok: false,

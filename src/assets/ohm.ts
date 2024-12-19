@@ -7,16 +7,16 @@ BooleanExpressions {
     = Iff 
 
   Iff
-    = Implies (iff_sym Implies)*    --iff
+    = Implies (iff_sym Implies)*
 
   Implies
-    = Or (implies_sym Or)*          --implies
+    = Or (implies_sym Or)*
 
   Or
-    = And (or_sym And)*             --or
+    = And (or_sym And)*
 
   And
-    = Not (and_sym Not)*            --and
+    = Not (and_sym Not)*
 
   Not
     = not_sym Not                   --not
@@ -57,39 +57,60 @@ semantics.addOperation("buildTree", {
     return e.buildTree();
   },
 
-  Iff_iff(left, _, right) {
+  Iff(leftExpr, _, rightExpr) {
+    const leftTree = leftExpr.buildTree();
+    const rightTree = rightExpr.buildTree();
+    if (rightTree.length === 0) {
+      return leftTree;
+    }
     return {
       nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.IFF,
-      left: left.buildTree(),
-      right: right.buildTree(),
+      left: leftTree,
+      right: rightTree[0],
     };
   },
 
-  Implies_implies(left, _, right) {
+  Implies(leftExpr, _, rightExpr) {
+    const leftTree = leftExpr.buildTree();
+    const rightTree = rightExpr.buildTree();
+    if (rightTree.length === 0) {
+      return leftTree;
+    }
     return {
       nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.IMPL,
-      left: left.buildTree(),
-      right: right.buildTree(),
+      left: leftTree,
+      right: rightTree[0],
     };
   },
 
-  Or_or(left, _, right) {
+  Or(leftExpr, _, rightExpr) {
+    const leftTree = leftExpr.buildTree();
+    const rightTree = rightExpr.buildTree();
+    if (rightTree.length === 0) {
+      return leftTree;
+    }
     return {
       nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.OR,
-      left: left.buildTree(),
-      right: right.buildTree(),
+      left: leftTree,
+      right: rightTree[0],
     };
   },
 
-  And_and(left, _, right) {
+  And(leftExpr, _, rightExpr) {
+    const leftTree = leftExpr.buildTree();
+    const rightTree = rightExpr.buildTree();
+
+    if (rightTree.length === 0) {
+      return leftTree;
+    }
     return {
       nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.AND,
-      left: left.buildTree(),
-      right: right.buildTree(),
+      left: leftTree,
+      right: rightTree[0],
     };
   },
 
