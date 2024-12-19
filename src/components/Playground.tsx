@@ -77,8 +77,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       next.set(k, v);
       return next;
     });
-    // Technically change the truth value of the same tree
-    // this action should not cause the playback to reset
+    // Changing the truth value of the same tree should not cause the playback to reset
     const nextExprTree = syntaxTreetoExprTree(
       maybeTree.data
     );
@@ -96,7 +95,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     e: KeyboardEvent<SVGSVGElement>
   ) => {
     const { key } = e;
-    console.log(e.key);
     if (key === "ArrowUp" || key === "ArrowRight") {
       e.preventDefault();
       setOrder((prev) => Math.min(maxOrder, prev + 1));

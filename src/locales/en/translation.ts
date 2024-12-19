@@ -1,25 +1,7 @@
 export const en = {
   translation: {
-    core: {
-      lexer: {
-        errors: {
-          foundUnsupportedCharacter:
-            "Found unsupport character at position",
-        },
-      },
-      parser: {
-        errors: {
-          inputEndedUnexpectedly: "Incomplete expression",
-          unexpectedParenthesis:
-            "Found unexpected parenthesis at position",
-          unpairedRightParenthesis:
-            "Found unpaired right parenthesis at position",
-          unclosedLeftParenthesis:
-            "Found unpaired left parenthesis at position",
-        },
-      },
-    },
     common: {
+      truthValue: "Truth value",
       true: "True",
       false: "False",
       connectives: {
@@ -44,11 +26,11 @@ export const en = {
         close: "Close",
       },
       playback: {
-        start: "Start",
         forward: "Forward",
         rewind: "Rewind",
-        end: "End",
+        // start: "Start",
+        // end: "End",
       },
     },
   },
-} as const;
+};

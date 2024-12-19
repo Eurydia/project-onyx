@@ -15,10 +15,11 @@ i18next
     detection: {
       lookupLocalStorage: "language",
     },
-    fallbackLng: "en",
     debug: true,
     resources: {
       en,
       th,
     },
   });
+
+export default i18next;

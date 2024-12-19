@@ -32,6 +32,11 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
 
   const selected = exprTreeCollectSymbols(node);
 
+  const evalValue = node.fn(value)
+    ? t("common.true")
+    : t("common.false");
+  const evalText = t("common.truthValue");
+  const text = `${evalText}: ${evalValue}`;
   return (
     <Dialog
       maxWidth="md"
@@ -57,12 +62,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
             output: "htmlAndMathml",
           }}
         />
-        <Typography>
-          Evaluation:{" "}
-          {node.fn(value)
-            ? t("common.true")
-            : t("common.false")}
-        </Typography>
+        <Typography fontStyle="italic">{text}</Typography>
       </DialogTitle>
       <DialogContent dividers>
         <PlaygroundDialogConfig
@@ -72,7 +72,12 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="text">
+        <Button
+          disableElevation
+          disableRipple
+          variant="text"
+          onClick={onClose}
+        >
           {t("playground.dialog.close")}
         </Button>
       </DialogActions>

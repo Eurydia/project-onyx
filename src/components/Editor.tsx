@@ -2,34 +2,23 @@ import { Operator } from "$types/ast";
 import { Stack } from "@mui/material";
 import { FC, useState } from "react";
 import { EditorRibbon } from "./EditorRibbon";
+import { EditorSimplConfigGroup } from "./EditorSimplConfigGroup";
 import { EditorTextField } from "./EditorTextField";
 
 type EditorProps = {
+  operators: Map<Operator, boolean>;
   onExecute: (value: string) => void;
+  onOperatorChange: (k: Operator, v: boolean) => void;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { onExecute } = props;
+  const { onExecute, onOperatorChange, operators } = props;
 
-  const [operators, setOperators] = useState(
-    new Map<Operator, boolean>()
-  );
   const [value, setValue] = useState(
     "not (p and q) iff (not p) or (not q)"
   );
 
   const handleExecute = () => {
     onExecute(value);
-  };
-
-  const handleOperatorChange = (
-    k: Operator,
-    v: boolean
-  ) => {
-    setOperators((p) => {
-      const next = new Map(p);
-      next.set(k, v);
-      return next;
-    });
   };
 
   const handleInsertChar = (char: string) => {
@@ -54,10 +43,10 @@ export const Editor: FC<EditorProps> = (props) => {
         onKeyDown={handleKeyDown}
         rows={5}
       />
-      {/* <EditorSimplConfigGroup
+      <EditorSimplConfigGroup
         values={operators}
-        onChange={handleOperatorChange}
-      /> */}
+        onChange={onOperatorChange}
+      />
     </Stack>
   );
 };
