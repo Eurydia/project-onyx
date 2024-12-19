@@ -1,5 +1,4 @@
-import { ExprTree } from "$types/ast";
-import { SymbolTable } from "$types/parser";
+import { ExprTree, SymbolTable } from "$types/ast";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";

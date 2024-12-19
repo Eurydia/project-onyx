@@ -26,7 +26,7 @@ import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
-  maybeTree: Maybe<SyntaxTree, string>;
+  maybeTree: Maybe<SyntaxTree, string> | null;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { maybeTree } = props;
@@ -49,7 +49,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   );
 
   useEffect(() => {
-    if (!maybeTree.ok) {
+    if (maybeTree === null || !maybeTree.ok) {
       setOrder(0);
       setMaxOrder(0);
       setExprTree(null);
@@ -69,7 +69,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   };
 
   const handleTableChange = (k: string, v: boolean) => {
-    if (!maybeTree.ok) {
+    if (maybeTree === null || !maybeTree.ok) {
       return;
     }
     setSymbolTable((prev) => {
@@ -104,18 +104,19 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     }
   };
 
-  const text = maybeTree.ok
-    ? syntaxTreeToLatex(maybeTree.data)
-    : `\\text{${maybeTree.other.replaceAll(
-        /"(.*)"/g,
-        '``$1"'
-      )}}`;
-
+  let text: string | null = null;
+  if (maybeTree !== null) {
+    if (maybeTree.ok) {
+      text = syntaxTreeToLatex(maybeTree.data);
+    } else {
+      text = maybeTree.other.replaceAll(/"(.*)"/g, '``$1"');
+    }
+  }
   return (
     <Stack spacing={1}>
       <LatexDisplay
         text={text}
-        emptyText={t("common.emptyText")}
+        emptyText={t("common.noPropositionToDisplay")}
       />
       <Box
         ref={containerRef}

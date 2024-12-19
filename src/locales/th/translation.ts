@@ -11,9 +11,11 @@ export const th = {
         implication: "ถ้า แล้ว",
         equivalence: "ก็ต่อเมื่อ",
       },
-      emptyText: "ไม่มีประพจน์ให้แสดง",
+      noPropositionToDisplay: "ไม่มีประพจน์ให้แสดง",
     },
     editor: {
+      originalPanel: "รูปเดิม",
+      simplifiedPanel: "รูปอย่างง่าย",
       howToUse: "คู่มือการใช้งาน",
       run: "คำนวณ",
       allowedOperatorLabel: "ตัวเชื่อมที่คงไว้",

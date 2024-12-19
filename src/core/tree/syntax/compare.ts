@@ -1,7 +1,4 @@
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/parser";
+import { SyntaxTree, SyntaxTreeNodeKind } from "$types/ast";
 
 const _compareSyntaxTree = (
   a: SyntaxTree,
@@ -12,30 +9,30 @@ const _compareSyntaxTree = (
   }
 
   if (
-    a.nodeType === SyntaxTreeNodeType.IDENTIFIER &&
-    b.nodeType === SyntaxTreeNodeType.IDENTIFIER
+    a.nodeType === SyntaxTreeNodeKind.IDEN &&
+    b.nodeType === SyntaxTreeNodeKind.IDEN
   ) {
-    return a.value === b.value;
+    return a.symbol.localeCompare(b.symbol) === 0;
   }
 
   if (
-    a.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR &&
-    b.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR
+    a.nodeType === SyntaxTreeNodeKind.UNARY &&
+    b.nodeType === SyntaxTreeNodeKind.UNARY
   ) {
     return _compareSyntaxTree(a.operand, b.operand);
   }
 
   if (
-    a.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR &&
-    b.nodeType === SyntaxTreeNodeType.BINARY_OPERATOR
+    a.nodeType === SyntaxTreeNodeKind.BINARY &&
+    b.nodeType === SyntaxTreeNodeKind.BINARY
   ) {
     if (a.operator !== b.operator) {
       return false;
     }
 
     return (
-      _compareSyntaxTree(a.leftOperand, b.leftOperand) &&
-      _compareSyntaxTree(a.rightOperand, b.rightOperand)
+      _compareSyntaxTree(a.left, b.left) &&
+      _compareSyntaxTree(a.right, b.right)
     );
   }
 

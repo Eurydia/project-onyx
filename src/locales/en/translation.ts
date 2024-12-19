@@ -11,9 +11,11 @@ export const en = {
         implication: "Implication",
         equivalence: "Equivalence",
       },
-      emptyText: "Nothing to see here",
+      noPropositionToDisplay: "Nothing to see here",
     },
     editor: {
+      originalPanel: "Original",
+      simplifiedPanel: "Simplified",
       howToUse: "How to use?",
       run: " Run",
       allowedOperatorLabel: "Connectives to keep",

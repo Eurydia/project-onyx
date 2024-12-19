@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 const SYMBOL_LABEL = new Map<Operator, string>([
   [Operator.AND, "conjunction"],
   [Operator.OR, "disjunction"],
-  [Operator.IMPLIES, "implication"],
+  [Operator.IMPL, "implication"],
   [Operator.IFF, "equivalence"],
 ]);
 

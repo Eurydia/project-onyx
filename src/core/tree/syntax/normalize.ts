@@ -1,26 +1,26 @@
-import { Operator } from "$types/lexer";
 import {
+  Operator,
   SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/parser";
+  SyntaxTreeNodeKind,
+} from "$types/ast";
 
-const normalizeDisjunction = (
+const eliminateDisjunction = (
   left: SyntaxTree,
   right: SyntaxTree
 ): SyntaxTree => {
   return {
-    nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.UNARY,
     operator: Operator.NOT,
     operand: {
-      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.AND,
-      leftOperand: {
-        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+      left: {
+        nodeType: SyntaxTreeNodeKind.UNARY,
         operator: Operator.NOT,
         operand: left,
       },
-      rightOperand: {
-        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+      right: {
+        nodeType: SyntaxTreeNodeKind.UNARY,
         operator: Operator.NOT,
         operand: right,
       },
@@ -28,19 +28,19 @@ const normalizeDisjunction = (
   };
 };
 
-const normalizeImplication = (
+const eliminateImplication = (
   left: SyntaxTree,
   right: SyntaxTree
 ): SyntaxTree => {
   return {
-    nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.UNARY,
     operator: Operator.NOT,
     operand: {
-      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.BINARY,
       operator: Operator.AND,
-      leftOperand: left,
-      rightOperand: {
-        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+      left: left,
+      right: {
+        nodeType: SyntaxTreeNodeKind.UNARY,
         operator: Operator.NOT,
         operand: right,
       },
@@ -48,42 +48,42 @@ const normalizeImplication = (
   };
 };
 
-const normalizeEquivalence = (
+const eliminateEquivalence = (
   left: SyntaxTree,
   right: SyntaxTree
 ): SyntaxTree => {
   const branchLeft: SyntaxTree = {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: Operator.AND,
-    leftOperand: left,
-    rightOperand: {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    left: left,
+    right: {
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator: Operator.NOT,
       operand: right,
     },
   };
 
   const branchRight: SyntaxTree = {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: Operator.AND,
-    leftOperand: right,
-    rightOperand: {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    left: right,
+    right: {
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator: Operator.NOT,
       operand: left,
     },
   };
 
   return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: Operator.AND,
-    leftOperand: {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    left: {
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator: Operator.NOT,
       operand: branchLeft,
     },
-    rightOperand: {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+    right: {
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator: Operator.NOT,
       operand: branchRight,
     },
@@ -91,44 +91,39 @@ const normalizeEquivalence = (
 };
 
 const _normalizeTree = (tree: SyntaxTree): SyntaxTree => {
-  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
+  if (tree.nodeType === SyntaxTreeNodeKind.IDEN) {
     return tree;
   }
 
-  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeKind.UNARY) {
     const operand = _normalizeTree(tree.operand);
     return {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator: tree.operator,
       operand,
     };
   }
 
-  const left = _normalizeTree(tree.leftOperand);
-  const right = _normalizeTree(tree.rightOperand);
+  const left = _normalizeTree(tree.left);
+  const right = _normalizeTree(tree.right);
 
   switch (tree.operator) {
     case Operator.AND:
       return {
-        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+        nodeType: SyntaxTreeNodeKind.BINARY,
         operator: Operator.AND,
-        leftOperand: left,
-        rightOperand: right,
+        left: left,
+        right: right,
       };
     case Operator.OR:
-      return normalizeDisjunction(left, right);
-    case Operator.IMPLIES:
-      return normalizeImplication(left, right);
+      return eliminateDisjunction(left, right);
+    case Operator.IMPL:
+      return eliminateImplication(left, right);
     case Operator.IFF:
-      return normalizeEquivalence(left, right);
+      return eliminateEquivalence(left, right);
   }
 };
 
-export const normalizeSyntaxTree = (
-  tree: SyntaxTree | null
-) => {
-  if (tree === null) {
-    return null;
-  }
+export const normalizeSyntaxTree = (tree: SyntaxTree) => {
   return _normalizeTree(tree);
 };

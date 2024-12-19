@@ -1,6 +1,11 @@
 import { Editor } from "$components/Editor";
 import { Playground } from "$components/Playground";
 import { parse } from "$core/interpreter/parser";
+import { normalizeSyntaxTree } from "$core/tree/syntax/normalize";
+import {
+  collapseSyntaxTree,
+  simplifySyntaxTree,
+} from "$core/tree/syntax/simplify";
 import i18nInstance from "$locales/config";
 import { Operator, SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
@@ -24,22 +29,55 @@ export const EditorView: FC = () => {
 
   const [activeTab, setActiveTab] = useState(0);
   const [operators, setOperators] = useState(
-    new Map<Operator, boolean>()
+    new Map<Operator, boolean>([
+      [Operator.AND, true],
+      [Operator.OR, true],
+      [Operator.IMPL, true],
+      [Operator.IFF, true],
+    ])
   );
-  const [tree, setTree] = useState<
-    Maybe<SyntaxTree, string>
-  >({
-    ok: false,
-    other: t("common.emptyText"),
-  });
+  const [tree, setTree] = useState<Maybe<
+    SyntaxTree,
+    string
+  > | null>(null);
+
+  const [simplifiedTree, setSimplifiedTree] =
+    useState<Maybe<SyntaxTree, string> | null>(null);
 
   const handleExecute = (value: string) => {
     if (value.trim().length === 0) {
-      setTree({ ok: false, other: t("common.emptyText") });
+      setTree(null);
+      setSimplifiedTree(null);
       return;
     }
     const maybeTree = parse(value);
     setTree(maybeTree);
+    if (maybeTree.ok) {
+      const op = new Set<Operator>();
+      for (const [k, v] of operators.entries()) {
+        if (v) {
+          op.add(k);
+        }
+      }
+      const simplTree = simplifySyntaxTree(
+        collapseSyntaxTree(
+          normalizeSyntaxTree(maybeTree.data),
+          op
+        )
+      );
+      if (simplTree === null) {
+        setSimplifiedTree({
+          ok: false,
+          other:
+            "Cannot simplified expression to desired form",
+        });
+      } else {
+        setSimplifiedTree({
+          ok: true,
+          data: simplTree,
+        });
+      }
+    }
   };
 
   const handleOperatorChange = (
@@ -91,11 +129,11 @@ export const EditorView: FC = () => {
               variant="scrollable"
             >
               <Tab
-                label="Original"
+                label={t("editor.originalPanel")}
                 value={0}
               />
               <Tab
-                label="Simplified"
+                label={t("editor.simplifiedPanel")}
                 value={1}
               />
             </TabList>
@@ -112,7 +150,7 @@ export const EditorView: FC = () => {
             value={1}
             sx={{ padding: 0 }}
           >
-            <Playground maybeTree={tree} />
+            <Playground maybeTree={simplifiedTree} />
           </TabPanel>
         </TabContext>
       </Stack>

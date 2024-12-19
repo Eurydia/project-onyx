@@ -34,7 +34,7 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
       }}
     >
       {text === null ? (
-        <Typography>
+        <Typography component="span">
           <pre>{emptyText}</pre>
         </Typography>
       ) : (

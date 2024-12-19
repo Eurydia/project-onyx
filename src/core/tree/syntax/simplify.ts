@@ -1,62 +1,74 @@
+import {
+  Operator,
+  SyntaxTree,
+  SyntaxTreeNodeBinary,
+  SyntaxTreeNodeKind,
+} from "$types/ast";
 import { compareSyntaxTree } from "./compare";
 
-const collapseToDisjunction = (
-  normalizedTree: UnaryOperatorNode
-): BinaryOperatorNode | null => {
-  const root = normalizedTree;
-  const c = root.operand;
-  if (c.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR) {
+const collapseToDisjunction = (tree: SyntaxTree) => {
+  if (tree.nodeType !== SyntaxTreeNodeKind.UNARY) {
+    return null;
+  }
+  const c = tree.operand;
+  if (c.nodeType !== SyntaxTreeNodeKind.BINARY) {
+    return null;
+  }
+  const lc = c.left;
+  if (lc.nodeType !== SyntaxTreeNodeKind.UNARY) {
+    return null;
+  }
+  const rc = c.right;
+  if (rc.nodeType !== SyntaxTreeNodeKind.UNARY) {
     return null;
   }
 
-  const lc = c.leftOperand;
-  if (lc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
-    return null;
-  }
-  const rc = c.rightOperand;
-  if (rc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
-    return null;
-  }
-
-  return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+  const node: SyntaxTree = {
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: Operator.OR,
-    leftOperand: lc.operand,
-    rightOperand: rc.operand,
+    left: lc.operand,
+    right: rc.operand,
   };
+
+  return node;
 };
 
 const collapseToImplication = (
-  normalizedTree: UnaryOperatorNode
-): BinaryOperatorNode | null => {
-  const root = normalizedTree;
-  const c = root.operand;
-  if (c.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR) {
+  tree: SyntaxTree
+): SyntaxTreeNodeBinary | null => {
+  if (tree.nodeType !== SyntaxTreeNodeKind.UNARY) {
     return null;
   }
 
-  const rc = c.rightOperand;
-  if (rc.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR) {
+  const c = tree.operand;
+  if (c.nodeType !== SyntaxTreeNodeKind.BINARY) {
     return null;
   }
-  return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
-    operator: Operator.IMPLIES,
-    leftOperand: c.leftOperand,
-    rightOperand: rc.operand,
+
+  const rc = c.right;
+  if (rc.nodeType !== SyntaxTreeNodeKind.UNARY) {
+    return null;
+  }
+
+  const node: SyntaxTreeNodeBinary = {
+    nodeType: SyntaxTreeNodeKind.BINARY,
+    operator: Operator.IMPL,
+    left: c.left,
+    right: rc.operand,
   };
+  return node;
 };
 
 const collapseToEquivalence = (
-  normalizedTree: BinaryOperatorNode
-): BinaryOperatorNode | null => {
+  normalizedTree: SyntaxTreeNodeBinary
+): SyntaxTreeNodeBinary | null => {
   const root = normalizedTree;
-  const l = root.leftOperand;
-  const r = root.rightOperand;
+  const l = root.left;
+  const r = root.right;
 
   if (
-    l.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR ||
-    r.nodeType !== SyntaxTreeNodeType.UNARY_OPERATOR
+    l.nodeType !== SyntaxTreeNodeKind.UNARY ||
+    r.nodeType !== SyntaxTreeNodeKind.UNARY
   ) {
     return null;
   }
@@ -64,48 +76,47 @@ const collapseToEquivalence = (
   const cl = l.operand;
   const cr = r.operand;
   if (
-    cl.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR ||
-    cr.nodeType !== SyntaxTreeNodeType.BINARY_OPERATOR
+    cl.nodeType !== SyntaxTreeNodeKind.BINARY ||
+    cr.nodeType !== SyntaxTreeNodeKind.BINARY
   ) {
     return null;
   }
 
-  const lcl = cl.leftOperand;
-  const lcr = cr.leftOperand;
+  const lcl = cl.left;
+  const lcr = cr.left;
   if (!compareSyntaxTree(lcl, lcr)) {
     return null;
   }
 
-  const rcl = cl.rightOperand;
-  const rcr = cr.rightOperand;
+  const rcl = cl.right;
+  const rcr = cr.right;
   if (!compareSyntaxTree(rcl, rcr)) {
     return null;
   }
 
   return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: Operator.IFF,
-    leftOperand: lcl,
-    rightOperand: lcr,
+    left: lcl,
+    right: lcr,
   };
 };
 
 const _collapseNormalizedTree = (
   tree: SyntaxTree,
   target: Set<Operator>
-): SyntaxTree => {
-  if (
-    tree.nodeType === SyntaxTreeNodeType.ERROR ||
-    tree.nodeType === SyntaxTreeNodeType.IDENTIFIER
-  ) {
+): SyntaxTree | null => {
+  if (tree.nodeType === SyntaxTreeNodeKind.IDEN) {
     return tree;
   }
 
-  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
-    let collapsed: BinaryOperatorNode | null = null;
+  if (tree.nodeType === SyntaxTreeNodeKind.UNARY) {
+    let collapsed: SyntaxTreeNodeBinary | null = null;
     if (target.has(Operator.OR)) {
       collapsed = collapseToDisjunction(tree);
-    } else if (target.has(Operator.IMPLIES)) {
+    }
+
+    if (collapsed === null && target.has(Operator.IMPL)) {
       collapsed = collapseToImplication(tree);
     }
 
@@ -114,180 +125,111 @@ const _collapseNormalizedTree = (
         tree.operand,
         target
       );
+      if (child === null) {
+        return null;
+      }
       return {
-        nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+        nodeType: SyntaxTreeNodeKind.UNARY,
         operator: Operator.NOT,
         operand: child,
       };
     }
 
     const left = _collapseNormalizedTree(
-      collapsed.leftOperand,
+      collapsed.left,
       target
     );
-    if (left.nodeType === SyntaxTreeNodeType.ERROR) {
-      return left;
+    if (left === null) {
+      return null;
     }
     const right = _collapseNormalizedTree(
-      collapsed.rightOperand,
+      collapsed.right,
       target
     );
-    if (right.nodeType === SyntaxTreeNodeType.ERROR) {
-      return right;
+    if (right === null) {
+      return null;
     }
 
     return {
-      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.BINARY,
       operator: collapsed.operator,
-      leftOperand: left,
-      rightOperand: right,
+      left: left,
+      right: right,
     };
   }
 
-  let collapsed: BinaryOperatorNode | null = null;
+  let collapsed: SyntaxTreeNodeBinary | null = null;
   if (target.has(Operator.AND)) {
     collapsed = tree;
-  } else if (target.has(Operator.IFF)) {
+  }
+
+  if (collapsed === null && target.has(Operator.IFF)) {
     collapsed = collapseToEquivalence(tree);
   }
 
   if (collapsed !== null) {
     const left = _collapseNormalizedTree(
-      collapsed.leftOperand,
+      collapsed.left,
       target
     );
-    if (left.nodeType === SyntaxTreeNodeType.ERROR) {
-      return left;
+    if (left === null) {
+      return null;
     }
-
     const right = _collapseNormalizedTree(
-      collapsed.rightOperand,
+      collapsed.right,
       target
     );
-    if (right.nodeType === SyntaxTreeNodeType.ERROR) {
-      return right;
+    if (right === null) {
+      return null;
     }
-
     return {
-      nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.BINARY,
       operator: collapsed.operator,
-      leftOperand: left,
-      rightOperand: right,
+      left: left,
+      right: right,
     };
   }
-  if (target.has(Operator.OR)) {
-    const left: SyntaxTree = {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: _collapseNormalizedTree(
-        tree.leftOperand,
-        target
-      ),
-    };
-    const right: SyntaxTree = {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: _collapseNormalizedTree(
-        tree.rightOperand,
-        target
-      ),
-    };
-    return {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: {
-        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
-        operator: Operator.OR,
-        leftOperand: left,
-        rightOperand: right,
-      },
-    };
-  } else if (target.has(Operator.IMPLIES)) {
-    return {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-      operator: Operator.NOT,
-      operand: {
-        nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
-        operator: Operator.IMPLIES,
-        leftOperand: _collapseNormalizedTree(
-          tree.leftOperand,
-          target
-        ),
-        rightOperand: {
-          nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
-          operator: Operator.NOT,
-          operand: _collapseNormalizedTree(
-            tree.rightOperand,
-            target
-          ),
-        },
-      },
-    };
-  }
-  return {
-    nodeType: SyntaxTreeNodeType.ERROR,
-    errorType: ErrorType.PARSER_ERROR,
-    // reason: ""
-    //   "ไม่สามารถแปลงนิพจน์ให้อยู่ในรูปแบบที่ต้องการได้",
-    reason: "Cannot transform expression to desired form",
-  };
+  return null;
 };
 
 export const collapseSyntaxTree = (
-  normalizedTree: SyntaxTree | null,
+  normalizedTree: SyntaxTree,
   target: Set<Operator>
 ) => {
-  if (normalizedTree === null) {
-    return null;
-  }
   return _collapseNormalizedTree(normalizedTree, target);
 };
 
 const _simplifySyntaxTree = (
   tree: SyntaxTree
 ): SyntaxTree => {
-  if (tree.nodeType === SyntaxTreeNodeType.ERROR) {
+  if (tree.nodeType === SyntaxTreeNodeKind.IDEN) {
     return tree;
   }
 
-  if (tree.nodeType === SyntaxTreeNodeType.IDENTIFIER) {
-    return tree;
-  }
-
-  if (tree.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR) {
+  if (tree.nodeType === SyntaxTreeNodeKind.UNARY) {
     const { operand, operator } = tree;
     // Skip double negation
-    if (
-      operand.nodeType === SyntaxTreeNodeType.UNARY_OPERATOR
-    ) {
+    if (operand.nodeType === SyntaxTreeNodeKind.UNARY) {
       return _simplifySyntaxTree(operand.operand);
     }
     const child = _simplifySyntaxTree(operand);
-    if (child.nodeType === SyntaxTreeNodeType.ERROR) {
-      return child;
-    }
     return {
-      nodeType: SyntaxTreeNodeType.UNARY_OPERATOR,
+      nodeType: SyntaxTreeNodeKind.UNARY,
       operator,
       operand: child,
     };
   }
 
-  const left = _simplifySyntaxTree(tree.leftOperand);
-  if (left.nodeType === SyntaxTreeNodeType.ERROR) {
+  const left = _simplifySyntaxTree(tree.left);
+  const right = _simplifySyntaxTree(tree.right);
+  if (compareSyntaxTree(left, right)) {
     return left;
   }
-
-  const right = _simplifySyntaxTree(tree.rightOperand);
-  if (right.nodeType === SyntaxTreeNodeType.ERROR) {
-    return right;
-  }
-
   return {
-    nodeType: SyntaxTreeNodeType.BINARY_OPERATOR,
+    nodeType: SyntaxTreeNodeKind.BINARY,
     operator: tree.operator,
-    leftOperand: left,
-    rightOperand: right,
+    left: left,
+    right: right,
   };
 };
 
