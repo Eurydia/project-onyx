@@ -24,9 +24,9 @@ export const StyledIconButton: FC<StyledIconButtonProps> = (
     >
       <span>
         <IconButton
+          disableRipple={disabled}
           color="primary"
           onClick={onClick}
-          disabled={disabled}
           onKeyDown={onKeyPress}
         >
           {children}

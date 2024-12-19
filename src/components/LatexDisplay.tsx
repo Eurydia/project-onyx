@@ -34,7 +34,9 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
       }}
     >
       {text === null ? (
-        <Typography>{emptyText}</Typography>
+        <Typography>
+          <pre>{emptyText}</pre>
+        </Typography>
       ) : (
         <StyledLatex tex={text} />
       )}

@@ -1,5 +1,4 @@
-import { ExprTree } from "$types/ast";
-import { SymbolTable } from "$types/parser";
+import { ExprTree, SymbolTable } from "$types/ast";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { Group } from "@visx/group";
@@ -10,19 +9,27 @@ import {
   useTooltipInPortal,
 } from "@visx/tooltip";
 import { Zoom } from "@visx/zoom";
-import { FC } from "react";
+import { FC, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledFAB } from "./StyledFAB";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
+
 type TreeGraphProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
   onNodeClick: (node: ExprTree) => void;
+  onKeyDown: (e: KeyboardEvent<SVGSVGElement>) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, symbolTable, order, onNodeClick } = props;
+  const {
+    tree,
+    symbolTable,
+    order,
+    onNodeClick,
+    onKeyDown,
+  } = props;
 
   const { t } = useTranslation();
   const data = hierarchy(tree);
@@ -67,12 +74,14 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       {(zoom) => (
         <>
           <svg
+            tabIndex={0} // Need tabindex otherwise svg will not send keyboard event
             width="100%"
             height="100%"
             ref={zoom.containerRef}
             style={{
               touchAction: "none",
             }}
+            onKeyDown={onKeyDown}
           >
             <g
               ref={containerRef}

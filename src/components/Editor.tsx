@@ -2,7 +2,6 @@ import { Operator } from "$types/ast";
 import { Stack } from "@mui/material";
 import { FC, useState } from "react";
 import { EditorRibbon } from "./EditorRibbon";
-import { EditorSimplConfigGroup } from "./EditorSimplConfigGroup";
 import { EditorTextField } from "./EditorTextField";
 
 type EditorProps = {
@@ -55,10 +54,10 @@ export const Editor: FC<EditorProps> = (props) => {
         onKeyDown={handleKeyDown}
         rows={5}
       />
-      <EditorSimplConfigGroup
+      {/* <EditorSimplConfigGroup
         values={operators}
         onChange={handleOperatorChange}
-      />
+      /> */}
     </Stack>
   );
 };

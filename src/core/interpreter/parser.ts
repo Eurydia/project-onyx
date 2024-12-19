@@ -12,7 +12,7 @@ export const parse = (
   } else {
     return {
       ok: false,
-      other: m.message ?? "",
+      other: m.shortMessage ?? "",
     };
   }
 };

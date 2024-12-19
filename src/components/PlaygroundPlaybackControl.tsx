@@ -73,7 +73,7 @@ export const PlaygroundPlaybackControl: FC<
       paddingY={1}
     >
       <StyledIconButton
-        disabled={disabled}
+        disabled={value <= minValue}
         title={t("rewind")}
         onClick={handleRewind}
         onKeyPress={handleKeyPress}
@@ -84,7 +84,7 @@ export const PlaygroundPlaybackControl: FC<
         {label}
       </Typography>
       <StyledIconButton
-        disabled={disabled}
+        disabled={value >= maxValue}
         title={t("forward")}
         onKeyPress={handleKeyPress}
         onClick={handleForward}

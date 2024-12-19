@@ -6,20 +6,26 @@ import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 import { Container, Stack } from "@mui/material";
 import { FC, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const EditorView: FC = () => {
+  const { t } = useTranslation();
   const [tree, setTree] = useState<
     Maybe<SyntaxTree, string>
   >({
     ok: false,
-    other: "...",
+    other: t("common.emptyText"),
   });
 
   const handleExecute = (value: string) => {
+    if (value.trim().length === 0) {
+      setTree({ ok: false, other: t("common.emptyText") });
+      return;
+    }
     const maybeTree = parse(value);
-    console.log(maybeTree);
     setTree(maybeTree);
   };
+
   return (
     <Container maxWidth="lg">
       <Stack
@@ -29,11 +35,8 @@ export const EditorView: FC = () => {
       >
         <Editor onExecute={handleExecute} />
         <StyledTabs
-          tabLabels={["Original", "Simplified"]}
-          panels={[
-            <Playground maybeTree={tree} />,
-            <Playground maybeTree={tree} />,
-          ]}
+          tabLabels={["Evaluation"]}
+          panels={[<Playground maybeTree={tree} />]}
         />
       </Stack>
     </Container>

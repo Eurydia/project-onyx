@@ -12,7 +12,13 @@ import {
   Stack,
   useTheme,
 } from "@mui/material";
-import { FC, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { LatexDisplay } from "./LatexDisplay";
 import { PlaygroundDialog } from "./PlaygroundDialog";
@@ -79,18 +85,33 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setExprTree(nextExprTree);
   };
 
-  const handleOrderChange = (v: number) => {
-    setOrder(v);
+  const handleOrderChange = (value: number) => {
+    setOrder(value);
     if (containerRef.current !== null) {
-      containerRef.current.scrollIntoView({
-        block: "end",
-      });
+      containerRef.current.scrollIntoView();
+    }
+  };
+
+  const handleGraphKeyPress = (
+    e: KeyboardEvent<SVGSVGElement>
+  ) => {
+    const { key } = e;
+    console.log(e.key);
+    if (key === "ArrowUp" || key === "ArrowRight") {
+      e.preventDefault();
+      setOrder((prev) => Math.min(maxOrder, prev + 1));
+    } else if (key === "ArrowLeft" || key === "ArrowDown") {
+      e.preventDefault();
+      setOrder((prev) => Math.max(0, prev - 1));
     }
   };
 
   const text = maybeTree.ok
     ? syntaxTreeToLatex(maybeTree.data)
-    : `\\text{${maybeTree.other}}`;
+    : `\\text{${maybeTree.other.replaceAll(
+        /"(.*)"/g,
+        '``$1"'
+      )}}`;
 
   return (
     <Stack spacing={1}>
@@ -118,6 +139,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
               order={order}
               tree={augmentExprTree(exprTree)}
               onNodeClick={handleNodeClick}
+              onKeyDown={handleGraphKeyPress}
             />
           )}
         </Box>
