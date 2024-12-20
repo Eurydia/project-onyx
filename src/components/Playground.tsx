@@ -2,9 +2,9 @@ import {
   syntaxTreetoExprTree,
   syntaxTreeToLatex,
 } from "$core/tree/conversion";
-import { augmentExprTree } from "$core/tree/expr/augment";
-import { ExprTree, SyntaxTree } from "$types/ast";
+import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
+import { ExprTree } from "$types/graph";
 import {
   alpha,
   Box,
@@ -84,13 +84,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setExprTree(nextExprTree);
   };
 
-  const handleOrderChange = (value: number) => {
-    setOrder(value);
-    if (containerRef.current !== null) {
-      containerRef.current.scrollIntoView();
-    }
-  };
-
   const handleGraphKeyPress = (
     e: KeyboardEvent<SVGSVGElement>
   ) => {
@@ -136,7 +129,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
             <TreeGraph
               symbolTable={symbolTable}
               order={order}
-              tree={augmentExprTree(exprTree)}
+              tree={exprTree}
               onNodeClick={handleNodeClick}
               onKeyDown={handleGraphKeyPress}
             />
@@ -148,7 +141,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           maxValue={maxOrder}
           minValue={1}
           value={order}
-          onChange={handleOrderChange}
+          onChange={setOrder}
         />
       </Box>
       {selectedNode !== null && (

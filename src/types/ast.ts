@@ -1,12 +1,5 @@
-export type ExprTree = {
-  label: string;
-  isError?: boolean | undefined;
-  children: ExprTree[];
-  fn: (table: Map<string, boolean>) => boolean;
-  order: number;
-};
-
 export enum SyntaxTreeNodeKind {
+  CONST = "CONSTANT",
   IDEN = "IDEN",
   UNARY = "UNARY",
   BINARY = "BINARY",
@@ -20,7 +13,11 @@ export enum Operator {
   NOT = "NOT",
 }
 
-export type SyntaxTreeNodeId = {
+export type SyntaxTreeNodeConst = {
+  nodeType: SyntaxTreeNodeKind.CONST;
+  value: boolean;
+};
+export type SyntaxTreeNodeIden = {
   nodeType: SyntaxTreeNodeKind.IDEN;
   symbol: string;
 };
@@ -39,6 +36,7 @@ export type SyntaxTreeNodeUnary = {
 export type SyntaxTree =
   | SyntaxTreeNodeBinary
   | SyntaxTreeNodeUnary
-  | SyntaxTreeNodeId;
+  | SyntaxTreeNodeIden
+  | SyntaxTreeNodeConst;
 
 export type SymbolTable = Map<string, boolean>;

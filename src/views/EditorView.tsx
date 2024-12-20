@@ -1,11 +1,6 @@
 import { Editor } from "$components/Editor";
 import { Playground } from "$components/Playground";
 import { parse } from "$core/interpreter/parser";
-import { normalizeSyntaxTree } from "$core/tree/syntax/normalize";
-import {
-  collapseSyntaxTree,
-  simplifySyntaxTree,
-} from "$core/tree/syntax/simplify";
 import i18nInstance from "$locales/config";
 import { Operator, SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
@@ -53,31 +48,34 @@ export const EditorView: FC = () => {
     const maybeTree = parse(value);
     setTree(maybeTree);
     if (maybeTree.ok) {
-      const op = new Set<Operator>();
-      for (const [k, v] of operators.entries()) {
-        if (v) {
-          op.add(k);
-        }
-      }
-      const simplTree = simplifySyntaxTree(
-        collapseSyntaxTree(
-          normalizeSyntaxTree(maybeTree.data),
-          op
-        )
-      );
-      if (simplTree === null) {
-        setSimplifiedTree({
-          ok: false,
-          other:
-            "Cannot simplified expression to desired form",
-        });
-      } else {
-        setSimplifiedTree({
-          ok: true,
-          data: simplTree,
-        });
-      }
+      console.log(JSON.stringify(maybeTree.data, null, 4));
     }
+    // if (maybeTree.ok) {
+    //   const op = new Set<Operator>();
+    //   for (const [k, v] of operators.entries()) {
+    //     if (v) {
+    //       op.add(k);
+    //     }
+    //   }
+    //   const simplTree = simplifySyntaxTree(
+    //     collapseSyntaxTree(
+    //       normalizeSyntaxTree(maybeTree.data),
+    //       op
+    //     )
+    //   );
+    //   if (simplTree === null) {
+    //     setSimplifiedTree({
+    //       ok: false,
+    //       other:
+    //         "Cannot simplified expression to desired form",
+    //     });
+    //   } else {
+    //     setSimplifiedTree({
+    //       ok: true,
+    //       data: simplTree,
+    //     });
+    //   }
+    // }
   };
 
   const handleOperatorChange = (

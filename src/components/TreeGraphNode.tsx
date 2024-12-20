@@ -1,4 +1,5 @@
-import { ExprTree, SymbolTable } from "$types/ast";
+import { SymbolTable } from "$types/ast";
+import { ExprTree } from "$types/graph";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
@@ -33,10 +34,10 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   useEffect(() => {
     if (ref.current !== null) {
       ref.current.innerHTML = katex
-        .renderToString(data.label)
+        .renderToString(data.repr)
         .replaceAll("span", "tspan");
     }
-  }, [ref, data.label]);
+  }, [ref, data.repr]);
 
   const isNodeHighlighted = data.order === order;
 
@@ -56,7 +57,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
     e: MouseEvent<SVGGElement> & MouseEvent
   ) => {
     e.stopPropagation();
-    onMouseEnter(x, y, data.fn);
+    onMouseEnter(x, y, data.eval);
   };
 
   return (

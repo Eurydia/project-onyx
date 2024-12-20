@@ -1,18 +1,23 @@
-import { ExprTree } from "$types/ast";
+import { SyntaxTreeNodeKind } from "$types/ast";
+import { ExprTree } from "$types/graph";
 
 const _exprTreeCollectSymbols = (
-  exprTree: ExprTree,
+  tree: ExprTree,
   symbols: Set<string>
 ): void => {
-  if (exprTree.isError) {
-    return symbols.clear();
-  }
-  if (exprTree.children.length === 0) {
-    symbols.add(exprTree.label);
-    return;
-  }
-  for (const child of exprTree.children) {
-    _exprTreeCollectSymbols(child, symbols);
+  switch (tree.nodeType) {
+    case SyntaxTreeNodeKind.CONST:
+      return;
+    case SyntaxTreeNodeKind.IDEN:
+      symbols.add(tree.repr);
+      return;
+    case SyntaxTreeNodeKind.UNARY:
+      _exprTreeCollectSymbols(tree.child, symbols);
+      return;
+    case SyntaxTreeNodeKind.BINARY:
+      _exprTreeCollectSymbols(tree.left, symbols);
+      _exprTreeCollectSymbols(tree.right, symbols);
+      return;
   }
 };
 

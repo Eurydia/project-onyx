@@ -1,4 +1,8 @@
-import { ExprTree, SymbolTable } from "$types/ast";
+import {
+  SymbolTable,
+  SyntaxTreeNodeKind,
+} from "$types/ast";
+import { ExprTree } from "$types/graph";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import { Group } from "@visx/group";
@@ -14,6 +18,19 @@ import { useTranslation } from "react-i18next";
 import { StyledFAB } from "./StyledFAB";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
+
+const flatten_expr = (d: ExprTree) => {
+  switch (d.nodeType) {
+    case SyntaxTreeNodeKind.CONST:
+      return null;
+    case SyntaxTreeNodeKind.IDEN:
+      return null;
+    case SyntaxTreeNodeKind.UNARY:
+      return [d.child];
+    case SyntaxTreeNodeKind.BINARY:
+      return [d.left, d.right];
+  }
+};
 
 type TreeGraphProps = {
   symbolTable: SymbolTable;
@@ -32,7 +49,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
   } = props;
 
   const { t } = useTranslation();
-  const data = hierarchy(tree);
+  const data = hierarchy(tree, flatten_expr);
   const height = (data.height + 1) * 75;
   const width = (data.leaves().length + 1) * 100;
 
