@@ -5,6 +5,7 @@ import {
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 import { ExprTree } from "$types/graph";
+import { HelpOutlineRounded } from "@mui/icons-material";
 import {
   alpha,
   Box,
@@ -24,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { LatexDisplay } from "./LatexDisplay";
 import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
+import { StyledAlert } from "./StyledAlert";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
@@ -122,6 +124,23 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         error={maybeTree !== null && !maybeTree.ok}
         emptyText={t("playground.feedback.empty")}
       />
+      <StyledAlert>
+        <Stack
+          padding={2}
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <HelpOutlineRounded
+            fontSize="medium"
+            color="info"
+          />
+          <Typography>
+            {t("playground.feedback.dialogInfo")}
+          </Typography>
+        </Stack>
+      </StyledAlert>
       <Box
         ref={containerRef}
         sx={{
@@ -139,6 +158,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           onChange={setOrder}
         />
         <Divider flexItem />
+
         <Box
           position="relative"
           height="75vh"

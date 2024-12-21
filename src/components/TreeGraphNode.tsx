@@ -46,6 +46,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
       onClick={() => onClick(data)}
       opacity={isNodeVisibleNow ? 1 : 0.5}
       visibility={isNodeVisible ? "visible" : "hidden"}
+      style={{ cursor: "pointer" }}
     >
       <circle
         strokeWidth={isNodeHighlighted ? 5 : 0}

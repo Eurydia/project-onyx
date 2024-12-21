@@ -5,6 +5,7 @@ export const en = {
       truthValue: "Truth value",
       true: "True",
       false: "False",
+      close: "Close",
       connectives: {
         negation: "Negation",
         conjunction: "Conjunction",
@@ -22,6 +23,8 @@ export const en = {
     },
     playground: {
       feedback: {
+        dialogInfo:
+          "Tap on a circle to modify the truth value of the expression.",
         empty:
           "No expression to display. Evaluate one to see how it's interpreted!",
       },
@@ -32,9 +35,7 @@ export const en = {
           "Cannot display evaluation step. Please check the expression and try again.",
         center: "Center Graph",
       },
-      dialog: {
-        close: "Close",
-      },
+
       playback: {
         forward: "Forward",
         rewind: "Rewind",

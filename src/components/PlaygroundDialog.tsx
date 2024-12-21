@@ -28,15 +28,17 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
 ) => {
   const { tree, open, onClose, onChange, value } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("translation", {
+    keyPrefix: "common",
+  });
   const { palette, shape } = useTheme();
 
   const active = exprTreeCollectSymbols(tree);
 
   const evalValue = tree.eval(value)
-    ? t("common.true")
-    : t("common.false");
-  const evalText = t("common.truthValue");
+    ? t("true")
+    : t("false");
+  const evalText = t("truthValue");
   const text = `${evalText}: ${evalValue}`;
 
   return (
@@ -80,7 +82,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
           variant="text"
           onClick={onClose}
         >
-          {t("playground.dialog.close")}
+          {t("close")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -3,6 +3,7 @@ export const th = {
     common: {
       proposition: "ประพจน์",
       truthValue: "ค่าความจริง",
+      close: "ปิด",
       true: "จริง",
       false: "เท็จ",
       connectives: {
@@ -12,7 +13,6 @@ export const th = {
         implication: "ถ้า แล้ว",
         equivalence: "ก็ต่อเมื่อ",
       },
-      noPropositionToDisplay: "",
     },
     editor: {
       originalPanel: "รูปเดิม",
@@ -23,6 +23,8 @@ export const th = {
     },
     playground: {
       feedback: {
+        dialogInfo:
+          "แตะที่วงลมสีเขียวเพื่อแก้ไขค่าความจริงของนิพจน์.",
         empty:
           "ไม่มีประพจน์ให้แสดงในขณะนี้ คำนวณประพจน์เพื่อตรวจสอบว่าโปรแกรมตีความถูกต้องหรือไม่",
       },
@@ -33,9 +35,7 @@ export const th = {
           "เกิดข้อผิดพลาด ไม่สามารถแสดงขั้นตอนการคำนวณได้ กรุณาตรวจสอบประพจน์และลองคำนวณอีกครั้ง",
         center: "กลับสู่ศูนย์กลาง",
       },
-      dialog: {
-        close: "ปิด",
-      },
+
       playback: {
         // start: "Start",
         // end: "End",
