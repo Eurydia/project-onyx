@@ -4,29 +4,20 @@ import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import katex from "katex";
-import { FC, MouseEvent, useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
-  onClick: (node: ExprTree) => void;
+  onClick: (value: ExprTree) => void;
   order: number;
-  onMouseLeave: () => void;
-  onMouseEnter: (
-    x: number,
-    y: number,
-    data: (t: SymbolTable) => boolean
-  ) => void;
+  symbolTable: SymbolTable;
 };
 export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
-  const {
-    order,
-    node,
-    onClick,
-    onMouseLeave,
-    onMouseEnter,
-  } = props;
+  const { order, node, onClick, symbolTable } = props;
+  const { t } = useTranslation();
   const { x, y, data } = node;
   const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
@@ -46,46 +37,54 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   const isNodeVisible =
     isNodeVisibleNow || isNodeVisibleSoon;
 
-  const handleMouseLeave = (
-    e: MouseEvent<SVGGElement> & MouseEvent
-  ) => {
-    e.stopPropagation();
-    onMouseLeave();
-  };
-
-  const handleMouseEnter = (
-    e: MouseEvent<SVGGElement> & MouseEvent
-  ) => {
-    e.stopPropagation();
-    onMouseEnter(x, y, data.eval);
-  };
+  const r = 30;
 
   return (
     <Group
       top={y}
       left={x}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
       onClick={() => onClick(data)}
+      opacity={isNodeVisibleNow ? 1 : 0.5}
       visibility={isNodeVisible ? "visible" : "hidden"}
     >
       <circle
         strokeWidth={isNodeHighlighted ? 5 : 0}
-        opacity={isNodeVisibleNow ? 1 : 0.5}
-        r={30}
-        fill={palette.secondary.light}
         stroke={palette.primary.light}
         strokeOpacity={0.8}
+        r={r}
+        fill={palette.secondary.light}
       />
       <text
         ref={ref}
         fontSize={typography.body1.fontSize}
+        color={palette.secondary.contrastText}
         dy="0.33rem"
         textAnchor="middle"
         pointerEvents="none"
-        color={palette.secondary.contrastText}
         style={{ userSelect: "none" }}
       />
+      <Group transform={`translate(${r / 3}, ${r / 3})`}>
+        <rect
+          width={60}
+          height={30}
+          rx={5}
+          ry={5}
+          fill={palette.secondary.light}
+        />
+        <text
+          x="30"
+          y="22"
+          // fill={palette.secondary.contrastText}
+          fillOpacity={0.5}
+          textAnchor="middle"
+          pointerEvents="none"
+          style={{ userSelect: "none" }}
+        >
+          {data.eval(symbolTable)
+            ? t("common.true")
+            : t("common.false")}
+        </text>
+      </Group>
     </Group>
   );
 };

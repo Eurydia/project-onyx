@@ -4,14 +4,8 @@ import {
 } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import { ControlCameraRounded } from "@mui/icons-material";
-import { Typography } from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
-import {
-  TooltipWithBounds,
-  useTooltip,
-  useTooltipInPortal,
-} from "@visx/tooltip";
 import { Zoom } from "@visx/zoom";
 import { FC, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
@@ -36,7 +30,7 @@ type TreeGraphProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
-  onNodeClick: (node: ExprTree) => void;
+  onNodeClick: (value: ExprTree) => void;
   onKeyDown: (e: KeyboardEvent<SVGSVGElement>) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
@@ -50,34 +44,8 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
 
   const { t } = useTranslation();
   const data = hierarchy(tree, flatten_expr);
-  const height = (data.height + 1) * 75;
-  const width = (data.leaves().length + 1) * 100;
-
-  const { containerRef } = useTooltipInPortal({
-    scroll: true,
-    detectBounds: true,
-  });
-
-  const {
-    showTooltip,
-    hideTooltip,
-    tooltipData,
-    tooltipOpen,
-    tooltipLeft,
-    tooltipTop,
-  } = useTooltip<(t: SymbolTable) => boolean>();
-
-  const handleMouseHoverNode = (
-    x: number,
-    y: number,
-    fn: (t: SymbolTable) => boolean
-  ) => {
-    showTooltip({
-      tooltipLeft: x,
-      tooltipTop: y,
-      tooltipData: fn,
-    });
-  };
+  const height = (data.height + 1) * 100;
+  const width = (data.leaves().length + 1) * 150;
 
   return (
     <Zoom<SVGSVGElement>
@@ -101,16 +69,12 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
             onKeyDown={onKeyDown}
           >
             <g
-              ref={containerRef}
               onTouchStart={zoom.dragStart}
               onTouchMove={zoom.dragMove}
               onTouchEnd={zoom.dragEnd}
               onMouseDown={zoom.dragStart}
               onMouseMove={zoom.dragMove}
-              onMouseUp={() => {
-                zoom.dragEnd();
-                hideTooltip();
-              }}
+              onMouseUp={zoom.dragEnd}
               onMouseLeave={zoom.dragEnd}
               transform={zoom.toString()}
             >
@@ -135,10 +99,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                           order={order}
                           node={node}
                           onClick={onNodeClick}
-                          onMouseEnter={
-                            handleMouseHoverNode
-                          }
-                          onMouseLeave={hideTooltip}
+                          symbolTable={symbolTable}
                         />
                       ))}
                   </Group>
@@ -152,29 +113,6 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
           >
             <ControlCameraRounded />
           </StyledFAB>
-          {!zoom.isDragging &&
-            tooltipOpen &&
-            tooltipData !== undefined &&
-            tooltipLeft !== undefined &&
-            tooltipTop !== undefined && (
-              <TooltipWithBounds
-                left={
-                  zoom.transformMatrix.scaleX *
-                    tooltipLeft +
-                  zoom.transformMatrix.translateX
-                }
-                top={
-                  zoom.transformMatrix.scaleY * tooltipTop +
-                  zoom.transformMatrix.translateY
-                }
-              >
-                <Typography>
-                  {tooltipData(symbolTable)
-                    ? t("common.true")
-                    : t("common.false")}
-                </Typography>
-              </TooltipWithBounds>
-            )}
         </>
       )}
     </Zoom>

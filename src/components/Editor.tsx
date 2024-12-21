@@ -1,7 +1,10 @@
-import { Stack } from "@mui/material";
+import { PlayArrowRounded } from "@mui/icons-material";
+import { Stack, Toolbar, Typography } from "@mui/material";
 import { FC, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { EditorRibbon } from "./EditorRibbon";
 import { EditorTextField } from "./EditorTextField";
+import { StyledTooltipButton } from "./StyledTooltipButton";
 
 type EditorProps = {
   // operators: Map<Operator, boolean>;
@@ -14,6 +17,7 @@ export const Editor: FC<EditorProps> = (props) => {
     // onOperatorChange,
     // operators,
   } = props;
+  const { t } = useTranslation();
 
   const [value, setValue] = useState(
     "not (p and q) iff (not p) or (not q)"
@@ -36,7 +40,7 @@ export const Editor: FC<EditorProps> = (props) => {
   return (
     <Stack spacing={1}>
       <EditorRibbon
-        onExecute={handleExecute}
+        // onExecute={handleExecute}
         onInsertChar={handleInsertChar}
       />
       <EditorTextField
@@ -46,6 +50,35 @@ export const Editor: FC<EditorProps> = (props) => {
         onKeyDown={handleKeyDown}
         rows={5}
       />
+      <Toolbar
+        variant="dense"
+        disableGutters
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          direction: "row",
+          gap: 4,
+        }}
+      >
+        <StyledTooltipButton
+          variant="contained"
+          startIcon={<PlayArrowRounded />}
+          onClick={handleExecute}
+          title={"CTRL + ENTER"}
+        >
+          {t("editor.run")}
+        </StyledTooltipButton>
+        <Typography
+          color="primary"
+          component="a"
+          href="#user-manual"
+          sx={{
+            textDecorationLine: "underline",
+          }}
+        >
+          {t("editor.howToUse")}
+        </Typography>
+      </Toolbar>
       {/* <EditorSimplConfigGroup
         values={operators}
         onChange={onOperatorChange}

@@ -11,29 +11,31 @@ import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
 type PlaygroundDialogConfigProps = {
+  active: Set<string>;
   table: Map<string, boolean>;
-  selected: Set<string>;
   onChange: (k: string, v: boolean) => void;
 };
 export const PlaygroundDialogConfig: FC<
   PlaygroundDialogConfigProps
 > = (props) => {
-  const { table, selected, onChange } = props;
+  const { active, table, onChange } = props;
 
   const { t } = useTranslation("translation", {
     keyPrefix: "common",
   });
   const propositionText = t("proposition");
 
+  const selected = [...active];
+  selected.toSorted();
   return (
     <Stack
       useFlexGap
       spacing={1}
       width="100%"
     >
-      {[...selected].map((symbol) => (
+      {selected.map((sym) => (
         <FormControl
-          key={"symbol-" + symbol}
+          key={"symbol-" + sym}
           fullWidth
         >
           <FormLabel
@@ -43,14 +45,14 @@ export const PlaygroundDialogConfig: FC<
             }}
           >
             <StyledLatex
-              tex={`\\text{${propositionText}: \`\`$${symbol}$''}`}
+              tex={`\\text{${propositionText}: \`\`$${sym}$''}`}
             />
           </FormLabel>
           <RadioGroup
             row
-            value={table.get(symbol) ? "T" : "F"}
+            value={table.get(sym) ? "1" : "0"}
             onChange={(e) =>
-              onChange(symbol, e.target.value === "T")
+              onChange(sym, e.target.value === "1")
             }
           >
             <FormControlLabel
@@ -60,7 +62,7 @@ export const PlaygroundDialogConfig: FC<
             />
             <FormControlLabel
               control={<Radio disableRipple />}
-              value="F"
+              value="0"
               label={t("false")}
             />
           </RadioGroup>

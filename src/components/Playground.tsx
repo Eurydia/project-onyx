@@ -40,11 +40,10 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     new Map<string, boolean>()
   );
 
-  const [order, setOrder] = useState(0);
-  const [maxOrder, setMaxOrder] = useState(0);
-
   const [selectedNode, setSelectedNode] =
     useState<ExprTree | null>(null);
+  const [order, setOrder] = useState(0);
+  const [maxOrder, setMaxOrder] = useState(0);
   const [exprTree, setExprTree] = useState<ExprTree | null>(
     null
   );
@@ -62,12 +61,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setOrder(nextExprTree.order + 1);
     setMaxOrder(nextExprTree.order + 1);
     setExprTree(nextExprTree);
-  }, [maybeTree]);
-
-  const handleNodeClick = (node: ExprTree) => {
-    setDialogOpen(true);
-    setSelectedNode(node);
-  };
+  }, [maybeTree, symbolTable, t]);
 
   const handleTableChange = (k: string, v: boolean) => {
     if (maybeTree === null || !maybeTree.ok) {
@@ -83,6 +77,11 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       maybeTree.data
     );
     setExprTree(nextExprTree);
+  };
+
+  const handleNodeClick = (value: ExprTree) => {
+    setDialogOpen(true);
+    setSelectedNode(value);
   };
 
   const handleGraphKeyPress = (
@@ -163,7 +162,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       </Box>
       {selectedNode !== null && (
         <PlaygroundDialog
-          node={selectedNode}
+          tree={selectedNode}
           open={dialogOpen}
           value={symbolTable}
           onChange={handleTableChange}

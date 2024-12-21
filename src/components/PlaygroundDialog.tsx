@@ -1,5 +1,6 @@
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
+import { SymbolTable } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import {
   Button,
@@ -16,27 +17,28 @@ import { PlaygroundDialogConfig } from "./PlaygroundDialogConfig";
 import { StyledLatex } from "./StyledLatex";
 
 type PlaygroundDialogProps = {
-  node: ExprTree;
+  tree: ExprTree;
   open: boolean;
-  value: Map<string, boolean>;
+  value: SymbolTable;
   onChange: (k: string, v: boolean) => void;
   onClose: () => void;
 };
 export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
   props
 ) => {
-  const { node, open, onClose, onChange, value } = props;
+  const { tree, open, onClose, onChange, value } = props;
 
   const { t } = useTranslation();
   const { palette, shape } = useTheme();
 
-  const selected = exprTreeCollectSymbols(node);
+  const active = exprTreeCollectSymbols(tree);
 
-  const evalValue = node.eval(value)
+  const evalValue = tree.eval(value)
     ? t("common.true")
     : t("common.false");
   const evalText = t("common.truthValue");
   const text = `${evalText}: ${evalValue}`;
+
   return (
     <Dialog
       maxWidth="md"
@@ -56,7 +58,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
     >
       <DialogTitle>
         <StyledLatex
-          tex={exprTreeToLatex(node)}
+          tex={exprTreeToLatex(tree)}
           options={{
             displayMode: true,
             output: "htmlAndMathml",
@@ -66,7 +68,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
       </DialogTitle>
       <DialogContent dividers>
         <PlaygroundDialogConfig
-          selected={selected}
+          active={active}
           table={value}
           onChange={onChange}
         />
