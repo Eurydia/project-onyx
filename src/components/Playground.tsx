@@ -105,7 +105,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       text = syntaxTreeToLatex(maybeTree.data);
     } else {
       text = maybeTree.other.replaceAll(/"(.*)"/g, '``$1"');
-      text = `\\text{${text}}`;
+      text = `\\textcolor{${palette.error.dark}}{\\text{${text}}}`;
       treeGraphText = t(
         "playground.graph.cannotDisplayEvaluation"
       );

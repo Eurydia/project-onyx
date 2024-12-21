@@ -23,6 +23,7 @@ export const PlaygroundDialogConfig: FC<
   const { t } = useTranslation("translation", {
     keyPrefix: "common",
   });
+  const propositionText = t("proposition");
 
   return (
     <Stack
@@ -42,7 +43,7 @@ export const PlaygroundDialogConfig: FC<
             }}
           >
             <StyledLatex
-              tex={`\\text{\`\`$${symbol}$''}`}
+              tex={`\\text{${propositionText}: \`\`$${symbol}$''}`}
             />
           </FormLabel>
           <RadioGroup

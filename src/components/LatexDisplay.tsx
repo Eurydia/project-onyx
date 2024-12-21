@@ -18,9 +18,9 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
   const { text, emptyText, error } = props;
   const { palette, shape } = useTheme();
 
-  const color = error
-    ? palette.error.light
-    : palette.secondary.light;
+  const bgColor = error
+    ? alpha(palette.error.light, 0.3)
+    : alpha(palette.secondary.light, 0.4);
   return (
     <Box
       paddingX={2}
@@ -31,11 +31,14 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
       minHeight={100} // Otherwise the size of the box will be smaller in its empty state
       sx={{
         borderRadius: shape.borderRadius,
-        backgroundColor: alpha(color, 0.4),
+        backgroundColor: bgColor,
       }}
     >
       {text === null ? (
-        <Typography component="span">
+        <Typography
+          component="span"
+          overflow="auto"
+        >
           <pre>{emptyText}</pre>
         </Typography>
       ) : (

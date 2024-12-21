@@ -1,6 +1,7 @@
 export const th = {
   translation: {
     common: {
+      proposition: "ประพจน์",
       truthValue: "ค่าความจริง",
       true: "จริง",
       false: "เท็จ",

@@ -34,7 +34,7 @@ const _exprTreeToLatex = (tree: ExprTree): string => {
         right = `( ${right} )`;
       }
 
-      return `( ${left} ) ${tree.repr} ( ${right} )`;
+      return `${left} ${tree.repr} ${right}`;
     }
   }
 };

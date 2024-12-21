@@ -1,6 +1,7 @@
 export const en = {
   translation: {
     common: {
+      proposition: "Proposition",
       truthValue: "Truth value",
       true: "True",
       false: "False",
