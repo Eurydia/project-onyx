@@ -1,6 +1,6 @@
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
-import { ExprTree } from "$types/ast";
+import { ExprTree } from "$types/graph";
 import {
   Button,
   Dialog,
@@ -32,7 +32,7 @@ export const PlaygroundDialog: FC<PlaygroundDialogProps> = (
 
   const selected = exprTreeCollectSymbols(node);
 
-  const evalValue = node.fn(value)
+  const evalValue = node.eval(value)
     ? t("common.true")
     : t("common.false");
   const evalText = t("common.truthValue");

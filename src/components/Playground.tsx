@@ -10,6 +10,7 @@ import {
   Box,
   Divider,
   Stack,
+  Typography,
   useTheme,
 } from "@mui/material";
 import {
@@ -58,7 +59,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     const nextExprTree = syntaxTreetoExprTree(
       maybeTree.data
     );
-    setOrder(1);
+    setOrder(nextExprTree.order + 1);
     setMaxOrder(nextExprTree.order + 1);
     setExprTree(nextExprTree);
   }, [maybeTree]);
@@ -97,19 +98,30 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     }
   };
 
+  let treeGraphText: string | null = null;
   let text: string | null = null;
   if (maybeTree !== null) {
     if (maybeTree.ok) {
       text = syntaxTreeToLatex(maybeTree.data);
     } else {
       text = maybeTree.other.replaceAll(/"(.*)"/g, '``$1"');
+      text = `\\text{${text}}`;
+      treeGraphText = t(
+        "playground.graph.cannotDisplayEvaluation"
+      );
     }
+  } else {
+    treeGraphText = t(
+      "playground.graph.noEvaluationToDisplay"
+    );
   }
+
   return (
     <Stack spacing={1}>
       <LatexDisplay
         text={text}
-        emptyText={t("common.noPropositionToDisplay")}
+        error={maybeTree !== null && !maybeTree.ok}
+        emptyText={t("playground.feedback.empty")}
       />
       <Box
         ref={containerRef}
@@ -120,22 +132,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           borderColor: alpha(palette.secondary.main, 0.4),
         }}
       >
-        <Box
-          position="relative"
-          height="75vh"
-          width="100%"
-        >
-          {exprTree !== null && (
-            <TreeGraph
-              symbolTable={symbolTable}
-              order={order}
-              tree={exprTree}
-              onNodeClick={handleNodeClick}
-              onKeyDown={handleGraphKeyPress}
-            />
-          )}
-        </Box>
-        <Divider flexItem />
         <PlaygroundPlaybackControl
           disabled={exprTree === null}
           maxValue={maxOrder}
@@ -143,6 +139,27 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           value={order}
           onChange={setOrder}
         />
+        <Divider flexItem />
+        <Box
+          position="relative"
+          height="75vh"
+          display="flex"
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {exprTree !== null ? (
+            <TreeGraph
+              symbolTable={symbolTable}
+              order={order}
+              tree={exprTree}
+              onNodeClick={handleNodeClick}
+              onKeyDown={handleGraphKeyPress}
+            />
+          ) : (
+            <Typography>{treeGraphText}</Typography>
+          )}
+        </Box>
       </Box>
       {selectedNode !== null && (
         <PlaygroundDialog

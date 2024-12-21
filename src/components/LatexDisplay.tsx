@@ -10,13 +10,17 @@ import { StyledLatex } from "./StyledLatex";
 type LatexDisplayProps = {
   text: string | null;
   emptyText: string;
+  error?: boolean;
 };
 export const LatexDisplay: FC<LatexDisplayProps> = (
   props
 ) => {
-  const { text, emptyText } = props;
+  const { text, emptyText, error } = props;
   const { palette, shape } = useTheme();
 
+  const color = error
+    ? palette.error.light
+    : palette.secondary.light;
   return (
     <Box
       paddingX={2}
@@ -27,10 +31,7 @@ export const LatexDisplay: FC<LatexDisplayProps> = (
       minHeight={100} // Otherwise the size of the box will be smaller in its empty state
       sx={{
         borderRadius: shape.borderRadius,
-        backgroundColor: alpha(
-          palette.secondary.light,
-          0.4
-        ),
+        backgroundColor: alpha(color, 0.4),
       }}
     >
       {text === null ? (

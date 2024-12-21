@@ -1,19 +1,9 @@
-## 📚User Manual
-
-To use the interpreter, simply type in a Boolean expresion into the input field and press run! If you expression is well-formed, you should see a version of your expression the interpreter sees, but if you see nothing, you might want to double check your expression.
-
-You can also play around with the truth value of your expression by changing the truth values of your propositions.
-
-While you are here, let me tell you a few tips. You can press `CTRL` + `ENTER` to trigger the run button. The math symbols can be tricky to write, so you can use the following; 
+# 📚User Manual
 
 
+**Quick guide**: 
+1. Enter a Boolean expression into the input field
+1. Press "RUN"
+1. Click on a node to modify the truth values
 
-- *and* is an alias for &and;, 
-- *or* is an alias for &or;, 
-- *implies* is an alias for &rarr;, 
-- *iff* is an alias for &hArr;, and 
-- *not* is an alias for &not;. 
-
-Beware since these are case-sensitive. For example, you can write an expresion like this; `not (p and q) iff not p or not q`.
-
-
+The available logical connectives are **not** (&not;), **and** (&and;), **or** (&or;), **implies** (&rarr;), and **iff** (&hArr;). 

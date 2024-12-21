@@ -1,17 +1,19 @@
-import { Operator } from "$types/ast";
 import { Stack } from "@mui/material";
 import { FC, useState } from "react";
 import { EditorRibbon } from "./EditorRibbon";
-import { EditorSimplConfigGroup } from "./EditorSimplConfigGroup";
 import { EditorTextField } from "./EditorTextField";
 
 type EditorProps = {
-  operators: Map<Operator, boolean>;
+  // operators: Map<Operator, boolean>;
   onExecute: (value: string) => void;
-  onOperatorChange: (k: Operator, v: boolean) => void;
+  // onOperatorChange: (k: Operator, v: boolean) => void;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { onExecute, onOperatorChange, operators } = props;
+  const {
+    onExecute,
+    // onOperatorChange,
+    // operators,
+  } = props;
 
   const [value, setValue] = useState(
     "not (p and q) iff (not p) or (not q)"
@@ -38,15 +40,16 @@ export const Editor: FC<EditorProps> = (props) => {
         onInsertChar={handleInsertChar}
       />
       <EditorTextField
+        placeholder="ex. not (p and q) iff (not p) or (not q)"
         value={value}
         onChange={setValue}
         onKeyDown={handleKeyDown}
         rows={5}
       />
-      <EditorSimplConfigGroup
+      {/* <EditorSimplConfigGroup
         values={operators}
         onChange={onOperatorChange}
-      />
+      /> */}
     </Stack>
   );
 };

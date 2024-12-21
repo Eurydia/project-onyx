@@ -2,8 +2,9 @@ import AboutBlog from "$assets/blogs/BooleanAlgebraSummary/en.txt";
 import UserManualBlog from "$assets/blogs/UserManual/en.txt";
 import { StyledMarkdown } from "$components/StyledMarkdown";
 import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { FC, Fragment } from "react";
+
 export const BlogView: FC = () => {
   const userManualContent =
     useFetchMarkdown(UserManualBlog);
@@ -21,12 +22,6 @@ export const BlogView: FC = () => {
         }}
       >
         <Container maxWidth="md">
-          <Typography
-            variant="h1"
-            component="h1"
-          >
-            Hi there! 👋
-          </Typography>
           <StyledMarkdown>
             {userManualContent ?? ""}
           </StyledMarkdown>

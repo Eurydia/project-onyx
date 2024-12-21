@@ -2,7 +2,7 @@ import { Editor } from "$components/Editor";
 import { Playground } from "$components/Playground";
 import { parse } from "$core/interpreter/parser";
 import i18nInstance from "$locales/config";
-import { Operator, SyntaxTree } from "$types/ast";
+import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
@@ -10,11 +10,12 @@ import {
   Button,
   ButtonGroup,
   Container,
+  Divider,
   Stack,
   Tab,
   Toolbar,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const EditorView: FC = () => {
@@ -23,33 +24,29 @@ export const EditorView: FC = () => {
   });
 
   const [activeTab, setActiveTab] = useState(0);
-  const [operators, setOperators] = useState(
-    new Map<Operator, boolean>([
-      [Operator.AND, true],
-      [Operator.OR, true],
-      [Operator.IMPL, true],
-      [Operator.IFF, true],
-    ])
-  );
   const [tree, setTree] = useState<Maybe<
     SyntaxTree,
     string
   > | null>(null);
-
-  const [simplifiedTree, setSimplifiedTree] =
-    useState<Maybe<SyntaxTree, string> | null>(null);
+  // const [operators, setOperators] = useState(
+  //   new Map<Operator, boolean>([
+  //     [Operator.AND, true],
+  //     [Operator.OR, true],
+  //     [Operator.IMPL, true],
+  //     [Operator.IFF, true],
+  //   ])
+  // );
+  // const [simplifiedTree, setSimplifiedTree] =
+  //   useState<Maybe<SyntaxTree, string> | null>(null);
 
   const handleExecute = (value: string) => {
     if (value.trim().length === 0) {
       setTree(null);
-      setSimplifiedTree(null);
+      // setSimplifiedTree(null);
       return;
     }
     const maybeTree = parse(value);
     setTree(maybeTree);
-    if (maybeTree.ok) {
-      console.log(JSON.stringify(maybeTree.data, null, 4));
-    }
     // if (maybeTree.ok) {
     //   const op = new Set<Operator>();
     //   for (const [k, v] of operators.entries()) {
@@ -78,80 +75,91 @@ export const EditorView: FC = () => {
     // }
   };
 
-  const handleOperatorChange = (
-    k: Operator,
-    v: boolean
-  ) => {
-    setOperators((p) => {
-      const next = new Map(p);
-      next.set(k, v);
-      return next;
-    });
-  };
+  // const handleOperatorChange = (
+  //   k: Operator,
+  //   v: boolean
+  // ) => {
+  //   setOperators((p) => {
+  //     const next = new Map(p);
+  //     next.set(k, v);
+  //     return next;
+  //   });
+  // };
 
   return (
-    <Container maxWidth="lg">
-      <Stack
-        useFlexGap
-        spacing={1}
-        padding={2}
+    <Fragment>
+      <Toolbar
+        variant="dense"
+        disableGutters
+        sx={{
+          flexDirection: "column",
+          display: "flex",
+          alignItems: "flex-start",
+        }}
       >
-        <Toolbar
-          variant="dense"
-          disableGutters
+        <ButtonGroup
+          variant="text"
+          disableElevation
         >
-          <ButtonGroup variant="text">
-            <Button
-              onClick={() => i18n.changeLanguage("en")}
+          <Button onClick={() => i18n.changeLanguage("en")}>
+            EN
+          </Button>
+          <Button onClick={() => i18n.changeLanguage("th")}>
+            TH
+          </Button>
+        </ButtonGroup>
+        <Divider flexItem />
+      </Toolbar>
+      <Container maxWidth="lg">
+        <Stack
+          useFlexGap
+          spacing={1}
+          padding={2}
+        >
+          <Editor
+            // operators={operators}
+            onExecute={handleExecute}
+            // onOperatorChange={handleOperatorChange}
+          />
+          <TabContext value={activeTab}>
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
             >
-              EN
-            </Button>
-            <Button
-              onClick={() => i18n.changeLanguage("th")}
+              <TabList
+                onChange={(_, v) => setActiveTab(v)}
+                variant="scrollable"
+              >
+                <Tab
+                  label={t("editor.originalPanel")}
+                  value={0}
+                />
+                <Tab
+                  disabled
+                  label={t("editor.simplifiedPanel")}
+                  value={1}
+                />
+              </TabList>
+            </Box>
+            <TabPanel
+              keepMounted
+              value={0}
+              sx={{ padding: 0 }}
             >
-              TH
-            </Button>
-          </ButtonGroup>
-        </Toolbar>
-        <Editor
-          operators={operators}
-          onExecute={handleExecute}
-          onOperatorChange={handleOperatorChange}
-        />
-        <TabContext value={activeTab}>
-          <Box
-            sx={{ borderBottom: 1, borderColor: "divider" }}
-          >
-            <TabList
-              onChange={(_, v) => setActiveTab(v)}
-              variant="scrollable"
-            >
-              <Tab
-                label={t("editor.originalPanel")}
-                value={0}
-              />
-              <Tab
-                label={t("editor.simplifiedPanel")}
-                value={1}
-              />
-            </TabList>
-          </Box>
-          <TabPanel
-            keepMounted
-            value={0}
-            sx={{ padding: 0 }}
-          >
-            <Playground maybeTree={tree} />
-          </TabPanel>
-          <TabPanel
+              <Playground maybeTree={tree} />
+            </TabPanel>
+            {/* <TabPanel
             keepMounted
             value={1}
             sx={{ padding: 0 }}
           >
             <Playground maybeTree={simplifiedTree} />
-          </TabPanel>
-        </TabContext>
-      </Stack>
-    </Container>
+          </TabPanel> */}
+          </TabContext>
+        </Stack>
+      </Container>
+    </Fragment>
   );
 };

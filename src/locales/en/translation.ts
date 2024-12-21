@@ -11,7 +11,6 @@ export const en = {
         implication: "Implication",
         equivalence: "Equivalence",
       },
-      noPropositionToDisplay: "Nothing to see here",
     },
     editor: {
       originalPanel: "Original",
@@ -21,7 +20,15 @@ export const en = {
       allowedOperatorLabel: "Connectives to keep",
     },
     playground: {
+      feedback: {
+        empty:
+          "No expression to display. Evaluate one to see how it's interpreted!",
+      },
       graph: {
+        noEvaluationToDisplay:
+          "No evaluation step to display. Evaluate an expression to see steps here.",
+        cannotDisplayEvaluation:
+          "Cannot display evaluation step. Please check the expression and try again.",
         center: "Center Graph",
       },
       dialog: {

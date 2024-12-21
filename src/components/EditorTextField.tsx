@@ -6,17 +6,20 @@ type EditorTextFieldProps = {
   rows: number;
   onChange: (value: string) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
+  placeholder?: string;
 };
 export const EditorTextField: FC<EditorTextFieldProps> = (
   props
 ) => {
-  const { rows, value, onChange, onKeyDown } = props;
+  const { placeholder, rows, value, onChange, onKeyDown } =
+    props;
   return (
     <TextField
       fullWidth
       multiline
       rows={rows}
       value={value}
+      placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
       onKeyDown={onKeyDown}
       slotProps={{
