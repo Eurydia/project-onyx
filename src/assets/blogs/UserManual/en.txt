@@ -1,9 +1,34 @@
-# 📚User Manual
-
+# User Manual
 
 **Quick guide**: 
 1. Enter a Boolean expression into the input field
 1. Press "RUN"
 1. Click on a node to modify the truth values
 
-The available logical connectives are **not** (&not;), **and** (&and;), **or** (&or;), **implies** (&rarr;), and **iff** (&hArr;). 
+## Supported Logical Connectives
+
+The application supports the following logical keywords and their respective mathematical symbols:
+
+- Logical negation    (keyword: `not`     , symbol: &not;) 
+- Logical conjunction (keyword: `and`     , symbol: &and;) 
+- Logical disjunction (keyword: `or`      , symbol: &or;) 
+- Logical implication (keyword: `implies` , symbol: &rArr;) 
+- Logical equivalence (keyword: `iff`     , symbol: &iff;)
+
+The keyword and the symbol are considered the same, so can use them interchangebly, or evening mix them in an expression.
+
+You can use the ribbon to insert a symbol into the input. With the input area active, press `CTRL` and `ENTER` to evaluate the expression
+
+## Features 
+
+**Evaluation playback**
+
+Use the playback control to see order of evaluation for the expression. Press forward or rewind to a finer playback control and the slider to quickly move around the evaluation.
+
+**Testing different truth values**
+
+Propositions are false initially. 
+
+To modify the truth value of a proposition, press one of the node present in the output area.
+
+Doing so will open up a window. In this window, you can modify the truth values of propositions present in the particular sub expression. Pressing the root will show the entire tree, along with every proposition.

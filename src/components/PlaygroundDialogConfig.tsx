@@ -57,7 +57,7 @@ export const PlaygroundDialogConfig: FC<
           >
             <FormControlLabel
               control={<Radio disableRipple />}
-              value="T"
+              value="1"
               label={t("true")}
             />
             <FormControlLabel

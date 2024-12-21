@@ -1,14 +1,34 @@
-import AboutBlog from "$assets/blogs/BooleanAlgebraSummary/en.txt";
-import UserManualBlog from "$assets/blogs/UserManual/en.txt";
+import UserManualBlogEN from "$assets/blogs/UserManual/en.txt";
+import UserManualBlogTH from "$assets/blogs/UserManual/th.txt";
 import { StyledMarkdown } from "$components/StyledMarkdown";
-import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
 import { Box, Container } from "@mui/material";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const BlogView: FC = () => {
-  const userManualContent =
-    useFetchMarkdown(UserManualBlog);
-  const content = useFetchMarkdown(AboutBlog);
+  const { i18n } = useTranslation();
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    let isWorking = true;
+
+    fetch(
+      i18n.language === "th"
+        ? UserManualBlogTH
+        : UserManualBlogEN
+    )
+      .then((res) => res.text())
+      .then((text) => {
+        if (!isWorking) {
+          return;
+        }
+        setContent(text);
+      });
+    return () => {
+      isWorking = false;
+    };
+  }, [i18n.language]);
+
   return (
     <Fragment>
       <Box
@@ -17,21 +37,20 @@ export const BlogView: FC = () => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: (t) => t.palette.secondary.light,
-          paddingY: 2,
-          marginY: 8,
+          paddingY: 8,
         }}
       >
         <Container maxWidth="md">
-          <StyledMarkdown>
-            {userManualContent ?? ""}
-          </StyledMarkdown>
+          <StyledMarkdown>{content}</StyledMarkdown>
         </Container>
       </Box>
-      <Box marginBottom={4}>
-        <Container maxWidth="md">
-          <StyledMarkdown>{content ?? ""}</StyledMarkdown>
-        </Container>
-      </Box>
+      {/* {i18n.language === "en" && (
+        <Box marginBottom={4}>
+          <Container maxWidth="md">
+            <StyledMarkdown>{content ?? ""}</StyledMarkdown>
+          </Container>
+        </Box>
+      )} */}
     </Fragment>
   );
 };

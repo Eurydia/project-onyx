@@ -2,11 +2,21 @@ import { Divider, Typography } from "@mui/material";
 import { JsxRuntimeComponents } from "node_modules/react-markdown/lib";
 import { FC } from "react";
 import Markdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
+import rehypeKatex, {
+  Options as KatexOptions,
+} from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 
 const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
+  h1: ({ children, id }) => (
+    <Typography
+      variant="h1"
+      id={id}
+    >
+      {children}
+    </Typography>
+  ),
   h2: ({ children, id }) => (
     <Typography
       variant="h2"
@@ -69,6 +79,10 @@ const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
   ),
 };
 
+const KATEX_OPTION: KatexOptions = {
+  output: "html",
+};
+
 type StyledMarkdownProps = {
   children: string;
 };
@@ -76,10 +90,14 @@ export const StyledMarkdown: FC<StyledMarkdownProps> = (
   props
 ) => {
   const { children } = props;
+
   return (
     <Markdown
       components={COMPONENTS_OVERRIDE}
-      rehypePlugins={[rehypeKatex, rehypeSlug]}
+      rehypePlugins={[
+        [rehypeKatex, KATEX_OPTION],
+        rehypeSlug,
+      ]}
       remarkPlugins={[remarkMath]}
     >
       {children}

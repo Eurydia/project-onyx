@@ -1,9 +1,0 @@
-## Motivation
-
-This project had been on the back burner for a while, partly due my knowledge, or the lack thereof, to build such application. I had plans in mind on the implementaion of the core features, but I never had sat down and integrate them together. When I was on summer break from my bachelor studies in July of 2024, I travelled back home and visited my highschool. There I had opportunities to reconnect with my teachers, one of which was my math teacher. 
-
-She had mentioned that the department would do well to introduce a learning tool to students to help them visualize mathematical concepts, but they had a hard time trying to build one themselves. I saw that this was the perfect opportunity to bring this project, or at the very least, the concept for it, to her.
-
-With concrete specifications and requirements laid out, I began work on this project. At its core, this project has three components; (1) evaluation, (2) visualization, and (3) experimentation.
-
-You can evaluate an arbitrary, well-formed Boolean expression and experiment with the truth value of your expression by changing the truth value of your introduced propositions. As for the visualization, you can see your expression in a syntax tree. I think they are quite neet!

@@ -63,7 +63,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setOrder(nextExprTree.order + 1);
     setMaxOrder(nextExprTree.order + 1);
     setExprTree(nextExprTree);
-  }, [maybeTree, symbolTable, t]);
+  }, [maybeTree]);
 
   const handleTableChange = (k: string, v: boolean) => {
     if (maybeTree === null || !maybeTree.ok) {
@@ -74,6 +74,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       next.set(k, v);
       return next;
     });
+
     // Changing the truth value of the same tree should not cause the playback to reset
     const nextExprTree = syntaxTreetoExprTree(
       maybeTree.data
