@@ -64,7 +64,12 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
         pointerEvents="none"
         style={{ userSelect: "none" }}
       />
-      <Group transform={`translate(${r / 3}, ${r / 3})`}>
+      <Group
+        visibility={
+          data.order < order ? "visible" : "hidden"
+        }
+        transform={`translate(${r / 3}, ${r / 3})`}
+      >
         <rect
           width={60}
           height={30}
