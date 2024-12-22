@@ -73,26 +73,26 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
         <TableBody>
           {perm.map((p, index) => (
             <TableRow
+              selected
               key={"perm" + index}
-              sx={{
-                backgroundColor:
-                  index % 2 === 0
-                    ? alpha(palette.secondary.light, 0.2)
-                    : undefined,
-              }}
+              // sx={{
+              //   backgroundColor:
+              //     index % 2 === 0
+              //       ? alpha(palette.secondary.light, 0.2)
+              //       : undefined,
+              // }}
             >
               {symbols.map((sym, index) => (
                 <TableCell
                   key={"sym" + index}
                   align="center"
+                  sx={{
+                    backgroundColor: p.get(sym)
+                      ? alpha(palette.secondary.light, 0.2)
+                      : alpha(palette.secondary.main, 0.2),
+                  }}
                 >
-                  <Typography
-                    sx={{
-                      fontWeight: p.get(sym)
-                        ? "bold"
-                        : undefined,
-                    }}
-                  >
+                  <Typography>
                     {p.get(sym)
                       ? t("common.true")
                       : t("common.false")}
@@ -103,14 +103,13 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
                 <TableCell
                   key={"col" + colIndex}
                   align="center"
+                  sx={{
+                    backgroundColor: subExpr.eval(p)
+                      ? alpha(palette.secondary.light, 0.2)
+                      : alpha(palette.secondary.main, 0.2),
+                  }}
                 >
-                  <Typography
-                    sx={{
-                      fontWeight: subExpr.eval(p)
-                        ? "bold"
-                        : undefined,
-                    }}
-                  >
+                  <Typography>
                     {subExpr.eval(p)
                       ? t("common.true")
                       : t("common.false")}
