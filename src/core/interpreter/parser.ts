@@ -1,4 +1,7 @@
-import { grammar, semantics } from "$assets/ohm";
+import {
+  grammar,
+  semantics,
+} from "$core/interpreter/grammar";
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 

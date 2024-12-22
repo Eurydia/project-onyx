@@ -10,8 +10,7 @@ const _exprTreeToLatex = (tree: ExprTree): string => {
     case SyntaxTreeNodeKind.UNARY: {
       const child = _exprTreeToLatex(tree.child);
       if (
-        tree.child.nodeType === SyntaxTreeNodeKind.BINARY ||
-        tree.child.nodeType === SyntaxTreeNodeKind.UNARY
+        tree.child.nodeType === SyntaxTreeNodeKind.BINARY
       ) {
         return `${tree.repr} ( ${child} )`;
       }
@@ -20,16 +19,14 @@ const _exprTreeToLatex = (tree: ExprTree): string => {
     case SyntaxTreeNodeKind.BINARY: {
       let left = _exprTreeToLatex(tree.left);
       if (
-        tree.left.nodeType === SyntaxTreeNodeKind.BINARY ||
-        tree.left.nodeType === SyntaxTreeNodeKind.UNARY
+        tree.left.nodeType === SyntaxTreeNodeKind.BINARY
       ) {
         left = `( ${left} )`;
       }
 
       let right = _exprTreeToLatex(tree.right);
       if (
-        tree.right.nodeType === SyntaxTreeNodeKind.BINARY ||
-        tree.right.nodeType === SyntaxTreeNodeKind.UNARY
+        tree.right.nodeType === SyntaxTreeNodeKind.BINARY
       ) {
         right = `( ${right} )`;
       }

@@ -24,6 +24,7 @@ export const StyledLatex: FC<StyledLatexProps> = (
       sx={{
         textWrap: "nowrap",
       }}
+      fontWeight="inherit"
       component="span"
       overflow="auto"
     />

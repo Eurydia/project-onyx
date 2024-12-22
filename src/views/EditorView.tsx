@@ -1,5 +1,6 @@
 import { Editor } from "$components/Editor";
 import { Playground } from "$components/Playground";
+import { TruthTable } from "$components/TruthTable";
 import { parse } from "$core/interpreter/parser";
 import i18nInstance from "$locales/config";
 import { SyntaxTree } from "$types/ast";
@@ -116,11 +117,7 @@ export const EditorView: FC = () => {
           spacing={1}
           padding={2}
         >
-          <Editor
-            // operators={operators}
-            onExecute={handleExecute}
-            // onOperatorChange={handleOperatorChange}
-          />
+          <Editor onExecute={handleExecute} />
           <TabContext value={activeTab}>
             <Box
               sx={{
@@ -137,8 +134,7 @@ export const EditorView: FC = () => {
                   value={0}
                 />
                 <Tab
-                  disabled
-                  label={t("editor.simplifiedPanel")}
+                  label={t("editor.truthTable")}
                   value={1}
                 />
               </TabList>
@@ -150,13 +146,13 @@ export const EditorView: FC = () => {
             >
               <Playground maybeTree={tree} />
             </TabPanel>
-            {/* <TabPanel
-            keepMounted
-            value={1}
-            sx={{ padding: 0 }}
-          >
-            <Playground maybeTree={simplifiedTree} />
-          </TabPanel> */}
+            <TabPanel
+              keepMounted
+              value={1}
+              sx={{ padding: 0 }}
+            >
+              <TruthTable maybeTree={tree} />
+            </TabPanel>
           </TabContext>
         </Stack>
       </Container>

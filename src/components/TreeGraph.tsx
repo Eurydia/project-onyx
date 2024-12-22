@@ -80,7 +80,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
             >
               <Tree
                 root={data}
-                size={[width, height]}
+                size={[width, -height]}
               >
                 {(treeHeir) => (
                   <Group>

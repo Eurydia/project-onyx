@@ -3,7 +3,7 @@ import "$locales/config";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import "$assets/ohm";
+import "$core/interpreter/grammar";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
