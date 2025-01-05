@@ -11,7 +11,6 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Divider,
   Stack,
   Tab,
   Toolbar,
@@ -93,7 +92,7 @@ export const EditorView: FC = () => {
         variant="dense"
         disableGutters
         sx={{
-          flexDirection: "column",
+          flexDirection: "row",
           display: "flex",
           alignItems: "flex-start",
         }}
@@ -109,7 +108,11 @@ export const EditorView: FC = () => {
             TH
           </Button>
         </ButtonGroup>
-        <Divider flexItem />
+        <Button>Solver</Button>
+        <Button>Evaluator</Button>
+        <Button>Simplify</Button>
+        <Button>Tautology Checker</Button>
+        <Button>About</Button>
       </Toolbar>
       <Container maxWidth="lg">
         <Stack
