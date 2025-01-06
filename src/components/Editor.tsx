@@ -1,9 +1,8 @@
 import { PlayArrowRounded } from "@mui/icons-material";
-import { Stack } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EditorRibbon } from "./EditorRibbon";
-import { EditorTextField } from "./EditorTextField";
 import { StyledTooltipButton } from "./StyledTooltipButton";
 
 type EditorProps = {
@@ -38,13 +37,26 @@ export const Editor: FC<EditorProps> = (props) => {
   return (
     <Stack spacing={1}>
       <EditorRibbon onInsertChar={handleInsertChar} />
-      <EditorTextField
+      <TextField
         ref={inputRef}
-        placeholder="not (p and q) iff (not p) or (not q)"
-        value={value}
-        onChange={setValue}
-        onKeyDown={handleKeyDown}
+        fullWidth
+        multiline
         rows={5}
+        value={value}
+        placeholder="not (p and q) iff (not p) or (not q)"
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        slotProps={{
+          input: {
+            autoComplete: "off",
+            autoCorrect: "off",
+            autoCapitalize: "none",
+            spellCheck: false,
+            sx: {
+              fontFamily: "monospace",
+            },
+          },
+        }}
       />
       <StyledTooltipButton
         variant="contained"

@@ -1,3 +1,4 @@
+import { SymbolTable } from "$types/ast";
 import {
   FormControl,
   FormControlLabel,
@@ -5,48 +6,45 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
 type PlaygroundDialogConfigProps = {
-  active: Set<string>;
-  table: Map<string, boolean>;
+  symbolTable: SymbolTable;
   onChange: (k: string, v: boolean) => void;
 };
 export const PlaygroundDialogConfig: FC<
   PlaygroundDialogConfigProps
 > = (props) => {
-  const { active, table, onChange } = props;
+  const { symbolTable: table, onChange } = props;
 
   const { t } = useTranslation("translation", {
     keyPrefix: "common",
   });
-  const propositionText = t("proposition");
 
-  const selected = [...active];
-  selected.toSorted();
+  const symbols = [...table.keys()];
+  symbols.sort();
+
   return (
-    <Stack
-      useFlexGap
-      spacing={1}
-      width="100%"
-    >
-      {selected.map((sym) => (
+    <Stack spacing={1}>
+      {symbols.map((sym) => (
         <FormControl
-          key={"symbol-" + sym}
           fullWidth
+          key={"symbol-" + sym}
         >
           <FormLabel
             sx={{
-              width: "100%",
-              overflowX: "auto",
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 1,
             }}
           >
-            <StyledLatex
-              tex={`\\text{${propositionText}: \`\`$${sym}$''}`}
-            />
+            <Typography>{t("proposition")}</Typography>
+            <StyledLatex tex={`\\text{\`\`$${sym}$''}`} />
           </FormLabel>
           <RadioGroup
             row

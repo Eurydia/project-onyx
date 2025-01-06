@@ -88,7 +88,7 @@ const _syntaxTreetoExprTree = (
   switch (nodeType) {
     case SyntaxTreeNodeKind.CONST: {
       const node: ExprTreeConst = {
-        eval: (_) => tree.value,
+        eval: () => tree.value,
         nodeType,
         order: orderStart + 1,
         repr: tree.value ? "\\top" : `\\bot`,

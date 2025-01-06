@@ -2,7 +2,6 @@ import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { syntaxTreeToPostOrder } from "$core/tree/flatten";
 import { SymbolTable, SyntaxTree } from "$types/ast";
-import { Maybe } from "$types/common";
 import {
   alpha,
   Table,
@@ -18,34 +17,37 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
-type TruthTableProps = {
-  maybeTree: Maybe<SyntaxTree, string> | null;
-};
-export const TruthTable: FC<TruthTableProps> = (props) => {
-  const { maybeTree } = props;
-
-  const { t } = useTranslation();
-  const { palette } = useTheme();
-  if (maybeTree === null || !maybeTree.ok) {
-    return;
-  }
-  const expr = syntaxTreetoExprTree(maybeTree.data);
-  const columns = syntaxTreeToPostOrder(expr);
-  const symbols = [...exprTreeCollectSymbols(expr)];
-  symbols.sort();
-
+const getPermutation = (
+  size: number,
+  symbols: string[]
+) => {
   const perm: SymbolTable[] = [];
-  const size = 1 << symbols.length;
-  for (let i = 0; i < size; i++) {
-    const repr = i
-      .toString(2)
-      .padStart(symbols.length, "0");
+  const permSize = 1 << size;
+  for (let i = 0; i < permSize; i++) {
+    const repr = i.toString(2).padStart(size, "0");
     const p = new Map<string, boolean>();
-    for (let j = 0; j < symbols.length; j++) {
+    for (let j = 0; j < size; j++) {
       p.set(symbols[j], repr[j] === "1");
     }
     perm.push(p);
   }
+  return perm;
+};
+
+type TruthTableProps = {
+  tree: SyntaxTree;
+};
+export const TruthTable: FC<TruthTableProps> = (props) => {
+  const { tree } = props;
+  const { t } = useTranslation();
+  const { palette } = useTheme();
+
+  const expr = syntaxTreetoExprTree(tree);
+  const columns = syntaxTreeToPostOrder(expr);
+  const symbols = [...exprTreeCollectSymbols(expr)];
+  symbols.sort();
+
+  const perm = getPermutation(symbols.length, symbols);
 
   return (
     <TableContainer>
@@ -72,16 +74,7 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
         </TableHead>
         <TableBody>
           {perm.map((p, index) => (
-            <TableRow
-              selected
-              key={"perm" + index}
-              // sx={{
-              //   backgroundColor:
-              //     index % 2 === 0
-              //       ? alpha(palette.secondary.light, 0.2)
-              //       : undefined,
-              // }}
-            >
+            <TableRow key={"perm" + index}>
               {symbols.map((sym, index) => (
                 <TableCell
                   key={"sym" + index}

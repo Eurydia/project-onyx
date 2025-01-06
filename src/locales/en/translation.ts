@@ -41,6 +41,15 @@ export const en = {
         },
       },
       solver: {
+        truthTable: {
+          title: "Truth Table",
+        },
+        stepByStep: {
+          title: "Step-by-step Evaluation",
+        },
+        graph: {
+          title: "Interactive Graph",
+        },
         tab: {
           graph: "Graph",
           truthTable: "Truth table",
@@ -54,6 +63,11 @@ export const en = {
     },
 
     common: {
+      truthTable: {
+        empty: "Nothing to see here!",
+        error:
+          "Something has gone wrong. Unable to display truth table for current expression.",
+      },
       proposition: "Proposition",
       truthValue: "Truth value",
       true: "True",

@@ -1,13 +1,10 @@
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
-import { SyntaxTree } from "$types/ast";
-import { Maybe } from "$types/common";
+import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { ExprTree } from "$types/graph";
 import {
   alpha,
   Box,
   Divider,
   Stack,
-  Typography,
   useTheme,
 } from "@mui/material";
 import {
@@ -16,58 +13,39 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
+import { PlaygroundDialogConfig } from "./PlaygroundDialogConfig";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
-  maybeTree: Maybe<SyntaxTree, string> | null;
+  exprTree: ExprTree;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
-  const { maybeTree } = props;
-
-  const { t } = useTranslation();
+  const { exprTree } = props;
   const { palette, shape } = useTheme();
+  const [step, setStep] = useState(1);
+  const [maxStep, setMaxStep] = useState(1);
   const [symbolTable, setSymbolTable] = useState(
     new Map<string, boolean>()
   );
 
-  const [order, setOrder] = useState(0);
-  const [maxOrder, setMaxOrder] = useState(0);
-  const [exprTree, setExprTree] = useState<ExprTree | null>(
-    null
-  );
-
   useEffect(() => {
-    if (maybeTree === null || !maybeTree.ok) {
-      setOrder(0);
-      setMaxOrder(0);
-      setExprTree(null);
-      return;
+    setStep(1);
+    setMaxStep(exprTree.order + 1);
+    const nextSymbolTable = new Map<string, boolean>();
+    const nextSymbols = exprTreeCollectSymbols(exprTree);
+    for (const symbol of nextSymbols) {
+      nextSymbolTable.set(symbol, true);
     }
-    const nextExprTree = syntaxTreetoExprTree(
-      maybeTree.data
-    );
-    setOrder(nextExprTree.order + 1);
-    setMaxOrder(nextExprTree.order + 1);
-    setExprTree(nextExprTree);
-  }, [maybeTree]);
+    setSymbolTable(nextSymbolTable);
+  }, [exprTree]);
 
-  const handleTableChange = (k: string, v: boolean) => {
-    if (maybeTree === null || !maybeTree.ok) {
-      return;
-    }
+  const handleSymbolChange = (k: string, v: boolean) => {
     setSymbolTable((prev) => {
       const next = new Map(prev);
       next.set(k, v);
       return next;
     });
-
-    // Changing the truth value of the same tree should not cause the playback to reset
-    const nextExprTree = syntaxTreetoExprTree(
-      maybeTree.data
-    );
-    setExprTree(nextExprTree);
   };
 
   const handleGraphKeyPress = (
@@ -76,26 +54,24 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     const { key } = e;
     if (key === "ArrowUp" || key === "ArrowRight") {
       e.preventDefault();
-      setOrder((prev) => Math.min(maxOrder, prev + 1));
+      setStep((prev) => Math.min(maxStep, prev + 1));
     } else if (key === "ArrowLeft" || key === "ArrowDown") {
       e.preventDefault();
-      setOrder((prev) => Math.max(0, prev - 1));
+      setStep((prev) => Math.max(0, prev - 1));
     }
   };
 
-  let treeGraphText: string = t(
-    "playground.graph.noEvaluationToDisplay"
-  );
-  if (maybeTree !== null) {
-    if (!maybeTree.ok) {
-      treeGraphText = t(
-        "playground.graph.cannotDisplayEvaluation"
-      );
-    }
-  }
-
   return (
-    <Stack spacing={1}>
+    <Stack spacing={2}>
+      <Box
+        maxHeight={400}
+        overflow="auto"
+      >
+        <PlaygroundDialogConfig
+          symbolTable={symbolTable}
+          onChange={handleSymbolChange}
+        />
+      </Box>
       <Box
         sx={{
           borderWidth: 4,
@@ -105,11 +81,10 @@ export const Playground: FC<PlaygroundProps> = (props) => {
         }}
       >
         <PlaygroundPlaybackControl
-          disabled={exprTree === null}
-          maxValue={maxOrder}
+          maxValue={maxStep}
           minValue={1}
-          value={order}
-          onChange={setOrder}
+          value={step}
+          onChange={setStep}
         />
         <Divider flexItem />
         <Box
@@ -120,16 +95,12 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           alignItems="center"
           justifyContent="center"
         >
-          {exprTree !== null ? (
-            <TreeGraph
-              symbolTable={symbolTable}
-              order={order}
-              tree={exprTree}
-              onKeyDown={handleGraphKeyPress}
-            />
-          ) : (
-            <Typography>{treeGraphText}</Typography>
-          )}
+          <TreeGraph
+            symbolTable={symbolTable}
+            order={step}
+            tree={exprTree}
+            onKeyDown={handleGraphKeyPress}
+          />
         </Box>
       </Box>
     </Stack>

@@ -10,15 +10,13 @@ import { StyledIconButton } from "./StyledIconButton";
 type PlaygroundPlaybackControlProps = {
   maxValue: number;
   minValue: number;
-  disabled: boolean;
   value: number;
   onChange: (v: number) => void;
 };
 export const PlaygroundPlaybackControl: FC<
   PlaygroundPlaybackControlProps
 > = (props) => {
-  const { disabled, maxValue, minValue, onChange, value } =
-    props;
+  const { maxValue, minValue, onChange, value } = props;
 
   const { t } = useTranslation("translation", {
     keyPrefix: "playground.playback",
@@ -57,10 +55,10 @@ export const PlaygroundPlaybackControl: FC<
   // and the slider out of view
   // but let's be real, we run into other problem any way
   // if the evaluation of a tree that large
-  const maxLabel = disabled ? "0" : maxValue.toString();
-  const valueLabel = disabled
-    ? "0"
-    : value.toString().padStart(maxLabel.length, "0");
+  const maxLabel = maxValue.toString();
+  const valueLabel = value
+    .toString()
+    .padStart(maxLabel.length, "0");
   const label = `${valueLabel}/${maxLabel}`;
 
   return (
@@ -92,7 +90,6 @@ export const PlaygroundPlaybackControl: FC<
         <KeyboardArrowRightRounded />
       </StyledIconButton>
       <Slider
-        disabled={disabled}
         valueLabelDisplay="auto"
         onChange={(_, v) => onChange(v as number)}
         value={value}

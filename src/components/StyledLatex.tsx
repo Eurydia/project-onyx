@@ -21,12 +21,13 @@ export const StyledLatex: FC<StyledLatexProps> = (
   return (
     <Typography
       ref={ref}
-      sx={{
-        textWrap: "nowrap",
-      }}
       fontWeight="inherit"
       component="span"
       overflow="auto"
+      sx={{
+        textWrap: "nowrap",
+        userSelect: "none",
+      }}
     />
   );
 };
