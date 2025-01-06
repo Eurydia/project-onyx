@@ -1,7 +1,8 @@
 import { TextField } from "@mui/material";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
 type EditorTextFieldProps = {
+  ref: RefObject<HTMLInputElement>;
   value: string;
   rows: number;
   onChange: (value: string) => void;
@@ -11,10 +12,18 @@ type EditorTextFieldProps = {
 export const EditorTextField: FC<EditorTextFieldProps> = (
   props
 ) => {
-  const { placeholder, rows, value, onChange, onKeyDown } =
-    props;
+  const {
+    ref,
+    placeholder,
+    rows,
+    value,
+    onChange,
+    onKeyDown,
+  } = props;
+
   return (
     <TextField
+      ref={ref}
       fullWidth
       multiline
       rows={rows}

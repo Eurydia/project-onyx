@@ -1,14 +1,13 @@
 import { Divider, Typography } from "@mui/material";
-import { JsxRuntimeComponents } from "node_modules/react-markdown/lib";
 import { FC } from "react";
-import Markdown from "react-markdown";
+import Markdown, { Components } from "react-markdown";
 import rehypeKatex, {
   Options as KatexOptions,
 } from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
 
-const COMPONENTS_OVERRIDE: Partial<JsxRuntimeComponents> = {
+const COMPONENTS_OVERRIDE: Partial<Components> = {
   h1: ({ children, id }) => (
     <Typography
       variant="h1"

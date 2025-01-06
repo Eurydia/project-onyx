@@ -1,12 +1,18 @@
 import "$core/interpreter/parser";
-import { EditorView } from "$views/EditorView";
-import { BlogView } from "$views/TheoremBlogView";
+import { NavigationLayout } from "$layouts/NavigationLayout";
+import { HomeView } from "$views/HomeView";
+import { SolverView } from "$views/SolverView";
+import { TheoremView } from "$views/TheoremView";
 import {
   CssBaseline,
   GlobalStyles,
   ThemeProvider,
 } from "@mui/material";
 import { FC } from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router";
 import { theme } from "./theme";
 
 const globalStyles = (
@@ -21,13 +27,35 @@ const globalStyles = (
   />
 );
 
+const router = createBrowserRouter(
+  [
+    { index: true, element: <HomeView /> },
+    {
+      path: "/",
+      element: <NavigationLayout />,
+      children: [
+        {
+          path: "/solver",
+          element: <SolverView />,
+        },
+        {
+          path: "/theorem",
+          element: <TheoremView />,
+        },
+      ],
+    },
+  ],
+  {
+    basename: "/project-onyx",
+  }
+);
+
 export const App: FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {globalStyles}
-      <EditorView />
-      <BlogView />
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 };

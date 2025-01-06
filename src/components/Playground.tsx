@@ -1,11 +1,7 @@
-import {
-  syntaxTreetoExprTree,
-  syntaxTreeToLatex,
-} from "$core/tree/conversion";
+import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 import { ExprTree } from "$types/graph";
-import { HelpOutlineRounded } from "@mui/icons-material";
 import {
   alpha,
   Box,
@@ -18,14 +14,10 @@ import {
   FC,
   KeyboardEvent,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { LatexDisplay } from "./LatexDisplay";
-import { PlaygroundDialog } from "./PlaygroundDialog";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
-import { StyledAlert } from "./StyledAlert";
 import { TreeGraph } from "./TreeGraph";
 
 type PlaygroundProps = {
@@ -36,14 +28,10 @@ export const Playground: FC<PlaygroundProps> = (props) => {
 
   const { t } = useTranslation();
   const { palette, shape } = useTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [symbolTable, setSymbolTable] = useState(
     new Map<string, boolean>()
   );
 
-  const [selectedNode, setSelectedNode] =
-    useState<ExprTree | null>(null);
   const [order, setOrder] = useState(0);
   const [maxOrder, setMaxOrder] = useState(0);
   const [exprTree, setExprTree] = useState<ExprTree | null>(
@@ -82,11 +70,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     setExprTree(nextExprTree);
   };
 
-  const handleNodeClick = (value: ExprTree) => {
-    setDialogOpen(true);
-    setSelectedNode(value);
-  };
-
   const handleGraphKeyPress = (
     e: KeyboardEvent<SVGSVGElement>
   ) => {
@@ -100,50 +83,20 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     }
   };
 
-  let treeGraphText: string | null = null;
-  let text: string | null = null;
+  let treeGraphText: string = t(
+    "playground.graph.noEvaluationToDisplay"
+  );
   if (maybeTree !== null) {
-    if (maybeTree.ok) {
-      text = syntaxTreeToLatex(maybeTree.data);
-    } else {
-      text = maybeTree.other.replaceAll(/"(.*)"/g, '``$1"');
-      text = `\\textcolor{${palette.error.dark}}{\\text{${text}}}`;
+    if (!maybeTree.ok) {
       treeGraphText = t(
         "playground.graph.cannotDisplayEvaluation"
       );
     }
-  } else {
-    treeGraphText = t(
-      "playground.graph.noEvaluationToDisplay"
-    );
   }
 
   return (
     <Stack spacing={1}>
-      <LatexDisplay
-        text={text}
-        error={maybeTree !== null && !maybeTree.ok}
-        emptyText={t("playground.feedback.empty")}
-      />
-      <StyledAlert>
-        <Stack
-          padding={2}
-          direction="row"
-          spacing={1}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <HelpOutlineRounded
-            fontSize="medium"
-            color="info"
-          />
-          <Typography>
-            {t("playground.feedback.dialogInfo")}
-          </Typography>
-        </Stack>
-      </StyledAlert>
       <Box
-        ref={containerRef}
         sx={{
           borderWidth: 4,
           borderStyle: "solid",
@@ -159,7 +112,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           onChange={setOrder}
         />
         <Divider flexItem />
-
         <Box
           position="relative"
           height="75vh"
@@ -173,7 +125,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
               symbolTable={symbolTable}
               order={order}
               tree={exprTree}
-              onNodeClick={handleNodeClick}
               onKeyDown={handleGraphKeyPress}
             />
           ) : (
@@ -181,15 +132,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           )}
         </Box>
       </Box>
-      {selectedNode !== null && (
-        <PlaygroundDialog
-          tree={selectedNode}
-          open={dialogOpen}
-          value={symbolTable}
-          onChange={handleTableChange}
-          onClose={() => setDialogOpen(false)}
-        />
-      )}
     </Stack>
   );
 };

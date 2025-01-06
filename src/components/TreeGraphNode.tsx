@@ -9,14 +9,13 @@ import { useTranslation } from "react-i18next";
 
 type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
-  onClick: (value: ExprTree) => void;
   order: number;
   symbolTable: SymbolTable;
 };
 export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
-  const { order, node, onClick, symbolTable } = props;
+  const { order, node, symbolTable } = props;
   const { t } = useTranslation();
   const { x, y, data } = node;
   const { palette, typography } = useTheme();
@@ -43,10 +42,8 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
     <Group
       top={y}
       left={x}
-      onClick={() => onClick(data)}
       opacity={isNodeVisibleNow ? 1 : 0.5}
       visibility={isNodeVisible ? "visible" : "hidden"}
-      style={{ cursor: "pointer" }}
     >
       <circle
         strokeWidth={isNodeHighlighted ? 5 : 0}
@@ -80,7 +77,6 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
         <text
           x="30"
           y="22"
-          // fill={palette.secondary.contrastText}
           fillOpacity={0.5}
           textAnchor="middle"
           pointerEvents="none"

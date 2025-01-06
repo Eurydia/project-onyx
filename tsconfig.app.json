@@ -10,6 +10,7 @@
     "paths": {
       "$App/*": ["src/App/*"],
       "$assets/*": ["src/assets/*"],
+      "$layouts/*": ["src/layouts/*"],
       "$blogs/*": ["src/blogs/*"],
       "$components/*": ["src/components/*"],
       "$core/*": ["src/core/*"],

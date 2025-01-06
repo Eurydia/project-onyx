@@ -26,6 +26,7 @@ export const StyledTooltipButton: FC<
         variant={variant}
         startIcon={startIcon}
         onClick={onClick}
+        sx={{ maxWidth: "fit-content" }}
       >
         {children}
       </Button>

@@ -1,5 +1,58 @@
 export const en = {
   translation: {
+    nav: {
+      home: "Home",
+      solver: "Solver",
+      evaluator: "Evaluator",
+      simplifier: "Simplifier",
+      checker: "Tautology checker",
+    },
+    view: {
+      home: {
+        launch: "Open",
+        read: "Read",
+        calculators: "Tools",
+        resources: "Resources",
+        card: {
+          solver: {
+            title: "Solver",
+            desc: "Solve an expression with truth table, expression tree, and step-by-step calculation.",
+          },
+          evaluator: {
+            title: "Evaluator",
+            desc: "Evaluate expressions according to given truth values.",
+          },
+          simplifier: {
+            title: "Simplifier",
+            desc: "Transform an expression into an equivalent, reduced form.",
+          },
+          checker: {
+            title: "Tautology checker",
+            desc: "Check if an expression is a tautology.",
+          },
+          theorem: {
+            title: "Useful theorems",
+            desc: "A collection of theorems on zeroth-order logic.",
+          },
+          about: {
+            title: "Documentation",
+            desc: "Learn more about the project's implementation and design.",
+          },
+        },
+      },
+      solver: {
+        tab: {
+          graph: "Graph",
+          truthTable: "Truth table",
+          stepByStep: "Step-by-step",
+        },
+        feedback: {
+          noExpression:
+            "No expression to display. Evaluate one to see how it's interpreted!",
+        },
+      },
+    },
+
     common: {
       proposition: "Proposition",
       truthValue: "Truth value",
@@ -18,15 +71,13 @@ export const en = {
       originalPanel: "Original",
       simplifiedPanel: "Simplified",
       howToUse: "How to use?",
-      run: " Run",
+      run: "Run",
       allowedOperatorLabel: "Connectives to keep",
     },
     playground: {
       feedback: {
         dialogInfo:
           "Tap on a circle to modify the truth value of the expression.",
-        empty:
-          "No expression to display. Evaluate one to see how it's interpreted!",
       },
       graph: {
         noEvaluationToDisplay:

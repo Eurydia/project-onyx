@@ -30,17 +30,10 @@ type TreeGraphProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
-  onNodeClick: (value: ExprTree) => void;
   onKeyDown: (e: KeyboardEvent<SVGSVGElement>) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const {
-    tree,
-    symbolTable,
-    order,
-    onNodeClick,
-    onKeyDown,
-  } = props;
+  const { tree, symbolTable, order, onKeyDown } = props;
 
   const { t } = useTranslation();
   const data = hierarchy(tree, flatten_expr);
@@ -63,10 +56,10 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
             width="100%"
             height="100%"
             ref={zoom.containerRef}
+            onKeyDown={onKeyDown}
             style={{
               touchAction: "none",
             }}
-            onKeyDown={onKeyDown}
           >
             <g
               onTouchStart={zoom.dragStart}
@@ -98,7 +91,6 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                           key={`node-${i}`}
                           order={order}
                           node={node}
-                          onClick={onNodeClick}
                           symbolTable={symbolTable}
                         />
                       ))}
