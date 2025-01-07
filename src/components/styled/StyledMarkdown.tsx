@@ -5,21 +5,24 @@ import rehypeKatex, {
   Options as KatexOptions,
 } from "rehype-katex";
 import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
 const COMPONENTS_OVERRIDE: Partial<Components> = {
   h1: ({ children, id }) => (
     <Typography
-      variant="h1"
       id={id}
+      fontWeight={900}
+      fontSize="xx-large"
     >
       {children}
     </Typography>
   ),
   h2: ({ children, id }) => (
     <Typography
-      variant="h2"
       id={id}
+      fontWeight={700}
+      fontSize="x-large"
     >
       {children}
     </Typography>
@@ -27,36 +30,14 @@ const COMPONENTS_OVERRIDE: Partial<Components> = {
   h3: ({ children, id }) => (
     <Typography
       id={id}
-      variant="h3"
-    >
-      {children}
-    </Typography>
-  ),
-  h4: ({ id, children }) => (
-    <Typography
-      id={id}
-      variant="h4"
+      fontWeight={500}
+      fontSize="large"
     >
       {children}
     </Typography>
   ),
   p: ({ children }) => (
-    <Typography
-      component="p"
-      gutterBottom
-    >
-      {children}
-    </Typography>
-  ),
-  // code: ({ children }) => <StyledKBD>{children}</StyledKBD>,
-  em: ({ children }) => (
-    <Typography
-      fontWeight="bold"
-      component="em"
-      fontStyle="normal"
-    >
-      {children}
-    </Typography>
+    <Typography gutterBottom>{children}</Typography>
   ),
   hr: () => (
     <Divider
@@ -97,7 +78,7 @@ export const StyledMarkdown: FC<StyledMarkdownProps> = (
         [rehypeKatex, KATEX_OPTION],
         rehypeSlug,
       ]}
-      remarkPlugins={[remarkMath]}
+      remarkPlugins={[remarkMath, remarkGfm]}
     >
       {children}
     </Markdown>

@@ -37,13 +37,6 @@ export let theme = createTheme({
         }),
       },
     },
-    MuiTypography: {
-      defaultProps: {
-        sx: {
-          userSelect: "none",
-        },
-      },
-    },
     MuiDialogActions: {
       defaultProps: {
         sx: { justifyContent: "flex-start" },

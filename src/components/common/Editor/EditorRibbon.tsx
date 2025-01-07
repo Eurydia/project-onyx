@@ -1,8 +1,8 @@
+import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledTooltipButton } from "$components/styled/StyledTooltipButton";
 import { ButtonGroup, Toolbar } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "./StyledLatex";
-import { StyledTooltipButton } from "./StyledTooltipButton";
 
 const OPERATOR = [
   {
@@ -45,8 +45,8 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
 
   return (
     <Toolbar
-      variant="dense"
       disableGutters
+      variant="dense"
       sx={{
         gap: 1,
         display: "flex",

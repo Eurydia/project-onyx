@@ -1,9 +1,10 @@
+import { StyledAlert } from "$components/styled/StyledAlert";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { syntaxTreeToPostOrder } from "$core/tree/flatten";
 import { SymbolTable } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import {
-  Alert,
   alpha,
   Button,
   Stack,
@@ -16,9 +17,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "./StyledLatex";
 
 const getPermutation = (
   size: number,
@@ -43,28 +43,31 @@ type TruthTableProps = {
 export const TruthTable: FC<TruthTableProps> = (props) => {
   const { exprTree } = props;
   const { t } = useTranslation();
-  const { palette, shape } = useTheme();
+  const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
-  const columns = syntaxTreeToPostOrder(exprTree);
-  const symbols = [...exprTreeCollectSymbols(exprTree)];
-  symbols.sort();
+
+  const { columns, symbols } = useMemo(() => {
+    const _columns = syntaxTreeToPostOrder(exprTree);
+    const _symbols = [...exprTreeCollectSymbols(exprTree)];
+    _symbols.sort();
+    return { columns: _columns, symbols: _symbols };
+  }, [exprTree]);
+
+  const perm = useMemo(() => {
+    if (symbols.length > 3 && !userConfirmed) {
+      return [];
+    }
+    return getPermutation(symbols.length, symbols);
+  }, [symbols, userConfirmed]);
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
       <Stack spacing={1}>
-        <Alert
-          icon={false}
-          severity="warning"
-          sx={{
-            borderRadius: shape.borderRadius,
-            padding: 4,
-          }}
-        >
+        <StyledAlert severity="warning">
           <Typography>
             {t("common.truthTable.warning")}
           </Typography>
-        </Alert>
-
+        </StyledAlert>
         <Button
           sx={{
             width: "fit-content",
@@ -80,11 +83,14 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
     );
   }
 
-  const perm = getPermutation(symbols.length, symbols);
-
   return (
-    <TableContainer>
-      <Table>
+    <TableContainer
+      sx={{
+        maxHeight: 500,
+        overflowY: "auto",
+      }}
+    >
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             {symbols.map((sym, index) => (

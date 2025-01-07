@@ -1,0 +1,84 @@
+**Quick start**
+
+First, enter a Boolean expression into the input field. Then, evaluate the expression by pressing the RUN button. Try it with this expression:
+
+$$
+\text{not (p and q) iff (not p) or (not q)}
+$$
+
+You should see the result of the evalutation which includes; a step-by-step evaluation, and a truth table.
+
+---
+
+**More on the expressions**
+
+Only zeroth-order logic expressions are supported, so this section will cover propositions and logical connectives.
+
+A proposition is denoted by lowercase or uppercase Latin alphabets, but a proposition cannot contain any other symbols.
+
+For example,
+
+$$
+\text{$p$, $q$, $a$, $b$, $P$, $Q$, $Pq$}
+$$
+
+are all valid names for a proposition, but 
+
+$$
+\text{$a1$, $b\_3$, $p!$, $a*$}
+$$
+
+are not recognized by the application, as such, it is important to use valid names for propositions. Otherwise, the application will not evaluate the given expression.
+  
+There are five supported operators;
+
+**Negation** *(symbol: $\lnot$, textual: `not`)*
+
+$$
+\begin{align*}
+&\lnot P\\
+&\text{not $P$}
+\end{align*}
+$$
+
+**Conjunction** *(symbol: $\land$, textual: `and`)*
+
+$$
+\begin{align*}
+&P\land Q\\
+&\text{$P$ and $Q$}
+\end{align*}
+$$
+
+**Disjunction** *(symbol: $\lor$, textual: `or`)*
+
+$$
+\begin{align*}
+&P\lor Q\\
+&\text{$P$ or $Q$}
+\end{align*}
+$$
+
+**Implication** *(symbol: $\implies$, textual: `implies`)*
+
+$$
+\begin{align*}
+&P\implies Q\\
+&\text{$P$ implies $Q$}
+\end{align*}
+$$
+
+**Equivalence** *(symbol: $\iff$, textual: `iff`)*
+
+$$
+\begin{align*}
+&P\iff Q\\
+&\text{$P$ iff $Q$}
+\end{align*}
+$$
+
+For better ergonomics, it is recommended to use the textual representation of each connective rather than its symbolic representation even though they are interchangeable.
+
+Alternatively, you can quickly insert a symbol using the toolbar provided above the input field.
+
+## More on the evaluation results

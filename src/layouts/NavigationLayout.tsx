@@ -1,4 +1,4 @@
-import { LanguageSwitcher } from "$components/LanguageSwitcher";
+import { LanguageSwitcher } from "$components/common/LanguageSwitcher";
 import { Divider, Stack, Toolbar } from "@mui/material";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,3 +1,4 @@
+import { StyledIconButton } from "$components/styled/StyledIconButton";
 import {
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,
@@ -5,7 +6,6 @@ import {
 import { Slider, Stack, Typography } from "@mui/material";
 import { FC, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledIconButton } from "./StyledIconButton";
 
 type PlaygroundPlaybackControlProps = {
   maxValue: number;

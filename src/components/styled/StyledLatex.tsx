@@ -26,7 +26,6 @@ export const StyledLatex: FC<StyledLatexProps> = (
       overflow="auto"
       sx={{
         textWrap: "nowrap",
-        userSelect: "none",
       }}
     />
   );

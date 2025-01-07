@@ -13,9 +13,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { PlaygroundDialogConfig } from "./PlaygroundDialogConfig";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
-import { TreeGraph } from "./TreeGraph";
+import { PlaygroundSymbolConfig } from "./PlaygroundSymbolConfig";
+import { TreeGraph } from "./TreeGraph/TreeGraph";
 
 type PlaygroundProps = {
   exprTree: ExprTree;
@@ -63,15 +63,10 @@ export const Playground: FC<PlaygroundProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Box
-        maxHeight={400}
-        overflow="auto"
-      >
-        <PlaygroundDialogConfig
-          symbolTable={symbolTable}
-          onChange={handleSymbolChange}
-        />
-      </Box>
+      <PlaygroundSymbolConfig
+        symbolTable={symbolTable}
+        onChange={handleSymbolChange}
+      />
       <Box
         sx={{
           borderWidth: 4,

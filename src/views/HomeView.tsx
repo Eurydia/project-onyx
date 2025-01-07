@@ -1,5 +1,5 @@
-import { LanguageSwitcher } from "$components/LanguageSwitcher";
-import { StyledCard } from "$components/StyledCard";
+import { LanguageSwitcher } from "$components/common/LanguageSwitcher";
+import { StyledCard } from "$components/styled/StyledCard";
 import {
   FunctionsRounded,
   MenuBookRounded,

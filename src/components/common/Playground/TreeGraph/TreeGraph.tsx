@@ -1,3 +1,4 @@
+import { StyledFAB } from "$components/styled/StyledFAB";
 import {
   SymbolTable,
   SyntaxTreeNodeKind,
@@ -9,7 +10,6 @@ import { hierarchy, Tree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
 import { FC, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledFAB } from "./StyledFAB";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
 
@@ -37,7 +37,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
 
   const { t } = useTranslation();
   const data = hierarchy(tree, flatten_expr);
-  const height = (data.height + 1) * 100;
+  const height = data.height * 100;
   const width = (data.leaves().length + 1) * 150;
 
   return (

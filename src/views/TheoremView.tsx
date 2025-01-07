@@ -1,6 +1,6 @@
 import UserManualBlogEN from "$assets/blogs/UserManual/en.txt";
 import UserManualBlogTH from "$assets/blogs/UserManual/th.txt";
-import { StyledMarkdown } from "$components/StyledMarkdown";
+import { StyledMarkdown } from "$components/styled/StyledMarkdown";
 import { Container } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

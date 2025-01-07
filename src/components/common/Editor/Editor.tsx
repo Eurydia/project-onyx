@@ -2,8 +2,8 @@ import { PlayArrowRounded } from "@mui/icons-material";
 import { Stack, TextField } from "@mui/material";
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledTooltipButton } from "../../styled/StyledTooltipButton";
 import { EditorRibbon } from "./EditorRibbon";
-import { StyledTooltipButton } from "./StyledTooltipButton";
 
 type EditorProps = {
   onExecute: (value: string) => void;
@@ -38,7 +38,7 @@ export const Editor: FC<EditorProps> = (props) => {
     <Stack spacing={1}>
       <EditorRibbon onInsertChar={handleInsertChar} />
       <TextField
-        ref={inputRef}
+        inputRef={inputRef}
         fullWidth
         multiline
         rows={5}
@@ -62,9 +62,9 @@ export const Editor: FC<EditorProps> = (props) => {
         variant="contained"
         startIcon={<PlayArrowRounded />}
         onClick={handleExecute}
-        title={"CTRL + ENTER"}
+        title={t("component.common.editor.run.tooltip")}
       >
-        {t("editor.run")}
+        {t("component.common.editor.run.label")}
       </StyledTooltipButton>
     </Stack>
   );

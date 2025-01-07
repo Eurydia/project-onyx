@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useFetchMarkdown = (path: string) => {
-  const [content, setContent] = useState<string | null>(
-    null
-  );
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     let isWorking = true;

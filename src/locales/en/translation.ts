@@ -1,5 +1,22 @@
 export const en = {
   translation: {
+    component: {
+      playground: {
+        config: {
+          true: "True",
+          false: "False",
+          editTruthValue: "Modify Truth Values",
+        },
+      },
+      common: {
+        editor: {
+          run: {
+            label: "Run",
+            tooltip: "Or (CTRL + ENTER)",
+          },
+        },
+      },
+    },
     nav: {
       home: "Home",
       solver: "Solver",
@@ -48,24 +65,22 @@ export const en = {
           title: "Step-by-step Evaluation",
         },
         graph: {
-          title: "Interactive Graph",
-        },
-        tab: {
-          graph: "Graph",
-          truthTable: "Truth table",
-          stepByStep: "Step-by-step",
+          title: "Step-by-step Evaluation",
         },
         feedback: {
           noExpression:
             "No expression to display. Evaluate one to see how it's interpreted!",
         },
+        howToUse: {
+          title:
+            "Not sure where to begin? Read the User Manual here.",
+          link: "Go to User Manual",
+        },
       },
     },
-
     common: {
       truthTable: {
-        confirm:
-          "I understand and I want to see the truth table of this expression",
+        confirm: "I understand",
         warning:
           "The truth table for this expression is automatically hidden due to its size. You can press the button below to show the table, but this process can take a long time to complete or even crash the application. For expressions with many propositions, truth table is not the recommemnded way to visualize them.",
       },

@@ -17,7 +17,6 @@ type StyledCardProps = {
   href: string;
   hrefLabel: string;
 };
-
 export const StyledCard: FC<StyledCardProps> = (props) => {
   const { desc, href, title, hrefLabel } = props;
   return (
