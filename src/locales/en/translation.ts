@@ -64,9 +64,10 @@ export const en = {
 
     common: {
       truthTable: {
-        empty: "Nothing to see here!",
-        error:
-          "Something has gone wrong. Unable to display truth table for current expression.",
+        confirm:
+          "I understand and I want to see the truth table of this expression",
+        warning:
+          "The truth table for this expression is automatically hidden due to its size. You can press the button below to show the table, but this process can take a long time to complete or even crash the application. For expressions with many propositions, truth table is not the recommemnded way to visualize them.",
       },
       proposition: "Proposition",
       truthValue: "Truth value",
@@ -100,7 +101,6 @@ export const en = {
           "Cannot display evaluation step. Please check the expression and try again.",
         center: "Center Graph",
       },
-
       playback: {
         forward: "Forward",
         rewind: "Rewind",

@@ -17,7 +17,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const SolverView: FC = () => {
@@ -52,6 +52,13 @@ export const SolverView: FC = () => {
     }
   }
 
+  const exprTree = useMemo(() => {
+    if (maybeTree !== null && maybeTree.ok) {
+      return syntaxTreetoExprTree(maybeTree.data);
+    }
+    return null;
+  }, [maybeTree]);
+
   return (
     <Stack
       useFlexGap
@@ -76,7 +83,7 @@ export const SolverView: FC = () => {
         text={text}
         error={maybeTree !== null && !maybeTree.ok}
       />
-      {maybeTree !== null && maybeTree.ok && (
+      {exprTree !== null && (
         <Stack
           spacing={2}
           paddingY={4}
@@ -85,18 +92,16 @@ export const SolverView: FC = () => {
             fontSize="x-large"
             fontWeight={800}
           >
-            {t("view.solver.truthTable.title")}
+            {t("view.solver.graph.title")}
           </Typography>
-          <TruthTable tree={maybeTree.data} />
+          <Playground exprTree={exprTree} />
           <Typography
             fontSize="x-large"
             fontWeight={800}
           >
-            {t("view.solver.graph.title")}
+            {t("view.solver.truthTable.title")}
           </Typography>
-          <Playground
-            exprTree={syntaxTreetoExprTree(maybeTree.data)}
-          />
+          <TruthTable exprTree={exprTree} />
         </Stack>
       )}
     </Stack>

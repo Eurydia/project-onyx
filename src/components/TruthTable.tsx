@@ -1,9 +1,12 @@
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { syntaxTreeToPostOrder } from "$core/tree/flatten";
-import { SymbolTable, SyntaxTree } from "$types/ast";
+import { SymbolTable } from "$types/ast";
+import { ExprTree } from "$types/graph";
 import {
+  Alert,
   alpha,
+  Button,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +16,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "./StyledLatex";
 
@@ -35,17 +38,47 @@ const getPermutation = (
 };
 
 type TruthTableProps = {
-  tree: SyntaxTree;
+  exprTree: ExprTree;
 };
 export const TruthTable: FC<TruthTableProps> = (props) => {
-  const { tree } = props;
+  const { exprTree } = props;
   const { t } = useTranslation();
-  const { palette } = useTheme();
-
-  const expr = syntaxTreetoExprTree(tree);
-  const columns = syntaxTreeToPostOrder(expr);
-  const symbols = [...exprTreeCollectSymbols(expr)];
+  const { palette, shape } = useTheme();
+  const [userConfirmed, setUserConfirmed] = useState(false);
+  const columns = syntaxTreeToPostOrder(exprTree);
+  const symbols = [...exprTreeCollectSymbols(exprTree)];
   symbols.sort();
+
+  if (symbols.length > 3 && !userConfirmed) {
+    return (
+      <Stack spacing={1}>
+        <Alert
+          icon={false}
+          severity="warning"
+          sx={{
+            borderRadius: shape.borderRadius,
+            padding: 4,
+          }}
+        >
+          <Typography>
+            {t("common.truthTable.warning")}
+          </Typography>
+        </Alert>
+
+        <Button
+          sx={{
+            width: "fit-content",
+          }}
+          disableElevation
+          disableRipple
+          variant="contained"
+          onClick={() => setUserConfirmed(true)}
+        >
+          {t("common.truthTable.confirm")}
+        </Button>
+      </Stack>
+    );
+  }
 
   const perm = getPermutation(symbols.length, symbols);
 
