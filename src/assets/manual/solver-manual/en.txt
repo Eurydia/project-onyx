@@ -77,8 +77,4 @@ $$
 \end{align*}
 $$
 
-For better ergonomics, it is recommended to use the textual representation of each connective rather than its symbolic representation even though they are interchangeable.
-
-Alternatively, you can quickly insert a symbol using the toolbar provided above the input field.
-
-## More on the evaluation results
+For better ergonomics, it is recommended to use the textual representation of each connective rather than its symbolic representation even though they are interchangeable. Alternatively, you can quickly insert a symbol using the toolbar provided above the input field.

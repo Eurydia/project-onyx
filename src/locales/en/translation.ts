@@ -72,9 +72,8 @@ export const en = {
             "No expression to display. Evaluate one to see how it's interpreted!",
         },
         howToUse: {
-          title:
-            "Not sure where to begin? Read the User Manual here.",
-          link: "Go to User Manual",
+          title: "Not sure where to begin?",
+          link: "Read the Manual",
         },
       },
     },

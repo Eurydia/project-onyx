@@ -17,21 +17,13 @@ import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
 import {
-  Alert,
-  AlertTitle,
   alpha,
   Box,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  FC,
-  Fragment,
-  ReactNode,
-  useMemo,
-  useState,
-} from "react";
+import { FC, ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const SolverView: FC = () => {
@@ -78,94 +70,84 @@ export const SolverView: FC = () => {
   }, [maybeTree]);
 
   return (
-    <Fragment>
-      <Stack
-        minHeight="100vh"
-        useFlexGap
-        maxWidth="lg"
-        margin="auto"
-        spacing={1}
-        padding={2}
+    <Stack
+      useFlexGap
+      maxWidth="lg"
+      margin="auto"
+      spacing={1}
+      padding={2}
+    >
+      <Editor onExecute={handleExecute} />
+      <StyledAlert
+        variant="outlined"
+        severity={
+          maybeTree !== null && !maybeTree.ok
+            ? "error"
+            : "success"
+        }
       >
-        <Alert
-          icon={false}
+        <Typography>{text}</Typography>
+      </StyledAlert>
+      {exprTree !== null && (
+        <Stack
+          spacing={2}
           sx={{
-            padding: 2,
-            borderRadius: shape.borderRadius,
+            marginRight: {
+              xs: 8,
+              md: 0,
+            },
           }}
         >
-          <AlertTitle>
-            {t("view.solver.howToUse.title")}
-          </AlertTitle>
           <Typography
-            component="a"
-            href="#user-manual"
-          >
-            {t("view.solver.howToUse.link")}
-          </Typography>
-        </Alert>
-        <Editor onExecute={handleExecute} />
-        <StyledAlert
-          severity={
-            maybeTree !== null && !maybeTree.ok
-              ? "error"
-              : "success"
-          }
-        >
-          <Typography>{text}</Typography>
-        </StyledAlert>
-        {exprTree !== null && (
-          <Stack
-            spacing={2}
+            fontSize="larger"
+            fontWeight={900}
             sx={{
-              marginRight: {
-                xs: 8,
-                md: 0,
-              },
+              padding: 4,
+              borderRadius: shape.borderRadius,
+              backgroundColor: alpha(
+                palette.secondary.light,
+                0.5
+              ),
             }}
           >
-            <Typography
-              fontSize="x-large"
-              fontWeight={800}
-            >
-              {t("view.solver.graph.title")}
-            </Typography>
-            <Playground exprTree={exprTree} />
-            <Typography
-              fontSize="x-large"
-              fontWeight={800}
-            >
-              {t("view.solver.truthTable.title")}
-            </Typography>
-            <TruthTable exprTree={exprTree} />
-          </Stack>
-        )}
-      </Stack>
-      <Stack
-        marginY={8}
-        marginX="auto"
-        maxWidth="lg"
-        spacing={4}
+            {t("view.solver.graph.title")}
+          </Typography>
+          <Playground exprTree={exprTree} />
+          <Typography
+            fontSize="larger"
+            fontWeight={900}
+            sx={{
+              padding: 4,
+              borderRadius: shape.borderRadius,
+              backgroundColor: alpha(
+                palette.secondary.light,
+                0.5
+              ),
+            }}
+          >
+            {t("view.solver.truthTable.title")}
+          </Typography>
+          <TruthTable exprTree={exprTree} />
+        </Stack>
+      )}
+      <Typography
+        id="user-manual"
+        fontSize="larger"
+        fontWeight={900}
+        sx={{
+          padding: 4,
+          borderRadius: shape.borderRadius,
+          backgroundColor: alpha(
+            palette.secondary.light,
+            0.5
+          ),
+        }}
       >
-        <Typography
-          id="user-manual"
-          fontSize="larger"
-          fontWeight={900}
-          sx={{
-            padding: 4,
-            borderRadius: shape.borderRadius,
-            backgroundColor: alpha(
-              palette.secondary.light,
-              0.5
-            ),
-          }}
-        >
-          User Manual
-        </Typography>
-        <Box>
-          <StyledMarkdown children={userManual} />
-        </Box>
-      </Stack>
-    </Fragment>
+        User Manual
+      </Typography>
+      <Box>
+        <StyledMarkdown children={userManual} />
+      </Box>
+    </Stack>
   );
 };
