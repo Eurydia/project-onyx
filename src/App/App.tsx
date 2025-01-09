@@ -29,11 +29,11 @@ const globalStyles = (
 
 const router = createBrowserRouter(
   [
-    { index: true, element: <HomeView /> },
     {
       path: "/",
       element: <NavigationLayout />,
       children: [
+        { index: true, element: <HomeView /> },
         {
           path: "/solver",
           element: <SolverView />,

@@ -5,7 +5,7 @@ export const en = {
         config: {
           true: "True",
           false: "False",
-          editTruthValue: "Modify Truth Values",
+          editTruthValue: "Modify propositions",
         },
       },
       common: {
@@ -65,7 +65,7 @@ export const en = {
           title: "Step-by-step Evaluation",
         },
         graph: {
-          title: "Step-by-step Evaluation",
+          title: "Step-by-step",
         },
         feedback: {
           noExpression:

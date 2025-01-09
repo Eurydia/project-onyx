@@ -1,22 +1,24 @@
-import { SymbolTable } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import katex from "katex";
 import { FC, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
 
 type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
   order: number;
-  symbolTable: SymbolTable;
+  // symbolTable: SymbolTable;
 };
 export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
-  const { order, node, symbolTable } = props;
-  const { t } = useTranslation();
+  const {
+    order,
+    node,
+    //  symbolTable
+  } = props;
+  // const { t } = useTranslation();
   const { x, y, data } = node;
   const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
@@ -61,7 +63,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
         pointerEvents="none"
         style={{ userSelect: "none" }}
       />
-      <Group
+      {/* <Group
         visibility={
           data.order < order ? "visible" : "hidden"
         }
@@ -86,7 +88,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
             ? t("common.true")
             : t("common.false")}
         </text>
-      </Group>
+      </Group> */}
     </Group>
   );
 };

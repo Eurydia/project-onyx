@@ -1,8 +1,8 @@
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
+import { getPermutation } from "$core/eval";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { syntaxTreeToPostOrder } from "$core/tree/flatten";
-import { SymbolTable } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import {
   alpha,
@@ -19,23 +19,6 @@ import {
 } from "@mui/material";
 import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const getPermutation = (
-  size: number,
-  symbols: string[]
-) => {
-  const perm: SymbolTable[] = [];
-  const permSize = 1 << size;
-  for (let i = 0; i < permSize; i++) {
-    const repr = i.toString(2).padStart(size, "0");
-    const p = new Map<string, boolean>();
-    for (let j = 0; j < size; j++) {
-      p.set(symbols[j], repr[j] === "1");
-    }
-    perm.push(p);
-  }
-  return perm;
-};
 
 type TruthTableProps = {
   exprTree: ExprTree;

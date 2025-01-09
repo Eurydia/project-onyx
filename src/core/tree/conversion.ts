@@ -18,6 +18,7 @@ const OPERATOR_REPR: Record<Operator, string> = {
   [Operator.IMPL]: `\\implies`,
   [Operator.NOT]: `\\lnot`,
 };
+
 type EvalFn = (t: SymbolTable) => boolean;
 const OPERATOR_EVAL_FN: Record<
   Exclude<Operator, Operator.NOT>,

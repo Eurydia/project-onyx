@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { t } from "i18next";
 import { FC, ReactNode } from "react";
@@ -19,6 +20,7 @@ type StyledCardProps = {
 };
 export const StyledCard: FC<StyledCardProps> = (props) => {
   const { desc, href, title, hrefLabel } = props;
+  const { palette, shape } = useTheme();
   return (
     <Card variant="outlined">
       <CardHeader

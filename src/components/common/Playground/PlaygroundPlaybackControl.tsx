@@ -63,12 +63,10 @@ export const PlaygroundPlaybackControl: FC<
 
   return (
     <Stack
-      spacing={1}
       useFlexGap
+      spacing={1}
       direction="row"
       alignItems="center"
-      paddingX={2}
-      paddingY={1}
     >
       <StyledIconButton
         disabled={value <= minValue}

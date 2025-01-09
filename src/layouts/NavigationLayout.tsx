@@ -6,6 +6,7 @@ import { NavLink, Outlet } from "react-router";
 
 export const NavigationLayout: FC = () => {
   const { t } = useTranslation();
+
   return (
     <Fragment>
       <Toolbar
@@ -54,7 +55,6 @@ export const NavigationLayout: FC = () => {
           </Stack>
           <LanguageSwitcher />
         </Stack>
-        <Divider flexItem />
       </Toolbar>
       <Outlet />
     </Fragment>

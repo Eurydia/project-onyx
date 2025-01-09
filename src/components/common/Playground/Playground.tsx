@@ -1,12 +1,6 @@
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { ExprTree } from "$types/graph";
-import {
-  alpha,
-  Box,
-  Divider,
-  Stack,
-  useTheme,
-} from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import {
   FC,
   KeyboardEvent,
@@ -14,7 +8,6 @@ import {
   useState,
 } from "react";
 import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
-import { PlaygroundSymbolConfig } from "./PlaygroundSymbolConfig";
 import { TreeGraph } from "./TreeGraph/TreeGraph";
 
 type PlaygroundProps = {
@@ -22,12 +15,11 @@ type PlaygroundProps = {
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
   const { exprTree } = props;
-  const { palette, shape } = useTheme();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  const [symbolTable, setSymbolTable] = useState(
-    new Map<string, boolean>()
-  );
+  // const [symbolTable, setSymbolTable] = useState(
+  //   new Map<string, boolean>()
+  // );
 
   useEffect(() => {
     setStep(1);
@@ -37,16 +29,16 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     for (const symbol of nextSymbols) {
       nextSymbolTable.set(symbol, true);
     }
-    setSymbolTable(nextSymbolTable);
+    // setSymbolTable(nextSymbolTable);
   }, [exprTree]);
 
-  const handleSymbolChange = (k: string, v: boolean) => {
-    setSymbolTable((prev) => {
-      const next = new Map(prev);
-      next.set(k, v);
-      return next;
-    });
-  };
+  // const handleSymbolChange = (k: string, v: boolean) => {
+  //   setSymbolTable((prev) => {
+  //     const next = new Map(prev);
+  //     next.set(k, v);
+  //     return next;
+  //   });
+  // };
 
   const handleGraphKeyPress = (
     e: KeyboardEvent<SVGSVGElement>
@@ -62,42 +54,25 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   };
 
   return (
-    <Stack spacing={2}>
-      <PlaygroundSymbolConfig
-        symbolTable={symbolTable}
-        onChange={handleSymbolChange}
+    <Box>
+      <PlaygroundPlaybackControl
+        maxValue={maxStep}
+        minValue={1}
+        value={step}
+        onChange={setStep}
       />
+      <Divider flexItem />
       <Box
-        sx={{
-          borderWidth: 4,
-          borderStyle: "solid",
-          borderRadius: shape.borderRadius,
-          borderColor: alpha(palette.secondary.main, 0.4),
-        }}
+        height="75vh"
+        width="100%"
       >
-        <PlaygroundPlaybackControl
-          maxValue={maxStep}
-          minValue={1}
-          value={step}
-          onChange={setStep}
+        <TreeGraph
+          // symbolTable={symbolTable}
+          order={step}
+          tree={exprTree}
+          onKeyDown={handleGraphKeyPress}
         />
-        <Divider flexItem />
-        <Box
-          position="relative"
-          height="75vh"
-          display="flex"
-          width="100%"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <TreeGraph
-            symbolTable={symbolTable}
-            order={step}
-            tree={exprTree}
-            onKeyDown={handleGraphKeyPress}
-          />
-        </Box>
       </Box>
-    </Stack>
+    </Box>
   );
 };

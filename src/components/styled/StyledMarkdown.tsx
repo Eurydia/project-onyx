@@ -12,8 +12,7 @@ const COMPONENTS_OVERRIDE: Partial<Components> = {
   h1: ({ children, id }) => (
     <Typography
       id={id}
-      fontWeight={900}
-      fontSize="xx-large"
+      variant="h3"
     >
       {children}
     </Typography>
@@ -21,8 +20,7 @@ const COMPONENTS_OVERRIDE: Partial<Components> = {
   h2: ({ children, id }) => (
     <Typography
       id={id}
-      fontWeight={700}
-      fontSize="x-large"
+      variant="h4"
     >
       {children}
     </Typography>
@@ -30,8 +28,7 @@ const COMPONENTS_OVERRIDE: Partial<Components> = {
   h3: ({ children, id }) => (
     <Typography
       id={id}
-      fontWeight={500}
-      fontSize="large"
+      variant="h5"
     >
       {children}
     </Typography>
