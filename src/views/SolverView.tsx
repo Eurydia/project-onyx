@@ -9,13 +9,13 @@ import { TruthTable } from "$components/common/TruthTable/TruthTable";
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { StyledMarkdown } from "$components/styled/StyledMarkdown";
+import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { parse } from "$core/interpreter/parser";
 import {
   syntaxTreetoExprTree,
   syntaxTreeToLatex,
 } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
@@ -41,6 +41,9 @@ export const SolverView: FC = () => {
     SyntaxTree,
     string
   > | null>(null);
+  const [symbolTable, setSymbolTable] = useState(
+    new Map<string, boolean>()
+  );
 
   const userManual = useFetchMarkdown(
     i18n.language === "th" ? userManualTH : userManualEN
@@ -55,22 +58,13 @@ export const SolverView: FC = () => {
     setTree(maybeTree);
   };
 
-  let text: ReactNode = (
-    <Typography>
-      {t("view.solver.feedback.noExpression")}
-    </Typography>
-  );
-  if (maybeTree !== null) {
-    if (maybeTree.ok) {
-      text = (
-        <StyledLatex
-          tex={syntaxTreeToLatex(maybeTree.data)}
-        />
-      );
-    } else {
-      text = <Typography>{maybeTree.other}</Typography>;
-    }
-  }
+  const handleSymbolChange = (k: string, v: boolean) => {
+    setSymbolTable((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+      return next;
+    });
+  };
 
   const exprTree = useMemo(() => {
     if (maybeTree !== null && maybeTree.ok) {
@@ -78,6 +72,12 @@ export const SolverView: FC = () => {
     }
     return null;
   }, [maybeTree]);
+  const calcSteps = useMemo(() => {
+    if (exprTree === null) {
+      return [];
+    }
+    return exprTreeFlattenStepByStep(exprTree, symbolTable);
+  }, [exprTree, symbolTable]);
 
   useEffect(() => {
     if (exprTree === null) {
@@ -94,17 +94,23 @@ export const SolverView: FC = () => {
     });
   }, [exprTree]);
 
-  const [symbolTable, setSymbolTable] = useState(
-    new Map<string, boolean>()
+  let text: ReactNode = (
+    <Typography>
+      {t("view.solver.feedback.noExpression")}
+    </Typography>
   );
 
-  const handleSymbolChange = (k: string, v: boolean) => {
-    setSymbolTable((prev) => {
-      const next = new Map(prev);
-      next.set(k, v);
-      return next;
-    });
-  };
+  if (maybeTree !== null) {
+    if (maybeTree.ok) {
+      text = (
+        <StyledLatex
+          tex={syntaxTreeToLatex(maybeTree.data)}
+        />
+      );
+    } else {
+      text = <Typography>{maybeTree.other}</Typography>;
+    }
+  }
 
   return (
     <Stack
@@ -147,35 +153,26 @@ export const SolverView: FC = () => {
             >
               Output
             </Typography>
-            <Divider flexItem />
-            <Typography
-              fontWeight="bold"
-              variant="h6"
-              component="div"
-            >
-              Modify propositions
-            </Typography>
-            <PlaygroundSymbolConfig
-              symbolTable={symbolTable}
-              onChange={handleSymbolChange}
-            />
-            <Divider flexItem />
-            <Typography
-              fontWeight="bold"
-              variant="h6"
-              component="div"
-            >
-              Solution
-            </Typography>
             <StyledLatex
               options={{
                 displayMode: true,
               }}
-              tex={
-                exprTreeToLatex(exprTree) +
-                `\\text{ $\\equiv$ True}`
-              }
+              tex={`\\text{${
+                exprTree.eval(symbolTable)
+                  ? "True"
+                  : "False"
+              }}`}
             />
+            <Divider flexItem />
+            <PlaygroundSymbolConfig
+              symbolTable={symbolTable}
+              onChange={handleSymbolChange}
+            />
+          </Paper>
+          <Paper
+            variant="outlined"
+            sx={{ padding: 4 }}
+          >
             <Typography
               fontWeight="bold"
               component="div"
@@ -187,126 +184,52 @@ export const SolverView: FC = () => {
               spacing={1}
               divider={<Divider />}
             >
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 1
-                </Typography>
-                <StyledLatex
-                  tex="p\land q"
-                  options={{ displayMode: true }}
-                />
-                <Typography>Evaluate normally,</Typography>
-                <StyledLatex
-                  tex="\begin{align*}p\land q&\equiv\text{True}\land\text{True}\\&\equiv\text{True}.\end{align*}"
-                  options={{
-                    displayMode: true,
-                    leqno: false,
-                    fleqn: false,
-                  }}
-                />
-              </Box>
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 2
-                </Typography>
-                <StyledLatex
-                  tex="\lnot(p \land q)"
-                  options={{ displayMode: true }}
-                />
-                <Typography>
-                  From step (1),{" "}
-                  <StyledLatex tex="\text{$p\land q\equiv$ True}" />{" "}
-                  then
-                </Typography>
-                <StyledLatex
-                  tex="\begin{align*}\lnot(p \land q)&\equiv \lnot(\text{True})\\&\equiv\text{False}.\end{align*}"
-                  options={{ displayMode: true }}
-                />
-              </Box>
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 3
-                </Typography>
-                <StyledLatex
-                  tex="\lnot p"
-                  options={{ displayMode: true }}
-                />
-                <Typography>Evaluate normally,</Typography>
-                <StyledLatex
-                  tex="\begin{align*}\lnot p&\equiv \lnot\text{True}\\&\equiv\text{False}.\end{align*}"
-                  options={{ displayMode: true }}
-                />
-              </Box>
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 4
-                </Typography>
-                <StyledLatex
-                  tex="\lnot q"
-                  options={{ displayMode: true }}
-                />
-                <Typography>Evaluate normally,</Typography>
-                <StyledLatex
-                  tex="\begin{align*}\lnot q&\equiv \lnot\text{True}\\&\equiv\text{False}.\end{align*}"
-                  options={{ displayMode: true }}
-                />
-              </Box>
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 5
-                </Typography>
-                <StyledLatex
-                  tex="\lnot p\lor \lnot q"
-                  options={{ displayMode: true }}
-                />
-                <ul>
-                  <li>
-                    <Typography>
-                      From step (3),{" "}
-                      <StyledLatex tex="\lnot p \equiv \text{False}." />
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography>
-                      From step (4),{" "}
-                      <StyledLatex tex="\lnot q \equiv \text{False}." />
-                    </Typography>
-                  </li>
-                </ul>
-                Substitute into expression
-                <StyledLatex
-                  tex="\begin{align*}\lnot p\lor \lnot q&\equiv \text{False}\lor\text{False}\\&\equiv\text{False}.\end{align*}"
-                  options={{ displayMode: true }}
-                />
-              </Box>
-              <Box>
-                <Typography fontWeight="bold">
-                  Step 6
-                </Typography>
-                <StyledLatex
-                  tex="\lnot(p\land q)\iff(\lnot p\lor \lnot q)"
-                  options={{ displayMode: true }}
-                />
-                <ul>
-                  <li>
-                    <Typography>
-                      From step (2),{" "}
-                      <StyledLatex tex="\lnot (p\land q) \equiv \text{False}." />
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography>
-                      From step (5),{" "}
-                      <StyledLatex tex="\lnot p\lor\lnot q \equiv \text{False}." />
-                    </Typography>
-                  </li>
-                </ul>
-                Substitute into expression
-                <StyledLatex
-                  tex="\begin{align*}\lnot(p\land q)\iff(\lnot p\lor \lnot q)&\equiv\text{False}\iff\text{False}\\&\equiv\text{True}.\end{align*}"
-                  options={{ displayMode: true }}
-                />
-              </Box>
+              {calcSteps.map((step, index) => (
+                <Box key={"step" + index}>
+                  <Typography fontWeight="bold">
+                    Step {index + 1}
+                  </Typography>
+                  <StyledLatex
+                    tex={step.expr}
+                    options={{ displayMode: true }}
+                  />
+                  {step.subSteps.length >= 1 && (
+                    <>
+                      <Typography>
+                        Substitute into expression
+                      </Typography>
+                      <ul>
+                        {step.subSteps.map(
+                          (subStep, index) => (
+                            <li key={"substep" + index}>
+                              <Typography
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  gap: 1,
+                                }}
+                              >
+                                From step {subStep + 1}:
+                                <StyledLatex
+                                  tex={`${calcSteps[subStep].expr}\\equiv${calcSteps[subStep].evaluated}`}
+                                />
+                              </Typography>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </>
+                  )}
+                  <StyledLatex
+                    tex={`\\begin{align*}${step.expr}&\\equiv${step.substituted}\\\\ &\\equiv${step.evaluated}.\\end{align*}`}
+                    options={{
+                      displayMode: true,
+                      leqno: false,
+                      fleqn: false,
+                    }}
+                  />
+                </Box>
+              ))}
             </Stack>
           </Paper>
           <Paper
@@ -328,9 +251,11 @@ export const SolverView: FC = () => {
                 the graph
               </Typography>
             </StyledAlert>
-            <Playground exprTree={exprTree} />
+            <Playground
+              exprTree={exprTree}
+              symbolTable={symbolTable}
+            />
           </Paper>
-
           <Paper
             variant="outlined"
             sx={{

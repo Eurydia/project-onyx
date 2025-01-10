@@ -1,4 +1,4 @@
-import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
+import { SymbolTable } from "$types/ast";
 import { ExprTree } from "$types/graph";
 import { Box, Divider } from "@mui/material";
 import {
@@ -12,20 +12,16 @@ import { TreeGraph } from "./TreeGraph/TreeGraph";
 
 type PlaygroundProps = {
   exprTree: ExprTree;
+  symbolTable: SymbolTable;
 };
 export const Playground: FC<PlaygroundProps> = (props) => {
-  const { exprTree } = props;
+  const { exprTree, symbolTable } = props;
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
 
   useEffect(() => {
     setStep(1);
     setMaxStep(exprTree.order + 1);
-    const nextSymbolTable = new Map<string, boolean>();
-    const nextSymbols = exprTreeCollectSymbols(exprTree);
-    for (const symbol of nextSymbols) {
-      nextSymbolTable.set(symbol, true);
-    }
   }, [exprTree]);
 
   const handleGraphKeyPress = (
@@ -51,6 +47,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           order={step}
           tree={exprTree}
           onKeyDown={handleGraphKeyPress}
+          symbolTable={symbolTable}
         />
       </Box>
       <Divider flexItem />

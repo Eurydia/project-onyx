@@ -1,5 +1,8 @@
 import { StyledFAB } from "$components/styled/StyledFAB";
-import { SyntaxTreeNodeKind } from "$types/ast";
+import {
+  SymbolTable,
+  SyntaxTreeNodeKind,
+} from "$types/ast";
 import { ExprTree } from "$types/graph";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
@@ -26,12 +29,13 @@ const flatten_expr = (d: ExprTree) => {
 };
 
 type TreeGraphProps = {
+  symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
   onKeyDown: (e: KeyboardEvent<SVGSVGElement>) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, order, onKeyDown } = props;
+  const { tree, order, onKeyDown, symbolTable } = props;
 
   const { t } = useTranslation();
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -49,8 +53,8 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       ? 0
       : viewportRef.current.getBoundingClientRect().height;
 
-  const treeWidth = (data.leaves().length + 1) * 120;
-  const treeHeight = (data.height + 1) * 80;
+  const treeWidth = (data.leaves().length + 1) * 150;
+  const treeHeight = (data.height + 1) * 100;
 
   return (
     <Box
@@ -111,6 +115,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                               key={`node-${i}`}
                               order={order}
                               node={node}
+                              symbolTable={symbolTable}
                             />
                           );
                         })}

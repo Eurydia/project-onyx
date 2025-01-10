@@ -5,7 +5,6 @@ import {
   Toolbar,
 } from "@mui/material";
 import { FC } from "react";
-import { useTranslation } from "react-i18next";
 
 const OPERATOR: {
   name: string;
@@ -52,10 +51,6 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
   props
 ) => {
   const { onInsertChar } = props;
-  const { t } = useTranslation("translation", {
-    keyPrefix: "common.connectives",
-  });
-
   return (
     <Toolbar
       disableGutters

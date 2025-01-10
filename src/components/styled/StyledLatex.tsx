@@ -22,12 +22,6 @@ export const StyledLatex: FC<StyledLatexProps> = (
     <Typography
       ref={ref}
       component="span"
-      sx={{
-        overflowX: "auto",
-        width: "100%",
-        textWrap: "nowrap",
-        scrollbarWidth: "thin",
-      }}
     />
   );
 };

@@ -1,9 +1,7 @@
 import { Divider, Typography } from "@mui/material";
 import { FC } from "react";
 import Markdown, { Components } from "react-markdown";
-import rehypeKatex, {
-  Options as KatexOptions,
-} from "rehype-katex";
+import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -56,9 +54,6 @@ const COMPONENTS_OVERRIDE: Partial<Components> = {
   ),
 };
 
-const KATEX_OPTION: KatexOptions = {
-  output: "html",
-};
 
 type StyledMarkdownProps = {
   children: string;
@@ -72,7 +67,7 @@ export const StyledMarkdown: FC<StyledMarkdownProps> = (
     <Markdown
       components={COMPONENTS_OVERRIDE}
       rehypePlugins={[
-        [rehypeKatex, KATEX_OPTION],
+        rehypeKatex,
         rehypeSlug,
       ]}
       remarkPlugins={[remarkMath, remarkGfm]}
