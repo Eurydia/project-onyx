@@ -22,7 +22,7 @@ export const Editor: FC<EditorProps> = (props) => {
   };
 
   const handleInsertChar = (char: string) => {
-    setValue((prev) => `${prev} ${char}`);
+    setValue((prev) => `${prev} ${char} `);
     if (inputRef !== null && inputRef.current !== null) {
       inputRef.current.focus();
     }

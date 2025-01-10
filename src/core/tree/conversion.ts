@@ -145,5 +145,5 @@ const _syntaxTreetoExprTree = (
 };
 
 export const syntaxTreetoExprTree = (tree: SyntaxTree) => {
-  return _syntaxTreetoExprTree(tree, 1);
+  return _syntaxTreetoExprTree(tree, 0);
 };

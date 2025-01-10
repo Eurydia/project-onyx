@@ -11,10 +11,6 @@ export const StyledAlert: FC<AlertProps> = (props) => {
       sx={{
         borderRadius: shape.borderRadius,
         padding: 4,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
         ...sx,
       }}
     />

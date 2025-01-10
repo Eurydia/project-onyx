@@ -2,7 +2,7 @@ import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { getPermutation } from "$core/eval";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { syntaxTreeToPostOrder } from "$core/tree/flatten";
+import { exprTreeFlattenPostOrder } from "$core/tree/flatten";
 import { ExprTree } from "$types/graph";
 import {
   alpha,
@@ -30,7 +30,7 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
   const [userConfirmed, setUserConfirmed] = useState(false);
 
   const { columns, symbols } = useMemo(() => {
-    const _columns = syntaxTreeToPostOrder(exprTree);
+    const _columns = exprTreeFlattenPostOrder(exprTree);
     const _symbols = [...exprTreeCollectSymbols(exprTree)];
     _symbols.sort();
     return { columns: _columns, symbols: _symbols };
@@ -69,7 +69,7 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
   return (
     <TableContainer
       sx={{
-        maxHeight: 500,
+        maxHeight: 600,
         overflowY: "auto",
       }}
     >

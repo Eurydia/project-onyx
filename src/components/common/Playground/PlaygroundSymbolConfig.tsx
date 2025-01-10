@@ -6,7 +6,6 @@ import {
   Grid2,
   Radio,
   RadioGroup,
-  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,28 +27,23 @@ export const PlaygroundSymbolConfig: FC<
 
   return (
     <Grid2
-      width="100%"
       container
+      width="100%"
       spacing={2}
-      margin={4}
-      maxHeight={400}
-      overflow="auto"
+      sx={{
+        maxHeight: 400,
+        overflowY: "auto",
+      }}
     >
-      <Grid2 size={12}>
-        <Typography
-          fontSize="large"
-          fontWeight={500}
-        >
-          {t("component.playground.config.editTruthValue")}
-        </Typography>
-      </Grid2>
       {symbols.map((sym) => (
         <Grid2
           key={"symbol-" + sym}
           size={{ xs: 12, md: 6 }}
         >
           <FormControl fullWidth>
-            <FormLabel>
+            <FormLabel
+              sx={{ width: "100%", overflowX: "auto" }}
+            >
               <StyledLatex tex={`\\text{\`\`$${sym}$''}`} />
             </FormLabel>
             <RadioGroup

@@ -7,7 +7,7 @@ import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import { Zoom } from "@visx/zoom";
-import { FC, KeyboardEvent, useMemo, useRef } from "react";
+import { FC, KeyboardEvent, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
@@ -34,30 +34,27 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
   const { tree, order, onKeyDown } = props;
 
   const { t } = useTranslation();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const data = hierarchy(tree, flatten_expr);
-
-  const viewportWidth = useMemo(() => {
-    return ref.current === null
-      ? 0
-      : ref.current.getBoundingClientRect().width;
-  }, [ref]);
-
-  const viewportHeight = useMemo(() => {
-    return ref.current === null
-      ? 0
-      : ref.current.getBoundingClientRect().height;
-  }, [ref]);
-
+  const viewportRef = useRef<HTMLDivElement | null>(null);
   const currentNode =
     useRef<HierarchyPointNode<ExprTree> | null>(null);
+  const data = hierarchy(tree, flatten_expr);
+
+  const viewportWidth =
+    viewportRef.current === null
+      ? 0
+      : viewportRef.current.getBoundingClientRect().width;
+
+  const viewportHeight =
+    viewportRef.current === null
+      ? 0
+      : viewportRef.current.getBoundingClientRect().height;
 
   const treeWidth = (data.leaves().length + 1) * 120;
   const treeHeight = (data.height + 1) * 80;
 
   return (
     <Box
-      ref={ref}
+      ref={viewportRef}
       width="100%"
       height="100%"
       position="relative"
@@ -129,18 +126,16 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                 }
                 const centerX = viewportWidth / 2;
                 const centerY = viewportHeight / 2;
-                const nodeX = currentNode.current.x;
-                const nodeY = currentNode.current.y;
-                const { scaleX, scaleY } =
-                  zoom.transformMatrix;
-                const translateX = centerX - nodeX * scaleX;
-                const translateY = centerY - nodeY * scaleY;
-
+                const { x, y } = currentNode.current;
+                const scaleX = zoom.transformMatrix.scaleX;
+                const scaleY = zoom.transformMatrix.scaleY;
+                const translateX = centerX - x * scaleX;
+                const translateY = centerY - y * scaleY;
                 zoom.setTransformMatrix({
-                  scaleX,
-                  scaleY,
                   translateX,
                   translateY,
+                  scaleX,
+                  scaleY,
                   skewX: 0,
                   skewY: 0,
                 });

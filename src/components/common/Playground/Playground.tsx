@@ -17,9 +17,6 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   const { exprTree } = props;
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  // const [symbolTable, setSymbolTable] = useState(
-  //   new Map<string, boolean>()
-  // );
 
   useEffect(() => {
     setStep(1);
@@ -29,16 +26,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
     for (const symbol of nextSymbols) {
       nextSymbolTable.set(symbol, true);
     }
-    // setSymbolTable(nextSymbolTable);
   }, [exprTree]);
-
-  // const handleSymbolChange = (k: string, v: boolean) => {
-  //   setSymbolTable((prev) => {
-  //     const next = new Map(prev);
-  //     next.set(k, v);
-  //     return next;
-  //   });
-  // };
 
   const handleGraphKeyPress = (
     e: KeyboardEvent<SVGSVGElement>
@@ -49,30 +37,29 @@ export const Playground: FC<PlaygroundProps> = (props) => {
       setStep((prev) => Math.min(maxStep, prev + 1));
     } else if (key === "ArrowLeft" || key === "ArrowDown") {
       e.preventDefault();
-      setStep((prev) => Math.max(0, prev - 1));
+      setStep((prev) => Math.max(1, prev - 1));
     }
   };
 
   return (
     <Box>
+      <Box
+        height="75vh"
+        width="100%"
+      >
+        <TreeGraph
+          order={step}
+          tree={exprTree}
+          onKeyDown={handleGraphKeyPress}
+        />
+      </Box>
+      <Divider flexItem />
       <PlaygroundPlaybackControl
         maxValue={maxStep}
         minValue={1}
         value={step}
         onChange={setStep}
       />
-      <Divider flexItem />
-      <Box
-        height="75vh"
-        width="100%"
-      >
-        <TreeGraph
-          // symbolTable={symbolTable}
-          order={step}
-          tree={exprTree}
-          onKeyDown={handleGraphKeyPress}
-        />
-      </Box>
     </Box>
   );
 };

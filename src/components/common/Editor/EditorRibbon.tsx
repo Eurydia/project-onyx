@@ -1,34 +1,47 @@
 import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledTooltipButton } from "$components/styled/StyledTooltipButton";
-import { ButtonGroup, Toolbar } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Toolbar,
+} from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
-const OPERATOR = [
+const OPERATOR: {
+  name: string;
+  label: string;
+  shiftChar: string;
+  char: string;
+}[] = [
   {
     name: "negation",
-    label: "\\lnot",
-    insertChar: "\u{00AC}",
+    label: "\\text{not, $\\lnot$}",
+    shiftChar: "\u{00AC}",
+    char: "not",
   },
   {
     name: "conjunction",
-    label: "\\land",
-    insertChar: "\u{2227}",
+    label: "\\text{and, $\\land$}",
+    shiftChar: "\u{2227}",
+    char: "and",
   },
   {
     name: "disjunction",
-    label: "\\lor",
-    insertChar: "\u{2228}",
+    label: "\\text{or, $\\lor$}",
+    shiftChar: "\u{2228}",
+    char: "or",
   },
   {
     name: "implication",
-    label: "\\implies",
-    insertChar: "\u{21D2}",
+    label: "\\text{implies, $\\implies$}",
+    shiftChar: "\u{21D2}",
+    char: "implies",
   },
   {
     name: "equivalence",
-    label: "\\iff",
-    insertChar: "\u{21D4}",
+    label: "\\text{iff, $\\iff$}",
+    shiftChar: "\u{21D4}",
+    char: "iff",
   },
 ];
 
@@ -60,14 +73,20 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
         variant="outlined"
       >
         {OPERATOR.map((btn, index) => (
-          <StyledTooltipButton
-            variant="outlined"
+          <Button
             key={"insert-btn-" + index}
-            title={t(btn.name)}
-            onClick={() => onInsertChar(btn.insertChar)}
+            sx={{
+              maxWidth: "fit-content",
+              textTransform: "none",
+            }}
+            onClick={(e) => {
+              onInsertChar(
+                e.shiftKey ? btn.shiftChar : btn.char
+              );
+            }}
           >
             <StyledLatex tex={btn.label} />
-          </StyledTooltipButton>
+          </Button>
         ))}
       </ButtonGroup>
     </Toolbar>

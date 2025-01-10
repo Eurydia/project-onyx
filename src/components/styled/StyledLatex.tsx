@@ -21,11 +21,12 @@ export const StyledLatex: FC<StyledLatexProps> = (
   return (
     <Typography
       ref={ref}
-      fontWeight="inherit"
       component="span"
-      overflow="auto"
       sx={{
+        overflowX: "auto",
+        width: "100%",
         textWrap: "nowrap",
+        scrollbarWidth: "thin",
       }}
     />
   );

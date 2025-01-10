@@ -52,7 +52,9 @@ const traversePostOrder = (
   }
 };
 
-export const syntaxTreeToPostOrder = (tree: ExprTree) => {
+export const exprTreeFlattenPostOrder = (
+  tree: ExprTree
+) => {
   const accum: MinifiedSyntaxTree[] = [];
   const seen = new Set<string>();
   traversePostOrder(tree, accum, seen);
