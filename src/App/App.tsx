@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router";
 import { theme } from "./theme";
@@ -27,28 +27,23 @@ const globalStyles = (
   />
 );
 
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <NavigationLayout />,
-      children: [
-        { index: true, element: <HomeView /> },
-        {
-          path: "/solver",
-          element: <SolverView />,
-        },
-        {
-          path: "/theorem",
-          element: <TheoremView />,
-        },
-      ],
-    },
-  ],
+const router = createHashRouter([
   {
-    basename: "/project-onyx",
-  }
-);
+    path: "/",
+    element: <NavigationLayout />,
+    children: [
+      { index: true, element: <HomeView /> },
+      {
+        path: "/solver",
+        element: <SolverView />,
+      },
+      {
+        path: "/theorem",
+        element: <TheoremView />,
+      },
+    ],
+  },
+]);
 
 export const App: FC = () => {
   return (
