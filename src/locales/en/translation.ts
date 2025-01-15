@@ -12,7 +12,7 @@ export const en = {
         editor: {
           run: {
             label: "Run",
-            tooltip: "Or (CTRL + ENTER)",
+            alt: "CTRL + ENTER",
           },
         },
       },

@@ -3,12 +3,7 @@ import {
   default as userManualTH,
 } from "$assets/manual/solver-manual/en.txt";
 import { Editor } from "$components/common/Editor/Editor";
-import { Playground } from "$components/common/Playground/Playground";
-import { PlaygroundSymbolConfig } from "$components/common/Playground/PlaygroundSymbolConfig";
-import { TruthTable } from "$components/common/TruthTable/TruthTable";
-import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledMarkdown } from "$components/styled/StyledMarkdown";
 import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { parse } from "$core/interpreter/parser";
 import {
@@ -19,13 +14,7 @@ import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
 import { SyntaxTree } from "$types/ast";
 import { Maybe } from "$types/common";
-import {
-  Box,
-  Divider,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import {
   FC,
   ReactNode,
@@ -120,162 +109,160 @@ export const SolverView: FC = () => {
       spacing={1}
     >
       <Editor onExecute={handleExecute} />
-      <Paper
-        variant="outlined"
-        sx={{
-          padding: 4,
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-        }}
-      >
-        <Typography
-          fontWeight="bold"
-          variant="h6"
-          component="span"
-        >
-          Input
-        </Typography>
-        {text}
-      </Paper>
-      {exprTree !== null && (
-        <>
-          <Paper
-            variant="outlined"
-            sx={{
-              padding: 4,
-            }}
-          >
-            <Typography
-              fontWeight="bold"
-              variant="h6"
-              component="div"
-            >
-              Output
-            </Typography>
-            <StyledLatex
-              options={{
-                displayMode: true,
-              }}
-              tex={`\\text{${
-                exprTree.eval(symbolTable)
-                  ? "True"
-                  : "False"
-              }}`}
-            />
-            <Divider flexItem />
-            <PlaygroundSymbolConfig
-              symbolTable={symbolTable}
-              onChange={handleSymbolChange}
-            />
-          </Paper>
-          <Paper
-            variant="outlined"
-            sx={{ padding: 4 }}
-          >
-            <Typography
-              fontWeight="bold"
-              component="div"
-              variant="h6"
-            >
-              Step-by-step
-            </Typography>
-            <Stack
-              spacing={1}
-              divider={<Divider />}
-            >
-              {calcSteps.map((step, index) => (
-                <Box key={"step" + index}>
-                  <Typography fontWeight="bold">
-                    Step {index + 1}
-                  </Typography>
-                  <StyledLatex
-                    tex={step.expr}
-                    options={{ displayMode: true }}
-                  />
-                  {step.subSteps.length >= 1 && (
-                    <>
-                      <Typography>
-                        Substitute into expression
-                      </Typography>
-                      <ul>
-                        {step.subSteps.map(
-                          (subStep, index) => (
-                            <li key={"substep" + index}>
-                              <Typography
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  gap: 1,
-                                }}
-                              >
-                                From step {subStep + 1}:
-                                <StyledLatex
-                                  tex={`${calcSteps[subStep].expr}\\equiv${calcSteps[subStep].evaluated}`}
-                                />
-                              </Typography>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </>
-                  )}
-                  <StyledLatex
-                    tex={`\\begin{align*}${step.expr}&\\equiv${step.substituted}\\\\ &\\equiv${step.evaluated}.\\end{align*}`}
-                    options={{
-                      displayMode: true,
-                      leqno: false,
-                      fleqn: false,
-                    }}
-                  />
-                </Box>
-              ))}
-            </Stack>
-          </Paper>
-          <Paper
-            variant="outlined"
-            sx={{
-              padding: 4,
-            }}
-          >
-            <Typography
-              fontWeight="bold"
-              variant="h6"
-              component="div"
-            >
-              Graph
-            </Typography>
-            <StyledAlert severity="info">
-              <Typography>
-                Use re-center button in case you cannot find
-                the graph
-              </Typography>
-            </StyledAlert>
-            <Playground
-              exprTree={exprTree}
-              symbolTable={symbolTable}
-            />
-          </Paper>
-          <Paper
-            variant="outlined"
-            sx={{
-              padding: 4,
-            }}
-          >
-            <Typography
-              fontWeight="bold"
-              variant="h6"
-              component="div"
-            >
-              Truth table
-            </Typography>
-            <TruthTable exprTree={exprTree} />
-          </Paper>
-        </>
-      )}
-      <Box marginY={32}>
-        <StyledMarkdown children={userManual} />
-      </Box>
     </Stack>
   );
 };
+
+// <Paper
+//   variant="outlined"
+//   sx={{
+//     padding: 4,
+//     display: "flex",
+//     flexDirection: "column",
+//     gap: 1,
+//   }}
+// >
+//   <Typography
+//     fontWeight="bold"
+//     variant="h6"
+//     component="span"
+//   >
+//     Input
+//   </Typography>
+//   {text}
+// </Paper>;
+// {exprTree !== null && (
+//   <>
+//     <Paper
+//       variant="outlined"
+//       sx={{
+//         padding: 4,
+//       }}
+//     >
+//       <Typography
+//         fontWeight="bold"
+//         variant="h6"
+//         component="div"
+//       >
+//         Output
+//       </Typography>
+//       <StyledLatex
+//         options={{
+//           displayMode: true,
+//         }}
+//         tex={`\\text{${
+//           exprTree.eval(symbolTable)
+//             ? "True"
+//             : "False"
+//         }}`}
+//       />
+//       <Divider flexItem />
+//       <PlaygroundSymbolConfig
+//         symbolTable={symbolTable}
+//         onChange={handleSymbolChange}
+//       />
+//     </Paper>
+//     <Paper
+//       variant="outlined"
+//       sx={{ padding: 4 }}
+//     >
+//       <Typography
+//         fontWeight="bold"
+//         component="div"
+//         variant="h6"
+//       >
+//         Step-by-step
+//       </Typography>
+//       <Stack
+//         spacing={1}
+//         divider={<Divider />}
+//       >
+//         {calcSteps.map((step, index) => (
+//           <Box key={"step" + index}>
+//             <Typography fontWeight="bold">
+//               Step {index + 1}
+//             </Typography>
+//             <StyledLatex
+//               tex={step.expr}
+//               options={{ displayMode: true }}
+//             />
+//             {step.subSteps.length >= 1 && (
+//               <>
+//                 <Typography>
+//                   Substitute into expression
+//                 </Typography>
+//                 <ul>
+//                   {step.subSteps.map(
+//                     (subStep, index) => (
+//                       <li key={"substep" + index}>
+//                         <Typography
+//                           sx={{
+//                             display: "flex",
+//                             flexDirection: "row",
+//                             gap: 1,
+//                           }}
+//                         >
+//                           From step {subStep + 1}:
+//                           <StyledLatex
+//                             tex={`${calcSteps[subStep].expr}\\equiv${calcSteps[subStep].evaluated}`}
+//                           />
+//                         </Typography>
+//                       </li>
+//                     )
+//                   )}
+//                 </ul>
+//               </>
+//             )}
+//             <StyledLatex
+//               tex={`\\begin{align*}${step.expr}&\\equiv${step.substituted}\\\\ &\\equiv${step.evaluated}.\\end{align*}`}
+//               options={{
+//                 displayMode: true,
+//                 leqno: false,
+//                 fleqn: false,
+//               }}
+//             />
+//           </Box>
+//         ))}
+//       </Stack>
+//     </Paper>
+//     <Paper
+//       variant="outlined"
+//       sx={{
+//         padding: 4,
+//       }}
+//     >
+//       <Typography
+//         fontWeight="bold"
+//         variant="h6"
+//         component="div"
+//       >
+//         Graph
+//       </Typography>
+//       <StyledAlert severity="info">
+//         <Typography>
+//           Use re-center button in case you cannot find
+//           the graph
+//         </Typography>
+//       </StyledAlert>
+//       <Playground
+//         exprTree={exprTree}
+//         symbolTable={symbolTable}
+//       />
+//     </Paper>
+//     <Paper
+//       variant="outlined"
+//       sx={{
+//         padding: 4,
+//       }}
+//     >
+//       <Typography
+//         fontWeight="bold"
+//         variant="h6"
+//         component="div"
+//       >
+//         Truth table
+//       </Typography>
+//       <TruthTable exprTree={exprTree} />
+//     </Paper>
+//   </>
+// )}

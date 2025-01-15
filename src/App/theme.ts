@@ -41,5 +41,3 @@ export const theme = createTheme({
     },
   },
 });
-
-// theme = responsiveFontSizes(theme, { factor: 8 });

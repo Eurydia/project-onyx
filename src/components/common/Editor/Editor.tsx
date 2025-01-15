@@ -1,36 +1,22 @@
-import { PlayArrowRounded } from "@mui/icons-material";
 import { Stack, TextField } from "@mui/material";
-import { FC, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { StyledTooltipButton } from "../../styled/StyledTooltipButton";
+import { FC, useRef } from "react";
 import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
-  onExecute: (value: string) => void;
+  value: string;
+  placeholder: string;
+  onChange: (value: string) => void;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { onExecute } = props;
-  const { t } = useTranslation();
+  const { onChange, placeholder, value } = props;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [value, setValue] = useState(
-    "not (p and q) iff (not p) or (not q)"
-  );
-
-  const handleExecute = () => {
-    onExecute(value);
-  };
 
   const handleInsertChar = (char: string) => {
-    setValue((prev) => `${prev} ${char} `);
+    const next = `${value} ${char} `;
+    onChange(next);
     if (inputRef !== null && inputRef.current !== null) {
       inputRef.current.focus();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.ctrlKey) {
-      handleExecute();
     }
   };
 
@@ -43,9 +29,8 @@ export const Editor: FC<EditorProps> = (props) => {
         multiline
         rows={5}
         value={value}
-        placeholder="not (p and q) iff (not p) or (not q)"
-        onChange={(e) => setValue(e.target.value)}
-        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
         slotProps={{
           input: {
             autoComplete: "off",
@@ -58,14 +43,28 @@ export const Editor: FC<EditorProps> = (props) => {
           },
         }}
       />
-      <StyledTooltipButton
-        variant="contained"
-        startIcon={<PlayArrowRounded />}
-        onClick={handleExecute}
-        title={t("component.common.editor.run.tooltip")}
-      >
-        {t("component.common.editor.run.label")}
-      </StyledTooltipButton>
     </Stack>
   );
 };
+
+// <Stack
+// useFlexGap
+// alignItems="center"
+// width="100%"
+// spacing={2}
+// direction="row"
+// flexWrap="wrap"
+// >
+// <Button
+//   type="submit"
+//   disableElevation
+//   variant="contained"
+//   startIcon={<PlayArrowRounded />}
+//   onClick={handleExecute}
+// >
+//   {t("component.common.editor.run.label")}
+// </Button>
+// <Typography>
+//   {t("component.common.editor.run.alt")}
+// </Typography>
+// </Stack>

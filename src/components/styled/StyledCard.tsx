@@ -1,8 +1,6 @@
-import { LaunchRounded } from "@mui/icons-material";
 import {
-  Button,
   Card,
-  CardActions,
+  CardActionArea,
   CardContent,
   CardHeader,
   Typography,
@@ -10,7 +8,7 @@ import {
 } from "@mui/material";
 import { t } from "i18next";
 import { FC, ReactNode } from "react";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 
 type StyledCardProps = {
   title: ReactNode;
@@ -22,34 +20,33 @@ export const StyledCard: FC<StyledCardProps> = (props) => {
   const { desc, href, title, hrefLabel } = props;
   const { palette, shape } = useTheme();
   return (
-    <Card variant="outlined">
-      <CardHeader
-        title={title}
-        titleTypographyProps={{
-          sx: {
-            fontSize: "medium",
-            fontWeight: "bold",
-            whiteSpace: "break-spaces",
-            wordBreak: "break-all",
-            wordWrap: "break-word",
-          },
-        }}
-      />
-      <CardContent>
-        <Typography>{t(desc)}</Typography>
-      </CardContent>
-      <CardActions>
-        <Button
-          startIcon={<LaunchRounded />}
-          component={Link}
-          to={href}
-          disableElevation
-          disableRipple
-          variant="outlined"
-        >
-          {hrefLabel}
-        </Button>
-      </CardActions>
+    <Card
+      variant="elevation"
+      elevation={0}
+      sx={{
+        borderRadius: ({ shape }) => shape.borderRadius,
+      }}
+    >
+      <CardActionArea
+        disableRipple
+        component={NavLink}
+        to={href}
+      >
+        <CardHeader
+          title={title}
+          titleTypographyProps={{
+            sx: {
+              fontWeight: "bold",
+              whiteSpace: "break-spaces",
+              wordBreak: "break-all",
+              wordWrap: "break-word",
+            },
+          }}
+        />
+        <CardContent>
+          <Typography>{t(desc)}</Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

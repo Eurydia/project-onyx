@@ -28,7 +28,6 @@ export const StyledTooltipButton: FC<
         onClick={onClick}
         sx={{
           maxWidth: "fit-content",
-          textTransform: "none",
         }}
       >
         {children}

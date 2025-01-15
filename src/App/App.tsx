@@ -8,6 +8,7 @@ import {
   GlobalStyles,
   ThemeProvider,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { FC } from "react";
 import {
   createHashRouter,
@@ -22,6 +23,9 @@ const globalStyles = (
       borderCollapse: "collapse",
       html: {
         scrollBehavior: "smooth",
+      },
+      body: {
+        backgroundColor: grey[200],
       },
     }}
   />
