@@ -4,8 +4,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/project-onyx",
-  publicDir: "public",
+  base: "/project-onyx/",
+  // publicDir: "public",
   plugins: [react(), tsconfigPaths()],
   build: {
     rollupOptions: {

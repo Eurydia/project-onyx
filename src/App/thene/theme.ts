@@ -1,17 +1,8 @@
 import { createTheme } from "@mui/material";
-import { brown, green } from "@mui/material/colors";
+import { PALETTE_OPTIONS } from "./palette";
 
-export const theme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: brown["600"],
-    },
-    secondary: {
-      light: "#abcbad",
-      main: green["800"],
-    },
-  },
+export const THEME = createTheme({
+  palette: PALETTE_OPTIONS,
   components: {
     MuiList: {
       defaultProps: {

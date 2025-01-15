@@ -2,7 +2,7 @@ import {
   default as userManualEN,
   default as userManualTH,
 } from "$assets/manual/solver-manual/en.txt";
-import { Editor } from "$components/common/Editor/Editor";
+import { Editor } from "$components/math/Editor/Editor";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { parse } from "$core/interpreter/parser";
@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 
 export const SolverView: FC = () => {
   const { t, i18n } = useTranslation("translation");
+  const [userInput, setUserInput] = useState("");
   const [maybeTree, setTree] = useState<Maybe<
     SyntaxTree,
     string
@@ -104,11 +105,15 @@ export const SolverView: FC = () => {
   return (
     <Stack
       useFlexGap
-      maxWidth="lg"
-      margin="auto"
       spacing={1}
+      maxWidth="lg"
+      marginX="auto"
     >
-      <Editor onExecute={handleExecute} />
+      <Editor
+        value={userInput}
+        placeholder="not (p and q) iff (not p or not q)"
+        onChange={setUserInput}
+      />
     </Stack>
   );
 };

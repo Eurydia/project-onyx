@@ -1,8 +1,14 @@
-import { StyledCard } from "$components/styled/StyledCard";
 import { Masonry } from "@mui/lab";
-import { Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 const CARDS: {
   title: string;
@@ -38,20 +44,56 @@ export const HomeView: FC = () => {
     <Stack
       spacing={2}
       maxWidth="lg"
-      marginX="auto"
+      marginX={{
+        md: "auto",
+        xs: 4,
+      }}
     >
-      <Typography variant="h3">
+      <Typography
+        fontSize="large"
+        fontWeight={700}
+      >
         {t("view.home.calculators")}
       </Typography>
-      <Masonry columns={2}>
+      <Masonry columns={{ xs: 1, md: 2 }}>
         {CARDS.map(({ title, href, desc }, index) => (
-          <StyledCard
+          <Link
+            to={href}
             key={"card" + index}
-            title={t(title)}
-            href={href}
-            desc={t(desc)}
-            hrefLabel={t("view.home.launch")}
-          />
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <Card
+              variant="elevation"
+              elevation={0}
+              sx={{
+                "borderStyle": "solid",
+                "borderRadius": ({ shape }) =>
+                  shape.borderRadius,
+                "borderColor": ({ palette }) =>
+                  palette.background.paper,
+                "transition": "all 0.1s ease",
+                "&:hover": {
+                  borderColor: ({ palette }) =>
+                    palette.primary.main,
+                },
+              }}
+            >
+              <CardHeader
+                title={t(title)}
+                titleTypographyProps={{
+                  sx: {
+                    fontWeight: 700,
+                    whiteSpace: "break-spaces",
+                  },
+                }}
+              />
+              <CardContent>
+                <Typography>{t(desc)}</Typography>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </Masonry>
     </Stack>

@@ -1,6 +1,11 @@
-import { TranslateRounded } from "@mui/icons-material";
+import {
+  CheckRounded,
+  TranslateRounded,
+} from "@mui/icons-material";
 import {
   IconButton,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   Tooltip,
@@ -9,17 +14,21 @@ import {
 import { FC, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+const LANGUAGES = ["en", "th"];
+
 export const LanguageSwitcher: FC = () => {
   const { i18n, t } = useTranslation();
   const [anchor, setAnchor] =
     useState<HTMLButtonElement | null>(null);
 
+  const handleClose = () => setAnchor(null);
   return (
     <Fragment>
       <Tooltip
         title={<Typography>{t("language")}</Typography>}
       >
         <IconButton
+          color="primary"
           size="large"
           onClick={(e) => setAnchor(e.currentTarget)}
         >
@@ -29,53 +38,47 @@ export const LanguageSwitcher: FC = () => {
       <Menu
         anchorEl={anchor}
         open={anchor !== null}
-        onClose={() => setAnchor(null)}
+        onClose={handleClose}
+        onClick={handleClose}
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: ({ shape }) =>
+                shape.borderRadius,
+            },
+          },
+        }}
       >
-        <MenuItem
-          selected={i18n.language === "en"}
-          onClick={() => i18n.changeLanguage("en")}
-        >
-          EN
-        </MenuItem>
-        <MenuItem
-          selected={i18n.language === "th"}
-          onClick={() => i18n.changeLanguage("th")}
-        >
-          TH
-        </MenuItem>
+        {LANGUAGES.map((lang, index) => {
+          const selected = i18n.language === lang;
+          return (
+            <MenuItem
+              onClick={() => i18n.changeLanguage(lang)}
+              disableRipple
+              key={"item" + index}
+              selected={selected}
+              sx={{
+                padding: 2,
+              }}
+            >
+              <ListItemIcon>
+                {selected && (
+                  <CheckRounded color="primary" />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                slotProps={{
+                  primary: {
+                    fontWeight: 500,
+                    textTransform: "uppercase",
+                  },
+                }}
+                primary={t(`lang.${lang}`)}
+              />
+            </MenuItem>
+          );
+        })}
       </Menu>
     </Fragment>
   );
 };
-
-// {/* <Stack
-//   spacing={2}
-//   direction="row"
-//   alignItems="center"
-//   justifyContent="flex-start"
-//   divider={
-//     <Divider
-//       flexItem
-//       orientation="vertical"
-//     />
-//   }
-// >
-//   <Typography
-//     onClick={() => i18n.changeLanguage("en")}
-//     sx={{
-//       cursor: "pointer",
-//       textDecorationLine: "underline",
-//     }}
-//   >
-//     EN
-//   </Typography>
-//   <Typography
-//     onClick={() => i18n.changeLanguage("th")}
-//     sx={{
-//       cursor: "pointer",
-//       textDecorationLine: "underline",
-//     }}
-//   >
-//     TH
-//   </Typography>
-// </Stack> */}

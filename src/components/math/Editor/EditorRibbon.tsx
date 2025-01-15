@@ -1,9 +1,5 @@
 import { StyledLatex } from "$components/styled/StyledLatex";
-import {
-  Button,
-  ButtonGroup,
-  Toolbar,
-} from "@mui/material";
+import { Button, ButtonGroup } from "@mui/material";
 import { FC } from "react";
 
 const OPERATOR: {
@@ -52,38 +48,26 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
 ) => {
   const { onInsertChar } = props;
   return (
-    <Toolbar
-      disableGutters
-      variant="dense"
-      sx={{
-        gap: 1,
-        display: "flex",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
+    <ButtonGroup
+      disableElevation
+      variant="outlined"
     >
-      <ButtonGroup
-        disableElevation
-        variant="outlined"
-      >
-        {OPERATOR.map((btn, index) => (
-          <Button
-            key={"insert-btn-" + index}
-            sx={{
-              maxWidth: "fit-content",
-              textTransform: "none",
-            }}
-            onClick={(e) => {
-              onInsertChar(
-                e.shiftKey ? btn.shiftChar : btn.char
-              );
-            }}
-          >
-            <StyledLatex tex={btn.label} />
-          </Button>
-        ))}
-      </ButtonGroup>
-    </Toolbar>
+      {OPERATOR.map((btn, index) => (
+        <Button
+          key={"insert-btn-" + index}
+          sx={{
+            maxWidth: "fit-content",
+            textTransform: "none",
+          }}
+          onClick={(e) => {
+            onInsertChar(
+              e.shiftKey ? btn.shiftChar : btn.char
+            );
+          }}
+        >
+          <StyledLatex tex={btn.label} />
+        </Button>
+      ))}
+    </ButtonGroup>
   );
 };

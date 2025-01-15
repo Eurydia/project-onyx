@@ -45,7 +45,7 @@ export const en = {
           },
           checker: {
             title: "Tautology checker",
-            desc: "Check if an expression is a tautology.",
+            desc: "Check if an expression is always true.",
           },
           theorem: {
             title: "Useful theorems",

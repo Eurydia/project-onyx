@@ -1,14 +1,12 @@
 import {
   Card,
-  CardActionArea,
   CardContent,
   CardHeader,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { t } from "i18next";
 import { FC, ReactNode } from "react";
-import { NavLink } from "react-router";
+import { Link } from "react-router";
 
 type StyledCardProps = {
   title: ReactNode;
@@ -17,36 +15,41 @@ type StyledCardProps = {
   hrefLabel: string;
 };
 export const StyledCard: FC<StyledCardProps> = (props) => {
-  const { desc, href, title, hrefLabel } = props;
-  const { palette, shape } = useTheme();
+  const { desc, href, title } = props;
   return (
     <Card
       variant="elevation"
       elevation={0}
       sx={{
-        borderRadius: ({ shape }) => shape.borderRadius,
+        "borderStyle": "solid",
+        "borderRadius": ({ shape }) => shape.borderRadius,
+        "borderColor": ({ palette }) =>
+          palette.background.paper,
+        "transition": "all 0.1s ease",
+        "&:hover": {
+          borderColor: ({ palette }) =>
+            palette.primary.main,
+        },
+        "display": "block",
+        "textDecoration": "none",
       }}
+      component={Link}
+      to={href}
     >
-      <CardActionArea
-        disableRipple
-        component={NavLink}
-        to={href}
-      >
-        <CardHeader
-          title={title}
-          titleTypographyProps={{
-            sx: {
-              fontWeight: "bold",
-              whiteSpace: "break-spaces",
-              wordBreak: "break-all",
-              wordWrap: "break-word",
-            },
-          }}
-        />
-        <CardContent>
-          <Typography>{t(desc)}</Typography>
-        </CardContent>
-      </CardActionArea>
+      <CardHeader
+        title={title}
+        titleTypographyProps={{
+          sx: {
+            fontWeight: 700,
+            whiteSpace: "break-spaces",
+            wordBreak: "break-all",
+            wordWrap: "break-word",
+          },
+        }}
+      />
+      <CardContent>
+        <Typography>{t(desc)}</Typography>
+      </CardContent>
     </Card>
   );
 };
