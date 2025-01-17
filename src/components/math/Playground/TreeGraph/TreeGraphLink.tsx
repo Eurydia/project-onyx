@@ -1,4 +1,4 @@
-import { ExprTree } from "$types/graph";
+import { ExprTree } from "$types/expression-tree";
 import { useTheme } from "@mui/material";
 import {
   HierarchyPointLink,

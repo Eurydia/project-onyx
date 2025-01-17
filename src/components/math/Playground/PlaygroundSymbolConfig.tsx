@@ -1,4 +1,4 @@
-import { SymbolTable } from "$types/ast";
+import { SymbolTable } from "$types/syntax-tree";
 import {
   FormControl,
   FormControlLabel,

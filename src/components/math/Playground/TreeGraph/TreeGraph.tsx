@@ -1,9 +1,9 @@
 import { StyledFAB } from "$components/styled/StyledFAB";
+import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
   SyntaxTreeNodeKind,
-} from "$types/ast";
-import { ExprTree } from "$types/graph";
+} from "$types/syntax-tree";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { Group } from "@visx/group";

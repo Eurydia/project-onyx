@@ -8,16 +8,15 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { t } from "i18next";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router";
 
 const NAV_ITEMS: { href: string; label: string }[] = [
-  { href: "/solver", label: t("nav.solver") },
-  { href: "/evaluator", label: t("nav.evaluator") },
-  { href: "/simplifier", label: t("nav.simplifier") },
-  { href: "/checker", label: t("nav.checker") },
+  { href: "/solver", label: "nav.solver" },
+  { href: "/evaluator", label: "nav.evaluator" },
+  { href: "/simplifier", label: "nav.simplifier" },
+  { href: "/checker", label: "nav.checker" },
 ];
 
 export const AppbarLayout: FC = () => {
@@ -66,7 +65,10 @@ export const AppbarLayout: FC = () => {
           </Tooltip>
           <ToolNavDropDown
             selected={pathname}
-            items={NAV_ITEMS}
+            items={NAV_ITEMS.map(({ href, label }) => ({
+              href,
+              label: t(label),
+            }))}
           />
         </Stack>
         <LanguageSwitcher />

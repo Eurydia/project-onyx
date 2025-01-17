@@ -1,15 +1,15 @@
 import {
-  Operator,
-  SymbolTable,
-  SyntaxTree,
-  SyntaxTreeNodeKind,
-} from "$types/ast";
-import {
   ExprTreeBinary,
   ExprTreeConst,
   ExprTreeIden,
   ExprTreeUnary,
-} from "$types/graph";
+} from "$types/expression-tree";
+import {
+  Operator,
+  SymbolTable,
+  SyntaxTree,
+  SyntaxTreeNodeKind,
+} from "$types/syntax-tree";
 
 const OPERATOR_REPR: Record<Operator, string> = {
   [Operator.AND]: `\\land`,

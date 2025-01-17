@@ -1,120 +1,39 @@
-import {
-  default as userManualEN,
-  default as userManualTH,
-} from "$assets/manual/solver-manual/en.txt";
 import { Editor } from "$components/math/Editor/Editor";
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
-import { parse } from "$core/interpreter/parser";
-import {
-  syntaxTreetoExprTree,
-  syntaxTreeToLatex,
-} from "$core/tree/conversion";
-import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { useFetchMarkdown } from "$hooks/useFetchMarkdown";
-import { SyntaxTree } from "$types/ast";
-import { Maybe } from "$types/common";
-import { Stack, Typography } from "@mui/material";
-import {
-  FC,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { useTranslation } from "react-i18next";
+import { PlayArrowRounded } from "@mui/icons-material";
+import { Box, Button, Stack } from "@mui/material";
+import { FC } from "react";
+import { Form } from "react-router";
 
 export const SolverView: FC = () => {
-  const { t, i18n } = useTranslation("translation");
-  const [userInput, setUserInput] = useState("");
-  const [maybeTree, setTree] = useState<Maybe<
-    SyntaxTree,
-    string
-  > | null>(null);
-  const [symbolTable, setSymbolTable] = useState(
-    new Map<string, boolean>()
-  );
-
-  const userManual = useFetchMarkdown(
-    i18n.language === "th" ? userManualTH : userManualEN
-  );
-
-  const handleExecute = (value: string) => {
-    if (value.trim().length === 0) {
-      setTree(null);
-      return;
-    }
-    const maybeTree = parse(value);
-    setTree(maybeTree);
-  };
-
-  const handleSymbolChange = (k: string, v: boolean) => {
-    setSymbolTable((prev) => {
-      const next = new Map(prev);
-      next.set(k, v);
-      return next;
-    });
-  };
-
-  const exprTree = useMemo(() => {
-    if (maybeTree !== null && maybeTree.ok) {
-      return syntaxTreetoExprTree(maybeTree.data);
-    }
-    return null;
-  }, [maybeTree]);
-  const calcSteps = useMemo(() => {
-    if (exprTree === null) {
-      return [];
-    }
-    return exprTreeFlattenStepByStep(exprTree, symbolTable);
-  }, [exprTree, symbolTable]);
-
-  useEffect(() => {
-    if (exprTree === null) {
-      return;
-    }
-    setSymbolTable(() => {
-      const next = new Map<string, boolean>();
-      for (const symbol of exprTreeCollectSymbols(
-        exprTree
-      )) {
-        next.set(symbol, true);
-      }
-      return next;
-    });
-  }, [exprTree]);
-
-  let text: ReactNode = (
-    <Typography>
-      {t("view.solver.feedback.noExpression")}
-    </Typography>
-  );
-
-  if (maybeTree !== null) {
-    if (maybeTree.ok) {
-      text = (
-        <StyledLatex
-          tex={syntaxTreeToLatex(maybeTree.data)}
-        />
-      );
-    } else {
-      text = <Typography>{maybeTree.other}</Typography>;
-    }
-  }
-
   return (
-    <Stack
-      useFlexGap
-      spacing={1}
+    <Box
       maxWidth="lg"
       marginX="auto"
     >
-      <Editor
-        value={userInput}
-        placeholder="not (p and q) iff (not p or not q)"
-        onChange={setUserInput}
-      />
-    </Stack>
+      <Form
+        action="/solver/solved"
+        method="GET"
+      >
+        <Stack spacing={1}>
+          <Editor
+            placeholder="not (p and q) iff (not p or not q)"
+            name="content"
+          />
+          <Button
+            disableElevation
+            disableRipple
+            variant="contained"
+            type="submit"
+            startIcon={<PlayArrowRounded />}
+            sx={{
+              maxWidth: "fit-content",
+            }}
+          >
+            RUN
+          </Button>
+        </Stack>
+      </Form>
+    </Box>
   );
 };
 
@@ -271,3 +190,78 @@ export const SolverView: FC = () => {
 //     </Paper>
 //   </>
 // )}
+
+// const [maybeTree, setTree] = useState<Maybe<
+//   SyntaxTree,
+//   string
+// > | null>(null);
+// const [symbolTable, setSymbolTable] = useState(
+//   new Map<string, boolean>()
+// );
+
+// const userManual = useFetchMarkdown(
+//   i18n.language === "th" ? userManualTH : userManualEN
+// );
+
+// const handleExecute = (value: string) => {
+//   if (value.trim().length === 0) {
+//     setTree(null);
+//     return;
+//   }
+//   const maybeTree = parse(value);
+//   setTree(maybeTree);
+// };
+
+// const handleSymbolChange = (k: string, v: boolean) => {
+//   setSymbolTable((prev) => {
+//     const next = new Map(prev);
+//     next.set(k, v);
+//     return next;
+//   });
+// };
+
+// const exprTree = useMemo(() => {
+//   if (maybeTree !== null && maybeTree.ok) {
+//     return syntaxTreetoExprTree(maybeTree.data);
+//   }
+//   return null;
+// }, [maybeTree]);
+// const calcSteps = useMemo(() => {
+//   if (exprTree === null) {
+//     return [];
+//   }
+//   return exprTreeFlattenStepByStep(exprTree, symbolTable);
+// }, [exprTree, symbolTable]);
+
+// useEffect(() => {
+//   if (exprTree === null) {
+//     return;
+//   }
+//   setSymbolTable(() => {
+//     const next = new Map<string, boolean>();
+//     for (const symbol of exprTreeCollectSymbols(
+//       exprTree
+//     )) {
+//       next.set(symbol, true);
+//     }
+//     return next;
+//   });
+// }, [exprTree]);
+
+// let text: ReactNode = (
+//   <Typography>
+//     {t("view.solver.feedback.noExpression")}
+//   </Typography>
+// );
+
+// if (maybeTree !== null) {
+//   if (maybeTree.ok) {
+//     text = (
+//       <StyledLatex
+//         tex={syntaxTreeToLatex(maybeTree.data)}
+//       />
+//     );
+//   } else {
+//     text = <Typography>{maybeTree.other}</Typography>;
+//   }
+// }

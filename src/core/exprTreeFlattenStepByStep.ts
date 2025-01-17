@@ -1,21 +1,21 @@
+import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
   SyntaxTreeNodeKind,
-} from "$types/ast";
-import { ExprTree } from "$types/graph";
+} from "$types/syntax-tree";
 import { exprTreeToLatex } from "./tree/expr/latex";
 
-type ExprTreeStep = {
+export type EvaluationStep = {
   expr: string;
   substituted: string;
   evaluated: string;
-  subSteps: number[];
+  relatedSteps: number[];
 };
 
 const traverse = (
   tree: ExprTree,
   symbolTable: SymbolTable,
-  steps: ExprTreeStep[]
+  steps: EvaluationStep[]
 ) => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeKind.CONST:
@@ -47,7 +47,7 @@ const traverse = (
         expr: repr,
         evaluated,
         substituted,
-        subSteps,
+        relatedSteps: subSteps,
       });
       break;
     }
@@ -91,7 +91,7 @@ const traverse = (
         expr: repr,
         evaluated,
         substituted,
-        subSteps,
+        relatedSteps: subSteps,
       });
     }
   }
@@ -101,7 +101,7 @@ export const exprTreeFlattenStepByStep = (
   tree: ExprTree,
   symbolTable: SymbolTable
 ) => {
-  const steps: ExprTreeStep[] = [];
+  const steps: EvaluationStep[] = [];
   traverse(tree, symbolTable, steps);
   console.debug(steps);
   return steps;

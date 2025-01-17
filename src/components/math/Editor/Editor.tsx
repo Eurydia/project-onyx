@@ -3,19 +3,18 @@ import { FC, useRef } from "react";
 import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
-  value: string;
   placeholder: string;
-  onChange: (value: string) => void;
+  name?: string;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { onChange, placeholder, value } = props;
+  const { name, placeholder } = props;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleInsertChar = (char: string) => {
-    const next = `${value} ${char} `;
-    onChange(next);
     if (inputRef !== null && inputRef.current !== null) {
+      const value = inputRef.current.value;
+      inputRef.current.value = `${value} ${char} `;
       inputRef.current.focus();
     }
   };
@@ -28,15 +27,13 @@ export const Editor: FC<EditorProps> = (props) => {
         fullWidth
         multiline
         rows={5}
-        value={value}
+        defaultValue={placeholder}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        name={name}
         slotProps={{
           input: {
-            autoComplete: "off",
-            autoCorrect: "off",
-            autoCapitalize: "none",
-            spellCheck: false,
+            autoCapitalize: "off",
+            spellCheck: "false",
             sx: {
               fontFamily: "monospace",
             },

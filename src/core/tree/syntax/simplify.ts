@@ -1,4 +1,4 @@
-import { SyntaxTree } from "$types/ast";
+import { SyntaxTree } from "$types/syntax-tree";
 
 export const simplifySyntaxTree = (
   tree: SyntaxTree | null

@@ -1,5 +1,5 @@
-import { SymbolTable } from "$types/ast";
-import { ExprTree } from "$types/graph";
+import { ExprTree } from "$types/expression-tree";
+import { SymbolTable } from "$types/syntax-tree";
 import { Box, Divider } from "@mui/material";
 import {
   FC,

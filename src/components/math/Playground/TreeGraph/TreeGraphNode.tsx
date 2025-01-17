@@ -1,5 +1,5 @@
-import { SymbolTable } from "$types/ast";
-import { ExprTree } from "$types/graph";
+import { ExprTree } from "$types/expression-tree";
+import { SymbolTable } from "$types/syntax-tree";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";

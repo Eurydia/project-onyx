@@ -1,5 +1,5 @@
-import { SyntaxTreeNodeKind } from "$types/ast";
-import { ExprTree } from "$types/graph";
+import { ExprTree } from "$types/expression-tree";
+import { SyntaxTreeNodeKind } from "$types/syntax-tree";
 
 const _exprTreeCollectSymbols = (
   tree: ExprTree,

@@ -1,4 +1,7 @@
-import { SyntaxTree, SyntaxTreeNodeKind } from "$types/ast";
+import {
+  SyntaxTree,
+  SyntaxTreeNodeKind,
+} from "$types/syntax-tree";
 
 const _compareSyntaxTree = (
   a: SyntaxTree,

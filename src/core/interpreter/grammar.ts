@@ -2,7 +2,7 @@ import {
   Operator,
   SyntaxTree,
   SyntaxTreeNodeKind,
-} from "$types/ast";
+} from "$types/syntax-tree";
 import * as ohm from "ohm-js";
 
 const collectBinaryNodes = (

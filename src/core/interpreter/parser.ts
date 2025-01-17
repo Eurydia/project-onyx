@@ -2,12 +2,12 @@ import {
   grammar,
   semantics,
 } from "$core/interpreter/grammar";
-import { SyntaxTree } from "$types/ast";
-import { Maybe } from "$types/common";
+import { Maybe } from "$types/generic";
+import { SyntaxTree } from "$types/syntax-tree";
 
 export const parse = (
   content: string
-): Maybe<SyntaxTree, string> => {
+): Maybe<SyntaxTree> => {
   const m = grammar.match(content);
   if (m.succeeded()) {
     const tree = semantics(m).buildTree();
@@ -15,7 +15,6 @@ export const parse = (
   } else {
     return {
       ok: false,
-      other: m.shortMessage ?? "",
     };
   }
 };

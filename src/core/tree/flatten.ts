@@ -1,8 +1,8 @@
+import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
   SyntaxTreeNodeKind,
-} from "$types/ast";
-import { ExprTree } from "$types/graph";
+} from "$types/syntax-tree";
 import { exprTreeToLatex } from "./expr/latex";
 
 type MinifiedSyntaxTree = {

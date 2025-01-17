@@ -1,4 +1,7 @@
-import { SymbolTable, SyntaxTreeNodeKind } from "./ast";
+import {
+  SymbolTable,
+  SyntaxTreeNodeKind,
+} from "./syntax-tree";
 
 type ExprTreeData = {
   order: number;

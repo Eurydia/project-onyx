@@ -1,7 +1,6 @@
 import "$core/interpreter/parser";
 import { AppbarLayout } from "$layouts/AppbarLayout";
 import { HomeView } from "$views/HomeView";
-import { SolverView } from "$views/SolverView";
 import { TheoremView } from "$views/TheoremView";
 import {
   CssBaseline,
@@ -13,6 +12,7 @@ import {
   createHashRouter,
   RouterProvider,
 } from "react-router";
+import { SOLVER_ROUTE } from "src/routes/solver";
 import { THEME } from "./thene/theme";
 
 const globalStyles = (
@@ -34,10 +34,7 @@ const router = createHashRouter(
       element: <AppbarLayout />,
       children: [
         { index: true, element: <HomeView /> },
-        {
-          path: "/solver",
-          element: <SolverView />,
-        },
+        SOLVER_ROUTE,
         {
           path: "/evaluator",
           element: "Hi",

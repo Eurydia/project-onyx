@@ -3,7 +3,7 @@ import { StyledLatex } from "$components/styled/StyledLatex";
 import { getPermutation } from "$core/eval";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeFlattenPostOrder } from "$core/tree/flatten";
-import { ExprTree } from "$types/graph";
+import { ExprTree } from "$types/expression-tree";
 import {
   alpha,
   Button,
