@@ -103,7 +103,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
             scrollbarGutter: "stable",
             width: "100%",
           }}
-          tex={steps.at(-1)!.expr}
+          tex={steps.at(-1)!.repr}
           options={{ displayMode: true }}
         />
       </StyledCard>

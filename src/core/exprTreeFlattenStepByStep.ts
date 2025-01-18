@@ -6,11 +6,14 @@ import {
 import { exprTreeToLatex } from "./tree/expr/latex";
 
 export type EvaluationStep = {
-  expr: string;
-  substitutedSteps: string[];
-  evaluated: string;
-  relatedSteps: number[];
-  q: string;
+  repr: string;
+  substitutions: {
+    substituted: string;
+    repr: string;
+    step: number;
+    evaluated: boolean;
+  }[];
+  evaluated: boolean;
 };
 
 // const substitute = (
@@ -78,94 +81,96 @@ const traverse = (
     case SyntaxTreeNodeKind.UNARY: {
       const { child } = tree;
 
+      const childEval = child.eval(table);
       let childStep = 0;
-      const childReprRaw = exprTreeToLatex(child);
-      let childRepr = childReprRaw;
+      let childRepr = `
+      \\text{${childEval ? "True" : "False"}}
+      `;
       if (
         child.nodeType !== SyntaxTreeNodeKind.CONST &&
         child.nodeType !== SyntaxTreeNodeKind.IDEN
       ) {
-        traverse(child, table, steps)!;
-        childStep = steps.length - 1;
+        traverse(child, table, steps);
+        childStep = steps.length;
         childRepr = `( ${childRepr} )`;
       }
-      const evaluated = tree.eval(table) ? "True" : "False";
 
-      const repr = exprTreeToLatex(tree);
-      const childEval = child.eval(table)
-        ? "True"
-        : "False";
-
-      const q = `
-      \\[
-      \\begin{aligned}
-      ${repr}\\\\
-      \\text{From ($${childStep}$), $${childReprRaw} \\equiv$ ${childEval}}\\\\
-      \\lnot ${childRepr}\\\\
-      \\equiv \\textbf{${evaluated}}\\
-      \\end{aligned}
-      \\]
-      `;
+      // not (x and y)
+      // From (9), x and y === True
+      // not True
+      // False
 
       steps.push({
-        expr: repr,
-        substitutedSteps: [],
-        evaluated,
-        relatedSteps: [],
-        q,
+        repr: exprTreeToLatex(tree),
+        substitutions: [
+          {
+            repr: exprTreeToLatex(child),
+            evaluated: childEval,
+            step: childStep,
+            substituted: `\\lnot ${childRepr}`,
+          },
+        ],
+        evaluated: tree.eval(table),
       });
       break;
     }
     case SyntaxTreeNodeKind.BINARY: {
       const { right, left } = tree;
 
-      const leftEval = left.eval(table) ? "True" : "False";
+      const leftEval = left.eval(table);
+      const leftSubstituted = `
+      \\text{${leftEval ? "True" : "False"}}
+      `;
       let leftStep: number = 0;
       if (
         left.nodeType !== SyntaxTreeNodeKind.CONST &&
         left.nodeType !== SyntaxTreeNodeKind.IDEN
       ) {
-        traverse(left, table, steps)!;
-        leftStep = steps.length - 1;
+        traverse(left, table, steps);
+        leftStep = steps.length;
+        // leftSubstituted = ` ( ${leftSubstituted} )`;
       }
 
-      let rightRepr = exprTreeToLatex(right);
+      const rightEval = right.eval(table);
+      const rightRawRepr = exprTreeToLatex(right);
+      let rightRepr = rightRawRepr;
+      const rightSubstituted = `
+      \\text{${rightEval ? "True" : "False"}}`;
       let rightStep: number = 0;
-      const rightEval = right.eval(table)
-        ? "True"
-        : "False";
       if (
         right.nodeType !== SyntaxTreeNodeKind.CONST &&
         right.nodeType !== SyntaxTreeNodeKind.IDEN
       ) {
-        traverse(right, table, steps)!;
-        rightStep = steps.length - 1;
+        traverse(right, table, steps);
+        rightStep = steps.length;
         rightRepr = `( ${rightRepr} )`;
+        // rightSubstituted = `( ${rightSubstituted} )`;
       }
 
-      const evaluated = tree.eval(table) ? "True" : "False";
-      const repr = exprTreeToLatex(tree);
-
-      const leftReprRaw = exprTreeToLatex(left);
-      const rightReprRaw = exprTreeToLatex(right);
-      const q = `
-      \\begin{aligned}
-      ${repr}\\\\
-      \\text{From ($${leftStep}$), $${leftReprRaw} \\equiv$ ${leftEval}}\\\\
-      ${leftEval} ${tree.repr} ${rightRepr}\\\\
-      \\text{From ($${rightStep}$), $${rightReprRaw} \\equiv$ ${rightReprRaw}}\\\\
-      ${leftEval} ${tree.repr} ${rightEval}\\\\
-      \\equiv \\textbf{${evaluated}}\\\\
-      \\end{aligned}
-      ${repr}
-      `;
+      // (x and y) and (y and z)
+      // From (9), x and y === True
+      // True and (y and z)
+      // From (10), y and z === True
+      // True and True
+      // True
 
       steps.push({
-        expr: repr,
-        evaluated,
-        substitutedSteps: [],
-        relatedSteps: [],
-        q,
+        repr: exprTreeToLatex(tree),
+        evaluated: tree.eval(table),
+        substitutions: [
+          {
+            repr: exprTreeToLatex(left),
+            evaluated: leftEval,
+            step: leftStep,
+            substituted: `${leftSubstituted} ${tree.repr} ${rightRepr}`,
+          },
+          {
+            repr: rightRawRepr,
+            evaluated: rightEval,
+            step: rightStep,
+            substituted: `${leftSubstituted} ${tree.repr} ${rightSubstituted}`,
+          },
+        ],
       });
     }
   }

@@ -31,49 +31,81 @@ export const StepByStepEvaluation: FC<
             <Typography fontWeight="bold">
               Step {index + 1}
             </Typography>
-            <StyledLatex
-              tex={step.q}
-              options={{
-                displayMode: true,
-              }}
-              sx={{
-                overflowX: "auto",
-                scrollbarGutter: "stable",
-                scrollbarWidth: "thin",
-                whiteSpace: "nowrap",
-              }}
-            />
-            {/* {step.substitutedSteps.length > 0 && (
+            <Stack direction="row">
+              <StyledLatex
+                tex={step.repr}
+                sx={{
+                  overflowX: "auto",
+                  scrollbarGutter: "stable",
+                  scrollbarWidth: "thin",
+                  whiteSpace: "nowrap",
+                  flexGrow: 1,
+                  textAlign: "center",
+                }}
+              />
+              <StyledLatex tex={`(${index + 1}.a)`} />
+            </Stack>
+            {step.substitutions.length > 0 && (
               <Stack>
-                {step.substitutedSteps.map(
-                  (substitution, relatedIndex) => (
+                {step.substitutions.map(
+                  (substitution, subIndex) => (
                     <Stack
-                      key={
-                        "sub-step" + index + relatedIndex
-                      }
-                      direction="row"
-                      spacing={1}
+                      key={"sub-step" + index + subIndex}
                     >
                       <StyledLatex
-                        tex={`\\equiv ${substitution}`}
-                        sx={{
-                          overflowX: "auto",
-                          scrollbarGutter: "stable",
-                          scrollbarWidth: "thin",
-                          whiteSpace: "nowrap",
-                          flexGrow: 1,
-                          textAlign: "center",
-                        }}
+                        tex={`
+                            \\text{${
+                              substitution.step === 0
+                                ? `Given`
+                                : `From $(${substitution.step})$`
+                            } $${
+                          substitution.repr
+                        } \\equiv$ ${
+                          substitution.evaluated
+                            ? "True"
+                            : "False"
+                        }},`}
                       />
+                      <Stack direction="row">
+                        <StyledLatex
+                          tex={`${substitution.substituted}.`}
+                          sx={{
+                            overflowX: "auto",
+                            scrollbarGutter: "stable",
+                            scrollbarWidth: "thin",
+                            whiteSpace: "nowrap",
+                            flexGrow: 1,
+                            textAlign: "center",
+                          }}
+                        />
+                        <StyledLatex
+                          tex={`(${
+                            index + 1
+                          }.${String.fromCharCode(
+                            97 + subIndex + 1
+                          )})`}
+                        />
+                      </Stack>
                     </Stack>
                   )
                 )}
               </Stack>
             )}
-            <StyledLatex
-              tex={`\\equiv \\textbf{${step.evaluated}}.`}
-              sx={{ textAlign: "center" }}
-            /> */}
+            <Stack
+              direction="row"
+              spacing={1}
+            >
+              <StyledLatex
+                tex={`${step.repr} \\equiv \\text{${
+                  step.evaluated ? "True" : "False"
+                }}`}
+                sx={{
+                  flexGrow: 1,
+                  textAlign: "center",
+                }}
+              />
+              <StyledLatex tex={`(${index + 1})`} />
+            </Stack>
           </Box>
         ))}
       </Stack>
