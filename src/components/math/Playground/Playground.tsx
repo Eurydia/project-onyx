@@ -1,6 +1,6 @@
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
-import { Box, Divider } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import {
   FC,
   KeyboardEvent,
@@ -38,10 +38,16 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   };
 
   return (
-    <Box>
-      <Box
-        height="75vh"
-        width="100%"
+    <Stack spacing={1}>
+      <Paper
+        elevation={0}
+        sx={{
+          height: "75vh",
+          width: "100%",
+          borderRadius: ({ shape }) => shape.borderRadius,
+          backgroundColor: ({ palette }) =>
+            palette.background.default,
+        }}
       >
         <TreeGraph
           order={step}
@@ -49,14 +55,13 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           onKeyDown={handleGraphKeyPress}
           symbolTable={symbolTable}
         />
-      </Box>
-      <Divider flexItem />
+      </Paper>
       <PlaygroundPlaybackControl
         maxValue={maxStep}
         minValue={1}
         value={step}
         onChange={setStep}
       />
-    </Box>
+    </Stack>
   );
 };

@@ -1,20 +1,25 @@
 import { Playground } from "$components/math/Playground/Playground";
 import { TruthTable } from "$components/math/TruthTable/TruthTable";
-import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import {
   EvaluationStep,
   exprTreeFlattenStepByStep,
 } from "$core/exprTreeFlattenStepByStep";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
   Card,
   CardContent,
   CardHeader,
   Stack,
-  Typography,
 } from "@mui/material";
-import { FC, ReactNode, useEffect, useState } from "react";
+import {
+  FC,
+  memo,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import { PlaygroundSymbolConfig } from "./Playground/PlaygroundSymbolConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation";
 
@@ -47,7 +52,7 @@ type SolverSolvedViewProps = {
   exprTree: ExprTree;
   symbolSet: Set<string>;
 };
-export const SolverSolvedView: FC<SolverSolvedViewProps> = (
+const SolverSolvedView_: FC<SolverSolvedViewProps> = (
   props
 ) => {
   const { exprTree, symbolSet } = props;
@@ -110,12 +115,6 @@ export const SolverSolvedView: FC<SolverSolvedViewProps> = (
         <StepByStepEvaluation steps={steps} />
       </StyledCard>
       <StyledCard title="Graph">
-        <StyledAlert severity="info">
-          <Typography>
-            Use re-center button in case you cannot find the
-            graph
-          </Typography>
-        </StyledAlert>
         <Playground
           exprTree={exprTree}
           symbolTable={symbolTable}
@@ -127,3 +126,10 @@ export const SolverSolvedView: FC<SolverSolvedViewProps> = (
     </Stack>
   );
 };
+
+export const SolverSolvedView = memo(
+  SolverSolvedView_,
+  (prev, next) =>
+    exprTreeToLatex(prev.exprTree) ===
+    exprTreeToLatex(next.exprTree)
+);

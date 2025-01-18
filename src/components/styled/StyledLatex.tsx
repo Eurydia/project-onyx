@@ -22,6 +22,10 @@ export const StyledLatex: FC<StyledLatexProps> = (
     <Typography
       ref={ref}
       component="span"
+      sx={{
+        scrollbarWidth: "thin",
+        scrollbarGutter: "stable both-edges",
+      }}
     />
   );
 };

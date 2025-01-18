@@ -46,18 +46,30 @@ export const StepByStepEvaluation: FC<
                   {step.relatedSteps.map(
                     (relatedStep, index) => (
                       <li key={"substep" + index}>
-                        <Typography
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: 1,
-                          }}
+                        <Stack
+                          spacing={1}
+                          direction="row"
                         >
-                          From step {relatedStep + 1}:
-                          <StyledLatex
-                            tex={`${steps[relatedStep].expr}\\equiv${steps[relatedStep].evaluated}`}
-                          />
-                        </Typography>
+                          <Typography
+                            sx={{
+                              whiteSpace: "nowrap",
+                              wordBreak: "keep-all",
+                            }}
+                          >
+                            From step {relatedStep + 1};
+                          </Typography>
+                          <Typography
+                            sx={{
+                              whiteSpace: "nowrap",
+                              wordBreak: "keep-all",
+                              overflowX: "auto",
+                            }}
+                          >
+                            <StyledLatex
+                              tex={`${steps[relatedStep].expr}\\equiv${steps[relatedStep].evaluated}`}
+                            />
+                          </Typography>
+                        </Stack>
                       </li>
                     )
                   )}
