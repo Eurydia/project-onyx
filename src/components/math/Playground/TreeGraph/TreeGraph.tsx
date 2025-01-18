@@ -8,9 +8,8 @@ import { ControlCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
-import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import { Zoom } from "@visx/zoom";
-import { FC, KeyboardEvent, useRef } from "react";
+import { FC, Fragment, KeyboardEvent, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
@@ -39,8 +38,6 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
 
   const { t } = useTranslation();
   const viewportRef = useRef<HTMLDivElement | null>(null);
-  const currentNode =
-    useRef<HierarchyPointNode<ExprTree> | null>(null);
   const data = hierarchy(tree, flatten_expr);
 
   const viewportWidth =
@@ -55,6 +52,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
 
   const treeWidth = (data.leaves().length + 1) * 150;
   const treeHeight = (data.height + 1) * 100;
+  const nodeRadius = 30;
 
   return (
     <Box
@@ -66,13 +64,13 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
       <Zoom<SVGSVGElement>
         width={viewportWidth}
         height={viewportHeight}
-        scaleXMin={1 / 3}
-        scaleXMax={3}
-        scaleYMin={1 / 3}
-        scaleYMax={3}
+        scaleXMin={1 / 10}
+        scaleXMax={1}
+        scaleYMin={1 / 10}
+        scaleYMax={1}
       >
         {(zoom) => (
-          <div>
+          <Fragment>
             <svg
               tabIndex={0} // Need tabindex otherwise svg will not send keyboard event
               width={viewportWidth}
@@ -90,13 +88,15 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
               onMouseUp={zoom.dragEnd}
               onMouseLeave={zoom.dragEnd}
             >
-              <g transform={zoom.toString()}>
+              <Group transform={zoom.toString()}>
                 <Tree
                   root={data}
                   size={[treeWidth, -treeHeight]}
                 >
                   {(treeHeir) => (
-                    <Group>
+                    <Group
+                      top={treeHeight + nodeRadius * 1.5}
+                    >
                       {treeHeir.links().map((link, i) => (
                         <TreeGraphLink
                           key={`link-${i}`}
@@ -106,50 +106,27 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                       ))}
                       {treeHeir
                         .descendants()
-                        .map((node, i) => {
-                          if (node.data.order === order) {
-                            currentNode.current = node;
-                          }
-                          return (
-                            <TreeGraphNode
-                              key={`node-${i}`}
-                              order={order}
-                              node={node}
-                              symbolTable={symbolTable}
-                            />
-                          );
-                        })}
+                        .map((node, i) => (
+                          <TreeGraphNode
+                            key={`node-${i}`}
+                            order={order}
+                            node={node}
+                            symbolTable={symbolTable}
+                            r={nodeRadius}
+                          />
+                        ))}
                     </Group>
                   )}
                 </Tree>
-              </g>
+              </Group>
             </svg>
             <StyledFAB
-              onClick={() => {
-                if (currentNode.current === null) {
-                  return;
-                }
-                const centerX = viewportWidth / 2;
-                const centerY = viewportHeight / 2;
-                const { x, y } = currentNode.current;
-                const scaleX = zoom.transformMatrix.scaleX;
-                const scaleY = zoom.transformMatrix.scaleY;
-                const translateX = centerX - x * scaleX;
-                const translateY = centerY - y * scaleY;
-                zoom.setTransformMatrix({
-                  translateX,
-                  translateY,
-                  scaleX,
-                  scaleY,
-                  skewX: 0,
-                  skewY: 0,
-                });
-              }}
+              onClick={zoom.center}
               title={t("playground.graph.center")}
             >
               <ControlCameraRounded />
             </StyledFAB>
-          </div>
+          </Fragment>
         )}
       </Zoom>
     </Box>

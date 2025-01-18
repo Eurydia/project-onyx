@@ -11,11 +11,12 @@ type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
   order: number;
   symbolTable: SymbolTable;
+  r: number;
 };
 export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
-  const { order, node, symbolTable } = props;
+  const { r, order, node, symbolTable } = props;
   const { t } = useTranslation();
   const { x, y, data } = node;
   const { palette, typography } = useTheme();
@@ -34,9 +35,6 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   const isNodeVisibleSoon = data.order <= order + 1;
   const isNodeVisible =
     isNodeVisibleNow || isNodeVisibleSoon;
-
-  const r = 30;
-
   return (
     <Group
       top={y}

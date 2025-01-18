@@ -8,16 +8,15 @@ import {
 } from "$core/exprTreeFlattenStepByStep";
 import { ExprTree } from "$types/expression-tree";
 import {
-  Box,
   Card,
   CardContent,
   CardHeader,
-  Divider,
   Stack,
   Typography,
 } from "@mui/material";
 import { FC, ReactNode, useEffect, useState } from "react";
 import { PlaygroundSymbolConfig } from "./Playground/PlaygroundSymbolConfig";
+import { StepByStepEvaluation } from "./StepByStepEvaluation";
 
 type StyledCardProps = {
   title: string;
@@ -108,63 +107,7 @@ export const SolverSolvedView: FC<SolverSolvedViewProps> = (
         />
       </StyledCard>
       <StyledCard title="Step-by-step Evaluation">
-        <Stack
-          spacing={1}
-          divider={<Divider />}
-        >
-          {steps.map((step, index) => (
-            <Box key={"step" + index}>
-              <Typography fontWeight="bold">
-                Step {index + 1}
-              </Typography>
-              <StyledLatex
-                tex={step.expr}
-                options={{ displayMode: true }}
-              />
-              {step.relatedSteps.length >= 1 && (
-                <>
-                  <Typography>
-                    Substitute into expression
-                  </Typography>
-                  <ul>
-                    {step.relatedSteps.map(
-                      (relatedStep, index) => (
-                        <li key={"substep" + index}>
-                          <Typography
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              gap: 1,
-                            }}
-                          >
-                            From step {relatedStep + 1}:
-                            <StyledLatex
-                              tex={`${steps[relatedStep].expr}\\equiv${steps[relatedStep].evaluated}`}
-                            />
-                          </Typography>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </>
-              )}
-              <StyledLatex
-                tex={`\\begin{align*}&\\equiv${step.substituted}\\\\ &\\equiv\\textbf{${step.evaluated}}.\\end{align*}`}
-                options={{
-                  displayMode: true,
-                  leqno: false,
-                  fleqn: false,
-                }}
-              />
-            </Box>
-          ))}
-        </Stack>
-        <StyledLatex
-          tex={`\\therefore 
-            ${steps.at(-1)!.expr} 
-            \\equiv 
-            ${steps.at(-1)!.evaluated}`}
-        />
+        <StepByStepEvaluation steps={steps} />
       </StyledCard>
       <StyledCard title="Graph">
         <StyledAlert severity="info">
