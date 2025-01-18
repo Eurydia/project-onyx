@@ -1,0 +1,2 @@
+import{g as r,a}from"./mdast-util-gfm-autolink-literal-DgF5FJC6.js";import{g as m,a as t}from"./mdast-util-gfm-footnote-DDcgsGKB.js";import{g as n,a as g}from"./mdast-util-gfm-strikethrough-Cj9qKt6Q.js";import{g as f,a as k}from"./mdast-util-gfm-table-1_ObPUfw.js";import{g as s,a as i}from"./mdast-util-gfm-task-list-item-LBihUM48.js";function u(){return[r(),m(),n(),f(),s()]}function F(o){return{extensions:[a(),t(),g(),k(o),i()]}}export{F as a,u as g};
+//# sourceMappingURL=mdast-util-gfm-CmpWHspO.js.map
