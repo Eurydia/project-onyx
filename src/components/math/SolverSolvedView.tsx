@@ -149,7 +149,7 @@ export const SolverSolvedView: FC<SolverSolvedViewProps> = (
                 </>
               )}
               <StyledLatex
-                tex={`\\begin{align*}&\\equiv${step.substituted}\\\\ &\\equiv${step.evaluated}.\\end{align*}`}
+                tex={`\\begin{align*}&\\equiv${step.substituted}\\\\ &\\equiv\\textbf{${step.evaluated}}.\\end{align*}`}
                 options={{
                   displayMode: true,
                   leqno: false,
@@ -159,6 +159,12 @@ export const SolverSolvedView: FC<SolverSolvedViewProps> = (
             </Box>
           ))}
         </Stack>
+        <StyledLatex
+          tex={`\\therefore 
+            ${steps.at(-1)!.expr} 
+            \\equiv 
+            ${steps.at(-1)!.evaluated}`}
+        />
       </StyledCard>
       <StyledCard title="Graph">
         <StyledAlert severity="info">

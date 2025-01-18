@@ -2,7 +2,7 @@ import { Editor } from "$components/math/Editor/Editor";
 import { SolverSolvedView } from "$components/math/SolverSolvedView";
 import { SolverRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
-import { Box, Button, Divider, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -56,13 +56,10 @@ export const SolverView: FC = () => {
           RUN
         </Button>
         {data.ok && (
-          <>
-            <Divider flexItem />
-            <SolverSolvedView
-              exprTree={data.data.exprTree}
-              symbolSet={data.data.symbols}
-            />
-          </>
+          <SolverSolvedView
+            exprTree={data.data.exprTree}
+            symbolSet={data.data.symbols}
+          />
         )}
       </Stack>
     </Box>

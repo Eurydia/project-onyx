@@ -26,7 +26,10 @@ const substitute = (
       break;
     case SyntaxTreeNodeKind.UNARY: {
       const { child } = tree;
-      const childRepr = substitute(child, table);
+      // const childRepr = substitute(child, table);
+      const childRepr = child.eval(table)
+        ? "\\text{True}"
+        : "\\text{False}";
       switch (child.nodeType) {
         case SyntaxTreeNodeKind.CONST:
         case SyntaxTreeNodeKind.IDEN:
@@ -42,14 +45,20 @@ const substitute = (
     case SyntaxTreeNodeKind.BINARY: {
       const { right, left } = tree;
 
-      let leftRepr = substitute(left, table);
+      // let leftRepr = substitute(left, table);
+      let leftRepr = left.eval(table)
+        ? "\\text{True}"
+        : "\\text{False}";
       switch (left.nodeType) {
         case SyntaxTreeNodeKind.UNARY:
         case SyntaxTreeNodeKind.BINARY:
           leftRepr = `( ${leftRepr} )`;
       }
 
-      let rightRepr = substitute(right, table);
+      // let rightRepr = substitute(right, table);
+      let rightRepr = right.eval(table)
+        ? "\\text{True}"
+        : "\\text{False}";
       switch (right.nodeType) {
         case SyntaxTreeNodeKind.UNARY:
         case SyntaxTreeNodeKind.BINARY:

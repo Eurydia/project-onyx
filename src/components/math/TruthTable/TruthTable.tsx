@@ -80,6 +80,9 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
               <TableCell
                 key={"sym" + index}
                 align="center"
+                sx={{
+                  whiteSpace: "nowrap",
+                }}
               >
                 <StyledLatex tex={sym} />
               </TableCell>
@@ -88,6 +91,9 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
               <TableCell
                 key={"subexpr" + index}
                 align="center"
+                sx={{
+                  whiteSpace: "nowrap",
+                }}
               >
                 <StyledLatex tex={col.repr} />
               </TableCell>
