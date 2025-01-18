@@ -1,20 +1,21 @@
 import { Stack, TextField } from "@mui/material";
-import { FC, useRef } from "react";
+import { Dispatch, FC, useRef } from "react";
 import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
   placeholder: string;
   name?: string;
+  value: string;
+  onChange: Dispatch<string>;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { name, placeholder } = props;
+  const { name, placeholder, value, onChange } = props;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleInsertChar = (char: string) => {
+    onChange(`${value} ${char} `);
     if (inputRef !== null && inputRef.current !== null) {
-      const value = inputRef.current.value;
-      inputRef.current.value = `${value} ${char} `;
       inputRef.current.focus();
     }
   };
@@ -27,7 +28,8 @@ export const Editor: FC<EditorProps> = (props) => {
         fullWidth
         multiline
         rows={5}
-        defaultValue={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         name={name}
         slotProps={{

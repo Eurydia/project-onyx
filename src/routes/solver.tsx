@@ -1,56 +1,52 @@
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { SolverSolvedView } from "$views/SolverSolvedView";
+import { SolverRouteLoaderData } from "$types/loader-data";
 import { SolverView } from "$views/SolverView";
-import { redirect, RouteObject } from "react-router";
+import { RouteObject } from "react-router";
 
 export const SOLVER_ROUTE: RouteObject = {
   path: "/solver",
-  children: [
-    {
-      index: true,
-      element: <SolverView />,
-    },
-    {
-      path: "/solver/solved",
-      element: <SolverSolvedView />,
-      loader: async ({ request }) => {
-        const url = new URL(request.url);
-        const userInputRaw =
-          url.searchParams.get("content");
+  element: <SolverView />,
+  loader: ({ request }) => {
+    const url = new URL(request.url);
+    const userInputRaw = url.searchParams.get("input");
 
-        if (
-          userInputRaw === null ||
-          userInputRaw.toString().trim().length === 0
-        ) {
-          return redirect("/solver");
-        }
+    if (
+      userInputRaw === null ||
+      userInputRaw.toString().trim().length === 0
+    ) {
+      const loaderData: SolverRouteLoaderData = {
+        userInput: "",
+        data: { ok: false },
+      };
+      return loaderData;
+    }
 
-        const userInput = userInputRaw.toString();
-        const result = parse(userInput);
+    const userInput = userInputRaw.toString();
+    const result = parse(userInput);
 
-        if (!result.ok) {
-          const loaderData: SolverRouteLoaderData = {
-            data: { ok: false },
-          };
-          return loaderData;
-        }
-        const { data: syntaxTree } = result;
-        const exprTree = syntaxTreetoExprTree(syntaxTree);
-        const symbols = exprTreeCollectSymbols(exprTree);
-        const data: LoaderData = {
+    if (!result.ok) {
+      const loaderData: SolverRouteLoaderData = {
+        userInput,
+        data: { ok: false },
+      };
+      return loaderData;
+    }
+
+    const { data: syntaxTree } = result;
+    const exprTree = syntaxTreetoExprTree(syntaxTree);
+    const symbols = exprTreeCollectSymbols(exprTree);
+    const loaderData: SolverRouteLoaderData = {
+      userInput,
+      data: {
+        ok: true,
+        data: {
           exprTree,
           symbols,
-        };
-        const loaderData: SolverRouteLoaderData = {
-          data: {
-            ok: true,
-            data,
-          },
-        };
-        return loaderData;
+        },
       },
-    },
-  ],
+    };
+    return loaderData;
+  },
 };
