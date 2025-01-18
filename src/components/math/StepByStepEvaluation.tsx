@@ -20,8 +20,6 @@ export const StepByStepEvaluation: FC<
     return null;
   }
 
-  const { expr, evaluated } = steps.at(-1)!;
-  const thereforeLatex = `\\therefore ${expr} \\equiv ${evaluated}`;
   return (
     <Stack>
       <Stack
@@ -34,60 +32,51 @@ export const StepByStepEvaluation: FC<
               Step {index + 1}
             </Typography>
             <StyledLatex
-              tex={step.expr}
-              options={{ displayMode: true }}
-            />
-            {step.relatedSteps.length >= 1 && (
-              <>
-                <Typography>
-                  Substitute into expression
-                </Typography>
-                <ul>
-                  {step.relatedSteps.map(
-                    (relatedStep, index) => (
-                      <li key={"substep" + index}>
-                        <Stack
-                          spacing={1}
-                          direction="row"
-                        >
-                          <Typography
-                            sx={{
-                              whiteSpace: "nowrap",
-                              wordBreak: "keep-all",
-                            }}
-                          >
-                            From step {relatedStep + 1};
-                          </Typography>
-                          <Typography
-                            sx={{
-                              whiteSpace: "nowrap",
-                              wordBreak: "keep-all",
-                              overflowX: "auto",
-                            }}
-                          >
-                            <StyledLatex
-                              tex={`${steps[relatedStep].expr}\\equiv${steps[relatedStep].evaluated}`}
-                            />
-                          </Typography>
-                        </Stack>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </>
-            )}
-            <StyledLatex
-              tex={`\\begin{align*}&\\equiv${step.substituted}\\\\ &\\equiv\\textbf{${step.evaluated}}.\\end{align*}`}
+              tex={step.q}
               options={{
                 displayMode: true,
-                leqno: false,
-                fleqn: false,
+              }}
+              sx={{
+                overflowX: "auto",
+                scrollbarGutter: "stable",
+                scrollbarWidth: "thin",
+                whiteSpace: "nowrap",
               }}
             />
+            {/* {step.substitutedSteps.length > 0 && (
+              <Stack>
+                {step.substitutedSteps.map(
+                  (substitution, relatedIndex) => (
+                    <Stack
+                      key={
+                        "sub-step" + index + relatedIndex
+                      }
+                      direction="row"
+                      spacing={1}
+                    >
+                      <StyledLatex
+                        tex={`\\equiv ${substitution}`}
+                        sx={{
+                          overflowX: "auto",
+                          scrollbarGutter: "stable",
+                          scrollbarWidth: "thin",
+                          whiteSpace: "nowrap",
+                          flexGrow: 1,
+                          textAlign: "center",
+                        }}
+                      />
+                    </Stack>
+                  )
+                )}
+              </Stack>
+            )}
+            <StyledLatex
+              tex={`\\equiv \\textbf{${step.evaluated}}.`}
+              sx={{ textAlign: "center" }}
+            /> */}
           </Box>
         ))}
       </Stack>
-      <StyledLatex tex={thereforeLatex} />
     </Stack>
   );
 };

@@ -1,8 +1,15 @@
 import { Editor } from "$components/math/Editor/Editor";
-import { SolverSolvedView } from "$components/math/SolverSolvedView";
+import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
 import { SolverRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
-import { Box, Button, Stack } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -56,10 +63,26 @@ export const SolverView: FC = () => {
           RUN
         </Button>
         {data.ok && (
-          <SolverSolvedView
+          <SolverOutputGroup
             exprTree={data.data.exprTree}
             symbolSet={data.data.symbols}
           />
+        )}
+        {!data.ok && defaultUserInput.trim().length > 0 && (
+          <Alert
+            severity="warning"
+            variant="outlined"
+          >
+            <AlertTitle>
+              <Typography>
+                The solver cannot understand your input.
+              </Typography>
+            </AlertTitle>
+            <Typography>
+              It seems like something is wrong with the
+              expression.
+            </Typography>
+          </Alert>
         )}
       </Stack>
     </Box>

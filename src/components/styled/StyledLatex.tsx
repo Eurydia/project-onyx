@@ -1,15 +1,16 @@
-import { Typography } from "@mui/material";
+import { SxProps, Typography } from "@mui/material";
 import katex, { KatexOptions } from "katex";
 import { FC, useEffect, useRef } from "react";
 
 type StyledLatexProps = {
   tex: string;
   options?: KatexOptions;
+  sx?: SxProps;
 };
 export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
-  const { tex, options } = props;
+  const { sx, tex, options } = props;
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -22,10 +23,7 @@ export const StyledLatex: FC<StyledLatexProps> = (
     <Typography
       ref={ref}
       component="span"
-      sx={{
-        scrollbarWidth: "thin",
-        scrollbarGutter: "stable both-edges",
-      }}
+      sx={sx}
     />
   );
 };

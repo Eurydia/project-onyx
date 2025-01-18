@@ -20,15 +20,37 @@ import {
 import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+type StyledTableCellProps = { value: boolean };
+const StyledTableCell: FC<StyledTableCellProps> = (
+  props
+) => {
+  const { value } = props;
+  const { t } = useTranslation();
+  const { palette } = useTheme();
+
+  return (
+    <TableCell
+      align="center"
+      sx={{
+        backgroundColor: value
+          ? alpha(palette.secondary.light, 0.8)
+          : alpha(palette.secondary.main, 0.2),
+      }}
+    >
+      <Typography>
+        {value ? t("common.true") : t("common.false")}
+      </Typography>
+    </TableCell>
+  );
+};
+
 type TruthTableProps = {
   exprTree: ExprTree;
 };
 export const TruthTable: FC<TruthTableProps> = (props) => {
   const { exprTree } = props;
   const { t } = useTranslation();
-  const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
-
   const { columns, symbols } = useMemo(() => {
     const _columns = exprTreeFlattenPostOrder(exprTree);
     const _symbols = [...exprTreeCollectSymbols(exprTree)];
@@ -81,7 +103,8 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
                 key={"sym" + index}
                 align="center"
                 sx={{
-                  whiteSpace: "nowrap",
+                  backgroundColor: ({ palette }) =>
+                    palette.background.paper,
                 }}
               >
                 <StyledLatex tex={sym} />
@@ -92,7 +115,8 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
                 key={"subexpr" + index}
                 align="center"
                 sx={{
-                  whiteSpace: "nowrap",
+                  backgroundColor: ({ palette }) =>
+                    palette.background.paper,
                 }}
               >
                 <StyledLatex tex={col.repr} />
@@ -104,38 +128,16 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
           {perm.map((p, index) => (
             <TableRow key={"perm" + index}>
               {symbols.map((sym, index) => (
-                <TableCell
+                <StyledTableCell
                   key={"sym" + index}
-                  align="center"
-                  sx={{
-                    backgroundColor: p.get(sym)
-                      ? alpha(palette.secondary.light, 0.2)
-                      : alpha(palette.secondary.main, 0.2),
-                  }}
-                >
-                  <Typography>
-                    {p.get(sym)
-                      ? t("common.true")
-                      : t("common.false")}
-                  </Typography>
-                </TableCell>
+                  value={p.get(sym) || false}
+                />
               ))}
               {columns.map((subExpr, colIndex) => (
-                <TableCell
+                <StyledTableCell
                   key={"col" + colIndex}
-                  align="center"
-                  sx={{
-                    backgroundColor: subExpr.eval(p)
-                      ? alpha(palette.secondary.light, 0.2)
-                      : alpha(palette.secondary.main, 0.2),
-                  }}
-                >
-                  <Typography>
-                    {subExpr.eval(p)
-                      ? t("common.true")
-                      : t("common.false")}
-                  </Typography>
-                </TableCell>
+                  value={subExpr.eval(p)}
+                />
               ))}
             </TableRow>
           ))}

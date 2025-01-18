@@ -25,8 +25,7 @@ export const AppbarLayout: FC = () => {
   return (
     <Fragment>
       <Paper
-        variant="elevation"
-        elevation={0}
+        variant="outlined"
         sx={{
           maxWidth: "lg",
           marginY: 4,

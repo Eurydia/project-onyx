@@ -42,7 +42,11 @@ export const PlaygroundSymbolConfig: FC<
         >
           <FormControl fullWidth>
             <FormLabel
-              sx={{ width: "100%", overflowX: "auto" }}
+              sx={{
+                overflowX: "auto",
+                scrollbarGutter: "stable",
+                scrollbarWidth: "thin",
+              }}
             >
               <StyledLatex tex={`\\text{\`\`$${sym}$''}`} />
             </FormLabel>

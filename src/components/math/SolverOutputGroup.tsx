@@ -31,7 +31,7 @@ const StyledCard: FC<StyledCardProps> = (props) => {
   const { children, title } = props;
   return (
     <Card
-      elevation={0}
+      variant="outlined"
       sx={{
         padding: 2,
         borderRadius: ({ shape }) => shape.borderRadius,
@@ -48,11 +48,11 @@ const StyledCard: FC<StyledCardProps> = (props) => {
   );
 };
 
-type SolverSolvedViewProps = {
+type SolverOutputGroupProps = {
   exprTree: ExprTree;
   symbolSet: Set<string>;
 };
-const SolverSolvedView_: FC<SolverSolvedViewProps> = (
+const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
   props
 ) => {
   const { exprTree, symbolSet } = props;
@@ -94,9 +94,15 @@ const SolverSolvedView_: FC<SolverSolvedViewProps> = (
   }, [exprTree, symbolTable]);
 
   return (
-    <Stack spacing={4}>
+    <Stack spacing={2}>
       <StyledCard title="Input">
         <StyledLatex
+          sx={{
+            overflowX: "auto",
+            scrollbarWidth: "thin",
+            scrollbarGutter: "stable",
+            width: "100%",
+          }}
           tex={steps.at(-1)!.expr}
           options={{ displayMode: true }}
         />
@@ -127,8 +133,8 @@ const SolverSolvedView_: FC<SolverSolvedViewProps> = (
   );
 };
 
-export const SolverSolvedView = memo(
-  SolverSolvedView_,
+export const SolverOutputGroup = memo(
+  SolverOutputGroup_,
   (prev, next) =>
     exprTreeToLatex(prev.exprTree) ===
     exprTreeToLatex(next.exprTree)

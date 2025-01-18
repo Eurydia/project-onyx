@@ -40,13 +40,11 @@ export const Playground: FC<PlaygroundProps> = (props) => {
   return (
     <Stack spacing={1}>
       <Paper
-        elevation={0}
+        variant="outlined"
         sx={{
           height: "75vh",
           width: "100%",
           borderRadius: ({ shape }) => shape.borderRadius,
-          backgroundColor: ({ palette }) =>
-            palette.background.default,
         }}
       >
         <TreeGraph
