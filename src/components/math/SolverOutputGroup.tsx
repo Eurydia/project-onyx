@@ -136,7 +136,6 @@ export const SolverOutputGroup = memo(
   (prev, next) => {
     const p = exprTreeToLatex(prev.exprTree);
     const n = exprTreeToLatex(next.exprTree);
-    console.debug(p, n);
     return n === p;
   }
 );
