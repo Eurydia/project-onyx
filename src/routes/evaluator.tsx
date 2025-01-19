@@ -3,10 +3,7 @@ import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
-import {
-  EvaluatorRouteLoaderData,
-  SolverRouteLoaderData,
-} from "$types/loader-data";
+import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { EvaluatorView } from "$views/EvaluatorView";
 import { RouteObject } from "react-router";
 
@@ -21,9 +18,10 @@ export const EVALUATOR_ROUTE: RouteObject = {
       userInput === null ||
       userInput.trim().length === 0
     ) {
-      const loaderData: SolverRouteLoaderData = {
+      const loaderData: EvaluatorRouteLoaderData = {
         userInput: "",
-        data: { ok: false },
+        data: [],
+        symbols: new Set(),
       };
       return loaderData;
     }
@@ -31,6 +29,9 @@ export const EVALUATOR_ROUTE: RouteObject = {
     const symbols = new Set<string>();
     const data: Maybe<ExprTree>[] = [];
     for (const expr of userInput.split(";")) {
+      if (expr.trim().length === 0) {
+        continue;
+      }
       const result = parse(expr);
       if (!result.ok) {
         data.push({ ok: false });
@@ -51,7 +52,7 @@ export const EVALUATOR_ROUTE: RouteObject = {
 
     const loaderData: EvaluatorRouteLoaderData = {
       userInput,
-      data,
+      data: data,
       symbols,
     };
     return loaderData;

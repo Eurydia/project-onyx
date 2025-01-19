@@ -65,17 +65,15 @@ export const HomeView: FC = () => {
             }}
           >
             <Card
-              elevation={0}
+              variant="outlined"
               sx={{
                 "borderStyle": "solid",
                 "borderRadius": ({ shape }) =>
                   shape.borderRadius,
-                "borderColor": ({ palette }) =>
-                  palette.divider,
                 "transition": "all 0.1s ease",
                 "&:hover": {
                   borderColor: ({ palette }) =>
-                    palette.secondary.main,
+                    palette.secondary.light,
                 },
               }}
             >

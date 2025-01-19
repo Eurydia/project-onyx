@@ -21,7 +21,7 @@ import { useLoaderData, useSubmit } from "react-router";
 export const EvaluatorView: FC = () => {
   const {
     symbols,
-    data,
+    data: data,
     userInput: defaultUserInput,
   } = useLoaderData() as EvaluatorRouteLoaderData;
 
@@ -81,90 +81,85 @@ export const EvaluatorView: FC = () => {
         >
           RUN
         </Button>
-
-        <StyledOutputCard title="Propositions">
-          {symbolTable.size === 0 && (
-            <Typography fontStyle="italic">
-              No proposition to display.
-            </Typography>
-          )}
-          {symbolTable.size > 0 && (
-            <PlaygroundSymbolConfig
-              symbolTable={symbolTable}
-              onChange={(k, v) =>
-                setSymbolTable((prev) => {
-                  const next = new Map(prev);
-                  next.set(k, v);
-                  return next;
-                })
-              }
-            />
-          )}
-        </StyledOutputCard>
-        <StyledOutputCard title="Evaluation">
-          {data.length === 0 && (
-            <Typography fontStyle="italic">
-              No expression to display. Enter an expression
-              to evaluate its result.
-            </Typography>
-          )}
-          {data.length > 0 && (
-            <Stack
-              spacing={2}
-              divider={<Divider flexItem />}
-            >
-              {data.map((expr, index) => (
-                <Stack key={"expr" + index}>
-                  <StyledLatex
-                    tex={`\\text{\\textbf{Equation} 
-                        $\\mathbf{${index + 1}}$:
-                        }`}
-                  />
-                  {!expr.ok && (
+        {data.length > 0 && data.some(({ ok }) => ok) && (
+          <>
+            <StyledOutputCard title="Propositions">
+              {symbolTable.size === 0 && (
+                <Typography fontStyle="italic">
+                  No proposition to display.
+                </Typography>
+              )}
+              {symbolTable.size > 0 && (
+                <PlaygroundSymbolConfig
+                  symbolTable={symbolTable}
+                  onChange={(k, v) =>
+                    setSymbolTable((prev) => {
+                      const next = new Map(prev);
+                      next.set(k, v);
+                      return next;
+                    })
+                  }
+                />
+              )}
+            </StyledOutputCard>
+            <StyledOutputCard title="Evaluation">
+              <Stack
+                spacing={2}
+                divider={<Divider flexItem />}
+              >
+                {data.map((expr, index) => (
+                  <Stack key={"expr" + index}>
                     <StyledLatex
-                      tex="\text{The evaluator cannot understand this expression.}"
-                      sx={{
-                        textAlign: "center",
-                      }}
+                      tex={`\\text{\\textbf{Equation} 
+                      $\\mathbf{${index + 1}}$:
+                      }`}
                     />
-                  )}
-                  {expr.ok && (
-                    <>
+                    {!expr.ok && (
                       <StyledLatex
-                        tex={exprTreeToLatex(expr.data)}
+                        tex="\text{The evaluator could not understand this expression.}"
                         sx={{
                           textAlign: "center",
                         }}
                       />
-                      <StyledLatex
-                        tex={exprTreeToLatexSubstitute(
-                          expr.data,
-                          symbolTable
-                        )}
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      />
-                      <StyledLatex
-                        tex={`\\textbf{${expr.data.eval(
-                          symbolTable
-                        )}}`}
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      />
-                      <StyledLatex
-                        tex={`\\text{$\\therefore 
-                          ${exprTreeToLatex(expr.data)}$ is 
-                        ${expr.data.eval(symbolTable)}.}`}
-                      />
-                    </>
-                  )}
-                </Stack>
-              ))}
-            </Stack>
-          )}
-        </StyledOutputCard>
+                    )}
+                    {expr.ok && (
+                      <>
+                        <StyledLatex
+                          tex={exprTreeToLatex(expr.data)}
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        />
+                        <StyledLatex
+                          tex={exprTreeToLatexSubstitute(
+                            expr.data,
+                            symbolTable
+                          )}
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        />
+                        <StyledLatex
+                          tex={`\\textbf{${expr.data.eval(
+                            symbolTable
+                          )}}`}
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        />
+                        <StyledLatex
+                          tex={`\\text{$\\therefore 
+                        ${exprTreeToLatex(expr.data)}$ is 
+                      ${expr.data.eval(symbolTable)}.}`}
+                        />
+                      </>
+                    )}
+                  </Stack>
+                ))}
+              </Stack>
+            </StyledOutputCard>
+          </>
+        )}
       </Stack>
     </Box>
   );

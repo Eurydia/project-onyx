@@ -55,7 +55,7 @@ BooleanExpressions {
     | identifier  --variable
 
   identifier
-    = letter+
+    = letter
   
   iff_sym 
     = "iff"

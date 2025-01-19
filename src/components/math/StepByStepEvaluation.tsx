@@ -28,24 +28,14 @@ const SubstitutionStepDisplay: FC<
       <StyledLatex
         tex={substepStmtLatex}
         sx={{
-          overflowX: "auto",
-          scrollbarGutter: "stable",
-          scrollbarWidth: "thin",
-          whiteSpace: "nowrap",
           flexGrow: 1,
-          paddingBottom: 1,
         }}
       />
       <StyledLatex
         tex={subStep.substituted}
         sx={{
-          overflowX: "auto",
-          scrollbarGutter: "stable",
-          scrollbarWidth: "thin",
-          whiteSpace: "nowrap",
           flexGrow: 1,
           textAlign: "center",
-          paddingBottom: 1,
         }}
       />
     </Stack>
@@ -67,30 +57,18 @@ const StepDisplay: FC<StepDisplayProps> = (props) => {
       <StyledLatex
         tex={stepLabelLatex}
         sx={{
-          overflowX: "auto",
-          scrollbarGutter: "stable",
-          scrollbarWidth: "thin",
-          whiteSpace: "nowrap",
           flexGrow: 1,
         }}
       />
       <StyledLatex
         tex={introStmtLatex}
         sx={{
-          overflowX: "auto",
-          scrollbarGutter: "stable",
-          scrollbarWidth: "thin",
-          whiteSpace: "nowrap",
           flexGrow: 1,
         }}
       />
       <StyledLatex
         tex={step.repr}
         sx={{
-          overflowX: "auto",
-          scrollbarGutter: "stable",
-          scrollbarWidth: "thin",
-          whiteSpace: "nowrap",
           flexGrow: 1,
           textAlign: "center",
         }}
@@ -110,24 +88,10 @@ const StepDisplay: FC<StepDisplayProps> = (props) => {
       <StyledLatex
         tex={`\\text{$\\equiv$ ${step.evaluated}}`}
         sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          paddingBottom: 1,
           textAlign: "center",
         }}
       />
-      <StyledLatex
-        tex={eqStmtLatex}
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          paddingBottom: 1,
-        }}
-      />
+      <StyledLatex tex={eqStmtLatex} />
     </Stack>
   );
 };
@@ -169,16 +133,7 @@ const StepByStepEvaluation_: FC<
           stepIndex={index + 1}
         />
       ))}
-      <StyledLatex
-        tex={thereforeStmtLatex}
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          paddingBottom: 1,
-        }}
-      />
+      <StyledLatex tex={thereforeStmtLatex} />
     </Stack>
   );
 };

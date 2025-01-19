@@ -1,8 +1,5 @@
 import { ExprTree } from "$types/expression-tree";
-import {
-  SymbolTable,
-  SyntaxTreeNodeKind,
-} from "$types/syntax-tree";
+import { SyntaxTreeNodeKind } from "$types/syntax-tree";
 
 const _exprTreeToLatex = (
   tree: ExprTree,
@@ -51,11 +48,7 @@ export const exprTreeToLatex = (exprTree: ExprTree) => {
 
 export const exprTreeToLatexSubstitute = (
   exprTree: ExprTree,
-  symbolTable: SymbolTable
+  symbolMap: Map<string, string>
 ) => {
-  const table = new Map<string, string>();
-  for (const [k, v] of symbolTable.entries()) {
-    table.set(k, `\\text{${v}}`);
-  }
-  return _exprTreeToLatex(exprTree, table);
+  return _exprTreeToLatex(exprTree, symbolMap);
 };

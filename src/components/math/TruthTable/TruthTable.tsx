@@ -36,11 +36,10 @@ const StyledTableCell: FC<StyledTableCellProps> = (
         backgroundColor: value
           ? alpha(palette.secondary.light, 0.8)
           : alpha(palette.secondary.main, 0.2),
+        whiteSpace: "nowrap",
       }}
     >
-      <Typography>
-        {value ? t("common.true") : t("common.false")}
-      </Typography>
+      {value ? t("common.true") : t("common.false")}
     </TableCell>
   );
 };
@@ -48,10 +47,11 @@ const StyledTableCell: FC<StyledTableCellProps> = (
 type TruthTableProps = {
   exprTree: ExprTree;
 };
-const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
+const TruthTable_: FC<TruthTableProps> = (props) => {
   const { exprTree } = props;
   const { t } = useTranslation();
   const [userConfirmed, setUserConfirmed] = useState(false);
+
   const { columns, symbols } = useMemo(() => {
     const _columns = exprTreeFlattenPostOrder(exprTree);
     const _symbols = [...exprTreeCollectSymbols(exprTree)];
@@ -75,13 +75,13 @@ const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
           </Typography>
         </StyledAlert>
         <Button
-          sx={{
-            width: "fit-content",
-          }}
           disableElevation
           disableRipple
           variant="contained"
           onClick={() => setUserConfirmed(true)}
+          sx={{
+            width: "fit-content",
+          }}
         >
           {t("common.truthTable.confirm")}
         </Button>
@@ -99,16 +99,17 @@ const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {symbols.map((sym, index) => (
+            {symbols.map((symbol, index) => (
               <TableCell
                 key={"sym" + index}
                 align="center"
                 sx={{
                   backgroundColor: ({ palette }) =>
                     palette.background.paper,
+                  whiteSpace: "nowrap",
                 }}
               >
-                <StyledLatex tex={sym} />
+                <StyledLatex tex={symbol} />
               </TableCell>
             ))}
             {columns.map((col, index) => (
@@ -118,9 +119,10 @@ const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
                 sx={{
                   backgroundColor: ({ palette }) =>
                     palette.background.paper,
+                  whiteSpace: "nowrap",
                 }}
               >
-                <StyledLatex tex={col.repr} />
+                <StyledLatex tex={col.label} />
               </TableCell>
             ))}
           </TableRow>
@@ -134,10 +136,10 @@ const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
                   value={p.get(sym) || false}
                 />
               ))}
-              {columns.map((subExpr, colIndex) => (
+              {columns.map((column, colIndex) => (
                 <StyledTableCell
                   key={"col" + colIndex}
-                  value={subExpr.eval(p)}
+                  value={column.eval(p)}
                 />
               ))}
             </TableRow>
@@ -149,7 +151,7 @@ const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
 };
 
 export const TruthTable = memo(
-  TruthTable_noMemo,
+  TruthTable_,
   (prev, next) => {
     return (
       exprTreeToLatex(prev.exprTree) ===

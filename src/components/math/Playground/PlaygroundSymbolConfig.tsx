@@ -41,13 +41,7 @@ export const PlaygroundSymbolConfig: FC<
           size={{ xs: 12, md: 6 }}
         >
           <FormControl fullWidth>
-            <FormLabel
-              sx={{
-                overflowX: "auto",
-                scrollbarGutter: "stable",
-                scrollbarWidth: "thin",
-              }}
-            >
+            <FormLabel>
               <StyledLatex tex={sym} />
             </FormLabel>
             <RadioGroup

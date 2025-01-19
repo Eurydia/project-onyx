@@ -48,13 +48,19 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         <StyledLatex
           tex={exprTreeToLatex(exprTree)}
           sx={{
-            scrollbarWidth: "thin",
-            scrollbarGutter: "stable",
-            textAlign: "center",
-            whiteSpace: "nowrap",
-            overflow: "auto",
-            width: "100%",
-            display: "inline-block",
+            "& .base": {
+              display: "inline-block",
+              wordBreak: "break-all",
+              whiteSpace: "nowrap",
+              wordWrap: "break-word",
+              maxWidth: "50px",
+            },
+            "& .mord": {
+              display: "inline-block",
+              wordBreak: "break-all",
+              whiteSpace: "nowrap",
+              wordWrap: "break-word",
+            },
           }}
         />
       </StyledOutputCard>

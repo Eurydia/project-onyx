@@ -3,16 +3,18 @@ import {
   SymbolTable,
   SyntaxTreeNodeKind,
 } from "$types/syntax-tree";
-import { exprTreeToLatex } from "./expr/latex";
+import { exprTreeCollectSymbols } from "./expr/evaluate";
+import { exprTreeToLatexSubstitute } from "./expr/latex";
 
 type MinifiedSyntaxTree = {
-  repr: string;
+  label: string;
   eval: (t: SymbolTable) => boolean;
 };
-const traversePostOrder = (
+const traverse = (
   tree: ExprTree,
   accum: MinifiedSyntaxTree[],
-  seen: Set<string>
+  seen: Set<string>,
+  symbolMap: Map<string, string>
 ) => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeKind.CONST:
@@ -20,31 +22,37 @@ const traversePostOrder = (
     case SyntaxTreeNodeKind.IDEN:
       return;
     case SyntaxTreeNodeKind.UNARY: {
-      const repr = exprTreeToLatex(tree);
+      const repr = exprTreeToLatexSubstitute(
+        tree,
+        symbolMap
+      );
       if (seen.has(repr)) {
         return;
       }
       seen.add(repr);
-      traversePostOrder(tree.child, accum, seen);
+      traverse(tree.child, accum, seen, symbolMap);
       const minified: MinifiedSyntaxTree = {
         eval: tree.eval,
-        repr,
+        label: repr,
       };
       accum.push(minified);
       return;
     }
     case SyntaxTreeNodeKind.BINARY: {
-      const repr = exprTreeToLatex(tree);
+      const repr = exprTreeToLatexSubstitute(
+        tree,
+        symbolMap
+      );
       if (seen.has(repr)) {
         return;
       }
       seen.add(repr);
-      traversePostOrder(tree.left, accum, seen);
-      traversePostOrder(tree.right, accum, seen);
+      traverse(tree.left, accum, seen, symbolMap);
+      traverse(tree.right, accum, seen, symbolMap);
 
       const minified: MinifiedSyntaxTree = {
         eval: tree.eval,
-        repr,
+        label: repr,
       };
       accum.push(minified);
       return;
@@ -57,6 +65,15 @@ export const exprTreeFlattenPostOrder = (
 ) => {
   const accum: MinifiedSyntaxTree[] = [];
   const seen = new Set<string>();
-  traversePostOrder(tree, accum, seen);
+  const symbolMap = new Map<string, string>();
+  for (const symbol of exprTreeCollectSymbols(tree)) {
+    symbolMap.set(
+      symbol,
+      symbol.length >= 5
+        ? `${symbol.slice(0, 5)}\\ldots`
+        : symbol
+    );
+  }
+  traverse(tree, accum, seen, symbolMap);
   return accum;
 };
