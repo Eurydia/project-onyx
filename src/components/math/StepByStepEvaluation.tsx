@@ -1,12 +1,7 @@
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
-import {
-  Box,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { FC } from "react";
+import { Divider, Stack, Typography } from "@mui/material";
+import { FC, Fragment } from "react";
 
 type StepByStepEvaluationProps = {
   steps: EvaluationStep[];
@@ -27,7 +22,10 @@ export const StepByStepEvaluation: FC<
         divider={<Divider />}
       >
         {steps.map((step, index) => (
-          <Box key={"step" + index}>
+          <Stack
+            key={"step" + index}
+            spacing={2}
+          >
             <Typography fontWeight="bold">
               Step {index + 1}
             </Typography>
@@ -46,7 +44,7 @@ export const StepByStepEvaluation: FC<
               <StyledLatex tex={`(${index + 1}.a)`} />
             </Stack>
             {step.substitutions.length > 0 && (
-              <Stack>
+              <Fragment>
                 {step.substitutions.map(
                   (substitution, subIndex) => (
                     <Stack
@@ -65,6 +63,14 @@ export const StepByStepEvaluation: FC<
                             ? "True"
                             : "False"
                         }},`}
+                        sx={{
+                          overflowX: "auto",
+                          scrollbarGutter: "stable",
+                          scrollbarWidth: "thin",
+                          whiteSpace: "nowrap",
+                          flexGrow: 1,
+                          paddingBottom: 1,
+                        }}
                       />
                       <Stack direction="row">
                         <StyledLatex
@@ -76,6 +82,7 @@ export const StepByStepEvaluation: FC<
                             whiteSpace: "nowrap",
                             flexGrow: 1,
                             textAlign: "center",
+                            paddingBottom: 1,
                           }}
                         />
                         <StyledLatex
@@ -89,8 +96,9 @@ export const StepByStepEvaluation: FC<
                     </Stack>
                   )
                 )}
-              </Stack>
+              </Fragment>
             )}
+            <StyledLatex tex="\text{So}" />
             <Stack
               direction="row"
               spacing={1}
@@ -98,15 +106,20 @@ export const StepByStepEvaluation: FC<
               <StyledLatex
                 tex={`${step.repr} \\equiv \\text{${
                   step.evaluated ? "True" : "False"
-                }}`}
+                }}.`}
                 sx={{
                   flexGrow: 1,
                   textAlign: "center",
+                  whiteSpace: "nowrap",
+                  overflow: "auto",
+                  scrollbarWidth: "thin",
+                  scrollbarGutter: "stable",
+                  paddingBottom: 1,
                 }}
               />
               <StyledLatex tex={`(${index + 1})`} />
             </Stack>
-          </Box>
+          </Stack>
         ))}
       </Stack>
     </Stack>

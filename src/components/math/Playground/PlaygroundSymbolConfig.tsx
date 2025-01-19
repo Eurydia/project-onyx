@@ -48,7 +48,7 @@ export const PlaygroundSymbolConfig: FC<
                 scrollbarWidth: "thin",
               }}
             >
-              <StyledLatex tex={`\\text{\`\`$${sym}$''}`} />
+              <StyledLatex tex={sym} />
             </FormLabel>
             <RadioGroup
               row

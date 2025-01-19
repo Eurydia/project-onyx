@@ -8,6 +8,7 @@ import {
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -96,20 +97,27 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
   return (
     <Stack spacing={2}>
       <StyledCard title="Input">
-        <StyledLatex
+        <Box
           sx={{
-            overflowX: "auto",
             scrollbarWidth: "thin",
             scrollbarGutter: "stable",
-            width: "100%",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            overflow: "auto",
           }}
-          tex={steps.at(-1)!.repr}
-          options={{ displayMode: true }}
-        />
+        >
+          <StyledLatex
+            tex={steps.at(-1)!.repr}
+            options={{ displayMode: true }}
+          />
+        </Box>
       </StyledCard>
       <StyledCard title="Output">
         <StyledLatex
-          tex={`\\textbf{${steps.at(-1)!.evaluated}}`}
+          tex={`
+            \\textbf{${
+              steps.at(-1)!.evaluated ? "True" : "False"
+            }}`}
           options={{ displayMode: true }}
         />
         <PlaygroundSymbolConfig

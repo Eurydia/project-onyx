@@ -22,7 +22,7 @@ export const Editor: FC<EditorProps> = (props) => {
 
   return (
     <Stack spacing={1}>
-      <EditorRibbon onInsertChar={handleInsertChar} />
+      <EditorRibbon onClick={handleInsertChar} />
       <TextField
         inputRef={inputRef}
         fullWidth
@@ -45,25 +45,3 @@ export const Editor: FC<EditorProps> = (props) => {
     </Stack>
   );
 };
-
-// <Stack
-// useFlexGap
-// alignItems="center"
-// width="100%"
-// spacing={2}
-// direction="row"
-// flexWrap="wrap"
-// >
-// <Button
-//   type="submit"
-//   disableElevation
-//   variant="contained"
-//   startIcon={<PlayArrowRounded />}
-//   onClick={handleExecute}
-// >
-//   {t("component.common.editor.run.label")}
-// </Button>
-// <Typography>
-//   {t("component.common.editor.run.alt")}
-// </Typography>
-// </Stack>

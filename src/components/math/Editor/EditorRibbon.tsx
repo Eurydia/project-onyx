@@ -1,73 +1,87 @@
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { Button, ButtonGroup } from "@mui/material";
+import { Stack } from "@mui/material";
 import { FC } from "react";
+import { EditorRibbonButton } from "./EditorRibbonButton";
 
-const OPERATOR: {
-  name: string;
+const OPERATOR_TEXT: {
   label: string;
-  shiftChar: string;
-  char: string;
+  value: string;
 }[] = [
   {
-    name: "negation",
-    label: "\\text{not, $\\lnot$}",
-    shiftChar: "\u{00AC}",
-    char: "not",
+    label: "\\text{not}",
+    value: "not",
   },
   {
-    name: "conjunction",
-    label: "\\text{and, $\\land$}",
-    shiftChar: "\u{2227}",
-    char: "and",
+    label: "\\text{and}",
+    value: "and",
   },
   {
-    name: "disjunction",
-    label: "\\text{or, $\\lor$}",
-    shiftChar: "\u{2228}",
-    char: "or",
+    label: "\\text{or}",
+    value: "or",
   },
   {
-    name: "implication",
-    label: "\\text{implies, $\\implies$}",
-    shiftChar: "\u{21D2}",
-    char: "implies",
+    label: "\\text{implies}",
+    value: "implies",
   },
   {
-    name: "equivalence",
-    label: "\\text{iff, $\\iff$}",
-    shiftChar: "\u{21D4}",
-    char: "iff",
+    label: "\\text{iff}",
+    value: "iff",
+  },
+];
+
+const OPERATOR_SYMBOL: {
+  label: string;
+  value: string;
+}[] = [
+  {
+    label: "\\lnot",
+    value: "\u{00AC}",
+  },
+  {
+    label: "\\land",
+    value: "\u{2227}",
+  },
+  {
+    label: "\\lor",
+    value: "\u{2228}",
+  },
+  {
+    label: "\\implies",
+    value: "\u{21D2}",
+  },
+  {
+    label: "\\iff",
+    value: "\u{21D4}",
   },
 ];
 
 type EditorRibbonProps = {
-  onInsertChar: (value: string) => void;
+  onClick: (value: string) => void;
 };
 export const EditorRibbon: FC<EditorRibbonProps> = (
   props
 ) => {
-  const { onInsertChar } = props;
+  const { onClick } = props;
   return (
-    <ButtonGroup
-      disableElevation
-      variant="outlined"
+    <Stack
+      useFlexGap
+      spacing={2}
+      flexWrap="wrap"
+      direction="row"
     >
-      {OPERATOR.map((btn, index) => (
-        <Button
-          key={"insert-btn-" + index}
-          sx={{
-            maxWidth: "fit-content",
-            textTransform: "none",
-          }}
-          onClick={(e) => {
-            onInsertChar(
-              e.shiftKey ? btn.shiftChar : btn.char
-            );
-          }}
-        >
-          <StyledLatex tex={btn.label} />
-        </Button>
-      ))}
-    </ButtonGroup>
+      <Stack
+        direction="row"
+        flexWrap="wrap"
+        spacing={0.5}
+        useFlexGap
+      >
+        {OPERATOR_TEXT.map((option, index) => (
+          <EditorRibbonButton
+            key={"insert-btn-text" + index}
+            onClick={(value) => onClick(value)}
+            options={[option, OPERATOR_SYMBOL[index]]}
+          />
+        ))}
+      </Stack>
+    </Stack>
   );
 };
