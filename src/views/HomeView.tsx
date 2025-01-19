@@ -75,7 +75,7 @@ export const HomeView: FC = () => {
                 "transition": "all 0.1s ease",
                 "&:hover": {
                   borderColor: ({ palette }) =>
-                    palette.primary.main,
+                    palette.secondary.main,
                 },
               }}
             >

@@ -2,6 +2,7 @@ import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { getPermutation } from "$core/eval";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { exprTreeFlattenPostOrder } from "$core/tree/flatten";
 import { ExprTree } from "$types/expression-tree";
 import {
@@ -17,7 +18,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, useMemo, useState } from "react";
+import { FC, memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type StyledTableCellProps = { value: boolean };
@@ -47,7 +48,7 @@ const StyledTableCell: FC<StyledTableCellProps> = (
 type TruthTableProps = {
   exprTree: ExprTree;
 };
-export const TruthTable: FC<TruthTableProps> = (props) => {
+const TruthTable_noMemo: FC<TruthTableProps> = (props) => {
   const { exprTree } = props;
   const { t } = useTranslation();
   const [userConfirmed, setUserConfirmed] = useState(false);
@@ -146,3 +147,13 @@ export const TruthTable: FC<TruthTableProps> = (props) => {
     </TableContainer>
   );
 };
+
+export const TruthTable = memo(
+  TruthTable_noMemo,
+  (prev, next) => {
+    return (
+      exprTreeToLatex(prev.exprTree) ===
+      exprTreeToLatex(next.exprTree)
+    );
+  }
+);

@@ -25,7 +25,7 @@ export const AppbarLayout: FC = () => {
   return (
     <Fragment>
       <Paper
-        elevation={0}
+        variant="outlined"
         sx={{
           borderStyle: "solid",
           borderRadius: ({ shape }) => shape.borderRadius,

@@ -1,10 +1,8 @@
-import { Playground } from "$components/math/Playground/Playground";
 import { TruthTable } from "$components/math/TruthTable/TruthTable";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
-  Box,
   Card,
   CardContent,
   CardHeader,
@@ -17,6 +15,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Playground } from "./Playground/Playground";
 import { PlaygroundSymbolConfig } from "./Playground/PlaygroundSymbolConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation";
 
@@ -84,20 +83,18 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
   return (
     <Stack spacing={2}>
       <StyledCard title="Input">
-        <Box
+        <StyledLatex
+          tex={exprTreeToLatex(exprTree)}
           sx={{
             scrollbarWidth: "thin",
             scrollbarGutter: "stable",
             textAlign: "center",
             whiteSpace: "nowrap",
             overflow: "auto",
+            width: "100%",
+            display: "inline-block",
           }}
-        >
-          <StyledLatex
-            tex={exprTreeToLatex(exprTree)}
-            options={{ displayMode: true }}
-          />
-        </Box>
+        />
       </StyledCard>
       <StyledCard title="Output">
         <StyledLatex
@@ -105,7 +102,15 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
             \\textbf{${
               exprTree.eval(symbolTable) ? "True" : "False"
             }}`}
-          options={{ displayMode: true }}
+          sx={{
+            scrollbarWidth: "thin",
+            scrollbarGutter: "stable",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            width: "100%",
+            display: "inline-block",
+          }}
         />
         <PlaygroundSymbolConfig
           symbolTable={symbolTable}

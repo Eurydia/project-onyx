@@ -19,9 +19,9 @@ const SubstitutionStepDisplay: FC<
 
   let substepStmtLatex = "";
   if (subStep.stepRef === false) {
-    substepStmtLatex = `\\text{Given: $${subStep.repr}$ is ${subStep.evaluated},}`;
+    substepStmtLatex = `\\text{Given $${subStep.repr}$ is ${subStep.evaluated},}`;
   } else {
-    substepStmtLatex = `\\text{From Eq. $(${subStep.stepRef})$: $${subStep.repr}$ is ${subStep.evaluated},}`;
+    substepStmtLatex = `\\text{From Eq. $(${subStep.stepRef})$, $${subStep.repr}$ is ${subStep.evaluated},}`;
   }
   return (
     <Stack>
@@ -107,6 +107,17 @@ const StepDisplay: FC<StepDisplayProps> = (props) => {
           )}
         </Fragment>
       )}
+      <StyledLatex
+        tex={`\\text{$\\equiv$ ${step.evaluated}}`}
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "thin",
+          scrollbarGutter: "stable",
+          paddingBottom: 1,
+          textAlign: "center",
+        }}
+      />
       <StyledLatex
         tex={eqStmtLatex}
         sx={{

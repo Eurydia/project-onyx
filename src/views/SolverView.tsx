@@ -40,7 +40,7 @@ export const SolverView: FC = () => {
   return (
     <Box
       maxWidth="lg"
-      marginX={{ xs: 4, md: "auto" }}
+      marginX={{ xs: 2, md: "auto" }}
     >
       <Stack spacing={2}>
         <Editor

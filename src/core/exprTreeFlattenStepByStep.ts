@@ -100,15 +100,13 @@ const traverse = (
 
         const childEval = child.eval(table);
         let childStep: number | false = false;
-        let childRepr = `\\text{${childEval}}
-      `;
+
         if (
           child.nodeType !== SyntaxTreeNodeKind.CONST &&
           child.nodeType !== SyntaxTreeNodeKind.IDEN
         ) {
           traverse(child, table, steps);
           childStep = steps.length;
-          childRepr = `( ${childRepr} )`;
         }
 
         // not (x and y)
@@ -123,7 +121,7 @@ const traverse = (
               repr: exprTreeToLatex(child),
               evaluated: childEval,
               stepRef: childStep,
-              substituted: `\\lnot ${childRepr}`,
+              substituted: `\\lnot \\text{${childEval}}`,
             },
           ],
           evaluated: tree.eval(table),
@@ -147,7 +145,10 @@ const traverse = (
 
         const rightEval = right.eval(table);
         const rightRawRepr = exprTreeToLatex(right);
-        let rightRepr = rightRawRepr;
+        const rightRepr =
+          right.nodeType === SyntaxTreeNodeKind.BINARY
+            ? `( ${rightRawRepr} )`
+            : rightRawRepr;
         const rightSubstituted = `\\text{${rightEval}}`;
         let rightStep: number | false = false;
         if (
@@ -156,7 +157,6 @@ const traverse = (
         ) {
           traverse(right, table, steps);
           rightStep = steps.length;
-          rightRepr = `( ${rightRepr} )`;
         }
 
         // (x and y) and (y and z)
