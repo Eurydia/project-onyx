@@ -1,10 +1,6 @@
 import { Playground } from "$components/math/Playground/Playground";
 import { TruthTable } from "$components/math/TruthTable/TruthTable";
 import { StyledLatex } from "$components/styled/StyledLatex";
-import {
-  EvaluationStep,
-  exprTreeFlattenStepByStep,
-} from "$core/exprTreeFlattenStepByStep";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
@@ -65,9 +61,9 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
     }
     return next;
   });
-  const [steps, setSteps] = useState<EvaluationStep[]>(
-    exprTreeFlattenStepByStep(exprTree, symbolTable)
-  );
+  // const [steps, setSteps] = useState<EvaluationStep[]>(
+  //   exprTreeFlattenStepByStep(exprTree, symbolTable)
+  // );
 
   const handleSymbolChange = (k: string, v: boolean) => {
     setSymbolTable((prev) => {
@@ -75,9 +71,6 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
       next.set(k, v);
       return next;
     });
-    setSteps(
-      exprTreeFlattenStepByStep(exprTree, symbolTable)
-    );
   };
 
   useEffect(() => {
@@ -87,12 +80,6 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
     }
     setSymbolTable(next);
   }, [symbolSet]);
-
-  useEffect(() => {
-    setSteps(
-      exprTreeFlattenStepByStep(exprTree, symbolTable)
-    );
-  }, [exprTree, symbolTable]);
 
   return (
     <Stack spacing={2}>
@@ -107,7 +94,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           }}
         >
           <StyledLatex
-            tex={steps.at(-1)!.repr}
+            tex={exprTreeToLatex(exprTree)}
             options={{ displayMode: true }}
           />
         </Box>
@@ -116,7 +103,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         <StyledLatex
           tex={`
             \\textbf{${
-              steps.at(-1)!.evaluated ? "True" : "False"
+              exprTree.eval(symbolTable) ? "True" : "False"
             }}`}
           options={{ displayMode: true }}
         />
@@ -126,7 +113,10 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         />
       </StyledCard>
       <StyledCard title="Step-by-step Evaluation">
-        <StepByStepEvaluation steps={steps} />
+        <StepByStepEvaluation
+          exprTree={exprTree}
+          symbolTable={symbolTable}
+        />
       </StyledCard>
       <StyledCard title="Graph">
         <Playground
@@ -143,7 +133,10 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
 
 export const SolverOutputGroup = memo(
   SolverOutputGroup_,
-  (prev, next) =>
-    exprTreeToLatex(prev.exprTree) ===
-    exprTreeToLatex(next.exprTree)
+  (prev, next) => {
+    const p = exprTreeToLatex(prev.exprTree);
+    const n = exprTreeToLatex(next.exprTree);
+    console.debug(p, n);
+    return n === p;
+  }
 );

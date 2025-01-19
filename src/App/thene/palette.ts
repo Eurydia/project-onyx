@@ -9,4 +9,5 @@ export const PALETTE_OPTIONS: PaletteOptions = {
   primary: { main: brown["700"] },
   secondary: { main: green["100"] },
   background: { default: alpha(amber["50"], 0.6) },
+  divider: brown["A700"],
 };

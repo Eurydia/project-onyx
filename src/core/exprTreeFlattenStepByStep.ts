@@ -10,7 +10,7 @@ export type EvaluationStep = {
   substitutions: {
     substituted: string;
     repr: string;
-    step: number;
+    stepRef: number | false;
     evaluated: boolean;
   }[];
   evaluated: boolean;
@@ -77,102 +77,115 @@ const traverse = (
     case SyntaxTreeNodeKind.CONST:
       return;
     case SyntaxTreeNodeKind.IDEN:
-      return;
-    case SyntaxTreeNodeKind.UNARY: {
-      const { child } = tree;
-
-      const childEval = child.eval(table);
-      let childStep = 0;
-      let childRepr = `
-      \\text{${childEval ? "True" : "False"}}
-      `;
-      if (
-        child.nodeType !== SyntaxTreeNodeKind.CONST &&
-        child.nodeType !== SyntaxTreeNodeKind.IDEN
-      ) {
-        traverse(child, table, steps);
-        childStep = steps.length;
-        childRepr = `( ${childRepr} )`;
+      {
+        const evaluated = tree.eval(table);
+        const repr = tree.repr;
+        steps.push({
+          repr,
+          evaluated,
+          substitutions: [
+            {
+              repr,
+              evaluated,
+              stepRef: false,
+              substituted: `\\text{${evaluated}}`,
+            },
+          ],
+        });
       }
-
-      // not (x and y)
-      // From (9), x and y === True
-      // not True
-      // False
-
-      steps.push({
-        repr: exprTreeToLatex(tree),
-        substitutions: [
-          {
-            repr: exprTreeToLatex(child),
-            evaluated: childEval,
-            step: childStep,
-            substituted: `\\lnot ${childRepr}`,
-          },
-        ],
-        evaluated: tree.eval(table),
-      });
       break;
-    }
-    case SyntaxTreeNodeKind.BINARY: {
-      const { right, left } = tree;
+    case SyntaxTreeNodeKind.UNARY:
+      {
+        const { child } = tree;
 
-      const leftEval = left.eval(table);
-      const leftSubstituted = `
-      \\text{${leftEval ? "True" : "False"}}
+        const childEval = child.eval(table);
+        let childStep: number | false = false;
+        let childRepr = `\\text{${childEval}}
       `;
-      let leftStep: number = 0;
-      if (
-        left.nodeType !== SyntaxTreeNodeKind.CONST &&
-        left.nodeType !== SyntaxTreeNodeKind.IDEN
-      ) {
-        traverse(left, table, steps);
-        leftStep = steps.length;
-        // leftSubstituted = ` ( ${leftSubstituted} )`;
+        if (
+          child.nodeType !== SyntaxTreeNodeKind.CONST &&
+          child.nodeType !== SyntaxTreeNodeKind.IDEN
+        ) {
+          traverse(child, table, steps);
+          childStep = steps.length;
+          childRepr = `( ${childRepr} )`;
+        }
+
+        // not (x and y)
+        // From (9), x and y === True
+        // not True
+        // False
+
+        steps.push({
+          repr: exprTreeToLatex(tree),
+          substitutions: [
+            {
+              repr: exprTreeToLatex(child),
+              evaluated: childEval,
+              stepRef: childStep,
+              substituted: `\\lnot ${childRepr}`,
+            },
+          ],
+          evaluated: tree.eval(table),
+        });
       }
+      break;
+    case SyntaxTreeNodeKind.BINARY:
+      {
+        const { right, left } = tree;
 
-      const rightEval = right.eval(table);
-      const rightRawRepr = exprTreeToLatex(right);
-      let rightRepr = rightRawRepr;
-      const rightSubstituted = `
-      \\text{${rightEval ? "True" : "False"}}`;
-      let rightStep: number = 0;
-      if (
-        right.nodeType !== SyntaxTreeNodeKind.CONST &&
-        right.nodeType !== SyntaxTreeNodeKind.IDEN
-      ) {
-        traverse(right, table, steps);
-        rightStep = steps.length;
-        rightRepr = `( ${rightRepr} )`;
-        // rightSubstituted = `( ${rightSubstituted} )`;
+        const leftEval = left.eval(table);
+        const leftSubstituted = `\\text{${leftEval}}`;
+        let leftStep: number | false = false;
+        if (
+          left.nodeType !== SyntaxTreeNodeKind.CONST &&
+          left.nodeType !== SyntaxTreeNodeKind.IDEN
+        ) {
+          traverse(left, table, steps);
+          leftStep = steps.length;
+        }
+
+        const rightEval = right.eval(table);
+        const rightRawRepr = exprTreeToLatex(right);
+        let rightRepr = rightRawRepr;
+        const rightSubstituted = `\\text{${rightEval}}`;
+        let rightStep: number | false = false;
+        if (
+          right.nodeType !== SyntaxTreeNodeKind.CONST &&
+          right.nodeType !== SyntaxTreeNodeKind.IDEN
+        ) {
+          traverse(right, table, steps);
+          rightStep = steps.length;
+          rightRepr = `( ${rightRepr} )`;
+        }
+
+        // (x and y) and (y and z)
+        // From (9), x and y === True
+        // True and (y and z)
+        // From (10), y and z === True
+        // True and True
+        // True
+
+        steps.push({
+          repr: exprTreeToLatex(tree),
+          evaluated: tree.eval(table),
+          substitutions: [
+            {
+              repr: exprTreeToLatex(left),
+              evaluated: leftEval,
+              stepRef: leftStep,
+              substituted: `${leftSubstituted} ${tree.repr} ${rightRepr}`,
+            },
+            {
+              repr: rightRawRepr,
+              evaluated: rightEval,
+              stepRef: rightStep,
+              substituted: `${leftSubstituted} ${tree.repr} ${rightSubstituted}`,
+            },
+          ],
+        });
       }
-
-      // (x and y) and (y and z)
-      // From (9), x and y === True
-      // True and (y and z)
-      // From (10), y and z === True
-      // True and True
-      // True
-
-      steps.push({
-        repr: exprTreeToLatex(tree),
-        evaluated: tree.eval(table),
-        substitutions: [
-          {
-            repr: exprTreeToLatex(left),
-            evaluated: leftEval,
-            step: leftStep,
-            substituted: `${leftSubstituted} ${tree.repr} ${rightRepr}`,
-          },
-          {
-            repr: rightRawRepr,
-            evaluated: rightEval,
-            step: rightStep,
-            substituted: `${leftSubstituted} ${tree.repr} ${rightSubstituted}`,
-          },
-        ],
-      });
-    }
+      break;
   }
 };
 

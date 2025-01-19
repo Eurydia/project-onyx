@@ -25,8 +25,11 @@ export const AppbarLayout: FC = () => {
   return (
     <Fragment>
       <Paper
-        variant="outlined"
+        elevation={0}
         sx={{
+          borderStyle: "solid",
+          borderRadius: ({ shape }) => shape.borderRadius,
+          borderColor: ({ palette }) => palette.divider,
           maxWidth: "lg",
           marginY: 4,
           marginX: {
@@ -35,7 +38,6 @@ export const AppbarLayout: FC = () => {
           },
           paddingY: 1,
           paddingX: 2,
-          borderRadius: 4,
           flexDirection: "row",
           display: "flex",
           justifyContent: "space-between",
