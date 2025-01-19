@@ -4,12 +4,11 @@ import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
   placeholder: string;
-  name?: string;
   value: string;
   onChange: Dispatch<string>;
 };
 export const Editor: FC<EditorProps> = (props) => {
-  const { name, placeholder, value, onChange } = props;
+  const { placeholder, value, onChange } = props;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -31,7 +30,6 @@ export const Editor: FC<EditorProps> = (props) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        name={name}
         slotProps={{
           input: {
             autoCapitalize: "off",

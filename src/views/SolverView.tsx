@@ -47,7 +47,6 @@ export const SolverView: FC = () => {
           value={userInput}
           onChange={setUserInput}
           placeholder="not (p and q) iff (not p or not q)"
-          name="content"
         />
         <Button
           disabled={userInput.trim().length === 0}

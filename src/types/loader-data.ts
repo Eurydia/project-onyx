@@ -8,3 +8,9 @@ export type SolverRouteLoaderData = {
     symbols: Set<string>;
   }>;
 };
+
+export type EvaluatorRouteLoaderData = {
+  userInput: string;
+  data: Maybe<ExprTree>[];
+  symbols: Set<string>;
+};

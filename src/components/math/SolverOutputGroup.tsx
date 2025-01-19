@@ -1,48 +1,13 @@
 import { TruthTable } from "$components/math/TruthTable/TruthTable";
 import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Stack,
-} from "@mui/material";
-import {
-  FC,
-  memo,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { Stack } from "@mui/material";
+import { FC, memo, useEffect, useState } from "react";
 import { Playground } from "./Playground/Playground";
 import { PlaygroundSymbolConfig } from "./Playground/PlaygroundSymbolConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation";
-
-type StyledCardProps = {
-  title: string;
-  children: ReactNode;
-};
-const StyledCard: FC<StyledCardProps> = (props) => {
-  const { children, title } = props;
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        padding: 2,
-        borderRadius: ({ shape }) => shape.borderRadius,
-      }}
-    >
-      <CardHeader
-        title={title}
-        titleTypographyProps={{
-          fontWeight: 900,
-        }}
-      />
-      <CardContent>{children}</CardContent>
-    </Card>
-  );
-};
 
 type SolverOutputGroupProps = {
   exprTree: ExprTree;
@@ -60,9 +25,6 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
     }
     return next;
   });
-  // const [steps, setSteps] = useState<EvaluationStep[]>(
-  //   exprTreeFlattenStepByStep(exprTree, symbolTable)
-  // );
 
   const handleSymbolChange = (k: string, v: boolean) => {
     setSymbolTable((prev) => {
@@ -82,7 +44,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
 
   return (
     <Stack spacing={2}>
-      <StyledCard title="Input">
+      <StyledOutputCard title="Input">
         <StyledLatex
           tex={exprTreeToLatex(exprTree)}
           sx={{
@@ -95,8 +57,8 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
             display: "inline-block",
           }}
         />
-      </StyledCard>
-      <StyledCard title="Output">
+      </StyledOutputCard>
+      <StyledOutputCard title="Output">
         <StyledLatex
           tex={`
             \\textbf{${
@@ -116,22 +78,22 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           symbolTable={symbolTable}
           onChange={handleSymbolChange}
         />
-      </StyledCard>
-      <StyledCard title="Step-by-step Evaluation">
+      </StyledOutputCard>
+      <StyledOutputCard title="Step-by-step Evaluation">
         <StepByStepEvaluation
           exprTree={exprTree}
           symbolTable={symbolTable}
         />
-      </StyledCard>
-      <StyledCard title="Graph">
+      </StyledOutputCard>
+      <StyledOutputCard title="Graph">
         <Playground
           exprTree={exprTree}
           symbolTable={symbolTable}
         />
-      </StyledCard>
-      <StyledCard title="Truth Table">
+      </StyledOutputCard>
+      <StyledOutputCard title="Truth Table">
         <TruthTable exprTree={exprTree} />
-      </StyledCard>
+      </StyledOutputCard>
     </Stack>
   );
 };

@@ -12,6 +12,7 @@ import {
   createHashRouter,
   RouterProvider,
 } from "react-router";
+import { EVALUATOR_ROUTE } from "src/routes/evaluator";
 import { SOLVER_ROUTE } from "src/routes/solver";
 import { THEME } from "./thene/theme";
 
@@ -35,10 +36,7 @@ const router = createHashRouter(
       children: [
         { index: true, element: <HomeView /> },
         SOLVER_ROUTE,
-        {
-          path: "/evaluator",
-          element: "Hi",
-        },
+        EVALUATOR_ROUTE,
         {
           path: "/theorem",
           element: <TheoremView />,
