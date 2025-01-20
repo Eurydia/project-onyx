@@ -15,7 +15,6 @@ i18next
     detection: {
       lookupLocalStorage: "language",
     },
-    // debug: true,
     resources: {
       en,
       th,

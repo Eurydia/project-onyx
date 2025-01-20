@@ -10,33 +10,54 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { FC, Fragment, memo } from "react";
 
 type SubstitutionStepDisplayProps = {
+  references: EvaluationStep[];
   subStep: EvaluationStep["substitutions"][number];
+  stepIndex: number;
+  subStepIndex: number;
 };
 const SubstitutionStepDisplay: FC<
   SubstitutionStepDisplayProps
 > = (props) => {
-  const { subStep } = props;
+  const { subStep, references, subStepIndex, stepIndex } =
+    props;
+  const prevMarker = String.fromCharCode(subStepIndex + 97);
+  const currMarker = String.fromCharCode(
+    subStepIndex + 97 + 1
+  );
 
-  let substepStmtLatex = "";
+  const taggedExpr = `${subStep.substituted}. \\tag{${stepIndex}.${currMarker}}`;
   if (subStep.stepRef === false) {
-    substepStmtLatex = `\\text{Given $${subStep.repr}$ is ${subStep.evaluated},}`;
-  } else {
-    substepStmtLatex = `\\text{From Eq. $(${subStep.stepRef})$, $${subStep.repr}$ is ${subStep.evaluated},}`;
+    return (
+      <Stack>
+        <StyledLatex
+          tex={`\\text{Given $${subStep.repr}$ is ${subStep.evaluated}, substitute into $(${stepIndex}.${prevMarker})$,}`}
+        />
+        <StyledLatex
+          tex={taggedExpr}
+          options={{ displayMode: true }}
+        />
+      </Stack>
+    );
   }
+
   return (
     <Stack>
       <StyledLatex
-        tex={substepStmtLatex}
-        sx={{
-          flexGrow: 1,
-        }}
+        tex={`\\text{From Eq. $(${subStep.stepRef})$,}`}
       />
       <StyledLatex
-        tex={subStep.substituted}
-        sx={{
-          flexGrow: 1,
-          textAlign: "center",
-        }}
+        tex={references[subStep.stepRef - 1].repr}
+        options={{ displayMode: true }}
+      />
+      <StyledLatex
+        tex={`\\text{is ${subStep.evaluated}.}`}
+      />
+      <StyledLatex
+        tex={`\\text{Substitute into $(${stepIndex}.${prevMarker})$},`}
+      />
+      <StyledLatex
+        tex={taggedExpr}
+        options={{ displayMode: true }}
       />
     </Stack>
   );
@@ -45,53 +66,47 @@ const SubstitutionStepDisplay: FC<
 type StepDisplayProps = {
   stepIndex: number;
   step: EvaluationStep;
+  references: EvaluationStep[];
 };
 const StepDisplay: FC<StepDisplayProps> = (props) => {
-  const { step, stepIndex } = props;
+  const { step, stepIndex, references } = props;
 
-  const stepLabelLatex = `\\textbf{Step $${stepIndex}$}`;
-  const introStmtLatex = `\\text{Consider}`;
-  const eqStmtLatex = `\\text{\\textbf{Equation $${stepIndex}$:} $${step.repr}$ is ${step.evaluated}.}`;
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1}>
+      <StyledLatex tex={`\\textbf{Step $${stepIndex}$}`} />
+      <StyledLatex tex={`\\text{Consider}`} />
       <StyledLatex
-        tex={stepLabelLatex}
-        sx={{
-          flexGrow: 1,
-        }}
-      />
-      <StyledLatex
-        tex={introStmtLatex}
-        sx={{
-          flexGrow: 1,
-        }}
-      />
-      <StyledLatex
-        tex={step.repr}
-        sx={{
-          flexGrow: 1,
-          textAlign: "center",
-        }}
+        tex={`${step.repr}. \\tag{${stepIndex}.a}`}
+        options={{ displayMode: true }}
       />
       {step.substitutions.length > 0 && (
         <Fragment>
           {step.substitutions.map(
             (subStep, subStepIndex) => (
               <SubstitutionStepDisplay
+                stepIndex={stepIndex}
+                subStepIndex={subStepIndex}
                 key={"sub-step" + stepIndex + subStepIndex}
                 subStep={subStep}
+                references={references}
               />
             )
           )}
         </Fragment>
       )}
       <StyledLatex
-        tex={`\\text{$\\equiv$ ${step.evaluated}}`}
-        sx={{
-          textAlign: "center",
-        }}
+        tex={`\\text{Then $(${stepIndex}.${String.fromCharCode(
+          step.substitutions.length + 97
+        )})$ is ${step.evaluated}.}`}
       />
-      <StyledLatex tex={eqStmtLatex} />
+      <StyledLatex
+        tex={`\\textbf{Equation $${stepIndex}$:}`}
+      />
+      <StyledLatex
+        tex={step.repr}
+        options={{ displayMode: true }}
+      />
+      <StyledLatex tex={`\\text{is ${step.evaluated}.}`} />
     </Stack>
   );
 };
@@ -119,7 +134,6 @@ const StepByStepEvaluation_: FC<
   }
 
   const { repr, evaluated } = steps.at(-1)!;
-  const thereforeStmtLatex = `\\text{$\\therefore ${repr}$ is ${evaluated}.}`;
 
   return (
     <Stack
@@ -131,9 +145,17 @@ const StepByStepEvaluation_: FC<
           key={"step" + index}
           step={step}
           stepIndex={index + 1}
+          references={steps}
         />
       ))}
-      <StyledLatex tex={thereforeStmtLatex} />
+      <Stack>
+        <StyledLatex tex="\text{Therefore,}" />
+        <StyledLatex
+          tex={repr}
+          options={{ displayMode: true }}
+        />
+        <StyledLatex tex={`\\text{is ${evaluated}.}`} />
+      </Stack>
     </Stack>
   );
 };
@@ -147,13 +169,11 @@ export const StepByStepEvaluation = memo(
     ) {
       return false;
     }
-
     for (const [k, v] of prev.symbolTable.entries()) {
       if (next.symbolTable.get(k) !== v) {
         return false;
       }
     }
-
     return true;
   }
 );

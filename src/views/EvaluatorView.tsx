@@ -2,10 +2,7 @@ import { Editor } from "$components/math/Editor/Editor";
 import { PlaygroundSymbolConfig } from "$components/math/Playground/PlaygroundSymbolConfig";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { StyledOutputCard } from "$components/styled/StyledOutputCard";
-import {
-  exprTreeToLatex,
-  exprTreeToLatexSubstitute,
-} from "$core/tree/expr/latex";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
@@ -102,7 +99,7 @@ export const EvaluatorView: FC = () => {
                 />
               )}
             </StyledOutputCard>
-            <StyledOutputCard title="Evaluation">
+            <StyledOutputCard title="Output">
               <Stack
                 spacing={2}
                 divider={<Divider flexItem />}
@@ -126,31 +123,14 @@ export const EvaluatorView: FC = () => {
                       <>
                         <StyledLatex
                           tex={exprTreeToLatex(expr.data)}
-                          sx={{
-                            textAlign: "center",
+                          options={{
+                            displayMode: true,
                           }}
                         />
                         <StyledLatex
-                          tex={exprTreeToLatexSubstitute(
-                            expr.data,
+                          tex={`\\text{is ${expr.data.eval(
                             symbolTable
-                          )}
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        />
-                        <StyledLatex
-                          tex={`\\textbf{${expr.data.eval(
-                            symbolTable
-                          )}}`}
-                          sx={{
-                            textAlign: "center",
-                          }}
-                        />
-                        <StyledLatex
-                          tex={`\\text{$\\therefore 
-                        ${exprTreeToLatex(expr.data)}$ is 
-                      ${expr.data.eval(symbolTable)}.}`}
+                          )}.}`}
                         />
                       </>
                     )}

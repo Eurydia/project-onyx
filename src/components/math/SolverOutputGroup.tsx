@@ -48,19 +48,9 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         <StyledLatex
           tex={exprTreeToLatex(exprTree)}
           sx={{
-            "& .base": {
-              display: "inline-block",
-              wordBreak: "break-all",
-              whiteSpace: "nowrap",
-              wordWrap: "break-word",
-              maxWidth: "50px",
-            },
-            "& .mord": {
-              display: "inline-block",
-              wordBreak: "break-all",
-              whiteSpace: "nowrap",
-              wordWrap: "break-word",
-            },
+            textAlign: "center",
+            display: "inline-block",
+            width: "100%",
           }}
         />
       </StyledOutputCard>
@@ -71,13 +61,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
               exprTree.eval(symbolTable) ? "True" : "False"
             }}`}
           sx={{
-            scrollbarWidth: "thin",
-            scrollbarGutter: "stable",
             textAlign: "center",
-            whiteSpace: "nowrap",
-            overflow: "auto",
-            width: "100%",
-            display: "inline-block",
           }}
         />
         <PlaygroundSymbolConfig
