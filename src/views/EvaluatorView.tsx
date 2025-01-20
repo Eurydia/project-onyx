@@ -80,6 +80,39 @@ export const EvaluatorView: FC = () => {
         </Button>
         {data.length > 0 && data.some(({ ok }) => ok) && (
           <>
+            <StyledOutputCard title="Input">
+              <Stack
+                spacing={2}
+                divider={<Divider flexItem />}
+              >
+                {data.map((expr, index) => (
+                  <Stack key={"expr" + index}>
+                    <StyledLatex
+                      tex={`\\text{\\textbf{Equation} 
+                      $\\mathbf{${index + 1}}$:
+                      }`}
+                    />
+                    {!expr.ok && (
+                      <StyledLatex
+                        tex="\text{The evaluator could not understand this expression.}"
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      />
+                    )}
+                    {expr.ok && (
+                      <StyledLatex
+                        tex={exprTreeToLatex(expr.data)}
+                        options={{
+                          displayMode: true,
+                        }}
+                      />
+                    )}
+                  </Stack>
+                ))}
+              </Stack>
+            </StyledOutputCard>
+
             <StyledOutputCard title="Propositions">
               {symbolTable.size === 0 && (
                 <Typography fontStyle="italic">

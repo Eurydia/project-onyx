@@ -1,6 +1,6 @@
 import {
   SymbolTable,
-  SyntaxTreeNodeKind,
+  SyntaxTreeNodeType,
 } from "./syntax-tree";
 
 type ExprTreeData = {
@@ -10,17 +10,17 @@ type ExprTreeData = {
 };
 
 export type ExprTreeIden = ExprTreeData & {
-  nodeType: SyntaxTreeNodeKind.IDEN;
+  nodeType: SyntaxTreeNodeType.IDEN;
 };
 export type ExprTreeConst = ExprTreeData & {
-  nodeType: SyntaxTreeNodeKind.CONST;
+  nodeType: SyntaxTreeNodeType.CONST;
 };
 export type ExprTreeUnary = ExprTreeData & {
-  nodeType: SyntaxTreeNodeKind.UNARY;
+  nodeType: SyntaxTreeNodeType.UNARY;
   child: ExprTree;
 };
 export type ExprTreeBinary = ExprTreeData & {
-  nodeType: SyntaxTreeNodeKind.BINARY;
+  nodeType: SyntaxTreeNodeType.BINARY;
   left: ExprTree;
   right: ExprTree;
 };

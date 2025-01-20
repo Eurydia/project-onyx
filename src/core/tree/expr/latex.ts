@@ -1,38 +1,38 @@
 import { ExprTree } from "$types/expression-tree";
-import { SyntaxTreeNodeKind } from "$types/syntax-tree";
+import { SyntaxTreeNodeType } from "$types/syntax-tree";
 
 const _exprTreeToLatex = (
   tree: ExprTree,
   table: Map<string, string> | null = null
 ): string => {
   switch (tree.nodeType) {
-    case SyntaxTreeNodeKind.CONST:
-      return tree.repr;
-    case SyntaxTreeNodeKind.IDEN:
+    case SyntaxTreeNodeType.CONST:
+      return `\\mathbf{${tree.repr}}`;
+    case SyntaxTreeNodeType.IDEN:
       if (table !== null && table.has(tree.repr)) {
         return table.get(tree.repr)!;
       }
       return tree.repr;
-    case SyntaxTreeNodeKind.UNARY: {
+    case SyntaxTreeNodeType.UNARY: {
       const child = _exprTreeToLatex(tree.child, table);
       if (
-        tree.child.nodeType === SyntaxTreeNodeKind.BINARY
+        tree.child.nodeType === SyntaxTreeNodeType.BINARY
       ) {
         return `${tree.repr} ( ${child} )`;
       }
       return `${tree.repr} ${child}`;
     }
-    case SyntaxTreeNodeKind.BINARY: {
+    case SyntaxTreeNodeType.BINARY: {
       let left = _exprTreeToLatex(tree.left, table);
       if (
-        tree.left.nodeType === SyntaxTreeNodeKind.BINARY
+        tree.left.nodeType === SyntaxTreeNodeType.BINARY
       ) {
         left = `( ${left} )`;
       }
 
       let right = _exprTreeToLatex(tree.right, table);
       if (
-        tree.right.nodeType === SyntaxTreeNodeKind.BINARY
+        tree.right.nodeType === SyntaxTreeNodeType.BINARY
       ) {
         right = `( ${right} )`;
       }

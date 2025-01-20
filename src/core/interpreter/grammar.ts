@@ -1,7 +1,7 @@
+import { Operator } from "$types/operators";
 import {
-  Operator,
   SyntaxTree,
-  SyntaxTreeNodeKind,
+  SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import * as ohm from "ohm-js";
 
@@ -11,14 +11,14 @@ const collectBinaryNodes = (
   right: SyntaxTree[]
 ) => {
   let node: SyntaxTree = {
-    nodeType: SyntaxTreeNodeKind.BINARY,
+    nodeType: SyntaxTreeNodeType.BINARY,
     operator,
     left,
     right: right[0],
   };
   for (let i = 1; i < right.length; i++) {
     node = {
-      nodeType: SyntaxTreeNodeKind.BINARY,
+      nodeType: SyntaxTreeNodeType.BINARY,
       operator,
       left: node,
       right: right[i],
@@ -161,7 +161,7 @@ semantics.addOperation("buildTree", {
 
   Not_not(_, expr) {
     return {
-      nodeType: SyntaxTreeNodeKind.UNARY,
+      nodeType: SyntaxTreeNodeType.UNARY,
       operator: Operator.NOT,
       operand: expr.buildTree(),
     };
@@ -173,21 +173,21 @@ semantics.addOperation("buildTree", {
 
   Primary_lit_true(_id) {
     return {
-      nodeType: SyntaxTreeNodeKind.CONST,
+      nodeType: SyntaxTreeNodeType.CONST,
       value: true,
     };
   },
 
   Primary_lit_false(_id) {
     return {
-      nodeType: SyntaxTreeNodeKind.CONST,
+      nodeType: SyntaxTreeNodeType.CONST,
       value: false,
     };
   },
 
   Primary_variable(id) {
     return {
-      nodeType: SyntaxTreeNodeKind.IDEN,
+      nodeType: SyntaxTreeNodeType.IDEN,
       symbol: id.sourceString,
     };
   },

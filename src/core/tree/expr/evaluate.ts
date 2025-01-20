@@ -1,20 +1,20 @@
 import { ExprTree } from "$types/expression-tree";
-import { SyntaxTreeNodeKind } from "$types/syntax-tree";
+import { SyntaxTreeNodeType } from "$types/syntax-tree";
 
 const _exprTreeCollectSymbols = (
   tree: ExprTree,
   symbols: Set<string>
 ): void => {
   switch (tree.nodeType) {
-    case SyntaxTreeNodeKind.CONST:
+    case SyntaxTreeNodeType.CONST:
       return;
-    case SyntaxTreeNodeKind.IDEN:
+    case SyntaxTreeNodeType.IDEN:
       symbols.add(tree.repr);
       return;
-    case SyntaxTreeNodeKind.UNARY:
+    case SyntaxTreeNodeType.UNARY:
       _exprTreeCollectSymbols(tree.child, symbols);
       return;
-    case SyntaxTreeNodeKind.BINARY:
+    case SyntaxTreeNodeType.BINARY:
       _exprTreeCollectSymbols(tree.left, symbols);
       _exprTreeCollectSymbols(tree.right, symbols);
       return;

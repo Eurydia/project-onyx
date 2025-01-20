@@ -2,7 +2,7 @@ import { StyledFAB } from "$components/styled/StyledFAB";
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
-  SyntaxTreeNodeKind,
+  SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
@@ -16,13 +16,13 @@ import { TreeGraphNode } from "./TreeGraphNode";
 
 const flatten_expr = (d: ExprTree) => {
   switch (d.nodeType) {
-    case SyntaxTreeNodeKind.CONST:
+    case SyntaxTreeNodeType.CONST:
       return null;
-    case SyntaxTreeNodeKind.IDEN:
+    case SyntaxTreeNodeType.IDEN:
       return null;
-    case SyntaxTreeNodeKind.UNARY:
+    case SyntaxTreeNodeType.UNARY:
       return [d.child];
-    case SyntaxTreeNodeKind.BINARY:
+    case SyntaxTreeNodeType.BINARY:
       return [d.left, d.right];
   }
 };

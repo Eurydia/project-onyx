@@ -14,3 +14,8 @@ export type EvaluatorRouteLoaderData = {
   data: Maybe<ExprTree>[];
   symbols: Set<string>;
 };
+
+export type CheckerRouteLoaderData = {
+  userInput: string;
+  data: Maybe<{ exprTree: ExprTree; verdict: boolean }>;
+};

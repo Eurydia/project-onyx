@@ -1,7 +1,7 @@
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
-  SyntaxTreeNodeKind,
+  SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import { exprTreeToLatex } from "./tree/expr/latex";
 
@@ -74,9 +74,9 @@ const traverse = (
   steps: EvaluationStep[]
 ) => {
   switch (tree.nodeType) {
-    case SyntaxTreeNodeKind.CONST:
+    case SyntaxTreeNodeType.CONST:
       return;
-    case SyntaxTreeNodeKind.IDEN:
+    case SyntaxTreeNodeType.IDEN:
       {
         const evaluated = tree.eval(table);
         const repr = tree.repr;
@@ -94,7 +94,7 @@ const traverse = (
         });
       }
       break;
-    case SyntaxTreeNodeKind.UNARY:
+    case SyntaxTreeNodeType.UNARY:
       {
         const { child } = tree;
 
@@ -102,8 +102,8 @@ const traverse = (
         let childStep: number | false = false;
 
         if (
-          child.nodeType !== SyntaxTreeNodeKind.CONST &&
-          child.nodeType !== SyntaxTreeNodeKind.IDEN
+          child.nodeType !== SyntaxTreeNodeType.CONST &&
+          child.nodeType !== SyntaxTreeNodeType.IDEN
         ) {
           traverse(child, table, steps);
           childStep = steps.length;
@@ -128,7 +128,7 @@ const traverse = (
         });
       }
       break;
-    case SyntaxTreeNodeKind.BINARY:
+    case SyntaxTreeNodeType.BINARY:
       {
         const { right, left } = tree;
 
@@ -136,8 +136,8 @@ const traverse = (
         const leftSubstituted = `\\text{${leftEval}}`;
         let leftStep: number | false = false;
         if (
-          left.nodeType !== SyntaxTreeNodeKind.CONST &&
-          left.nodeType !== SyntaxTreeNodeKind.IDEN
+          left.nodeType !== SyntaxTreeNodeType.CONST &&
+          left.nodeType !== SyntaxTreeNodeType.IDEN
         ) {
           traverse(left, table, steps);
           leftStep = steps.length;
@@ -146,14 +146,14 @@ const traverse = (
         const rightEval = right.eval(table);
         const rightRawRepr = exprTreeToLatex(right);
         const rightRepr =
-          right.nodeType === SyntaxTreeNodeKind.BINARY
+          right.nodeType === SyntaxTreeNodeType.BINARY
             ? `( ${rightRawRepr} )`
             : rightRawRepr;
         const rightSubstituted = `\\text{${rightEval}}`;
         let rightStep: number | false = false;
         if (
-          right.nodeType !== SyntaxTreeNodeKind.CONST &&
-          right.nodeType !== SyntaxTreeNodeKind.IDEN
+          right.nodeType !== SyntaxTreeNodeType.CONST &&
+          right.nodeType !== SyntaxTreeNodeType.IDEN
         ) {
           traverse(right, table, steps);
           rightStep = steps.length;

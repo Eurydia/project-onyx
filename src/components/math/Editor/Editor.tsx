@@ -30,6 +30,7 @@ export const Editor: FC<EditorProps> = (props) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        autoCapitalize="off"
         slotProps={{
           input: {
             autoCapitalize: "off",

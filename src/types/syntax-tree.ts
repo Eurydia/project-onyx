@@ -1,34 +1,34 @@
-export enum SyntaxTreeNodeKind {
+import { Operator } from "./operators";
+
+export enum SyntaxTreeNodeType {
   CONST = "CONSTANT",
   IDEN = "IDEN",
   UNARY = "UNARY",
   BINARY = "BINARY",
 }
 
-export enum Operator {
-  IFF = "IFF",
-  IMPL = "IMPL",
-  AND = "AND",
-  OR = "OR",
-  NOT = "NOT",
-}
-
 export type SyntaxTreeNodeConst = {
-  nodeType: SyntaxTreeNodeKind.CONST;
+  nodeType: SyntaxTreeNodeType.CONST;
   value: boolean;
 };
+
 export type SyntaxTreeNodeIden = {
-  nodeType: SyntaxTreeNodeKind.IDEN;
+  nodeType: SyntaxTreeNodeType.IDEN;
   symbol: string;
 };
+
 export type SyntaxTreeNodeBinary = {
-  nodeType: SyntaxTreeNodeKind.BINARY;
-  operator: Exclude<Operator, Operator.NOT>;
+  nodeType: SyntaxTreeNodeType.BINARY;
+  operator:
+    | Operator.AND
+    | Operator.OR
+    | Operator.IMPL
+    | Operator.IFF;
   left: SyntaxTree;
   right: SyntaxTree;
 };
 export type SyntaxTreeNodeUnary = {
-  nodeType: SyntaxTreeNodeKind.UNARY;
+  nodeType: SyntaxTreeNodeType.UNARY;
   operator: Operator.NOT;
   operand: SyntaxTree;
 };

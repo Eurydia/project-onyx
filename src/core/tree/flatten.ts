@@ -1,7 +1,7 @@
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
-  SyntaxTreeNodeKind,
+  SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import { exprTreeCollectSymbols } from "./expr/evaluate";
 import { exprTreeToLatexSubstitute } from "./expr/latex";
@@ -17,11 +17,11 @@ const traverse = (
   symbolMap: Map<string, string>
 ) => {
   switch (tree.nodeType) {
-    case SyntaxTreeNodeKind.CONST:
+    case SyntaxTreeNodeType.CONST:
       return;
-    case SyntaxTreeNodeKind.IDEN:
+    case SyntaxTreeNodeType.IDEN:
       return;
-    case SyntaxTreeNodeKind.UNARY: {
+    case SyntaxTreeNodeType.UNARY: {
       const repr = exprTreeToLatexSubstitute(
         tree,
         symbolMap
@@ -38,7 +38,7 @@ const traverse = (
       accum.push(minified);
       return;
     }
-    case SyntaxTreeNodeKind.BINARY: {
+    case SyntaxTreeNodeType.BINARY: {
       const repr = exprTreeToLatexSubstitute(
         tree,
         symbolMap

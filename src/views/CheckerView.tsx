@@ -1,6 +1,6 @@
 import { Editor } from "$components/math/Editor/Editor";
-import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
-import { SolverRouteLoaderData } from "$types/loader-data";
+import { Playground } from "$components/math/Playground/Playground";
+import { CheckerRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Alert,
@@ -13,9 +13,9 @@ import {
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
-export const SolverView: FC = () => {
+export const CheckerView: FC = () => {
   const { data, userInput: defaultUserInput } =
-    useLoaderData() as SolverRouteLoaderData;
+    useLoaderData() as CheckerRouteLoaderData;
   const submit = useSubmit();
   const [userInput, setUserInput] = useState(
     defaultUserInput
@@ -32,7 +32,7 @@ export const SolverView: FC = () => {
       },
       {
         method: "GET",
-        action: "/solver",
+        action: "/checker",
       }
     );
   };
@@ -63,9 +63,9 @@ export const SolverView: FC = () => {
           RUN
         </Button>
         {data.ok && (
-          <SolverOutputGroup
+          <Playground
             exprTree={data.data.exprTree}
-            symbolSet={data.data.symbols}
+            symbolTable={new Map()}
           />
         )}
         {!data.ok && defaultUserInput.trim().length > 0 && (
