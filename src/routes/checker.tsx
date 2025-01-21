@@ -1,5 +1,6 @@
 import { validateTautology } from "$core/checker";
 import { parse } from "$core/interpreter/parser";
+import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
 import { syntaxTreetoExprTree } from "$core/tree/conversion";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { CheckerView } from "$views/CheckerView";
@@ -45,6 +46,7 @@ export const CHECKER_ROUTE: RouteObject = {
         data: {
           exprTree,
           verdict: false,
+          qq: syntaxTreeNormalize(syntaxTree),
         },
       },
     };

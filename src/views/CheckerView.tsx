@@ -1,6 +1,10 @@
 import { Editor } from "$components/math/Editor/Editor";
-import { Playground } from "$components/math/Playground/Playground";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import { CheckerRouteLoaderData } from "$types/loader-data";
+import {
+  SyntaxTreeNodeIden,
+  SyntaxTreeNodeType,
+} from "$types/syntax-tree";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Alert,
@@ -36,6 +40,30 @@ export const CheckerView: FC = () => {
       }
     );
   };
+  const str: string[] = [];
+  if (data.ok) {
+    for (const q of data.data.qq) {
+      const curr: string[] = [];
+
+      for (const t of q) {
+        switch (t.nodeType) {
+          case SyntaxTreeNodeType.CONST:
+            curr.push(String(t.value));
+            break;
+          case SyntaxTreeNodeType.IDEN:
+            curr.push(String(t.symbol));
+            break;
+          case SyntaxTreeNodeType.UNARY:
+            curr.push(
+              `\\lnot ${
+                (t.operand as SyntaxTreeNodeIden).symbol
+              }`
+            );
+        }
+      }
+      str.push(`\\{${curr.join(", ")}\\}`);
+    }
+  }
 
   return (
     <Box
@@ -62,12 +90,13 @@ export const CheckerView: FC = () => {
         >
           RUN
         </Button>
-        {data.ok && (
+        {/* {data.ok && (
           <Playground
             exprTree={data.data.exprTree}
             symbolTable={new Map()}
           />
-        )}
+        )} */}
+        {data.ok && <StyledLatex tex={str.join(" ")} />}
         {!data.ok && defaultUserInput.trim().length > 0 && (
           <Alert
             severity="warning"

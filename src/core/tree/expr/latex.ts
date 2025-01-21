@@ -7,7 +7,7 @@ const _exprTreeToLatex = (
 ): string => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
-      return `\\mathbf{${tree.repr}}`;
+      return `\\textbf{${tree.repr}}`;
     case SyntaxTreeNodeType.IDEN:
       if (table !== null && table.has(tree.repr)) {
         return table.get(tree.repr)!;
