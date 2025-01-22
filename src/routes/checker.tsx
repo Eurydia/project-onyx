@@ -1,8 +1,8 @@
-import { validateTautology } from "$core/checker";
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
+import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { CheckerRouteLoaderData } from "$types/loader-data";
+import { SyntaxTreeNodeType } from "$types/syntax-tree";
 import { CheckerView } from "$views/CheckerView";
 import { RouteObject } from "react-router";
 
@@ -36,17 +36,22 @@ export const CHECKER_ROUTE: RouteObject = {
     }
 
     const { data: syntaxTree } = result;
-    const exprTree = syntaxTreetoExprTree(
-      validateTautology(syntaxTree)
+    const normalSyntaxTree =
+      syntaxTreeNormalize(syntaxTree);
+    const exprTree = exprTreeFromSyntaxTree(
+      normalSyntaxTree
     );
+
     const loaderData: CheckerRouteLoaderData = {
       userInput,
       data: {
         ok: true,
         data: {
           exprTree,
-          verdict: false,
-          qq: syntaxTreeNormalize(syntaxTree),
+          verdict:
+            normalSyntaxTree.nodeType ===
+              SyntaxTreeNodeType.CONST &&
+            normalSyntaxTree.value,
         },
       },
     };

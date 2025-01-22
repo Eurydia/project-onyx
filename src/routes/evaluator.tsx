@@ -1,5 +1,5 @@
 import { parse } from "$core/interpreter/parser";
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
+import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
@@ -37,7 +37,7 @@ export const EVALUATOR_ROUTE: RouteObject = {
         data.push({ ok: false });
         continue;
       }
-      const exprTree = syntaxTreetoExprTree(result.data);
+      const exprTree = exprTreeFromSyntaxTree(result.data);
       for (const symbol of exprTreeCollectSymbols(
         exprTree
       )) {

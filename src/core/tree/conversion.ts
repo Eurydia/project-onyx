@@ -102,6 +102,8 @@ const _syntaxTreetoExprTree = (
   }
 };
 
-export const syntaxTreetoExprTree = (tree: SyntaxTree) => {
+export const exprTreeFromSyntaxTree = (
+  tree: SyntaxTree
+) => {
   return _syntaxTreetoExprTree(tree, 0);
 };

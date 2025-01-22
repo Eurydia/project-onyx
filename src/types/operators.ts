@@ -1,10 +1,7 @@
 export enum Operator {
-  TAUTOLOGY,
-  CONTRADICTION,
-
-  IFF,
-  IMPL,
-  AND,
-  OR,
-  NOT,
+  IFF = "IFF",
+  IMPL = "IMPL",
+  AND = "AND",
+  OR = "OR",
+  NOT = "NOT",
 }

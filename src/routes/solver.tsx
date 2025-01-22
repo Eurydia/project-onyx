@@ -1,5 +1,5 @@
 import { parse } from "$core/interpreter/parser";
-import { syntaxTreetoExprTree } from "$core/tree/conversion";
+import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { SolverRouteLoaderData } from "$types/loader-data";
 import { SolverView } from "$views/SolverView";
@@ -35,7 +35,7 @@ export const SOLVER_ROUTE: RouteObject = {
     }
 
     const { data: syntaxTree } = result;
-    const exprTree = syntaxTreetoExprTree(syntaxTree);
+    const exprTree = exprTreeFromSyntaxTree(syntaxTree);
     const symbols = exprTreeCollectSymbols(exprTree);
     const loaderData: SolverRouteLoaderData = {
       userInput,
