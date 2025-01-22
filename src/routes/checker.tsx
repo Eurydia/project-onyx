@@ -1,6 +1,8 @@
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
+import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { SyntaxTreeNodeType } from "$types/syntax-tree";
 import { CheckerView } from "$views/CheckerView";
@@ -38,20 +40,28 @@ export const CHECKER_ROUTE: RouteObject = {
     const { data: syntaxTree } = result;
     const normalSyntaxTree =
       syntaxTreeNormalize(syntaxTree);
-    const exprTree = exprTreeFromSyntaxTree(
-      normalSyntaxTree
-    );
 
     const loaderData: CheckerRouteLoaderData = {
       userInput,
       data: {
         ok: true,
         data: {
-          exprTree,
+          input: exprTreeToLatex(
+            exprTreeFromSyntaxTree(syntaxTree)
+          ),
           verdict:
             normalSyntaxTree.nodeType ===
-              SyntaxTreeNodeType.CONST &&
-            normalSyntaxTree.value,
+            SyntaxTreeNodeType.CONST
+              ? {
+                  constant: true,
+                  value: normalSyntaxTree.value,
+                }
+              : {
+                  constant: false,
+                  dependencies: exprTreeCollectSymbols(
+                    exprTreeFromSyntaxTree(normalSyntaxTree)
+                  ),
+                },
         },
       },
     };

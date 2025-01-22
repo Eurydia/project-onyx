@@ -12,13 +12,13 @@ export const syntaxTreeToString = (
     case SyntaxTreeNodeType.IDEN:
       return tree.symbol;
     case SyntaxTreeNodeType.UNARY: {
-      const operandRepr = syntaxTreeToString(tree.operand);
+      let operandRepr = syntaxTreeToString(tree.operand);
       if (
         tree.operand.nodeType === SyntaxTreeNodeType.BINARY
       ) {
-        return `${tree.operator} ( ${operandRepr} )`;
+        operandRepr = `( ${operandRepr} )`;
       }
-      return operandRepr;
+      return `${tree.operator} ${operandRepr}`;
     }
     case SyntaxTreeNodeType.BINARY: {
       let leftRepr = syntaxTreeToString(tree.left);

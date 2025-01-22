@@ -18,7 +18,12 @@ export type EvaluatorRouteLoaderData = {
 export type CheckerRouteLoaderData = {
   userInput: string;
   data: Maybe<{
-    exprTree: ExprTree;
-    verdict: boolean;
+    input: string;
+    verdict:
+      | {
+          constant: true;
+          value: boolean;
+        }
+      | { constant: false; dependencies: Set<string> };
   }>;
 };

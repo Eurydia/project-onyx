@@ -372,9 +372,12 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
 
   if (simplified.length > 0) {
     let tree = syntaxTreeFromClause(simplified[0]);
+    const seen = new Set<string>();
     for (const clause of simplified.slice(1)) {
       const next = syntaxTreeFromClause(clause);
+
       if (next.nodeType === SyntaxTreeNodeType.CONST) {
+        console.debug("CONST");
         if (next.value) {
           continue;
         }
@@ -382,6 +385,55 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
           nodeType: SyntaxTreeNodeType.CONST,
           value: false,
         } as SyntaxTreeNodeConst;
+      }
+
+      if (next.nodeType === SyntaxTreeNodeType.IDEN) {
+        seen.add(syntaxTreeToString(next));
+        console.debug("IDEN");
+        if (
+          seen.has(
+            syntaxTreeToString({
+              nodeType: SyntaxTreeNodeType.UNARY,
+              operand: next,
+              operator: Operator.NOT,
+            } as SyntaxTreeNodeUnary)
+          )
+        ) {
+          console.debug(
+            seen.has(
+              syntaxTreeToString({
+                nodeType: SyntaxTreeNodeType.UNARY,
+                operand: next,
+                operator: Operator.NOT,
+              } as SyntaxTreeNodeUnary)
+            ),
+            syntaxTreeToString({
+              nodeType: SyntaxTreeNodeType.UNARY,
+              operand: next,
+              operator: Operator.NOT,
+            } as SyntaxTreeNodeUnary)
+          );
+
+          return {
+            nodeType: SyntaxTreeNodeType.CONST,
+            value: false,
+          } as SyntaxTreeNodeConst;
+        }
+      }
+
+      if (next.nodeType === SyntaxTreeNodeType.UNARY) {
+        console.debug("UNARY");
+        seen.add(syntaxTreeToString(next));
+        if (
+          seen.has(
+            (next.operand as SyntaxTreeNodeIden).symbol
+          )
+        ) {
+          return {
+            nodeType: SyntaxTreeNodeType.CONST,
+            value: false,
+          } as SyntaxTreeNodeConst;
+        }
       }
 
       tree = {

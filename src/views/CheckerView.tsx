@@ -1,7 +1,6 @@
 import { Editor } from "$components/math/Editor/Editor";
-import { Playground } from "$components/math/Playground/Playground";
 import { StyledLatex } from "$components/styled/StyledLatex";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
+import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
@@ -38,36 +37,12 @@ export const CheckerView: FC = () => {
       }
     );
   };
-  // const str: string[] = [];
-  // if (data.ok) {
-  //   for (const q of data.data.qq) {
-  //     const curr: string[] = [];
-
-  //     for (const t of q) {
-  //       switch (t.nodeType) {
-  //         case SyntaxTreeNodeType.CONST:
-  //           curr.push(String(t.value));
-  //           break;
-  //         case SyntaxTreeNodeType.IDEN:
-  //           curr.push(String(t.symbol));
-  //           break;
-  //         case SyntaxTreeNodeType.UNARY:
-  //           curr.push(
-  //             `\\lnot ${
-  //               (t.operand as SyntaxTreeNodeIden).symbol
-  //             }`
-  //           );
-  //       }
-  //     }
-  //     str.push(`\\{${curr.join(", ")}\\}`);
-  //   }
-  // }
 
   return (
     <Box
       maxWidth="lg"
       marginX={{ xs: 2, md: "auto" }}
-      paddingY={4}
+      paddingY={2}
     >
       <Stack spacing={2}>
         <Editor
@@ -90,16 +65,33 @@ export const CheckerView: FC = () => {
         </Button>
         {data.ok && (
           <>
-            <StyledLatex
-              tex={exprTreeToLatex(data.data.exprTree)}
-            />
-            <StyledLatex
-              tex={`\\textbf{${data.data.verdict}}`}
-            />
-            <Playground
-              exprTree={data.data.exprTree}
-              symbolTable={new Map()}
-            />
+            <StyledOutputCard title="Input">
+              <StyledLatex
+                tex={data.data.input}
+                options={{ displayMode: true }}
+              />
+            </StyledOutputCard>
+            <StyledOutputCard title="Verdict">
+              {data.data.verdict.constant ? (
+                <StyledLatex
+                  tex={
+                    data.data.verdict.value
+                      ? `\\text{The given expression is a tautology.}`
+                      : `\\text{The given expression is a contradiction.}`
+                  }
+                />
+              ) : (
+                <>
+                  <StyledLatex
+                    tex={`\\text{The given expression is not a tautology. Its truth value is dependant on 
+                      $${[...data.data.verdict.dependencies]
+                        .toSorted()
+                        .join(",")}
+                        $.}`}
+                  />
+                </>
+              )}
+            </StyledOutputCard>
           </>
         )}
         {!data.ok && defaultUserInput.trim().length > 0 && (

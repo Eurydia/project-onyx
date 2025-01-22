@@ -54,19 +54,16 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           }}
         />
       </StyledOutputCard>
-      <StyledOutputCard title="Output">
-        <StyledLatex
-          tex={`
-            \\textbf{${
-              exprTree.eval(symbolTable) ? "True" : "False"
-            }}`}
-          sx={{
-            textAlign: "center",
-          }}
-        />
+      <StyledOutputCard title="Propositions">
         <PlaygroundSymbolConfig
           symbolTable={symbolTable}
           onChange={handleSymbolChange}
+        />
+      </StyledOutputCard>
+      <StyledOutputCard title="Output">
+        <StyledLatex
+          tex={`\\textbf{${exprTree.eval(symbolTable)}}`}
+          options={{ displayMode: true }}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
