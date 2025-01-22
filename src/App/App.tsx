@@ -1,7 +1,6 @@
 import "$core/interpreter/parser";
 import { AppbarLayout } from "$layouts/AppbarLayout";
 import { HomeView } from "$views/HomeView";
-import { TheoremView } from "$views/TheoremView";
 import {
   CssBaseline,
   GlobalStyles,
@@ -39,10 +38,6 @@ const router = createHashRouter(
         SOLVER_ROUTE,
         EVALUATOR_ROUTE,
         CHECKER_ROUTE,
-        {
-          path: "/theorem",
-          element: <TheoremView />,
-        },
       ],
     },
   ],

@@ -71,7 +71,7 @@ export const CheckerView: FC = () => {
                 options={{ displayMode: true }}
               />
             </StyledOutputCard>
-            <StyledOutputCard title="Verdict">
+            <StyledOutputCard title="Output">
               {data.data.verdict.constant ? (
                 <StyledLatex
                   tex={

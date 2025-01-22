@@ -377,7 +377,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
       const next = syntaxTreeFromClause(clause);
 
       if (next.nodeType === SyntaxTreeNodeType.CONST) {
-        console.debug("CONST");
         if (next.value) {
           continue;
         }
@@ -389,7 +388,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
 
       if (next.nodeType === SyntaxTreeNodeType.IDEN) {
         seen.add(syntaxTreeToString(next));
-        console.debug("IDEN");
         if (
           seen.has(
             syntaxTreeToString({
@@ -399,21 +397,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
             } as SyntaxTreeNodeUnary)
           )
         ) {
-          console.debug(
-            seen.has(
-              syntaxTreeToString({
-                nodeType: SyntaxTreeNodeType.UNARY,
-                operand: next,
-                operator: Operator.NOT,
-              } as SyntaxTreeNodeUnary)
-            ),
-            syntaxTreeToString({
-              nodeType: SyntaxTreeNodeType.UNARY,
-              operand: next,
-              operator: Operator.NOT,
-            } as SyntaxTreeNodeUnary)
-          );
-
           return {
             nodeType: SyntaxTreeNodeType.CONST,
             value: false,
@@ -422,7 +405,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
       }
 
       if (next.nodeType === SyntaxTreeNodeType.UNARY) {
-        console.debug("UNARY");
         seen.add(syntaxTreeToString(next));
         if (
           seen.has(
