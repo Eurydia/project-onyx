@@ -4,6 +4,7 @@ import {
   default as LangDectector,
 } from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+import { EN_COMPONENT } from "./en/component";
 import { en } from "./en/translation";
 import { th } from "./th/translation";
 
@@ -16,7 +17,10 @@ i18next
       lookupLocalStorage: "language",
     },
     resources: {
-      en,
+      en: {
+        translation: en.translation,
+        component: EN_COMPONENT,
+      },
       th,
     },
   });

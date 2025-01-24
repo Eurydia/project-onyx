@@ -1,5 +1,5 @@
 import { Editor } from "$components/math/Editor/Editor";
-import { PlaygroundSymbolConfig } from "$components/math/Playground/PlaygroundSymbolConfig";
+import { PropositionConfig } from "$components/math/PropositionConfig";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
@@ -120,8 +120,8 @@ export const EvaluatorView: FC = () => {
                 </Typography>
               )}
               {symbolTable.size > 0 && (
-                <PlaygroundSymbolConfig
-                  symbolTable={symbolTable}
+                <PropositionConfig
+                  value={symbolTable}
                   onChange={(k, v) =>
                     setSymbolTable((prev) => {
                       const next = new Map(prev);

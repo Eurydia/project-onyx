@@ -6,96 +6,62 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { exprTreeFlattenPostOrder } from "$core/tree/flatten";
 import { ExprTree } from "$types/expression-tree";
 import {
-  alpha,
   Button,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableContainerProps,
   TableHead,
   TableRow,
   Typography,
-  useTheme,
 } from "@mui/material";
-import { FC, memo, useMemo, useState } from "react";
+import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-type StyledTableCellProps = { value: boolean };
-const StyledTableCell: FC<StyledTableCellProps> = (
-  props
-) => {
-  const { value } = props;
-  const { t } = useTranslation();
-  const { palette } = useTheme();
-
-  return (
-    <TableCell
-      align="center"
-      sx={{
-        backgroundColor: value
-          ? alpha(palette.secondary.light, 0.8)
-          : alpha(palette.secondary.main, 0.2),
-        whiteSpace: "nowrap",
-      }}
-    >
-      {value ? t("common.true") : t("common.false")}
-    </TableCell>
-  );
-};
+import { StyledTableCell } from "./TruthTableCell";
 
 type TruthTableProps = {
   exprTree: ExprTree;
+  slotProps: { container: TableContainerProps };
 };
 const TruthTable_: FC<TruthTableProps> = (props) => {
-  const { exprTree } = props;
+  const { exprTree, slotProps } = props;
   const { t } = useTranslation();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
-  const { columns, symbols } = useMemo(() => {
-    const _columns = exprTreeFlattenPostOrder(exprTree);
-    const _symbols = [...exprTreeCollectSymbols(exprTree)];
-    _symbols.sort();
-    return { columns: _columns, symbols: _symbols };
-  }, [exprTree]);
+  const columns = exprTreeFlattenPostOrder(exprTree);
+  const symbols = [...exprTreeCollectSymbols(exprTree)];
+  symbols.sort();
 
-  const perm = useMemo(() => {
-    if (symbols.length > 3 && !userConfirmed) {
-      return [];
-    }
-    return getPermutation(symbols.length, symbols);
-  }, [symbols, userConfirmed]);
+  const perm =
+    symbols.length > 3 && !userConfirmed
+      ? []
+      : getPermutation(symbols.length, symbols);
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
       <Stack spacing={1}>
-        <StyledAlert severity="warning">
+        <StyledAlert
+          severity="warning"
+          variant="standard"
+        >
           <Typography>
-            {t("common.truthTable.warning")}
+            {t("component:math.truthTable.warning")}
           </Typography>
         </StyledAlert>
         <Button
-          disableElevation
-          disableRipple
           variant="contained"
           onClick={() => setUserConfirmed(true)}
-          sx={{
-            width: "fit-content",
-          }}
         >
-          {t("common.truthTable.confirm")}
+          {t("component:math.truthTable.confirm")}
         </Button>
       </Stack>
     );
   }
 
   return (
-    <TableContainer
-      sx={{
-        maxHeight: 600,
-        overflowY: "auto",
-      }}
-    >
+    <TableContainer {...slotProps.container}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -103,11 +69,6 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
               <TableCell
                 key={"sym" + index}
                 align="center"
-                sx={{
-                  backgroundColor: ({ palette }) =>
-                    palette.background.paper,
-                  whiteSpace: "nowrap",
-                }}
               >
                 <StyledLatex tex={symbol} />
               </TableCell>
@@ -116,11 +77,6 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
               <TableCell
                 key={"subexpr" + index}
                 align="center"
-                sx={{
-                  backgroundColor: ({ palette }) =>
-                    palette.background.paper,
-                  whiteSpace: "nowrap",
-                }}
               >
                 <StyledLatex tex={col.label} />
               </TableCell>

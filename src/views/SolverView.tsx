@@ -14,16 +14,15 @@ import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const SolverView: FC = () => {
-  const { data, userInput: defaultUserInput } =
+  const { data, userInput: prevUserInput } =
     useLoaderData() as SolverRouteLoaderData;
+
   const submit = useSubmit();
-  const [userInput, setUserInput] = useState(
-    defaultUserInput
-  );
+  const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
-    setUserInput(defaultUserInput);
-  }, [defaultUserInput]);
+    setUserInput(prevUserInput);
+  }, [prevUserInput]);
 
   const handleSubmit = () => {
     submit(
@@ -51,13 +50,8 @@ export const SolverView: FC = () => {
         />
         <Button
           disabled={userInput.trim().length === 0}
-          disableElevation
-          disableRipple
           variant="contained"
           startIcon={<PlayArrowRounded />}
-          sx={{
-            maxWidth: "fit-content",
-          }}
           onClick={handleSubmit}
         >
           RUN
@@ -68,7 +62,7 @@ export const SolverView: FC = () => {
             symbolSet={data.data.symbols}
           />
         )}
-        {!data.ok && defaultUserInput.trim().length > 0 && (
+        {!data.ok && prevUserInput.trim().length > 0 && (
           <Alert
             severity="warning"
             variant="outlined"

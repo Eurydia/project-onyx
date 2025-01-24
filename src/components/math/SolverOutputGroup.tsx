@@ -5,8 +5,9 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Stack } from "@mui/material";
 import { FC, memo, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Playground } from "./Playground/Playground";
-import { PlaygroundSymbolConfig } from "./Playground/PlaygroundSymbolConfig";
+import { PropositionConfig } from "./PropositionConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation";
 
 type SolverOutputGroupProps = {
@@ -17,6 +18,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
   props
 ) => {
   const { exprTree, symbolSet } = props;
+  const { t } = useTranslation();
 
   const [symbolTable, setSymbolTable] = useState(() => {
     const next = new Map<string, boolean>();
@@ -44,19 +46,17 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
 
   return (
     <Stack spacing={2}>
-      <StyledOutputCard title="Input">
+      <StyledOutputCard title={"Input"}>
         <StyledLatex
           tex={exprTreeToLatex(exprTree)}
-          sx={{
-            textAlign: "center",
-            display: "inline-block",
-            width: "100%",
+          options={{
+            displayMode: true,
           }}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Propositions">
-        <PlaygroundSymbolConfig
-          symbolTable={symbolTable}
+        <PropositionConfig
+          value={symbolTable}
           onChange={handleSymbolChange}
         />
       </StyledOutputCard>
@@ -78,8 +78,19 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           symbolTable={symbolTable}
         />
       </StyledOutputCard>
-      <StyledOutputCard title="Truth Table">
-        <TruthTable exprTree={exprTree} />
+      <StyledOutputCard
+        title={t("component:math.truthTable.title")}
+      >
+        <TruthTable
+          exprTree={exprTree}
+          slotProps={{
+            container: {
+              sx: {
+                maxHeight: { xs: "100vh", md: "50vh" },
+              },
+            },
+          }}
+        />
       </StyledOutputCard>
     </Stack>
   );

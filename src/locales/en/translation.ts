@@ -78,11 +78,6 @@ export const en = {
       },
     },
     common: {
-      truthTable: {
-        confirm: "I understand",
-        warning:
-          "The truth table for this expression is automatically hidden due to its size. You can press the button below to show the table, but this process can take a long time to complete or even crash the application. For expressions with many propositions, truth table is not the recommemnded way to visualize them.",
-      },
       proposition: "Proposition",
       truthValue: "Truth value",
       true: "True",
@@ -118,8 +113,6 @@ export const en = {
       playback: {
         forward: "Forward",
         rewind: "Rewind",
-        // start: "Start",
-        // end: "End",
       },
     },
   },

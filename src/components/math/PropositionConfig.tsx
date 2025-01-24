@@ -9,20 +9,20 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "../../styled/StyledLatex";
+import { StyledLatex } from "../styled/StyledLatex";
 
-type PlaygroundSymbolConfig = {
-  symbolTable: SymbolTable;
+type PropositionConfigProps = {
+  value: SymbolTable;
   onChange: (k: string, v: boolean) => void;
 };
-export const PlaygroundSymbolConfig: FC<
-  PlaygroundSymbolConfig
+export const PropositionConfig: FC<
+  PropositionConfigProps
 > = (props) => {
-  const { symbolTable, onChange } = props;
+  const { value, onChange } = props;
 
   const { t } = useTranslation("translation");
 
-  const symbols = [...symbolTable.keys()];
+  const symbols = [...value.keys()];
   symbols.sort();
 
   return (
@@ -46,9 +46,9 @@ export const PlaygroundSymbolConfig: FC<
             </FormLabel>
             <RadioGroup
               row
-              value={symbolTable.get(sym) ? "1" : "0"}
-              onChange={(e) =>
-                onChange(sym, e.target.value === "1")
+              value={value.get(sym) ? "1" : "0"}
+              onChange={(_, value) =>
+                onChange(sym, value === "1")
               }
             >
               <FormControlLabel
