@@ -58,7 +58,6 @@ const rewriteImplication = (
 const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
-      return tree;
     case SyntaxTreeNodeType.IDEN:
       return tree;
     case SyntaxTreeNodeType.UNARY:
@@ -132,6 +131,7 @@ const expandInward = (tree: SyntaxTree): SyntaxTree => {
           right,
         } as SyntaxTreeNodeBinary;
       }
+
       if (
         tree.operand.nodeType === SyntaxTreeNodeType.CONST
       ) {
@@ -140,6 +140,7 @@ const expandInward = (tree: SyntaxTree): SyntaxTree => {
           value: !tree.operand.value,
         } as SyntaxTreeNodeConst;
       }
+
       return tree;
 
     case SyntaxTreeNodeType.BINARY: {
@@ -368,7 +369,15 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   const expr = new Set<Set<SyntaxTree>>();
   collectClause(expandInward(rewriteTree(tree)), expr);
 
-  const simplified = [...expr];
+  const simplified = [...expr].filter(
+    (clause) =>
+      clause.size > 0 &&
+      [...clause].every(
+        (node) =>
+          node.nodeType !== SyntaxTreeNodeType.CONST ||
+          !node.value
+      )
+  );
 
   if (simplified.length > 0) {
     let tree = syntaxTreeFromClause(simplified[0]);

@@ -15,7 +15,7 @@ import { Link, Outlet, useLocation } from "react-router";
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/solver", label: "nav.solver" },
   { href: "/evaluator", label: "nav.evaluator" },
-  { href: "/simplifier", label: "nav.simplifier" },
+  { href: "/rewriter", label: "nav.rewriter" },
   { href: "/checker", label: "nav.checker" },
 ];
 

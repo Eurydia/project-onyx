@@ -28,7 +28,7 @@ const CARDS: {
   {
     title: "view.home.card.simplifier.title",
     desc: "view.home.card.simplifier.desc",
-    href: "/simplifier",
+    href: "/rewriter",
   },
   {
     title: "view.home.card.checker.title",
@@ -79,10 +79,12 @@ export const HomeView: FC = () => {
             >
               <CardHeader
                 title={t(title)}
-                titleTypographyProps={{
-                  sx: {
-                    fontWeight: 700,
-                    whiteSpace: "break-spaces",
+                slotProps={{
+                  title: {
+                    sx: {
+                      fontWeight: 700,
+                      whiteSpace: "break-spaces",
+                    },
                   },
                 }}
               />

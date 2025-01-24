@@ -13,6 +13,7 @@ import {
 } from "react-router";
 import { CHECKER_ROUTE } from "src/routes/checker";
 import { EVALUATOR_ROUTE } from "src/routes/evaluator";
+import { REWRITER_ROUTE } from "src/routes/rewriter";
 import { SOLVER_ROUTE } from "src/routes/solver";
 import { THEME } from "./thene/theme";
 
@@ -38,6 +39,7 @@ const router = createHashRouter(
         SOLVER_ROUTE,
         EVALUATOR_ROUTE,
         CHECKER_ROUTE,
+        REWRITER_ROUTE,
       ],
     },
   ],

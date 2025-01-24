@@ -27,3 +27,8 @@ export type CheckerRouteLoaderData = {
       | { constant: false; dependencies: Set<string> };
   }>;
 };
+
+export type RewriterRouteLoaderData = {
+  userInput: string;
+  data: Maybe<string>;
+};
