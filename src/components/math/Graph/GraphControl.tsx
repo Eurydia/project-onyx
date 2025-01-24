@@ -7,15 +7,15 @@ import { Slider, Stack, Typography } from "@mui/material";
 import { FC, KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 
-type PlaygroundPlaybackControlProps = {
+type GraphControlProps = {
   maxValue: number;
   minValue: number;
   value: number;
   onChange: (v: number) => void;
 };
-export const PlaygroundPlaybackControl: FC<
-  PlaygroundPlaybackControlProps
-> = (props) => {
+export const GraphControl: FC<GraphControlProps> = (
+  props
+) => {
   const { maxValue, minValue, onChange, value } = props;
 
   const { t } = useTranslation("translation", {

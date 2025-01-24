@@ -7,14 +7,14 @@ import {
   useEffect,
   useState,
 } from "react";
-import { PlaygroundPlaybackControl } from "./PlaygroundPlaybackControl";
+import { GraphControl } from "./GraphControl";
 import { TreeGraph } from "./TreeGraph/TreeGraph";
 
-type PlaygroundProps = {
+type GraphProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
 };
-export const Playground: FC<PlaygroundProps> = (props) => {
+export const Graph: FC<GraphProps> = (props) => {
   const { exprTree, symbolTable } = props;
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
@@ -54,7 +54,7 @@ export const Playground: FC<PlaygroundProps> = (props) => {
           symbolTable={symbolTable}
         />
       </Paper>
-      <PlaygroundPlaybackControl
+      <GraphControl
         maxValue={maxStep}
         minValue={1}
         value={step}

@@ -6,7 +6,7 @@ import { ExprTree } from "$types/expression-tree";
 import { Stack } from "@mui/material";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Playground } from "./Playground/Playground";
+import { Graph } from "./Graph/Graph";
 import { PropositionConfig } from "./PropositionConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation";
 
@@ -73,7 +73,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         />
       </StyledOutputCard>
       <StyledOutputCard title="Graph">
-        <Playground
+        <Graph
           exprTree={exprTree}
           symbolTable={symbolTable}
         />
