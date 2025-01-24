@@ -1,11 +1,12 @@
 import { Editor } from "$components/math/Editor/Editor";
 import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledOutputCard } from "$components/styled/StyledOutputCard";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { RewriterRouteLoaderData } from "$types/loader-data";
 import { Operator } from "$types/operators";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Alert,
-  AlertTitle,
   Box,
   Button,
   Checkbox,
@@ -64,7 +65,7 @@ export const RewriteView: FC = () => {
           placeholder="not (p and q) iff (not p or not q)"
         />
 
-        <FormGroup>
+        <FormGroup row>
           {Object.values(Operator).map(
             (operator, index) => (
               <FormControlLabel
@@ -90,32 +91,45 @@ export const RewriteView: FC = () => {
 
         <Button
           disabled={userInput.trim().length === 0}
-          disableElevation
-          disableRipple
           variant="contained"
           startIcon={<PlayArrowRounded />}
-          sx={{
-            maxWidth: "fit-content",
-          }}
           onClick={handleSubmit}
         >
           RUN
         </Button>
-        {data.ok && <StyledLatex tex={data.data} />}
+        {data.ok && (
+          <>
+            <StyledOutputCard title="Input">
+              <StyledLatex tex={data.data.inputLatex} />
+            </StyledOutputCard>
+            <StyledOutputCard title="Output">
+              {!data.data.rewritten.ok && (
+                <StyledLatex tex="\text{The application could not rewrite the expression into the desired basis.}" />
+              )}
+              {data.data.rewritten.ok && (
+                <>
+                  <StyledLatex
+                    tex={`\\text{The expression is rewritten to}`}
+                  />
+                  <StyledLatex
+                    tex={
+                      exprTreeToLatex(
+                        data.data.rewritten.data
+                      ) + "."
+                    }
+                    options={{ displayMode: true }}
+                  />
+                </>
+              )}
+            </StyledOutputCard>
+          </>
+        )}
         {!data.ok && defaultUserInput.trim().length > 0 && (
           <Alert
             severity="warning"
             variant="outlined"
           >
-            <AlertTitle>
-              <Typography>
-                The solver cannot understand your input.
-              </Typography>
-            </AlertTitle>
-            <Typography>
-              It seems like something is wrong with the
-              expression.
-            </Typography>
+            <Typography>Uhhhh</Typography>
           </Alert>
         )}
       </Stack>

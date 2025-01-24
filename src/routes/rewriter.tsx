@@ -51,20 +51,23 @@ export const REWRITER_ROUTE: RouteObject = {
       basis
     );
 
-    if (!rewriteResult.ok) {
-      return {
-        userInput,
-        data: { ok: false },
-      } as RewriterRouteLoaderData;
-    }
-
     const loaderData: RewriterRouteLoaderData = {
       userInput,
       data: {
         ok: true,
-        data: exprTreeToLatex(
-          exprTreeFromSyntaxTree(rewriteResult.data)
-        ),
+        data: {
+          inputLatex: exprTreeToLatex(
+            exprTreeFromSyntaxTree(syntaxTree)
+          ),
+          rewritten: rewriteResult.ok
+            ? {
+                ok: true,
+                data: exprTreeFromSyntaxTree(
+                  rewriteResult.data
+                ),
+              }
+            : { ok: false },
+        },
       },
     };
     return loaderData;

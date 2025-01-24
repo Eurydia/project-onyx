@@ -55,7 +55,7 @@ export const Graph: FC<GraphProps> = (props) => {
             return prev;
           });
         }
-      }, 500);
+      }, 750);
     }
     return () =>
       clearInterval(intervalRef.current ?? undefined);

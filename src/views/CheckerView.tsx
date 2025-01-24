@@ -52,13 +52,8 @@ export const CheckerView: FC = () => {
         />
         <Button
           disabled={userInput.trim().length === 0}
-          disableElevation
-          disableRipple
           variant="contained"
           startIcon={<PlayArrowRounded />}
-          sx={{
-            maxWidth: "fit-content",
-          }}
           onClick={handleSubmit}
         >
           RUN
@@ -72,18 +67,23 @@ export const CheckerView: FC = () => {
               />
             </StyledOutputCard>
             <StyledOutputCard title="Output">
+              <StyledLatex tex="\text{The expression}" />
+              <StyledLatex
+                tex={data.data.input}
+                options={{ displayMode: true }}
+              />
               {data.data.verdict.constant ? (
                 <StyledLatex
                   tex={
                     data.data.verdict.value
-                      ? `\\text{The given expression is a tautology.}`
-                      : `\\text{The given expression is a contradiction.}`
+                      ? `\\text{is a tautology.}`
+                      : `\\text{is a contradiction.}`
                   }
                 />
               ) : (
                 <>
                   <StyledLatex
-                    tex={`\\text{The given expression is not a tautology. Its truth value is dependant on 
+                    tex={`\\text{is not a tautology. Its truth value depends on 
                       $${[...data.data.verdict.dependencies]
                         .toSorted()
                         .join(",")}
@@ -101,7 +101,8 @@ export const CheckerView: FC = () => {
           >
             <AlertTitle>
               <Typography>
-                The solver cannot understand your input.
+                The application cannot understand your
+                input.
               </Typography>
             </AlertTitle>
             <Typography>

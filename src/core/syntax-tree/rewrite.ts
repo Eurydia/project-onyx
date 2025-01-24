@@ -43,6 +43,11 @@ const rewrite = (
       if (right === null) {
         return null;
       }
+
+      if (basis.has(tree.operator)) {
+        return BINARY(tree.operator, left, right);
+      }
+
       const rules = getRewriteRulesFor(tree.operator);
       for (const rule of rules) {
         if (rule.basis.every((op) => basis.has(op))) {
