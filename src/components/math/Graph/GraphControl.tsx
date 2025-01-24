@@ -2,6 +2,9 @@ import { StyledIconButton } from "$components/styled/StyledIconButton";
 import {
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,
+  PauseRounded,
+  PlayArrowRounded,
+  ReplayRounded,
 } from "@mui/icons-material";
 import { Slider, Stack, Typography } from "@mui/material";
 import { FC, KeyboardEvent } from "react";
@@ -12,11 +15,24 @@ type GraphControlProps = {
   minValue: number;
   value: number;
   onChange: (v: number) => void;
+  onAnimationPlay: () => void;
+  onAnimationPause: () => void;
+  onAnimationReplay: () => void;
+  isAnimationPlaying: boolean;
 };
 export const GraphControl: FC<GraphControlProps> = (
   props
 ) => {
-  const { maxValue, minValue, onChange, value } = props;
+  const {
+    value,
+    maxValue,
+    minValue,
+    onChange,
+    isAnimationPlaying,
+    onAnimationPause,
+    onAnimationPlay,
+    onAnimationReplay,
+  } = props;
 
   const { t } = useTranslation("translation", {
     keyPrefix: "playground.playback",
@@ -36,6 +52,26 @@ export const GraphControl: FC<GraphControlProps> = (
     onChange(value - 1);
   };
 
+  // const [animationId, setAnimationId] = useState<
+  //   number | null
+  // >(null);
+
+  // const handleAnimationStart = () => {
+  //   const id = setInterval(() => {
+  //     onChange(value + 1);
+  //     if (value >= maxValue) {
+  //       handleAnimationStop();
+  //     }
+  //   }, 1500);
+  //   setAnimationId(id);
+  // };
+
+  // const handleAnimationStop = () => {
+  //   if (animationId !== null) {
+  //     clearInterval(animationId);
+  //   }
+  // };
+
   const handleKeyPress = (
     e: KeyboardEvent<HTMLButtonElement>
   ) => {
@@ -49,44 +85,8 @@ export const GraphControl: FC<GraphControlProps> = (
     }
   };
 
-  // There is a possibility for the ui to fall apart due to overflow
-  // **IF** the order is large enough eg 20 digits long
-  // in such a case, the label would over and pushes the forward arrow
-  // and the slider out of view
-  // but let's be real, we run into other problem any way
-  // if the evaluation of a tree that large
-  const maxLabel = maxValue.toString();
-  const valueLabel = value
-    .toString()
-    .padStart(maxLabel.length, "0");
-  const label = `${valueLabel}/${maxLabel}`;
-
   return (
-    <Stack
-      useFlexGap
-      spacing={1}
-      direction="row"
-      alignItems="center"
-    >
-      <StyledIconButton
-        disabled={value <= minValue}
-        title={t("rewind")}
-        onClick={handleRewind}
-        onKeyPress={handleKeyPress}
-      >
-        <KeyboardArrowLeftRounded />
-      </StyledIconButton>
-      <Typography fontFamily="monospace">
-        {label}
-      </Typography>
-      <StyledIconButton
-        disabled={value >= maxValue}
-        title={t("forward")}
-        onKeyPress={handleKeyPress}
-        onClick={handleForward}
-      >
-        <KeyboardArrowRightRounded />
-      </StyledIconButton>
+    <Stack>
       <Slider
         valueLabelDisplay="auto"
         onChange={(_, v) => onChange(v as number)}
@@ -95,6 +95,53 @@ export const GraphControl: FC<GraphControlProps> = (
         min={minValue}
         step={1}
       />
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+      >
+        <StyledIconButton
+          disabled={value <= minValue}
+          title="Previous"
+          onClick={handleRewind}
+          onKeyPress={handleKeyPress}
+        >
+          <KeyboardArrowLeftRounded />
+        </StyledIconButton>
+        {value === maxValue && (
+          <StyledIconButton
+            title="Replay"
+            onClick={onAnimationReplay}
+          >
+            <ReplayRounded />
+          </StyledIconButton>
+        )}
+        {value !== maxValue && isAnimationPlaying && (
+          <StyledIconButton
+            title="Pause"
+            onClick={onAnimationPause}
+          >
+            <PauseRounded />
+          </StyledIconButton>
+        )}
+        {value !== maxValue && !isAnimationPlaying && (
+          <StyledIconButton
+            title="Play"
+            onClick={onAnimationPlay}
+          >
+            <PlayArrowRounded />
+          </StyledIconButton>
+        )}
+        <StyledIconButton
+          disabled={value >= maxValue}
+          title={t("forward")}
+          onKeyPress={handleKeyPress}
+          onClick={handleForward}
+        >
+          <KeyboardArrowRightRounded />
+        </StyledIconButton>
+        <Typography>{`${value}/${maxValue}`}</Typography>
+      </Stack>
     </Stack>
   );
 };

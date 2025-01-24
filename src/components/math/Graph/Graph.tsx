@@ -10,6 +10,7 @@ import {
   FC,
   KeyboardEvent,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { GraphControl } from "./GraphControl";
@@ -27,6 +28,38 @@ export const Graph: FC<GraphProps> = (props) => {
 
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const intervalRef = useRef<number | null>(null);
+  const isPlayingRef = useRef(isPlaying);
+  const currentFrameRef = useRef(step);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  useEffect(() => {
+    currentFrameRef.current = step;
+  }, [step]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      intervalRef.current = setInterval(() => {
+        if (isPlayingRef.current) {
+          setStep((prev) => {
+            if (prev < maxStep) {
+              return prev + 1;
+            }
+            setIsPlaying(false);
+            isPlayingRef.current = false;
+            return prev;
+          });
+        }
+      }, 500);
+    }
+    return () =>
+      clearInterval(intervalRef.current ?? undefined);
+  }, [isPlaying, maxStep]);
 
   useEffect(() => {
     setStep(1);
@@ -64,6 +97,17 @@ export const Graph: FC<GraphProps> = (props) => {
         minValue={1}
         value={step}
         onChange={setStep}
+        isAnimationPlaying={isPlaying}
+        onAnimationPause={() => {
+          setIsPlaying(false);
+        }}
+        onAnimationPlay={() => {
+          setIsPlaying(true);
+        }}
+        onAnimationReplay={() => {
+          setStep(1);
+          setIsPlaying(true);
+        }}
       />
     </Stack>
   );

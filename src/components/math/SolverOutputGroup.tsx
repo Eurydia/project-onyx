@@ -8,7 +8,7 @@ import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Graph } from "./Graph/Graph";
 import { PropositionConfig } from "./PropositionConfig";
-import { StepByStepEvaluation } from "./StepByStepEvaluation";
+import { StepByStepEvaluation } from "./StepByStepEvaluation/StepByStepEvaluation";
 
 type SolverOutputGroupProps = {
   exprTree: ExprTree;

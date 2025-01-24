@@ -10,7 +10,9 @@ type StyledIconButtonProps = {
   children: ReactNode;
   disabled?: boolean;
   onClick: () => void;
-  onKeyPress: (e: KeyboardEvent<HTMLButtonElement>) => void;
+  onKeyPress?: (
+    e: KeyboardEvent<HTMLButtonElement>
+  ) => void;
 };
 export const StyledIconButton: FC<StyledIconButtonProps> = (
   props
@@ -18,14 +20,11 @@ export const StyledIconButton: FC<StyledIconButtonProps> = (
   const { children, onKeyPress, onClick, title, disabled } =
     props;
   return (
-    <Tooltip
-      placement="top"
-      title={<Typography>{title}</Typography>}
-    >
+    <Tooltip title={<Typography>{title}</Typography>}>
       <span>
         <IconButton
-          disableRipple={disabled}
-          color="primary"
+          disableRipple
+          disabled={disabled}
           onClick={onClick}
           onKeyDown={onKeyPress}
         >
