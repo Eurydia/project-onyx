@@ -6,8 +6,25 @@ import {
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
-import { Divider, Stack, Typography } from "@mui/material";
-import { FC, Fragment, memo } from "react";
+import {
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRightRounded,
+} from "@mui/icons-material";
+import {
+  Divider,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import {
+  FC,
+  Fragment,
+  memo,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 type SubstitutionStepDisplayProps = {
   references: EvaluationStep[];
@@ -120,42 +137,87 @@ const StepByStepEvaluation_: FC<
 > = (props) => {
   const { exprTree, symbolTable } = props;
 
-  const steps = exprTreeFlattenStepByStep(
-    exprTree,
-    symbolTable
+  const [currentStep, setCurrentStep] = useState(0);
+  const steps = useMemo(
+    () => exprTreeFlattenStepByStep(exprTree, symbolTable),
+    [exprTree, symbolTable]
   );
+
+  useEffect(() => {
+    setCurrentStep(0);
+  }, [steps]);
 
   if (steps.length === 0) {
     return (
       <Typography fontStyle="italic">
-        No step to display
+        No step to display.
       </Typography>
     );
   }
 
-  const { repr, evaluated } = steps.at(-1)!;
+  // const { repr, evaluated } = steps.at(-1)!;
 
   return (
     <Stack
       spacing={2}
       divider={<Divider flexItem />}
     >
-      {steps.map((step, index) => (
-        <StepDisplay
-          key={"step" + index}
-          step={step}
-          stepIndex={index + 1}
-          references={steps}
-        />
-      ))}
-      <Stack>
-        <StyledLatex tex="\text{Therefore,}" />
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+      >
         <StyledLatex
-          tex={repr}
-          options={{ displayMode: true }}
+          tex={`\\text{Showing step ${currentStep + 1} of ${
+            steps.length
+          }}`}
         />
-        <StyledLatex tex={`\\text{is ${evaluated}.}`} />
+        <Tooltip title={<Typography>Previous</Typography>}>
+          <span>
+            <IconButton
+              disabled={currentStep <= 0}
+              onClick={() =>
+                setCurrentStep((prev) =>
+                  Math.max(prev - 1, 0)
+                )
+              }
+            >
+              <KeyboardArrowLeftRounded />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Tooltip title={<Typography>Next</Typography>}>
+          <span>
+            <IconButton
+              disabled={currentStep >= steps.length - 1}
+              onClick={() =>
+                setCurrentStep((prev) =>
+                  Math.min(prev + 1, steps.length - 1)
+                )
+              }
+            >
+              <KeyboardArrowRightRounded />
+            </IconButton>
+          </span>
+        </Tooltip>
       </Stack>
+      <StepDisplay
+        step={steps[currentStep]}
+        stepIndex={currentStep + 1}
+        references={steps}
+      />
+      {currentStep === steps.length - 1 && (
+        <Stack>
+          <StyledLatex tex="\text{Therefore,}" />
+          <StyledLatex
+            tex={steps[currentStep].repr}
+            options={{ displayMode: true }}
+          />
+          <StyledLatex
+            tex={`\\text{is ${steps[currentStep].evaluated}.}`}
+          />
+        </Stack>
+      )}
     </Stack>
   );
 };

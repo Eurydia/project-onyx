@@ -63,14 +63,6 @@ export const EditorRibbonButton: FC<
         anchorEl={anchorRef.current}
         onClose={() => setOpen(false)}
         onClick={() => setOpen(false)}
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: ({ shape }) =>
-                shape.borderRadius,
-            },
-          },
-        }}
       >
         {options.map((option, index) => {
           const isSelected =

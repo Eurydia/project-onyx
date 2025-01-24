@@ -1,10 +1,12 @@
 import { Editor } from "$components/math/Editor/Editor";
 import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
 import { SolverRouteLoaderData } from "$types/loader-data";
-import { PlayArrowRounded } from "@mui/icons-material";
+import {
+  PlayArrowRounded,
+  WarningRounded,
+} from "@mui/icons-material";
 import {
   Alert,
-  AlertTitle,
   Box,
   Button,
   Stack,
@@ -39,7 +41,7 @@ export const SolverView: FC = () => {
   return (
     <Box
       maxWidth="lg"
-      marginX={{ xs: 2, md: "auto" }}
+      marginX={{ xs: 4, md: "auto" }}
       paddingY={2}
     >
       <Stack spacing={2}>
@@ -64,17 +66,14 @@ export const SolverView: FC = () => {
         )}
         {!data.ok && prevUserInput.trim().length > 0 && (
           <Alert
+            icon={<WarningRounded />}
             severity="warning"
             variant="outlined"
           >
-            <AlertTitle>
-              <Typography>
-                The solver cannot understand your input.
-              </Typography>
-            </AlertTitle>
             <Typography>
-              It seems like something is wrong with the
-              expression.
+              The solver cannot understand your input.
+              Please make sure the expression is correct and
+              try again.
             </Typography>
           </Alert>
         )}

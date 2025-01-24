@@ -8,13 +8,14 @@ import { ExprTree } from "$types/expression-tree";
 import {
   Button,
   Stack,
+  SxProps,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableContainerProps,
   TableHead,
   TableRow,
+  Theme,
   Typography,
 } from "@mui/material";
 import { FC, memo, useState } from "react";
@@ -23,7 +24,7 @@ import { StyledTableCell } from "./TruthTableCell";
 
 type TruthTableProps = {
   exprTree: ExprTree;
-  slotProps: { container: TableContainerProps };
+  slotProps: { container: SxProps<Theme> };
 };
 const TruthTable_: FC<TruthTableProps> = (props) => {
   const { exprTree, slotProps } = props;
@@ -61,7 +62,7 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   }
 
   return (
-    <TableContainer {...slotProps.container}>
+    <TableContainer sx={slotProps.container}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -70,7 +71,10 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
                 key={"sym" + index}
                 align="center"
               >
-                <StyledLatex tex={symbol} />
+                <StyledLatex
+                  tex={symbol}
+                  sx={{ fontWeight: 700 }}
+                />
               </TableCell>
             ))}
             {columns.map((col, index) => (

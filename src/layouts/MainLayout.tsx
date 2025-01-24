@@ -19,7 +19,7 @@ const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/checker", label: "nav.checker" },
 ];
 
-export const AppbarLayout: FC = () => {
+export const MainLayout: FC = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   return (
@@ -27,52 +27,51 @@ export const AppbarLayout: FC = () => {
       <Paper
         variant="outlined"
         sx={{
-          borderStyle: "solid",
-          borderRadius: ({ shape }) => shape.borderRadius,
-          borderColor: ({ palette }) => palette.divider,
           maxWidth: "lg",
           marginY: 4,
           marginX: {
             xs: 4,
             md: "auto",
           },
-          paddingY: 1,
-          paddingX: 2,
-          flexDirection: "row",
-          display: "flex",
-          justifyContent: "space-between",
         }}
       >
         <Stack
-          flexWrap="wrap"
           direction="row"
-          useFlexGap
-          alignItems="center"
-          justifyContent="flex-start"
-          spacing={2}
+          justifyContent="space-between"
         >
-          <Tooltip
-            title={<Typography>{t("nav.home")}</Typography>}
+          <Stack
+            flexWrap="wrap"
+            direction="row"
+            useFlexGap
+            alignItems="center"
+            justifyContent="flex-start"
+            spacing={2}
           >
-            <IconButton
-              disableRipple
-              color="primary"
-              size="large"
-              component={Link}
-              to="/"
+            <Tooltip
+              title={
+                <Typography>{t("nav.home")}</Typography>
+              }
             >
-              <HomeRounded />
-            </IconButton>
-          </Tooltip>
-          <ToolNavDropDown
-            selected={pathname}
-            items={NAV_ITEMS.map(({ href, label }) => ({
-              href,
-              label: t(label),
-            }))}
-          />
+              <IconButton
+                disableRipple
+                color="primary"
+                size="large"
+                component={Link}
+                to="/"
+              >
+                <HomeRounded />
+              </IconButton>
+            </Tooltip>
+            <ToolNavDropDown
+              selected={pathname}
+              items={NAV_ITEMS.map(({ href, label }) => ({
+                href,
+                label: t(label),
+              }))}
+            />
+          </Stack>
+          <LanguageSwitcher />
         </Stack>
-        <LanguageSwitcher />
       </Paper>
       <Outlet />
     </Fragment>

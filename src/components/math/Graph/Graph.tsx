@@ -1,6 +1,11 @@
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
-import { Paper, Stack } from "@mui/material";
+import {
+  Paper,
+  Stack,
+  SxProps,
+  Theme,
+} from "@mui/material";
 import {
   FC,
   KeyboardEvent,
@@ -13,9 +18,13 @@ import { TreeGraph } from "./TreeGraph/TreeGraph";
 type GraphProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
+  slotProps: {
+    graphRegion: SxProps<Theme>;
+  };
 };
 export const Graph: FC<GraphProps> = (props) => {
-  const { exprTree, symbolTable } = props;
+  const { exprTree, symbolTable, slotProps } = props;
+
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
 
@@ -41,11 +50,7 @@ export const Graph: FC<GraphProps> = (props) => {
     <Stack spacing={1}>
       <Paper
         variant="outlined"
-        sx={{
-          height: "75vh",
-          width: "100%",
-          borderRadius: ({ shape }) => shape.borderRadius,
-        }}
+        sx={slotProps.graphRegion}
       >
         <TreeGraph
           order={step}

@@ -1,9 +1,9 @@
 import { Masonry } from "@mui/lab";
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
-  Stack,
   Typography,
 } from "@mui/material";
 import { FC } from "react";
@@ -26,8 +26,8 @@ const CARDS: {
     href: "/evaluator",
   },
   {
-    title: "view.home.card.simplifier.title",
-    desc: "view.home.card.simplifier.desc",
+    title: "view.home.card.rewriter.title",
+    desc: "view.home.card.rewriter.desc",
     href: "/rewriter",
   },
   {
@@ -41,20 +41,13 @@ export const HomeView: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack
-      spacing={2}
+    <Box
       maxWidth="lg"
       marginX={{
         md: "auto",
         xs: 4,
       }}
     >
-      <Typography
-        fontSize="large"
-        fontWeight={700}
-      >
-        {t("view.home.calculators")}
-      </Typography>
       <Masonry columns={{ xs: 1, md: 2 }}>
         {CARDS.map(({ title, href, desc }, index) => (
           <Link
@@ -67,9 +60,6 @@ export const HomeView: FC = () => {
             <Card
               variant="outlined"
               sx={{
-                "borderStyle": "solid",
-                "borderRadius": ({ shape }) =>
-                  shape.borderRadius,
                 "transition": "all 0.1s ease",
                 "&:hover": {
                   borderColor: ({ palette }) =>
@@ -95,6 +85,6 @@ export const HomeView: FC = () => {
           </Link>
         ))}
       </Masonry>
-    </Stack>
+    </Box>
   );
 };

@@ -1,5 +1,5 @@
 import "$core/interpreter/parser";
-import { AppbarLayout } from "$layouts/AppbarLayout";
+import { MainLayout } from "$layouts/MainLayout";
 import { HomeView } from "$views/HomeView";
 import {
   CssBaseline,
@@ -15,7 +15,7 @@ import { CHECKER_ROUTE } from "src/routes/checker";
 import { EVALUATOR_ROUTE } from "src/routes/evaluator";
 import { REWRITER_ROUTE } from "src/routes/rewriter";
 import { SOLVER_ROUTE } from "src/routes/solver";
-import { THEME } from "./thene/theme";
+import { THEME } from "./theme";
 
 const globalStyles = (
   <GlobalStyles
@@ -33,7 +33,7 @@ const router = createHashRouter(
   [
     {
       path: "/",
-      element: <AppbarLayout />,
+      element: <MainLayout />,
       children: [
         { index: true, element: <HomeView /> },
         SOLVER_ROUTE,

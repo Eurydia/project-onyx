@@ -26,34 +26,23 @@ export const en = {
     },
     view: {
       home: {
-        launch: "Open",
-        read: "Read",
-        calculators: "Tools",
-        resources: "Resources",
+        tools: "Tools",
         card: {
           solver: {
             title: "Solver",
-            desc: "Solve an expression with truth table, expression tree, and step-by-step calculation.",
+            desc: "Solve an expression with truth table, graph, and step-by-step calculation.",
           },
           evaluator: {
             title: "Evaluator",
             desc: "Evaluate expressions according to given truth values.",
           },
-          simplifier: {
-            title: "Simplifier",
-            desc: "Transform an expression into an equivalent, reduced form.",
+          rewriter: {
+            title: "Rewriter",
+            desc: "Transform an expression into a different basis with equivalent truth values.",
           },
           checker: {
             title: "Tautology checker",
             desc: "Check if an expression is always true.",
-          },
-          theorem: {
-            title: "Useful theorems",
-            desc: "A collection of theorems on zeroth-order logic.",
-          },
-          about: {
-            title: "Documentation",
-            desc: "Learn more about the project's implementation and design.",
           },
         },
       },

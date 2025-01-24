@@ -44,11 +44,13 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
     setSymbolTable(next);
   }, [symbolSet]);
 
+  const exprLatex = exprTreeToLatex(exprTree);
+
   return (
     <Stack spacing={2}>
       <StyledOutputCard title={"Input"}>
         <StyledLatex
-          tex={exprTreeToLatex(exprTree)}
+          tex={exprLatex}
           options={{
             displayMode: true,
           }}
@@ -61,9 +63,13 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         />
       </StyledOutputCard>
       <StyledOutputCard title="Output">
+        <StyledLatex tex="\text{The expression}" />
         <StyledLatex
-          tex={`\\textbf{${exprTree.eval(symbolTable)}}`}
+          tex={exprLatex}
           options={{ displayMode: true }}
+        />
+        <StyledLatex
+          tex={`\\text{is ${exprTree.eval(symbolTable)}.}`}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
@@ -76,6 +82,11 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         <Graph
           exprTree={exprTree}
           symbolTable={symbolTable}
+          slotProps={{
+            graphRegion: {
+              height: { xs: "66vh", md: "80vh" },
+            },
+          }}
         />
       </StyledOutputCard>
       <StyledOutputCard
@@ -85,9 +96,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           exprTree={exprTree}
           slotProps={{
             container: {
-              sx: {
-                maxHeight: { xs: "100vh", md: "50vh" },
-              },
+              maxHeight: { xs: "100vh", md: "50vh" },
             },
           }}
         />
