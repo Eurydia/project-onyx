@@ -3,7 +3,6 @@ import { StyledLatex } from "$components/styled/StyledLatex";
 import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
-import { Stack } from "@mui/material";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Graph } from "./Graph/Graph";
@@ -47,13 +46,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
   const exprLatex = exprTreeToLatex(exprTree);
 
   return (
-    <Stack spacing={2}>
-      <StyledOutputCard title="Input Interpretation">
-        <StyledLatex
-          displayMode
-          tex={exprLatex}
-        />
-      </StyledOutputCard>
+    <>
       <StyledOutputCard title="Propositions">
         <PropositionConfig
           value={symbolTable}
@@ -99,7 +92,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           }}
         />
       </StyledOutputCard>
-    </Stack>
+    </>
   );
 };
 

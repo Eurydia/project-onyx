@@ -12,7 +12,6 @@ export const en = {
         editor: {
           run: {
             label: "Run",
-            alt: "CTRL + ENTER",
           },
         },
       },
@@ -21,7 +20,7 @@ export const en = {
       home: "Home",
       solver: "Solver",
       evaluator: "Evaluator",
-      simplifier: "Simplifier",
+      rewriter: "Rewriter",
       checker: "Tautology checker",
     },
     view: {
@@ -38,7 +37,7 @@ export const en = {
           },
           rewriter: {
             title: "Rewriter",
-            desc: "Transform an expression into a different basis with equivalent truth values.",
+            desc: "Transform an expression into a different basis.",
           },
           checker: {
             title: "Tautology checker",

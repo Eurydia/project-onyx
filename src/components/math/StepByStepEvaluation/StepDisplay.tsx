@@ -18,7 +18,7 @@ export const StepDisplay: FC<StepDisplayProps> = (
   return (
     <Stack spacing={1}>
       <StyledLatex
-        tex={`\\textbf{Step $${stepIndex}$ of $${references.length}$}`}
+        tex={`\\textbf{Step ${stepIndex} of ${references.length}}`}
       />
       <StyledLatex
         tex={`\\text{Consider the expression}`}
@@ -43,12 +43,12 @@ export const StepDisplay: FC<StepDisplayProps> = (
         </Fragment>
       )}
       <StyledLatex
-        tex={`\\text{Then $(${stepIndex}.${String.fromCharCode(
+        tex={`\\text{Then Eq. (${stepIndex}.${String.fromCharCode(
           step.substitutions.length + 97
-        )})$ is ${step.evaluated}.}`}
+        )}) is ${step.evaluated}.}`}
       />
       <StyledLatex
-        tex={`\\textbf{Equation $${stepIndex}$:}`}
+        tex={`\\textbf{Equation ${stepIndex}:}`}
       />
       <StyledLatex
         displayMode

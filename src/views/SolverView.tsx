@@ -1,5 +1,8 @@
 import { Editor } from "$components/math/Editor/Editor";
 import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
+import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledOutputCard } from "$components/styled/StyledOutputCard";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { SolverRouteLoaderData } from "$types/loader-data";
 import {
   PlayArrowRounded,
@@ -59,10 +62,18 @@ export const SolverView: FC = () => {
           RUN
         </Button>
         {data.ok && (
-          <SolverOutputGroup
-            exprTree={data.data.exprTree}
-            symbolSet={data.data.symbols}
-          />
+          <>
+            <StyledOutputCard title="Input Interpretation">
+              <StyledLatex
+                displayMode
+                tex={exprTreeToLatex(data.data.exprTree)}
+              />
+            </StyledOutputCard>
+            <SolverOutputGroup
+              exprTree={data.data.exprTree}
+              symbolSet={data.data.symbols}
+            />
+          </>
         )}
         {!data.ok && prevUserInput.trim().length > 0 && (
           <Alert
