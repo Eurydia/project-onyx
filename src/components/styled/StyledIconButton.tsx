@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import { FC, KeyboardEvent, ReactNode } from "react";
 
-type StyledIconButtonProps = {
+type StyledTooltipIconButtonProps = {
   title: string;
   children: ReactNode;
   disabled?: boolean;
@@ -14,9 +14,9 @@ type StyledIconButtonProps = {
     e: KeyboardEvent<HTMLButtonElement>
   ) => void;
 };
-export const StyledIconButton: FC<StyledIconButtonProps> = (
-  props
-) => {
+export const StyledTooltipIconButton: FC<
+  StyledTooltipIconButtonProps
+> = (props) => {
   const { children, onKeyPress, onClick, title, disabled } =
     props;
   return (

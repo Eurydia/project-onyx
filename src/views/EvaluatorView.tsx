@@ -102,10 +102,8 @@ export const EvaluatorView: FC = () => {
                     )}
                     {expr.ok && (
                       <StyledLatex
+                        displayMode
                         tex={exprTreeToLatex(expr.data)}
-                        options={{
-                          displayMode: true,
-                        }}
                       />
                     )}
                   </Stack>
@@ -155,10 +153,8 @@ export const EvaluatorView: FC = () => {
                     {expr.ok && (
                       <>
                         <StyledLatex
+                          displayMode
                           tex={exprTreeToLatex(expr.data)}
-                          options={{
-                            displayMode: true,
-                          }}
                         />
                         <StyledLatex
                           tex={`\\text{is ${expr.data.eval(

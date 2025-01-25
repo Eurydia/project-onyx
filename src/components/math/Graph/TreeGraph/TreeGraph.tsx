@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 import { Group } from "@visx/group";
 import { hierarchy, Tree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
-import { FC, Fragment, KeyboardEvent, useRef } from "react";
+import { FC, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
@@ -31,10 +31,9 @@ type TreeGraphProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
-  onKeyDown: (e: KeyboardEvent<SVGSVGElement>) => void;
 };
 export const TreeGraph: FC<TreeGraphProps> = (props) => {
-  const { tree, order, onKeyDown, symbolTable } = props;
+  const { tree, order, symbolTable } = props;
 
   const { t } = useTranslation();
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -72,11 +71,9 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
         {(zoom) => (
           <Fragment>
             <svg
-              tabIndex={0} // Need tabindex otherwise svg will not send keyboard event
               width={viewportWidth}
               height={viewportHeight}
               ref={zoom.containerRef}
-              onKeyDown={onKeyDown}
               style={{
                 touchAction: "none",
                 cursor: zoom.isDragging

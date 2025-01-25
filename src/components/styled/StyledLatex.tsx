@@ -28,12 +28,16 @@ export const StyledLatex: FC<StyledLatexProps> = (
       component="span"
       sx={{
         ...sx,
-        "& .katex-html .base ": !displayMode
+        "& .katex-html .base": !displayMode
           ? {
-              display: "inline-block",
-              maxWidth: "100%",
-              wordWrap: "break-word",
-              textWrap: "balance",
+              "display": "inline-block",
+              "maxWidth": "100%",
+              " & .mord.text": {
+                display: "inline-block",
+                maxWidth: "100%",
+                wordWrap: "break-word",
+                textWrap: "balance",
+              },
             }
           : {},
       }}

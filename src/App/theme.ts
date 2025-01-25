@@ -45,7 +45,7 @@ export const THEME = createTheme({
     },
     MuiTableCell: {
       styleOverrides: {
-        head: ({ theme }) => ({
+        root: ({ theme }) => ({
           whiteSpace: "nowrap",
           backgroundColor: theme.palette.background.paper,
         }),

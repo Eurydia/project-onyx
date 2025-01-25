@@ -112,12 +112,12 @@ export const RewriteView: FC = () => {
                     tex={`\\text{The expression is rewritten to}`}
                   />
                   <StyledLatex
+                    displayMode
                     tex={
                       exprTreeToLatex(
                         data.data.rewritten.data
                       ) + "."
                     }
-                    options={{ displayMode: true }}
                   />
                 </>
               )}

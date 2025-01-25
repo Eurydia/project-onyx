@@ -63,14 +63,14 @@ export const CheckerView: FC = () => {
             <StyledOutputCard title="Input">
               <StyledLatex
                 tex={data.data.input}
-                options={{ displayMode: true }}
+                displayMode
               />
             </StyledOutputCard>
             <StyledOutputCard title="Output">
               <StyledLatex tex="\text{The expression}" />
               <StyledLatex
                 tex={data.data.input}
-                options={{ displayMode: true }}
+                displayMode
               />
               {data.data.verdict.constant ? (
                 <StyledLatex

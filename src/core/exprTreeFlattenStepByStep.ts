@@ -16,58 +16,6 @@ export type EvaluationStep = {
   evaluated: boolean;
 };
 
-// const substitute = (
-//   tree: ExprTree,
-//   table: SymbolTable
-// ): string => {
-//   switch (tree.nodeType) {
-//     case SyntaxTreeNodeKind.CONST:
-//     case SyntaxTreeNodeKind.IDEN:
-//       return tree.eval(table)
-//         ? "\\text{True}"
-//         : "\\text{False}";
-//     case SyntaxTreeNodeKind.UNARY: {
-//       const { child } = tree;
-//       let repr = child.eval(table)
-//         ? "\\text{True}"
-//         : "\\text{False}";
-
-//       if (
-//         child.nodeType === SyntaxTreeNodeKind.UNARY ||
-//         child.nodeType === SyntaxTreeNodeKind.BINARY
-//       ) {
-//         repr = `\\lnot ( ${repr} )`;
-//       } else {
-//         repr = `\\lnot ${repr} `;
-//       }
-//       return repr;
-//     }
-//     case SyntaxTreeNodeKind.BINARY: {
-//       const { right, left } = tree;
-
-//       let leftRepr = left.eval(table)
-//         ? "\\text{True}"
-//         : "\\text{False}";
-//       switch (left.nodeType) {
-//         case SyntaxTreeNodeKind.UNARY:
-//         case SyntaxTreeNodeKind.BINARY:
-//           leftRepr = `( ${leftRepr} )`;
-//       }
-
-//       let rightRepr = right.eval(table)
-//         ? "\\text{True}"
-//         : "\\text{False}";
-//       switch (right.nodeType) {
-//         case SyntaxTreeNodeKind.UNARY:
-//         case SyntaxTreeNodeKind.BINARY:
-//           rightRepr = `( ${rightRepr} )`;
-//       }
-
-//       return `${leftRepr} ${tree.repr} ${rightRepr}`;
-//     }
-//   }
-// };
-
 const traverse = (
   tree: ExprTree,
   table: SymbolTable,
@@ -114,16 +62,20 @@ const traverse = (
         // not True
         // False
 
+        const substitutions: EvaluationStep["substitutions"] =
+          [];
+        if (child.nodeType !== SyntaxTreeNodeType.CONST) {
+          substitutions.push({
+            repr: exprTreeToLatex(child),
+            evaluated: childEval,
+            stepRef: childStep,
+            substituted: `\\lnot \\text{${childEval}}`,
+          });
+        }
+
         steps.push({
           repr: exprTreeToLatex(tree),
-          substitutions: [
-            {
-              repr: exprTreeToLatex(child),
-              evaluated: childEval,
-              stepRef: childStep,
-              substituted: `\\lnot \\text{${childEval}}`,
-            },
-          ],
+          substitutions,
           evaluated: tree.eval(table),
         });
       }
@@ -166,23 +118,31 @@ const traverse = (
         // True and True
         // True
 
+        const substitutions: EvaluationStep["substitutions"] =
+          [];
+
+        if (left.nodeType !== SyntaxTreeNodeType.CONST) {
+          substitutions.push({
+            repr: exprTreeToLatex(left),
+            evaluated: leftEval,
+            stepRef: leftStep,
+            substituted: `${leftSubstituted} ${tree.repr} ${rightRepr}`,
+          });
+        }
+
+        if (right.nodeType !== SyntaxTreeNodeType.CONST) {
+          substitutions.push({
+            repr: rightRawRepr,
+            evaluated: rightEval,
+            stepRef: rightStep,
+            substituted: `${leftSubstituted} ${tree.repr} ${rightSubstituted}`,
+          });
+        }
+
         steps.push({
           repr: exprTreeToLatex(tree),
           evaluated: tree.eval(table),
-          substitutions: [
-            {
-              repr: exprTreeToLatex(left),
-              evaluated: leftEval,
-              stepRef: leftStep,
-              substituted: `${leftSubstituted} ${tree.repr} ${rightRepr}`,
-            },
-            {
-              repr: rightRawRepr,
-              evaluated: rightEval,
-              stepRef: rightStep,
-              substituted: `${leftSubstituted} ${tree.repr} ${rightSubstituted}`,
-            },
-          ],
+          substitutions,
         });
       }
       break;

@@ -71,10 +71,7 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
                 key={"sym" + index}
                 align="center"
               >
-                <StyledLatex
-                  tex={symbol}
-                  sx={{ fontWeight: 700 }}
-                />
+                <StyledLatex tex={symbol} />
               </TableCell>
             ))}
             {columns.map((col, index) => (

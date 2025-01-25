@@ -6,13 +6,7 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import {
-  FC,
-  KeyboardEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { GraphControl } from "./GraphControl";
 import { TreeGraph } from "./TreeGraph/TreeGraph";
 
@@ -66,18 +60,18 @@ export const Graph: FC<GraphProps> = (props) => {
     setMaxStep(exprTree.order + 1);
   }, [exprTree]);
 
-  const handleGraphKeyPress = (
-    e: KeyboardEvent<SVGSVGElement>
-  ) => {
-    const { key } = e;
-    if (key === "ArrowUp" || key === "ArrowRight") {
-      e.preventDefault();
-      setStep((prev) => Math.min(maxStep, prev + 1));
-    } else if (key === "ArrowLeft" || key === "ArrowDown") {
-      e.preventDefault();
-      setStep((prev) => Math.max(1, prev - 1));
-    }
-  };
+  // const handleGraphKeyPress = (
+  //   e: KeyboardEvent<SVGSVGElement>
+  // ) => {
+  //   const { key } = e;
+  //   if (key === "ArrowUp" || key === "ArrowRight") {
+  //     e.preventDefault();
+  //     setStep((prev) => Math.min(maxStep, prev + 1));
+  //   } else if (key === "ArrowLeft" || key === "ArrowDown") {
+  //     e.preventDefault();
+  //     setStep((prev) => Math.max(1, prev - 1));
+  //   }
+  // };
 
   return (
     <Stack spacing={1}>
@@ -88,7 +82,6 @@ export const Graph: FC<GraphProps> = (props) => {
         <TreeGraph
           order={step}
           tree={exprTree}
-          onKeyDown={handleGraphKeyPress}
           symbolTable={symbolTable}
         />
       </Paper>

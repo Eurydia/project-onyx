@@ -1,4 +1,4 @@
-import { StyledIconButton } from "$components/styled/StyledIconButton";
+import { StyledTooltipIconButton } from "$components/styled/StyledIconButton";
 import {
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,
@@ -7,7 +7,7 @@ import {
   ReplayRounded,
 } from "@mui/icons-material";
 import { Slider, Stack, Typography } from "@mui/material";
-import { FC, KeyboardEvent } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 type GraphControlProps = {
@@ -52,39 +52,6 @@ export const GraphControl: FC<GraphControlProps> = (
     onChange(value - 1);
   };
 
-  // const [animationId, setAnimationId] = useState<
-  //   number | null
-  // >(null);
-
-  // const handleAnimationStart = () => {
-  //   const id = setInterval(() => {
-  //     onChange(value + 1);
-  //     if (value >= maxValue) {
-  //       handleAnimationStop();
-  //     }
-  //   }, 1500);
-  //   setAnimationId(id);
-  // };
-
-  // const handleAnimationStop = () => {
-  //   if (animationId !== null) {
-  //     clearInterval(animationId);
-  //   }
-  // };
-
-  const handleKeyPress = (
-    e: KeyboardEvent<HTMLButtonElement>
-  ) => {
-    const { key } = e;
-    if (key === "ArrowUp" || key === "ArrowRight") {
-      e.preventDefault();
-      handleForward();
-    } else if (key === "ArrowLeft" || key === "ArrowDown") {
-      e.preventDefault();
-      handleRewind();
-    }
-  };
-
   return (
     <Stack>
       <Slider
@@ -100,46 +67,44 @@ export const GraphControl: FC<GraphControlProps> = (
         spacing={1}
         alignItems="center"
       >
-        <StyledIconButton
+        <StyledTooltipIconButton
           disabled={value <= minValue}
           title="Previous"
           onClick={handleRewind}
-          onKeyPress={handleKeyPress}
         >
           <KeyboardArrowLeftRounded />
-        </StyledIconButton>
+        </StyledTooltipIconButton>
         {value === maxValue && (
-          <StyledIconButton
+          <StyledTooltipIconButton
             title="Replay"
             onClick={onAnimationReplay}
           >
             <ReplayRounded />
-          </StyledIconButton>
+          </StyledTooltipIconButton>
         )}
         {value !== maxValue && isAnimationPlaying && (
-          <StyledIconButton
+          <StyledTooltipIconButton
             title="Pause"
             onClick={onAnimationPause}
           >
             <PauseRounded />
-          </StyledIconButton>
+          </StyledTooltipIconButton>
         )}
         {value !== maxValue && !isAnimationPlaying && (
-          <StyledIconButton
+          <StyledTooltipIconButton
             title="Play"
             onClick={onAnimationPlay}
           >
             <PlayArrowRounded />
-          </StyledIconButton>
+          </StyledTooltipIconButton>
         )}
-        <StyledIconButton
+        <StyledTooltipIconButton
           disabled={value >= maxValue}
           title={t("forward")}
-          onKeyPress={handleKeyPress}
           onClick={handleForward}
         >
           <KeyboardArrowRightRounded />
-        </StyledIconButton>
+        </StyledTooltipIconButton>
         <Typography>{`${value}/${maxValue}`}</Typography>
       </Stack>
     </Stack>
