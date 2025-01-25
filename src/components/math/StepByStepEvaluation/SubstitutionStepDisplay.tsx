@@ -27,8 +27,8 @@ export const SubstitutionStepDisplay: FC<
           tex={`\\text{Given $${subStep.repr}$ is ${subStep.evaluated}, substitute into $(${stepIndex}.${prevMarker})$,}`}
         />
         <StyledLatex
+          displayMode
           tex={taggedExpr}
-          options={{ displayMode: true }}
         />
       </Stack>
     );
@@ -40,8 +40,8 @@ export const SubstitutionStepDisplay: FC<
         tex={`\\text{From Eq. $(${subStep.stepRef})$,}`}
       />
       <StyledLatex
+        displayMode
         tex={references[subStep.stepRef - 1].repr}
-        options={{ displayMode: true }}
       />
       <StyledLatex
         tex={`\\text{is ${subStep.evaluated}.}`}
@@ -50,8 +50,8 @@ export const SubstitutionStepDisplay: FC<
         tex={`\\text{Substitute into $(${stepIndex}.${prevMarker})$},`}
       />
       <StyledLatex
+        displayMode
         tex={taggedExpr}
-        options={{ displayMode: true }}
       />
     </Stack>
   );

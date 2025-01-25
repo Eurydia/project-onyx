@@ -60,8 +60,8 @@ const StepByStepEvaluation_: FC<
         <Stack>
           <StyledLatex tex="\text{Therefore, the expression}" />
           <StyledLatex
+            displayMode
             tex={steps[currentStep].repr}
-            options={{ displayMode: true }}
           />
           <StyledLatex
             tex={`\\text{is ${steps[currentStep].evaluated}.}`}

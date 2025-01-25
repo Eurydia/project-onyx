@@ -48,12 +48,10 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
 
   return (
     <Stack spacing={2}>
-      <StyledOutputCard title={"Input"}>
+      <StyledOutputCard title="Input Interpretation">
         <StyledLatex
+          displayMode
           tex={exprLatex}
-          options={{
-            displayMode: true,
-          }}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Propositions">
@@ -65,8 +63,8 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
       <StyledOutputCard title="Output">
         <StyledLatex tex="\text{The expression}" />
         <StyledLatex
+          displayMode
           tex={exprLatex}
-          options={{ displayMode: true }}
         />
         <StyledLatex
           tex={`\\text{is ${exprTree.eval(symbolTable)}.}`}

@@ -1,29 +1,42 @@
 import { SxProps, Typography } from "@mui/material";
-import katex, { KatexOptions } from "katex";
+import katex from "katex";
 import { FC, useEffect, useRef } from "react";
 
 type StyledLatexProps = {
   tex: string;
-  options?: KatexOptions;
+  displayMode?: boolean;
   sx?: SxProps;
 };
 export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
-  const { sx, tex, options } = props;
+  const { sx, tex, displayMode } = props;
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (ref.current !== null) {
-      katex.render(tex, ref.current, options);
+      katex.render(tex, ref.current, {
+        displayMode,
+        output: "html",
+      });
     }
-  }, [ref, tex, options]);
+  }, [ref, tex, displayMode]);
 
   return (
     <Typography
       ref={ref}
       component="span"
-      sx={sx}
+      sx={{
+        ...sx,
+        "& .katex-html .base ": !displayMode
+          ? {
+              display: "inline-block",
+              maxWidth: "100%",
+              wordWrap: "break-word",
+              textWrap: "balance",
+            }
+          : {},
+      }}
     />
   );
 };

@@ -51,8 +51,8 @@ export const HomeView: FC = () => {
       <Masonry columns={{ xs: 1, md: 2 }}>
         {CARDS.map(({ title, href, desc }, index) => (
           <Link
-            to={href}
             key={"card" + index}
+            to={href}
             style={{
               textDecoration: "none",
             }}

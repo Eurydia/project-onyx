@@ -24,8 +24,8 @@ export const StepDisplay: FC<StepDisplayProps> = (
         tex={`\\text{Consider the expression}`}
       />
       <StyledLatex
+        displayMode
         tex={`${step.repr}. \\tag{${stepIndex}.a}`}
-        options={{ displayMode: true }}
       />
       {step.substitutions.length > 0 && (
         <Fragment>
@@ -51,8 +51,8 @@ export const StepDisplay: FC<StepDisplayProps> = (
         tex={`\\textbf{Equation $${stepIndex}$:}`}
       />
       <StyledLatex
+        displayMode
         tex={step.repr}
-        options={{ displayMode: true }}
       />
       <StyledLatex tex={`\\text{is ${step.evaluated}.}`} />
     </Stack>
