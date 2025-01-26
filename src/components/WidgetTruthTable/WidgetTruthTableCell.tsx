@@ -4,11 +4,12 @@ import {
   alpha,
   useTheme,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-type StyledTableCellProps = { value: boolean };
-export const StyledTableCell: FC<StyledTableCellProps> = (
+type WidgetTableCellProps = { value: boolean };
+
+const WidgetStyledTableCell_: FC<WidgetTableCellProps> = (
   props
 ) => {
   const { value } = props;
@@ -30,3 +31,10 @@ export const StyledTableCell: FC<StyledTableCellProps> = (
     </TableCell>
   );
 };
+
+export const WidgetStyledTableCell = memo(
+  WidgetStyledTableCell_,
+  (prev, next) => {
+    return prev.value === next.value;
+  }
+);

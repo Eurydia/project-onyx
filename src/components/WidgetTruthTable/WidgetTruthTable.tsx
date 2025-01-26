@@ -20,13 +20,15 @@ import {
 } from "@mui/material";
 import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledTableCell } from "./TruthTableCell";
+import { WidgetStyledTableCell } from "./WidgetTruthTableCell";
 
-type TruthTableProps = {
+type WidgetTruthTableProps = {
   exprTree: ExprTree;
   slotProps: { container: SxProps<Theme> };
 };
-const TruthTable_: FC<TruthTableProps> = (props) => {
+const WidgetTruthTable_: FC<WidgetTruthTableProps> = (
+  props
+) => {
   const { exprTree, slotProps } = props;
   const { t } = useTranslation();
   const [userConfirmed, setUserConfirmed] = useState(false);
@@ -88,13 +90,13 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
           {perm.map((p, index) => (
             <TableRow key={"perm" + index}>
               {symbols.map((sym, index) => (
-                <StyledTableCell
+                <WidgetStyledTableCell
                   key={"sym" + index}
                   value={p.get(sym) || false}
                 />
               ))}
               {columns.map((column, colIndex) => (
-                <StyledTableCell
+                <WidgetStyledTableCell
                   key={"col" + colIndex}
                   value={column.eval(p)}
                 />
@@ -107,8 +109,8 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   );
 };
 
-export const TruthTable = memo(
-  TruthTable_,
+export const WidgetTruthTable = memo(
+  WidgetTruthTable_,
   (prev, next) => {
     return (
       exprTreeToLatex(prev.exprTree) ===

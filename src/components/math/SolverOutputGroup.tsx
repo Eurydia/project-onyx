@@ -1,11 +1,11 @@
-import { TruthTable } from "$components/math/TruthTable/TruthTable";
+import { WidgetTruthTable } from "$components/WidgetTruthTable/WidgetTruthTable";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Graph } from "./Graph/Graph";
+import { WidgetGraph } from "../WidgetGraph/WidgetGraph";
 import { PropositionConfig } from "./PropositionConfig";
 import { StepByStepEvaluation } from "./StepByStepEvaluation/StepByStepEvaluation";
 
@@ -70,7 +70,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         />
       </StyledOutputCard>
       <StyledOutputCard title="Graph">
-        <Graph
+        <WidgetGraph
           exprTree={exprTree}
           symbolTable={symbolTable}
           slotProps={{
@@ -83,7 +83,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
       <StyledOutputCard
         title={t("component:math.truthTable.title")}
       >
-        <TruthTable
+        <WidgetTruthTable
           exprTree={exprTree}
           slotProps={{
             container: {

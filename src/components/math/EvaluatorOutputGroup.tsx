@@ -11,8 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
+import { WidgetTruthTable } from "../WidgetTruthTable/WidgetTruthTable";
 import { PropositionConfig } from "./PropositionConfig";
-import { TruthTable } from "./TruthTable/TruthTable";
 
 type EvaluatorOutputGroupProps = {
   symbolSet: Set<string>;
@@ -125,7 +125,7 @@ export const EvaluatorOutputGroup: FC<
               ))}
             </Tabs>
             {items[tab].ok && (
-              <TruthTable
+              <WidgetTruthTable
                 exprTree={items[tab].data}
                 slotProps={{
                   container: {

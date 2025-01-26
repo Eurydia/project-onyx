@@ -7,20 +7,20 @@ import {
   ReplayRounded,
 } from "@mui/icons-material";
 import { Slider, Stack, Typography } from "@mui/material";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-type GraphControlProps = {
+type WidgetGraphControlProps = {
   maxValue: number;
   minValue: number;
   value: number;
   onChange: (v: number) => void;
+  isAnimationPlaying: boolean;
   onAnimationPlay: () => void;
   onAnimationPause: () => void;
   onAnimationReplay: () => void;
-  isAnimationPlaying: boolean;
 };
-export const GraphControl: FC<GraphControlProps> = (
+const WidgetGraphControl_: FC<WidgetGraphControlProps> = (
   props
 ) => {
   const {
@@ -110,3 +110,16 @@ export const GraphControl: FC<GraphControlProps> = (
     </Stack>
   );
 };
+
+export const WidgetGraphControl = memo(
+  WidgetGraphControl_,
+  (prev, next) => {
+    const keys = [
+      "value",
+      "maxValue",
+      "minValue",
+      "isAnimationPlaying",
+    ] as (keyof WidgetGraphControlProps)[];
+    return keys.every((key) => prev[key] === next[key]);
+  }
+);

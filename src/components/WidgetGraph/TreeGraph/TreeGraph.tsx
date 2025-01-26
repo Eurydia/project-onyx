@@ -14,19 +14,6 @@ import { useTranslation } from "react-i18next";
 import { TreeGraphLink } from "./TreeGraphLink";
 import { TreeGraphNode } from "./TreeGraphNode";
 
-const flatten_expr = (d: ExprTree) => {
-  switch (d.nodeType) {
-    case SyntaxTreeNodeType.CONST:
-      return null;
-    case SyntaxTreeNodeType.IDEN:
-      return null;
-    case SyntaxTreeNodeType.UNARY:
-      return [d.child];
-    case SyntaxTreeNodeType.BINARY:
-      return [d.left, d.right];
-  }
-};
-
 type TreeGraphProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
@@ -37,7 +24,19 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
 
   const { t } = useTranslation();
   const viewportRef = useRef<HTMLDivElement | null>(null);
-  const data = hierarchy(tree, flatten_expr);
+
+  const data = hierarchy(tree, (d) => {
+    switch (d.nodeType) {
+      case SyntaxTreeNodeType.CONST:
+        return null;
+      case SyntaxTreeNodeType.IDEN:
+        return null;
+      case SyntaxTreeNodeType.UNARY:
+        return [d.child];
+      case SyntaxTreeNodeType.BINARY:
+        return [d.left, d.right];
+    }
+  });
 
   const viewportWidth =
     viewportRef.current === null

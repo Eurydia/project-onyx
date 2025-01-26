@@ -7,24 +7,26 @@ import {
   Theme,
 } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
-import { GraphControl } from "./GraphControl";
-import { TreeGraph } from "./TreeGraph/TreeGraph";
+import { TreeGraph } from "./TreeGraph";
+import { WidgetGraphControl } from "./WidgetGraphControl";
 
-type GraphProps = {
+type WidgetGraphProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
   slotProps: {
     graphRegion: SxProps<Theme>;
   };
 };
-export const Graph: FC<GraphProps> = (props) => {
+export const WidgetGraph: FC<WidgetGraphProps> = (
+  props
+) => {
   const { exprTree, symbolTable, slotProps } = props;
 
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const intervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isPlayingRef = useRef(isPlaying);
   const currentFrameRef = useRef(step);
 
@@ -60,19 +62,6 @@ export const Graph: FC<GraphProps> = (props) => {
     setMaxStep(exprTree.order + 1);
   }, [exprTree]);
 
-  // const handleGraphKeyPress = (
-  //   e: KeyboardEvent<SVGSVGElement>
-  // ) => {
-  //   const { key } = e;
-  //   if (key === "ArrowUp" || key === "ArrowRight") {
-  //     e.preventDefault();
-  //     setStep((prev) => Math.min(maxStep, prev + 1));
-  //   } else if (key === "ArrowLeft" || key === "ArrowDown") {
-  //     e.preventDefault();
-  //     setStep((prev) => Math.max(1, prev - 1));
-  //   }
-  // };
-
   return (
     <Stack spacing={1}>
       <Paper
@@ -85,7 +74,7 @@ export const Graph: FC<GraphProps> = (props) => {
           symbolTable={symbolTable}
         />
       </Paper>
-      <GraphControl
+      <WidgetGraphControl
         maxValue={maxStep}
         minValue={1}
         value={step}

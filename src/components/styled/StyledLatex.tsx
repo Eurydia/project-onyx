@@ -31,10 +31,10 @@ export const StyledLatex: FC<StyledLatexProps> = (
         "& .katex-html .base": !displayMode
           ? {
               "display": "inline-block",
-              "maxWidth": "100%",
+              "width": "100%",
               " & .mord.text": {
                 display: "inline-block",
-                maxWidth: "100%",
+                width: "100%",
                 wordWrap: "break-word",
                 textWrap: "balance",
               },

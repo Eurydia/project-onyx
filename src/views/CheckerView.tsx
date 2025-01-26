@@ -5,7 +5,6 @@ import { CheckerRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Alert,
-  AlertTitle,
   Box,
   Button,
   Stack,
@@ -60,36 +59,30 @@ export const CheckerView: FC = () => {
         </Button>
         {data.ok && (
           <>
-            <StyledOutputCard title="Input">
+            <StyledOutputCard title="Input Intepretation">
               <StyledLatex
-                tex={data.data.input}
                 displayMode
+                tex={data.data.input}
               />
             </StyledOutputCard>
-            <StyledOutputCard title="Output">
-              <StyledLatex tex="\text{The expression}" />
-              <StyledLatex
-                tex={data.data.input}
-                displayMode
-              />
-              {data.data.verdict.constant ? (
+            <StyledOutputCard title="Verdict">
+              {data.data.verdict.constant && (
                 <StyledLatex
                   tex={
                     data.data.verdict.value
-                      ? `\\text{is a tautology.}`
-                      : `\\text{is a contradiction.}`
+                      ? `\\text{The expression is a tautology.}`
+                      : `\\text{The expression is a contradiction.}`
                   }
                 />
-              ) : (
-                <>
-                  <StyledLatex
-                    tex={`\\text{is not a tautology. Its truth value depends on 
-                      $${[...data.data.verdict.dependencies]
-                        .toSorted()
-                        .join(",")}
-                        $.}`}
-                  />
-                </>
+              )}
+              {!data.data.verdict.constant && (
+                <StyledLatex
+                  tex={`\\text{The expression is not a tautology. Its truth value depends on $${[
+                    ...data.data.verdict.dependencies,
+                  ]
+                    .toSorted()
+                    .join(",")}$.}`}
+                />
               )}
             </StyledOutputCard>
           </>
@@ -99,15 +92,10 @@ export const CheckerView: FC = () => {
             severity="warning"
             variant="outlined"
           >
-            <AlertTitle>
-              <Typography>
-                The application cannot understand your
-                input.
-              </Typography>
-            </AlertTitle>
             <Typography>
-              It seems like something is wrong with the
-              expression.
+              The checker cannot understand your input.
+              Please make sure that it is correct and try
+              again.
             </Typography>
           </Alert>
         )}

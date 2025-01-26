@@ -1,0 +1,1 @@
+export { WidgetTruthTable } from "./WidgetTruthTable";
