@@ -1,6 +1,6 @@
-import { Editor } from "$components/math/Editor/Editor";
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledOutputCard } from "$components/styled/StyledOutputCard";
+import { Editor } from "$components/Editor/Editor";
+import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { RewriterRouteLoaderData } from "$types/loader-data";
 import { Operator } from "$types/operators";

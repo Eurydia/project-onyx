@@ -1,4 +1,4 @@
-import { StyledFAB } from "$components/styled/StyledFAB";
+import { StyledFAB } from "$components/Styled/StyledFAB";
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,

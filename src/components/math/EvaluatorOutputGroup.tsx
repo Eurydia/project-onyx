@@ -1,5 +1,5 @@
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledOutputCard } from "$components/styled/StyledOutputCard";
+import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";

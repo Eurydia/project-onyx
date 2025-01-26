@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "../styled/StyledLatex";
+import { StyledLatex } from "../Styled/StyledLatex";
 
 type PropositionConfigProps = {
   value: SymbolTable;

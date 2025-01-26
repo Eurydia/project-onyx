@@ -1,7 +1,7 @@
-import { Editor } from "$components/math/Editor/Editor";
+import { Editor } from "$components/Editor/Editor";
 import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledOutputCard } from "$components/styled/StyledOutputCard";
+import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { SolverRouteLoaderData } from "$types/loader-data";
 import {

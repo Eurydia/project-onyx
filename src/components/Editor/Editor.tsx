@@ -1,5 +1,5 @@
 import { Stack, TextField } from "@mui/material";
-import { Dispatch, FC, useRef } from "react";
+import { Dispatch, FC, memo, useRef } from "react";
 import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
@@ -7,7 +7,7 @@ type EditorProps = {
   value: string;
   onChange: Dispatch<string>;
 };
-export const Editor: FC<EditorProps> = (props) => {
+const Editor_: FC<EditorProps> = (props) => {
   const { placeholder, value, onChange } = props;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -45,3 +45,7 @@ export const Editor: FC<EditorProps> = (props) => {
     </Stack>
   );
 };
+export const Editor = memo(
+  Editor_,
+  (prev, next) => prev.value === next.value
+);

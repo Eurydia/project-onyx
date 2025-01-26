@@ -1,6 +1,6 @@
+import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { WidgetTruthTable } from "$components/WidgetTruthTable/WidgetTruthTable";
-import { StyledLatex } from "$components/styled/StyledLatex";
-import { StyledOutputCard } from "$components/styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
