@@ -12,7 +12,7 @@ The application takes an Boolean expression and evaluates its truth value by sub
 - **KaTeX**: for rendering mathematical expressions, although it is mostly included for aesthethic.
 - **visx**: for the interactive graph, which includes the node positioning along with zooming and panning.
 - **MUIv6**: for the UI components.
-- **react-markdown**: for conversion from MD files content to blog posts and large text content in the application.
+- ~~**react-markdown**: for conversion from MD files content to blog posts and large text content in the application.~~
 
 ## In case I forgot
 
