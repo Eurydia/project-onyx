@@ -1,17 +1,13 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { WidgetStepByStepEvaluationMany } from "$components/WidgetStepByStepEvaluationMany";
+import { WidgetTruthTableMany } from "$components/WidgetTruthTableMany";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
-import {
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { WidgetTruthTable } from "../WidgetTruthTable/WidgetTruthTable";
 import { PropositionConfig } from "./PropositionConfig";
 
 type EvaluatorOutputGroupProps = {
@@ -23,7 +19,6 @@ export const EvaluatorOutputGroup: FC<
 > = (props) => {
   const { symbolSet, items } = props;
 
-  const [tab, setTab] = useState(0);
   const [symbolTable, setSymbolTable] = useState(() => {
     const next: SymbolTable = new Map();
     for (const symbol of symbolSet) {
@@ -78,7 +73,7 @@ export const EvaluatorOutputGroup: FC<
                     tex={exprTreeToLatex(item.data)}
                   />
                   <StyledLatex
-                    tex={`\\text{evalautes to $\\bold{${item.data.eval(
+                    tex={`\\text{is $\\bold{${item.data.eval(
                       symbolTable
                     )}}$.}`}
                   />
@@ -102,42 +97,20 @@ export const EvaluatorOutputGroup: FC<
           </Typography>
         )}
         {items.length > 0 && (
-          <>
-            <Tabs
-              value={tab}
-              onChange={(_, v) => setTab(v as number)}
-              variant="scrollable"
-              scrollButtons="auto"
-            >
-              {items.map((item, index) => (
-                <Tab
-                  key={"tab" + index}
-                  value={index}
-                  disableRipple
-                  disabled={!item.ok}
-                  sx={{
-                    textDecorationLine: !item.ok
-                      ? "line-through"
-                      : undefined,
-                  }}
-                  label={`EQUATION (${index + 1})`}
-                />
-              ))}
-            </Tabs>
-            {items[tab].ok && (
-              <WidgetTruthTable
-                exprTree={items[tab].data}
-                slotProps={{
-                  container: {
-                    maxHeight: "40vh",
-                  },
-                }}
-              />
-            )}
-            {!items[tab].ok && (
-              <StyledLatex tex="\text{Not applicable}" />
-            )}
-          </>
+          <WidgetTruthTableMany items={items} />
+        )}
+      </StyledOutputCard>
+      <StyledOutputCard title="Step-by-step Evaluation">
+        {items.length === 0 && (
+          <Typography fontStyle="italic">
+            No step-by-step evaluation to display
+          </Typography>
+        )}
+        {items.length > 0 && (
+          <WidgetStepByStepEvaluationMany
+            symbolTable={symbolTable}
+            items={items}
+          />
         )}
       </StyledOutputCard>
     </>

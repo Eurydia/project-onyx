@@ -56,6 +56,7 @@ export const REWRITER_ROUTE: RouteObject = {
       data: {
         ok: true,
         data: {
+          basis,
           inputLatex: exprTreeToLatex(
             exprTreeFromSyntaxTree(syntaxTree)
           ),

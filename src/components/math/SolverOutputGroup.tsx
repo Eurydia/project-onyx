@@ -1,13 +1,13 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { WidgetTruthTable } from "$components/WidgetTruthTable/WidgetTruthTable";
+import { WidgetTruthTable } from "$components/WidgetTruthTable";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { WidgetGraph } from "../WidgetGraph/WidgetGraph";
+import { WidgetStepByStepEvaluation } from "../WidgetStepByStepEvaluation/WidgetStepByStepEvaluation";
 import { PropositionConfig } from "./PropositionConfig";
-import { StepByStepEvaluation } from "./StepByStepEvaluation/StepByStepEvaluation";
 
 type SolverOutputGroupProps = {
   exprTree: ExprTree;
@@ -63,8 +63,20 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           tex={`\\text{is ${exprTree.eval(symbolTable)}.}`}
         />
       </StyledOutputCard>
+      <StyledOutputCard
+        title={t("component:math.truthTable.title")}
+      >
+        <WidgetTruthTable
+          exprTree={exprTree}
+          slotProps={{
+            container: {
+              maxHeight: { xs: "100vh", md: "50vh" },
+            },
+          }}
+        />
+      </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
-        <StepByStepEvaluation
+        <WidgetStepByStepEvaluation
           exprTree={exprTree}
           symbolTable={symbolTable}
         />
@@ -76,18 +88,6 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           slotProps={{
             graphRegion: {
               height: { xs: "66vh", md: "80vh" },
-            },
-          }}
-        />
-      </StyledOutputCard>
-      <StyledOutputCard
-        title={t("component:math.truthTable.title")}
-      >
-        <WidgetTruthTable
-          exprTree={exprTree}
-          slotProps={{
-            container: {
-              maxHeight: { xs: "100vh", md: "50vh" },
             },
           }}
         />

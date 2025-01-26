@@ -11,15 +11,15 @@ import {
   useMemo,
   useState,
 } from "react";
-import { StepByStepEvaluationControl } from "./StepByStepEvaluationControl";
 import { StepDisplay } from "./StepDisplay";
+import { WidgetStepByStepEvaluationControl } from "./WidgetStepByStepEvaluationControl";
 
-type StepByStepEvaluationProps = {
+type WidgetStepByStepEvaluationProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
 };
-const StepByStepEvaluation_: FC<
-  StepByStepEvaluationProps
+const WidgetStepByStepEvaluation_: FC<
+  WidgetStepByStepEvaluationProps
 > = (props) => {
   const { exprTree, symbolTable } = props;
 
@@ -46,7 +46,7 @@ const StepByStepEvaluation_: FC<
       spacing={2}
       divider={<Divider flexItem />}
     >
-      <StepByStepEvaluationControl
+      <WidgetStepByStepEvaluationControl
         value={currentStep}
         maxValue={steps.length}
         onChange={setCurrentStep}
@@ -72,8 +72,8 @@ const StepByStepEvaluation_: FC<
   );
 };
 
-export const StepByStepEvaluation = memo(
-  StepByStepEvaluation_,
+export const WidgetStepByStepEvaluation = memo(
+  WidgetStepByStepEvaluation_,
   (prev, next) => {
     if (
       exprTreeToLatex(prev.exprTree) !==

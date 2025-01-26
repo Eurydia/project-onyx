@@ -1,5 +1,6 @@
 import { ExprTree } from "./expression-tree";
 import { Maybe } from "./generic";
+import { Operator } from "./operators";
 
 export type SolverRouteLoaderData = {
   userInput: string;
@@ -32,6 +33,7 @@ export type RewriterRouteLoaderData = {
   userInput: string;
   data: Maybe<{
     inputLatex: string;
+    basis: Set<Operator>;
     rewritten: Maybe<ExprTree>;
   }>;
 };

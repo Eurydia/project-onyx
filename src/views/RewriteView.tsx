@@ -78,12 +78,17 @@ export const RewriteView: FC = () => {
                     return next;
                   })
                 }
-                control={<Checkbox />}
+                control={<Checkbox disableRipple />}
                 label={
                   <StyledLatex
                     tex={`\\text{${operator}}`}
                   />
                 }
+                slotProps={{
+                  typography: {
+                    textTransform: "lowercase",
+                  },
+                }}
               />
             )
           )}
@@ -99,8 +104,11 @@ export const RewriteView: FC = () => {
         </Button>
         {data.ok && (
           <>
-            <StyledOutputCard title="Input">
-              <StyledLatex tex={data.data.inputLatex} />
+            <StyledOutputCard title="Input Intepretation">
+              <StyledLatex
+                displayMode
+                tex={data.data.inputLatex}
+              />
             </StyledOutputCard>
             <StyledOutputCard title="Output">
               {!data.data.rewritten.ok && (
@@ -113,11 +121,14 @@ export const RewriteView: FC = () => {
                   />
                   <StyledLatex
                     displayMode
-                    tex={
-                      exprTreeToLatex(
-                        data.data.rewritten.data
-                      ) + "."
-                    }
+                    tex={exprTreeToLatex(
+                      data.data.rewritten.data
+                    )}
+                  />
+                  <StyledLatex
+                    tex={`\\text{in the \\{${[
+                      ...data.data.basis,
+                    ].join(",")}\\} basis.}`}
                   />
                 </>
               )}
@@ -129,7 +140,7 @@ export const RewriteView: FC = () => {
             severity="warning"
             variant="outlined"
           >
-            <Typography>Uhhhh</Typography>
+            <Typography>Something went wrong</Typography>
           </Alert>
         )}
       </Stack>
