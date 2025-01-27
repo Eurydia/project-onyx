@@ -1,5 +1,6 @@
 import "$core/interpreter/parser";
 import { MainLayout } from "$layouts/MainLayout";
+import { ErrorView } from "$views/ErrorView";
 import { HomeView } from "$views/HomeView";
 import {
   CssBaseline,
@@ -34,6 +35,7 @@ const router = createHashRouter(
     {
       path: "/",
       element: <MainLayout />,
+      errorElement: <ErrorView />,
       children: [
         { index: true, element: <HomeView /> },
         SOLVER_ROUTE,

@@ -13,10 +13,10 @@ import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router";
 
 const NAV_ITEMS: { href: string; label: string }[] = [
-  { href: "/solver", label: "nav.solver" },
-  { href: "/evaluator", label: "nav.evaluator" },
-  { href: "/rewriter", label: "nav.rewriter" },
-  { href: "/checker", label: "nav.checker" },
+  { href: "/solver", label: "nav:solver" },
+  { href: "/evaluator", label: "nav:evaluator" },
+  { href: "/rewriter", label: "nav:rewriter" },
+  { href: "/checker", label: "nav:checker" },
 ];
 
 export const MainLayout: FC = () => {
@@ -49,13 +49,11 @@ export const MainLayout: FC = () => {
           >
             <Tooltip
               title={
-                <Typography>{t("nav.home")}</Typography>
+                <Typography>{t("nav:home")}</Typography>
               }
             >
               <IconButton
                 disableRipple
-                color="primary"
-                size="large"
                 component={Link}
                 to="/"
               >

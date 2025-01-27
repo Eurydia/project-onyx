@@ -16,13 +16,6 @@ export const en = {
         },
       },
     },
-    nav: {
-      home: "Home",
-      solver: "Solver",
-      evaluator: "Evaluator",
-      rewriter: "Rewriter",
-      checker: "Tautology checker",
-    },
     view: {
       home: {
         tools: "Tools",
