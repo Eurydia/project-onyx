@@ -5,7 +5,12 @@ import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { PlayArrowRounded } from "@mui/icons-material";
-import { Box, Button, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -59,26 +64,22 @@ export const EvaluatorView: FC = () => {
           <>
             <StyledOutputCard title="Input Interpretation">
               <Stack spacing={2}>
-                {data.map((expr, index) => (
-                  <Stack
-                    key={"expr" + index}
-                    spacing={0.5}
-                  >
-                    <StyledLatex
-                      tex={`\\textbf{Equation ${
-                        index + 1
-                      }:} `}
-                    />
-                    <StyledLatex
-                      displayMode
-                      tex={
-                        expr.ok
-                          ? exprTreeToLatex(expr.data)
-                          : "\\text{The evaluator could not understand this expression.}"
-                      }
-                    />
-                  </Stack>
-                ))}
+                {data.map((expr, index) => {
+                  if (!expr.ok) {
+                    return (
+                      <Typography>{`The evaluator could not understand this expression.`}</Typography>
+                    );
+                  }
+                  const latexRepr = exprTreeToLatex(
+                    expr.data
+                  );
+                  const marker = index + 1;
+                  return (
+                    <StyledLatex key={"expr" + index}>
+                      {`$$${latexRepr} \\tag{${marker}}$$`}
+                    </StyledLatex>
+                  );
+                })}
               </Stack>
             </StyledOutputCard>
             <EvaluatorOutputGroup

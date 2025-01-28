@@ -1,46 +1,38 @@
 import { SxProps, Typography } from "@mui/material";
-import katex from "katex";
-import { FC, useEffect, useRef } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 
 type StyledLatexProps = {
-  tex: string;
-  displayMode?: boolean;
+  children: ReactNode;
   sx?: SxProps;
 };
 export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
-  const { sx, tex, displayMode } = props;
-  const ref = useRef<HTMLSpanElement>(null);
-
+  const { sx, children } = props;
+  const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (ref.current !== null) {
-      katex.render(tex, ref.current, {
-        displayMode,
+      window.renderMathInElement(ref.current, {
         output: "html",
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
       });
     }
-  }, [ref, tex, displayMode]);
+  }, [children, ref]);
 
   return (
     <Typography
       ref={ref}
-      component="span"
       sx={{
         ...sx,
-        "& .katex-html .base": !displayMode
-          ? {
-              "display": "inline-block",
-              "width": "100%",
-              " & .mord.text": {
-                display: "inline-block",
-                width: "100%",
-                wordWrap: "break-word",
-                textWrap: "balance",
-              },
-            }
-          : {},
+        "& .katex-display > .katex": {
+          whiteSpace: "normal",
+        },
       }}
-    />
+    >
+      {children}
+    </Typography>
   );
 };

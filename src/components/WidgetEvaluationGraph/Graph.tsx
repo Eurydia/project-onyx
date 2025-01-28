@@ -1,25 +1,18 @@
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
-import {
-  Paper,
-  Stack,
-  SxProps,
-  Theme,
-} from "@mui/material";
+import { Paper, Stack, SxProps } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
-import { TreeGraph } from "./TreeGraph";
-import { WidgetGraphControl } from "./WidgetGraphControl";
+import { GraphControl } from "./GraphControl";
+import { Tree } from "./Tree";
 
-type WidgetGraphProps = {
+type GraphProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
   slotProps: {
-    graphRegion: SxProps<Theme>;
+    container: SxProps;
   };
 };
-export const WidgetGraph: FC<WidgetGraphProps> = (
-  props
-) => {
+export const Graph: FC<GraphProps> = (props) => {
   const { exprTree, symbolTable, slotProps } = props;
 
   const [step, setStep] = useState(1);
@@ -66,15 +59,15 @@ export const WidgetGraph: FC<WidgetGraphProps> = (
     <Stack spacing={1}>
       <Paper
         variant="outlined"
-        sx={slotProps.graphRegion}
+        sx={slotProps.container}
       >
-        <TreeGraph
+        <Tree
           order={step}
           tree={exprTree}
           symbolTable={symbolTable}
         />
       </Paper>
-      <WidgetGraphControl
+      <GraphControl
         maxValue={maxStep}
         minValue={1}
         value={step}

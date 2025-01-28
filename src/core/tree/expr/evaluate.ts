@@ -1,30 +1,28 @@
 import { ExprTree } from "$types/expression-tree";
 import { SyntaxTreeNodeType } from "$types/syntax-tree";
 
-const _exprTreeCollectSymbols = (
-  tree: ExprTree,
-  symbols: Set<string>
-): void => {
-  switch (tree.nodeType) {
-    case SyntaxTreeNodeType.CONST:
-      return;
-    case SyntaxTreeNodeType.IDEN:
-      symbols.add(tree.repr);
-      return;
-    case SyntaxTreeNodeType.UNARY:
-      _exprTreeCollectSymbols(tree.child, symbols);
-      return;
-    case SyntaxTreeNodeType.BINARY:
-      _exprTreeCollectSymbols(tree.left, symbols);
-      _exprTreeCollectSymbols(tree.right, symbols);
-      return;
-  }
-};
-
 export const exprTreeCollectSymbols = (
   exprTree: ExprTree
 ): Set<string> => {
   const symbols = new Set<string>();
-  _exprTreeCollectSymbols(exprTree, symbols);
+  const nodes: ExprTree[] = [exprTree];
+
+  while (nodes.length > 0) {
+    const curr = nodes.shift()!;
+    switch (curr.nodeType) {
+      case SyntaxTreeNodeType.CONST:
+        break;
+      case SyntaxTreeNodeType.IDEN:
+        symbols.add(curr.repr);
+        break;
+      case SyntaxTreeNodeType.UNARY:
+        nodes.push(curr.child);
+        break;
+      case SyntaxTreeNodeType.BINARY:
+        nodes.push(curr.left);
+        nodes.push(curr.right);
+        break;
+    }
+  }
   return symbols;
 };

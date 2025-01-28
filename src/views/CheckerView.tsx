@@ -60,29 +60,26 @@ export const CheckerView: FC = () => {
         {data.ok && (
           <>
             <StyledOutputCard title="Input Intepretation">
-              <StyledLatex
-                displayMode
-                tex={data.data.input}
-              />
+              <StyledLatex>
+                {`$$${data.data.input}$$`}
+              </StyledLatex>
             </StyledOutputCard>
             <StyledOutputCard title="Verdict">
               {data.data.verdict.constant && (
-                <StyledLatex
-                  tex={
-                    data.data.verdict.value
-                      ? `\\text{The expression is a tautology.}`
-                      : `\\text{The expression is a contradiction.}`
-                  }
-                />
+                <StyledLatex>
+                  {data.data.verdict.value
+                    ? `\\text{The expression is a tautology.}`
+                    : `\\text{The expression is a contradiction.}`}
+                </StyledLatex>
               )}
               {!data.data.verdict.constant && (
-                <StyledLatex
-                  tex={`\\text{The expression is not a tautology. Its truth value depends on $${[
+                <StyledLatex>
+                  {`The expression is not a tautology. Its truth value depends on $${[
                     ...data.data.verdict.dependencies,
                   ]
                     .toSorted()
                     .join(",")}$.}`}
-                />
+                </StyledLatex>
               )}
             </StyledOutputCard>
           </>

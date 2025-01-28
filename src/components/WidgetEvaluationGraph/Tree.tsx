@@ -1,4 +1,5 @@
 import { StyledFAB } from "$components/Styled/StyledFAB";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,
@@ -7,19 +8,22 @@ import {
 import { ControlCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { Group } from "@visx/group";
-import { hierarchy, Tree } from "@visx/hierarchy";
+import {
+  hierarchy,
+  Tree as VisxTree,
+} from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
-import { FC, Fragment, useRef } from "react";
+import { FC, Fragment, memo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { TreeGraphLink } from "./TreeGraphLink";
-import { TreeGraphNode } from "./TreeGraphNode";
+import { TreeGraphLink } from "./TreeLink";
+import { TreeGraphNode } from "./TreeNode";
 
-type TreeGraphProps = {
+type TreeProps = {
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
 };
-export const TreeGraph: FC<TreeGraphProps> = (props) => {
+const Tree_: FC<TreeProps> = (props) => {
   const { tree, order, symbolTable } = props;
 
   const { t } = useTranslation();
@@ -85,7 +89,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
               onMouseLeave={zoom.dragEnd}
             >
               <Group transform={zoom.toString()}>
-                <Tree
+                <VisxTree
                   root={data}
                   size={[treeWidth, -treeHeight]}
                 >
@@ -113,7 +117,7 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
                         ))}
                     </Group>
                   )}
-                </Tree>
+                </VisxTree>
               </Group>
             </svg>
             <StyledFAB
@@ -128,3 +132,28 @@ export const TreeGraph: FC<TreeGraphProps> = (props) => {
     </Box>
   );
 };
+
+export const Tree = memo(Tree_, (prev, next) => {
+  if (prev.order !== next.order) {
+    return false;
+  }
+
+  if (
+    exprTreeToLatex(prev.tree).localeCompare(
+      exprTreeToLatex(next.tree)
+    ) !== 0
+  ) {
+    return false;
+  }
+
+  for (const [
+    symbol,
+    value,
+  ] of prev.symbolTable.entries()) {
+    if (next.symbolTable.get(symbol) !== value) {
+      return false;
+    }
+  }
+
+  return true;
+});

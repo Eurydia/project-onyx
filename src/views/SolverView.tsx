@@ -64,10 +64,11 @@ export const SolverView: FC = () => {
         {data.ok && (
           <>
             <StyledOutputCard title="Input Interpretation">
-              <StyledLatex
-                displayMode
-                tex={exprTreeToLatex(data.data.exprTree)}
-              />
+              <StyledLatex>
+                {`$$
+                ${exprTreeToLatex(data.data.exprTree)}
+                $$`}
+              </StyledLatex>
             </StyledOutputCard>
             <SolverOutputGroup
               exprTree={data.data.exprTree}

@@ -16,8 +16,7 @@
     "@mui/icons-material": "^6.1.7",
     "@mui/lab": "^6.0.0-beta.17",
     "@mui/material": "^6.1.7",
-    "@visx/group": "^3.12.0",
-    "katex": "^0.16.11",
+    "katex": "^0.16.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.1.1"
@@ -27,6 +26,7 @@
     "@types/katex": "^0.16.7",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@visx/group": "^3.12.0",
     "@visx/hierarchy": "^3.12.0",
     "@visx/shape": "^3.12.0",
     "@visx/zoom": "^3.12.0",
@@ -47,4 +47,3 @@
     "vite-tsconfig-paths": "^5.1.3"
   }
 }
-

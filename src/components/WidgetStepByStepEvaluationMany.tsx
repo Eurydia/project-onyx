@@ -1,11 +1,10 @@
-import { StyledLatex } from "$components/Styled/StyledLatex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab } from "@mui/material";
+import { Tab, Typography } from "@mui/material";
 import { FC, useState } from "react";
-import { WidgetStepByStepEvaluation } from "./WidgetStepByStepEvaluation/WidgetStepByStepEvaluation";
+import { Display } from "./WidgetEvaluationDisplay/Display";
 
 type WidgetStepByStepEvaluationManyProps = {
   symbolTable: SymbolTable;
@@ -46,13 +45,13 @@ export const WidgetStepByStepEvaluationMany: FC<
           value={index}
         >
           {item.ok && (
-            <WidgetStepByStepEvaluation
+            <Display
               exprTree={item.data}
               symbolTable={symbolTable}
             />
           )}
           {!item.ok && (
-            <StyledLatex tex="\text{Not applicable}" />
+            <Typography>{`Not applicable`}</Typography>
           )}
         </TabPanel>
       ))}

@@ -73,10 +73,7 @@ const WidgetTruthTable_: FC<WidgetTruthTableProps> = (
                 key={"sym" + index}
                 align="center"
               >
-                <StyledLatex
-                  tex={symbol}
-                  displayMode
-                />
+                <StyledLatex>{`$${symbol}$`}</StyledLatex>
               </TableCell>
             ))}
             {columns.map((col, index) => (
@@ -84,10 +81,9 @@ const WidgetTruthTable_: FC<WidgetTruthTableProps> = (
                 key={"subexpr" + index}
                 align="center"
               >
-                <StyledLatex
-                  tex={col.label}
-                  displayMode
-                />
+                <StyledLatex>
+                  {`$${col.label}$`}
+                </StyledLatex>
               </TableCell>
             ))}
           </TableRow>

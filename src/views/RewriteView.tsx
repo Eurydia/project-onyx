@@ -80,9 +80,7 @@ export const RewriteView: FC = () => {
                 }
                 control={<Checkbox disableRipple />}
                 label={
-                  <StyledLatex
-                    tex={`\\text{${operator}}`}
-                  />
+                  <StyledLatex>{`${operator} `}</StyledLatex>
                 }
                 slotProps={{
                   typography: {
@@ -105,32 +103,26 @@ export const RewriteView: FC = () => {
         {data.ok && (
           <>
             <StyledOutputCard title="Input Intepretation">
-              <StyledLatex
-                displayMode
-                tex={data.data.inputLatex}
-              />
+              <StyledLatex>
+                {`$$${data.data.inputLatex}$$`}
+              </StyledLatex>
             </StyledOutputCard>
             <StyledOutputCard title="Output">
               {!data.data.rewritten.ok && (
-                <StyledLatex tex="\text{The application could not rewrite the expression into the desired basis.}" />
+                <Typography>
+                  {`The application could not rewrite the expression into the desired basis.`}
+                </Typography>
               )}
               {data.data.rewritten.ok && (
-                <>
-                  <StyledLatex
-                    tex={`\\text{The expression is rewritten to}`}
-                  />
-                  <StyledLatex
-                    displayMode
-                    tex={exprTreeToLatex(
-                      data.data.rewritten.data
-                    )}
-                  />
-                  <StyledLatex
-                    tex={`\\text{in the \\{${[
-                      ...data.data.basis,
-                    ].join(",")}\\} basis.}`}
-                  />
-                </>
+                <StyledLatex>
+                  {`The expression is rewritten to`}
+                  {`$$${exprTreeToLatex(
+                    data.data.rewritten.data
+                  )}$$`}
+                  {`\\text{in the \\{${[
+                    ...data.data.basis,
+                  ].join(",")}\\} basis.}`}
+                </StyledLatex>
               )}
             </StyledOutputCard>
           </>

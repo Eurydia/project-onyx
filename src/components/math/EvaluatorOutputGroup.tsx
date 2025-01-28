@@ -64,27 +64,20 @@ export const EvaluatorOutputGroup: FC<
               spacing={1}
             >
               {item.ok && (
-                <>
-                  <StyledLatex
-                    tex={`\\text{Eq. (${index + 1})}`}
-                  />
-                  <StyledLatex
-                    displayMode
-                    tex={exprTreeToLatex(item.data)}
-                  />
-                  <StyledLatex
-                    tex={`\\text{is $\\bold{${item.data.eval(
-                      symbolTable
-                    )}}$.}`}
-                  />
-                </>
+                <StyledLatex>
+                  {`The equation $(${
+                    index + 1
+                  })$ $$${exprTreeToLatex(
+                    item.data
+                  )}$$ is ${item.data.eval(symbolTable)}}`}
+                </StyledLatex>
               )}
               {!item.ok && (
-                <StyledLatex
-                  tex={`\\text{Eq. (${
+                <StyledLatex>
+                  {`The equiation (${
                     index + 1
-                  }) is invalid.}`}
-                />
+                  }) is invalid.`}
+                </StyledLatex>
               )}
             </Stack>
           ))}

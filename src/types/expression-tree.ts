@@ -3,23 +3,23 @@ import {
   SyntaxTreeNodeType,
 } from "./syntax-tree";
 
-type ExprTreeData = {
+type ExprTreeBase = {
   order: number;
   eval: (symbolTable: SymbolTable) => boolean;
   repr: string;
 };
 
-export type ExprTreeIden = ExprTreeData & {
+export type ExprTreeIden = ExprTreeBase & {
   nodeType: SyntaxTreeNodeType.IDEN;
 };
-export type ExprTreeConst = ExprTreeData & {
+export type ExprTreeConst = ExprTreeBase & {
   nodeType: SyntaxTreeNodeType.CONST;
 };
-export type ExprTreeUnary = ExprTreeData & {
+export type ExprTreeUnary = ExprTreeBase & {
   nodeType: SyntaxTreeNodeType.UNARY;
   child: ExprTree;
 };
-export type ExprTreeBinary = ExprTreeData & {
+export type ExprTreeBinary = ExprTreeBase & {
   nodeType: SyntaxTreeNodeType.BINARY;
   left: ExprTree;
   right: ExprTree;

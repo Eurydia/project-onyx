@@ -10,7 +10,7 @@ import { Slider, Stack, Typography } from "@mui/material";
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-type WidgetGraphControlProps = {
+type GraphControlProps = {
   maxValue: number;
   minValue: number;
   value: number;
@@ -20,9 +20,7 @@ type WidgetGraphControlProps = {
   onAnimationPause: () => void;
   onAnimationReplay: () => void;
 };
-const WidgetGraphControl_: FC<WidgetGraphControlProps> = (
-  props
-) => {
+const GraphControl_: FC<GraphControlProps> = (props) => {
   const {
     value,
     maxValue,
@@ -111,15 +109,15 @@ const WidgetGraphControl_: FC<WidgetGraphControlProps> = (
   );
 };
 
-export const WidgetGraphControl = memo(
-  WidgetGraphControl_,
+export const GraphControl = memo(
+  GraphControl_,
   (prev, next) => {
     const keys = [
       "value",
       "maxValue",
       "minValue",
       "isAnimationPlaying",
-    ] as (keyof WidgetGraphControlProps)[];
+    ] as (keyof GraphControlProps)[];
     return keys.every((key) => prev[key] === next[key]);
   }
 );

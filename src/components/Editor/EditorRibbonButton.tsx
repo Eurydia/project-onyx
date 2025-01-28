@@ -44,7 +44,7 @@ export const EditorRibbonButton: FC<
             textTransform: "none",
           }}
         >
-          <StyledLatex tex={selected.label} />
+          <StyledLatex>{`$${selected.label}$`}</StyledLatex>
         </Button>
         <Button
           size="small"
@@ -79,7 +79,7 @@ export const EditorRibbonButton: FC<
                 {isSelected && <CheckRounded />}
               </ListItemIcon>
               <ListItemText>
-                <StyledLatex tex={option.label} />
+                <StyledLatex>{`$${option.label}$`}</StyledLatex>
               </ListItemText>
             </MenuItem>
           );

@@ -11,16 +11,14 @@ import {
   useMemo,
   useState,
 } from "react";
+import { EvaluationDisplayControl } from "./DisplayControl";
 import { StepDisplay } from "./StepDisplay";
-import { WidgetStepByStepEvaluationControl } from "./WidgetStepByStepEvaluationControl";
 
-type WidgetStepByStepEvaluationProps = {
+type DisplayProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
 };
-const WidgetStepByStepEvaluation_: FC<
-  WidgetStepByStepEvaluationProps
-> = (props) => {
+const Display_: FC<DisplayProps> = (props) => {
   const { exprTree, symbolTable } = props;
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -46,7 +44,7 @@ const WidgetStepByStepEvaluation_: FC<
       spacing={2}
       divider={<Divider flexItem />}
     >
-      <WidgetStepByStepEvaluationControl
+      <EvaluationDisplayControl
         value={currentStep}
         maxValue={steps.length}
         onChange={setCurrentStep}
@@ -57,35 +55,25 @@ const WidgetStepByStepEvaluation_: FC<
         references={steps}
       />
       {currentStep === steps.length - 1 && (
-        <Stack>
-          <StyledLatex tex="\text{Therefore, the expression}" />
-          <StyledLatex
-            displayMode
-            tex={steps[currentStep].repr}
-          />
-          <StyledLatex
-            tex={`\\text{is ${steps[currentStep].evaluated}.}`}
-          />
-        </Stack>
+        <StyledLatex>
+          {`Therefore, the expression $$${steps[currentStep].repr}$$ is ${steps[currentStep].evaluated}.`}
+        </StyledLatex>
       )}
     </Stack>
   );
 };
 
-export const WidgetStepByStepEvaluation = memo(
-  WidgetStepByStepEvaluation_,
-  (prev, next) => {
-    if (
-      exprTreeToLatex(prev.exprTree) !==
-      exprTreeToLatex(next.exprTree)
-    ) {
+export const Display = memo(Display_, (prev, next) => {
+  if (
+    exprTreeToLatex(prev.exprTree) !==
+    exprTreeToLatex(next.exprTree)
+  ) {
+    return false;
+  }
+  for (const [k, v] of prev.symbolTable.entries()) {
+    if (next.symbolTable.get(k) !== v) {
       return false;
     }
-    for (const [k, v] of prev.symbolTable.entries()) {
-      if (next.symbolTable.get(k) !== v) {
-        return false;
-      }
-    }
-    return true;
   }
-);
+  return true;
+});

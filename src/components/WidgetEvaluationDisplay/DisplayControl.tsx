@@ -8,20 +8,22 @@ import {
 import { Stack } from "@mui/material";
 import { FC, memo } from "react";
 
-type WidgetStepByStepEvaluationControlProps = {
+type DisplayControlProps = {
   value: number;
   maxValue: number;
   onChange: (value: number) => void;
 };
-const WidgetStepByStepEvaluationControl_: FC<
-  WidgetStepByStepEvaluationControlProps
-> = (props) => {
+const DisplayControl_: FC<DisplayControlProps> = (
+  props
+) => {
   const { maxValue, onChange, value } = props;
   return (
     <Stack
+      useFlexGap
       alignItems="center"
       spacing={0.5}
       direction="row"
+      flexWrap="wrap"
     >
       <StyledTooltipIconButton
         title="First step"
@@ -56,13 +58,13 @@ const WidgetStepByStepEvaluationControl_: FC<
     </Stack>
   );
 };
-export const WidgetStepByStepEvaluationControl = memo(
-  WidgetStepByStepEvaluationControl_,
+export const EvaluationDisplayControl = memo(
+  DisplayControl_,
   (prev, next) => {
     const keys = [
       "value",
       "maxValue",
-    ] as (keyof WidgetStepByStepEvaluationControlProps)[];
+    ] as (keyof DisplayControlProps)[];
     return keys.every((key) => prev[key] === next[key]);
   }
 );

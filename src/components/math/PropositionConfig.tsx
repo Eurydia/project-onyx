@@ -42,7 +42,7 @@ export const PropositionConfig: FC<
         >
           <FormControl fullWidth>
             <FormLabel>
-              <StyledLatex tex={sym} />
+              <StyledLatex>{`$${sym}$`}</StyledLatex>
             </FormLabel>
             <RadioGroup
               row

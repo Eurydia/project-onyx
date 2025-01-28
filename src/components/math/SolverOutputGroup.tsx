@@ -5,8 +5,8 @@ import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { WidgetGraph } from "../WidgetGraph/WidgetGraph";
-import { WidgetStepByStepEvaluation } from "../WidgetStepByStepEvaluation/WidgetStepByStepEvaluation";
+import { EvaluationDisplay } from "../WidgetEvaluationDisplay";
+import { Graph } from "../WidgetEvaluationGraph/Graph";
 import { PropositionConfig } from "./PropositionConfig";
 
 type SolverOutputGroupProps = {
@@ -54,14 +54,11 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
         />
       </StyledOutputCard>
       <StyledOutputCard title="Output">
-        <StyledLatex tex="\text{The expression}" />
-        <StyledLatex
-          displayMode
-          tex={exprLatex}
-        />
-        <StyledLatex
-          tex={`\\text{is ${exprTree.eval(symbolTable)}.}`}
-        />
+        <StyledLatex>
+          {`The expression $$${exprLatex}$$ is ${exprTree.eval(
+            symbolTable
+          )}.`}
+        </StyledLatex>
       </StyledOutputCard>
       <StyledOutputCard
         title={t("component:math.truthTable.title")}
@@ -70,23 +67,23 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
           exprTree={exprTree}
           slotProps={{
             container: {
-              maxHeight: { xs: "100vh", md: "50vh" },
+              maxHeight: { xs: "66vh", md: "80vh" },
             },
           }}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
-        <WidgetStepByStepEvaluation
+        <EvaluationDisplay
           exprTree={exprTree}
           symbolTable={symbolTable}
         />
       </StyledOutputCard>
       <StyledOutputCard title="Graph">
-        <WidgetGraph
+        <Graph
           exprTree={exprTree}
           symbolTable={symbolTable}
           slotProps={{
-            graphRegion: {
+            container: {
               height: { xs: "66vh", md: "80vh" },
             },
           }}
