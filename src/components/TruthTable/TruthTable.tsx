@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Cell } from "./Cell";
+import { TruthTableCell } from "./TruthTableCell";
 
 type WidgetTruthTableProps = {
   exprTree: ExprTree;
@@ -88,13 +88,13 @@ const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
           {perm.map((p, index) => (
             <TableRow key={"perm" + index}>
               {symbols.map((sym, index) => (
-                <Cell
+                <TruthTableCell
                   key={"sym" + index}
                   value={p.get(sym) || false}
                 />
               ))}
               {columns.map((column, colIndex) => (
-                <Cell
+                <TruthTableCell
                   key={"col" + colIndex}
                   value={column.eval(p)}
                 />

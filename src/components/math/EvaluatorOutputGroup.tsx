@@ -1,7 +1,7 @@
+import { EvaluationDisplayMany } from "$components/EvaluationDisplay/EvaluationDisplayMany";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { WidgetStepByStepEvaluationMany } from "$components/WidgetStepByStepEvaluationMany";
-import { WidgetTruthTableMany } from "$components/WidgetTruthTableMany";
+import { TruthTableMany } from "$components/TruthTable/TruthTableMany";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
@@ -90,7 +90,7 @@ export const EvaluatorOutputGroup: FC<
           </Typography>
         )}
         {items.length > 0 && (
-          <WidgetTruthTableMany items={items} />
+          <TruthTableMany items={items} />
         )}
       </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
@@ -100,7 +100,7 @@ export const EvaluatorOutputGroup: FC<
           </Typography>
         )}
         {items.length > 0 && (
-          <WidgetStepByStepEvaluationMany
+          <EvaluationDisplayMany
             symbolTable={symbolTable}
             items={items}
           />

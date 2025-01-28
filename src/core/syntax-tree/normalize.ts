@@ -1,58 +1,26 @@
 import { Operator } from "$types/operators";
 import {
   SyntaxTree,
-  SyntaxTreeNodeBinary,
   SyntaxTreeNodeConst,
   SyntaxTreeNodeIden,
   SyntaxTreeNodeType,
   SyntaxTreeNodeUnary,
 } from "$types/syntax-tree";
+import { AND, BINARY, CONST, NOT, OR } from "./node";
 import { syntaxTreeToString } from "./to-string";
 
 const rewriteEquivalence = (
   p: SyntaxTree,
   q: SyntaxTree
 ) => {
-  return {
-    nodeType: SyntaxTreeNodeType.BINARY,
-    operator: Operator.AND,
-    left: {
-      nodeType: SyntaxTreeNodeType.BINARY,
-      operator: Operator.OR,
-      left: {
-        nodeType: SyntaxTreeNodeType.UNARY,
-        operator: Operator.NOT,
-        operand: p,
-      } as SyntaxTreeNodeUnary,
-      right: q,
-    } as SyntaxTreeNodeBinary,
-    right: {
-      nodeType: SyntaxTreeNodeType.BINARY,
-      operator: Operator.OR,
-      left: {
-        nodeType: SyntaxTreeNodeType.UNARY,
-        operator: Operator.NOT,
-        operand: q,
-      } as SyntaxTreeNodeUnary,
-      right: p,
-    } as SyntaxTreeNodeBinary,
-  } as SyntaxTreeNodeBinary;
+  return AND(OR(NOT(p), q), OR(NOT(q), p));
 };
 
 const rewriteImplication = (
   p: SyntaxTree,
   q: SyntaxTree
 ) => {
-  return {
-    nodeType: SyntaxTreeNodeType.BINARY,
-    operator: Operator.OR,
-    left: {
-      nodeType: SyntaxTreeNodeType.UNARY,
-      operator: Operator.NOT,
-      operand: p,
-    } as SyntaxTreeNodeUnary,
-    right: q,
-  } as SyntaxTreeNodeBinary;
+  return OR(NOT(p), q);
 };
 
 const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
@@ -60,13 +28,10 @@ const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
     case SyntaxTreeNodeType.CONST:
     case SyntaxTreeNodeType.IDEN:
       return tree;
-    case SyntaxTreeNodeType.UNARY:
-      return {
-        nodeType: SyntaxTreeNodeType.UNARY,
-        operator: Operator.NOT,
-        operand: rewriteTree(tree.operand),
-      } as SyntaxTreeNodeUnary;
-
+    case SyntaxTreeNodeType.UNARY: {
+      const operand = rewriteTree(tree.operand);
+      return NOT(operand);
+    }
     case SyntaxTreeNodeType.BINARY: {
       const left = rewriteTree(tree.left);
       const right = rewriteTree(tree.right);
@@ -76,19 +41,9 @@ const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
         case Operator.IMPL:
           return rewriteImplication(left, right);
         case Operator.AND:
-          return {
-            nodeType: SyntaxTreeNodeType.BINARY,
-            operator: Operator.AND,
-            left,
-            right,
-          } as SyntaxTreeNodeBinary;
+          return AND(left, right);
         case Operator.OR:
-          return {
-            nodeType: SyntaxTreeNodeType.BINARY,
-            operator: Operator.OR,
-            left,
-            right,
-          } as SyntaxTreeNodeBinary;
+          return OR(left, right);
       }
     }
   }
@@ -97,62 +52,34 @@ const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
 const expandInward = (tree: SyntaxTree): SyntaxTree => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
-      return tree;
     case SyntaxTreeNodeType.IDEN:
       return tree;
-    case SyntaxTreeNodeType.UNARY:
-      if (
-        tree.operand.nodeType === SyntaxTreeNodeType.UNARY
-      ) {
-        return expandInward(tree.operand.operand);
+    case SyntaxTreeNodeType.UNARY: {
+      const { operand } = tree;
+      switch (operand.nodeType) {
+        case SyntaxTreeNodeType.CONST:
+          return CONST(!operand.value);
+        case SyntaxTreeNodeType.IDEN:
+          return tree;
+        case SyntaxTreeNodeType.UNARY:
+          return expandInward(operand.operand);
+        case SyntaxTreeNodeType.BINARY: {
+          const left = expandInward(NOT(operand.left));
+          const right = expandInward(NOT(operand.right));
+          const expandedOp =
+            operand.operator === Operator.AND
+              ? Operator.OR
+              : Operator.AND;
+          return BINARY(expandedOp, left, right);
+        }
       }
-
-      if (
-        tree.operand.nodeType === SyntaxTreeNodeType.BINARY
-      ) {
-        const left = expandInward({
-          nodeType: SyntaxTreeNodeType.UNARY,
-          operand: tree.operand.left,
-          operator: Operator.NOT,
-        } as SyntaxTreeNodeUnary);
-        const right = expandInward({
-          nodeType: SyntaxTreeNodeType.UNARY,
-          operand: tree.operand.right,
-          operator: Operator.NOT,
-        } as SyntaxTreeNodeUnary);
-        const operator =
-          tree.operand.operator === Operator.AND
-            ? Operator.OR
-            : Operator.AND;
-        return {
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator,
-          left,
-          right,
-        } as SyntaxTreeNodeBinary;
-      }
-
-      if (
-        tree.operand.nodeType === SyntaxTreeNodeType.CONST
-      ) {
-        return {
-          nodeType: SyntaxTreeNodeType.CONST,
-          value: !tree.operand.value,
-        } as SyntaxTreeNodeConst;
-      }
-
-      return tree;
-
+      break;
+    }
     case SyntaxTreeNodeType.BINARY: {
       const left = expandInward(tree.left);
       const right = expandInward(tree.right);
       if (tree.operator === Operator.AND) {
-        return {
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.AND,
-          left,
-          right,
-        } as SyntaxTreeNodeBinary;
+        return AND(left, right);
       }
 
       // tree.operator === Operator.OR
@@ -160,58 +87,26 @@ const expandInward = (tree: SyntaxTree): SyntaxTree => {
         right.nodeType === SyntaxTreeNodeType.BINARY &&
         right.operator === Operator.AND
       ) {
-        const leftExp = expandInward({
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.OR,
-          left,
-          right: right.left,
-        } as SyntaxTreeNodeBinary);
-        const rightExp = expandInward({
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.OR,
-          left,
-          right: right.right,
-        } as SyntaxTreeNodeBinary);
-        return {
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.AND,
-          left: leftExp,
-          right: rightExp,
-        } as SyntaxTreeNodeBinary;
+        const leftExp = expandInward(OR(left, right.left));
+        const rightExp = expandInward(
+          OR(left, right.right)
+        );
+        return AND(leftExp, rightExp);
       }
 
       if (
         left.nodeType === SyntaxTreeNodeType.BINARY &&
         left.operator === Operator.AND
       ) {
-        const leftExp = expandInward({
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.OR,
-          left: left.left,
-          right,
-        } as SyntaxTreeNodeBinary);
-        const rightExp = expandInward({
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.OR,
-          left: left.right,
-          right,
-        } as SyntaxTreeNodeBinary);
-
-        return {
-          nodeType: SyntaxTreeNodeType.BINARY,
-          operator: Operator.AND,
-          left: leftExp,
-          right: rightExp,
-        } as SyntaxTreeNodeBinary;
+        const leftExp = expandInward(OR(left.left, right));
+        const rightExp = expandInward(
+          OR(left.right, right)
+        );
+        return AND(leftExp, rightExp);
       }
 
       // neither left or right sub tree contains an AND operator
-      return {
-        nodeType: SyntaxTreeNodeType.BINARY,
-        operator: Operator.OR,
-        left,
-        right,
-      } as SyntaxTreeNodeBinary;
+      return OR(left, right);
     }
   }
 };
@@ -219,68 +114,47 @@ const expandInward = (tree: SyntaxTree): SyntaxTree => {
 const simplifyDisjunctionClause = (
   clause: Set<SyntaxTree>
 ) => {
-  const nodes = [...clause];
-  if (
-    nodes.every(
-      (node) =>
-        node.nodeType === SyntaxTreeNodeType.CONST &&
-        !node.value
-    )
-  ) {
-    return new Set([
-      {
-        nodeType: SyntaxTreeNodeType.CONST,
-        value: false,
-      } as SyntaxTreeNodeConst,
-    ]);
+  const clauses = [...clause];
+
+  // every subclause is false
+  // or at least one is true
+  let isAllFalse = true;
+  for (const clause of clauses) {
+    if (clause.nodeType !== SyntaxTreeNodeType.CONST) {
+      isAllFalse = false;
+      break;
+    }
+    if (clause.value) {
+      return new Set([CONST(true)]);
+    }
+  }
+  if (isAllFalse) {
+    return new Set([CONST(false)]);
   }
 
   const simplified = new Set<SyntaxTree>();
   const seen = new Set<string>();
-
-  for (const node of nodes) {
-    switch (node.nodeType) {
-      case SyntaxTreeNodeType.CONST:
-        if (node.value) {
-          return new Set<SyntaxTree>([node]);
+  for (const clause of clauses) {
+    switch (clause.nodeType) {
+      case SyntaxTreeNodeType.IDEN: {
+        if (seen.has(syntaxTreeToString(NOT(clause)))) {
+          return new Set([CONST(true)]);
+        }
+        const clauseRepr = syntaxTreeToString(clause);
+        if (!seen.has(clauseRepr)) {
+          seen.add(clauseRepr);
+          simplified.add(clause);
         }
         break;
-      case SyntaxTreeNodeType.IDEN:
-        if (
-          seen.has(
-            syntaxTreeToString({
-              nodeType: SyntaxTreeNodeType.UNARY,
-              operand: node,
-              operator: Operator.NOT,
-            } as SyntaxTreeNodeUnary)
-          )
-        ) {
-          return new Set<SyntaxTree>([
-            {
-              nodeType: SyntaxTreeNodeType.CONST,
-              value: true,
-            } as SyntaxTreeNodeConst,
-          ]);
-        }
-        if (!seen.has(syntaxTreeToString(node))) {
-          seen.add(syntaxTreeToString(node));
-          simplified.add(node);
-        }
-        break;
+      }
       case SyntaxTreeNodeType.UNARY: {
-        const symbol = (node.operand as SyntaxTreeNodeIden)
-          .symbol;
-        if (seen.has(symbol)) {
-          return new Set<SyntaxTree>([
-            {
-              nodeType: SyntaxTreeNodeType.CONST,
-              value: true,
-            } as SyntaxTreeNodeConst,
-          ]);
+        if (seen.has(syntaxTreeToString(clause.operand))) {
+          return new Set([CONST(true)]);
         }
-        if (!seen.has(syntaxTreeToString(node))) {
-          seen.add(syntaxTreeToString(node));
-          simplified.add(node);
+        const clauseRepr = syntaxTreeToString(clause);
+        if (!seen.has(clauseRepr)) {
+          seen.add(clauseRepr);
+          simplified.add(clause);
         }
       }
     }
@@ -303,7 +177,6 @@ const collectClause = (
         const subClause = new Set<Set<SyntaxTree>>();
         collectClause(tree.left, subClause);
         collectClause(tree.right, subClause);
-
         const flattened = new Set<SyntaxTree>();
         subClause.forEach((group) =>
           group.forEach((element) => flattened.add(element))
@@ -324,10 +197,7 @@ const collectClause = (
 
 const syntaxTreeFromClause = (clause: Set<SyntaxTree>) => {
   if (clause.size === 0) {
-    return {
-      nodeType: SyntaxTreeNodeType.CONST,
-      value: true,
-    } as SyntaxTree;
+    return CONST(true);
   }
 
   const nodes = [...clause];
@@ -335,32 +205,9 @@ const syntaxTreeFromClause = (clause: Set<SyntaxTree>) => {
     return nodes[0];
   }
 
-  if (
-    nodes.every(
-      (node) =>
-        node.nodeType === SyntaxTreeNodeType.CONST &&
-        !node.value
-    )
-  ) {
-    return {
-      value: false,
-      nodeType: SyntaxTreeNodeType.CONST,
-    } as SyntaxTreeNodeConst;
-  }
-
-  let tree: SyntaxTree = {
-    nodeType: SyntaxTreeNodeType.BINARY,
-    operator: Operator.OR,
-    left: nodes[0],
-    right: nodes[1],
-  };
+  let tree: SyntaxTree = OR(nodes[0], nodes[1]);
   for (const node of nodes.slice(2)) {
-    tree = {
-      nodeType: SyntaxTreeNodeType.BINARY,
-      operator: Operator.OR,
-      left: tree,
-      right: node,
-    } as SyntaxTree;
+    tree = OR(tree, node);
   }
   return tree;
 };
@@ -369,76 +216,56 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   const expr = new Set<Set<SyntaxTree>>();
   collectClause(expandInward(rewriteTree(tree)), expr);
 
-  const simplified = [...expr].filter(
-    (clause) =>
-      clause.size > 0 &&
-      [...clause].every(
-        (node) =>
-          node.nodeType !== SyntaxTreeNodeType.CONST ||
-          !node.value
-      )
-  );
-
-  if (simplified.length > 0) {
-    let tree = syntaxTreeFromClause(simplified[0]);
-    const seen = new Set<string>();
-    for (const clause of simplified.slice(1)) {
-      const next = syntaxTreeFromClause(clause);
-
-      if (next.nodeType === SyntaxTreeNodeType.CONST) {
-        if (next.value) {
-          continue;
-        }
-        return {
-          nodeType: SyntaxTreeNodeType.CONST,
-          value: false,
-        } as SyntaxTreeNodeConst;
-      }
-
-      if (next.nodeType === SyntaxTreeNodeType.IDEN) {
-        seen.add(syntaxTreeToString(next));
-        if (
-          seen.has(
-            syntaxTreeToString({
-              nodeType: SyntaxTreeNodeType.UNARY,
-              operand: next,
-              operator: Operator.NOT,
-            } as SyntaxTreeNodeUnary)
-          )
-        ) {
-          return {
-            nodeType: SyntaxTreeNodeType.CONST,
-            value: false,
-          } as SyntaxTreeNodeConst;
-        }
-      }
-
-      if (next.nodeType === SyntaxTreeNodeType.UNARY) {
-        seen.add(syntaxTreeToString(next));
-        if (
-          seen.has(
-            (next.operand as SyntaxTreeNodeIden).symbol
-          )
-        ) {
-          return {
-            nodeType: SyntaxTreeNodeType.CONST,
-            value: false,
-          } as SyntaxTreeNodeConst;
-        }
-      }
-
-      tree = {
-        nodeType: SyntaxTreeNodeType.BINARY,
-        operator: Operator.AND,
-        left: tree,
-        right: next,
-      } as SyntaxTree;
+  const nonTrivialClauses = [...expr].filter((clause) => {
+    if (clause.size === 0) {
+      return false;
     }
-    return tree;
+    for (const subclause of clause) {
+      if (
+        subclause.nodeType === SyntaxTreeNodeType.CONST &&
+        subclause.value
+      ) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  if (nonTrivialClauses.length === 0) {
+    return CONST(true);
   }
 
-  return {
-    nodeType: SyntaxTreeNodeType.CONST,
-    value: true,
-  } as SyntaxTreeNodeConst;
+  let normalTree = syntaxTreeFromClause(
+    nonTrivialClauses[0]
+  );
+  const seen = new Set([syntaxTreeToString(normalTree)]);
+  for (const clause of nonTrivialClauses.slice(1)) {
+    const next = syntaxTreeFromClause(clause) as
+      | SyntaxTreeNodeConst
+      | SyntaxTreeNodeIden
+      | SyntaxTreeNodeUnary;
+
+    switch (next.nodeType) {
+      case SyntaxTreeNodeType.CONST:
+        if (!next.value) {
+          return CONST(false);
+        }
+        break;
+      case SyntaxTreeNodeType.IDEN:
+        if (seen.has(syntaxTreeToString(NOT(next)))) {
+          return CONST(false);
+        }
+        seen.add(syntaxTreeToString(next));
+        break;
+      case SyntaxTreeNodeType.UNARY:
+        if (seen.has(syntaxTreeToString(next.operand))) {
+          return CONST(false);
+        }
+        seen.add(syntaxTreeToString(next));
+        break;
+    }
+    normalTree = AND(normalTree, next);
+  }
+
+  return normalTree;
 };

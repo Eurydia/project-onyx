@@ -1,1 +1,2 @@
-export { Display as EvaluationDisplay } from "./Display";
+export { EvaluationDisplay } from "./EvaluationDisplay";
+export { EvaluationDisplayMany } from "./EvaluationDisplayMany";

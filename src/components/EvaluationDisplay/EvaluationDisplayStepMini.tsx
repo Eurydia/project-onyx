@@ -3,15 +3,15 @@ import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
 import { Stack } from "@mui/material";
 import { FC } from "react";
 
-type MiniStepDisplayProps = {
+type EvaluationDisplayStepMiniProps = {
   references: EvaluationStep[];
   subStep: EvaluationStep["substitutions"][number];
   stepIndex: number;
   subStepIndex: number;
 };
-export const MiniStepDisplay: FC<MiniStepDisplayProps> = (
-  props
-) => {
+export const EvaluationDisplayStepMini: FC<
+  EvaluationDisplayStepMiniProps
+> = (props) => {
   const { subStep, references, subStepIndex, stepIndex } =
     props;
   const prevMarker = String.fromCharCode(subStepIndex + 97);

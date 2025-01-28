@@ -2,16 +2,16 @@ import { StyledLatex } from "$components/Styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
 import { Stack } from "@mui/material";
 import { FC } from "react";
-import { MiniStepDisplay } from "./MiniStepDisplay";
+import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
-type StepDisplayProps = {
+type EvaluationDisplayProps = {
   stepIndex: number;
   step: EvaluationStep;
   references: EvaluationStep[];
 };
-export const StepDisplay: FC<StepDisplayProps> = (
-  props
-) => {
+export const EvaluationDisplayStep: FC<
+  EvaluationDisplayProps
+> = (props) => {
   const { step, stepIndex, references } = props;
   const { evaluated, repr, substitutions } = step;
   const tagMaker = `${stepIndex}.a`;
@@ -24,7 +24,7 @@ export const StepDisplay: FC<StepDisplayProps> = (
         {`Consider the expression $$${repr}.\\tag{${tagMaker}}$$`}
       </StyledLatex>
       {substitutions.map((subStep, subStepIndex) => (
-        <MiniStepDisplay
+        <EvaluationDisplayStepMini
           stepIndex={stepIndex}
           subStepIndex={subStepIndex}
           key={"sub-step" + stepIndex + subStepIndex}

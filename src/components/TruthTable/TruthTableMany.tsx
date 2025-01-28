@@ -1,26 +1,24 @@
+import { TruthTable } from "$components/TruthTable";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
-import { SymbolTable } from "$types/syntax-tree";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Typography } from "@mui/material";
 import { FC, useState } from "react";
-import { Display } from "./EvaluationDisplay/Display";
 
-type WidgetStepByStepEvaluationManyProps = {
-  symbolTable: SymbolTable;
+type TruthTableManyProps = {
   items: Maybe<ExprTree>[];
 };
-export const WidgetStepByStepEvaluationMany: FC<
-  WidgetStepByStepEvaluationManyProps
-> = (props) => {
-  const { items, symbolTable } = props;
+export const TruthTableMany: FC<TruthTableManyProps> = (
+  props
+) => {
+  const { items } = props;
 
   const [tab, setTab] = useState(0);
 
   return (
     <TabContext value={tab}>
       <TabList
-        onChange={(_, v) => setTab(v as number)}
+        onChange={(_, v) => setTab(v)}
         variant="scrollable"
         scrollButtons="auto"
       >
@@ -45,13 +43,19 @@ export const WidgetStepByStepEvaluationMany: FC<
           value={index}
         >
           {item.ok && (
-            <Display
+            <TruthTable
               exprTree={item.data}
-              symbolTable={symbolTable}
+              slotProps={{
+                container: {
+                  maxHeight: "60vh",
+                },
+              }}
             />
           )}
           {!item.ok && (
-            <Typography>{`Not applicable`}</Typography>
+            <Typography fontStyle="italic">
+              No applicable
+            </Typography>
           )}
         </TabPanel>
       ))}

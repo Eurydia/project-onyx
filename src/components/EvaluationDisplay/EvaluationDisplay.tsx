@@ -11,14 +11,16 @@ import {
   useMemo,
   useState,
 } from "react";
-import { EvaluationDisplayControl } from "./DisplayControl";
-import { StepDisplay } from "./StepDisplay";
+import { EvaluationDisplayControl } from "./EvaluationDisplayControl";
+import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
-type DisplayProps = {
+type EvaluationDisplayProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
 };
-const Display_: FC<DisplayProps> = (props) => {
+const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
+  props
+) => {
   const { exprTree, symbolTable } = props;
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -49,7 +51,7 @@ const Display_: FC<DisplayProps> = (props) => {
         maxValue={steps.length}
         onChange={setCurrentStep}
       />
-      <StepDisplay
+      <EvaluationDisplayStep
         step={steps[currentStep]}
         stepIndex={currentStep + 1}
         references={steps}
@@ -63,17 +65,20 @@ const Display_: FC<DisplayProps> = (props) => {
   );
 };
 
-export const Display = memo(Display_, (prev, next) => {
-  if (
-    exprTreeToLatex(prev.exprTree) !==
-    exprTreeToLatex(next.exprTree)
-  ) {
-    return false;
-  }
-  for (const [k, v] of prev.symbolTable.entries()) {
-    if (next.symbolTable.get(k) !== v) {
+export const EvaluationDisplay = memo(
+  EvaluationDisplay_,
+  (prev, next) => {
+    if (
+      exprTreeToLatex(prev.exprTree) !==
+      exprTreeToLatex(next.exprTree)
+    ) {
       return false;
     }
+    for (const [k, v] of prev.symbolTable.entries()) {
+      if (next.symbolTable.get(k) !== v) {
+        return false;
+      }
+    }
+    return true;
   }
-  return true;
-});
+);

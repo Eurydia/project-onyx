@@ -7,8 +7,10 @@ import {
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-type CellProps = { value: boolean };
-const Cell_: FC<CellProps> = (props) => {
+type TruthTableCellProps = { value: boolean };
+const TruthTableCell_: FC<TruthTableCellProps> = (
+  props
+) => {
   const { value } = props;
   const { t } = useTranslation();
   const { palette } = useTheme();
@@ -29,6 +31,9 @@ const Cell_: FC<CellProps> = (props) => {
   );
 };
 
-export const Cell = memo(Cell_, (prev, next) => {
-  return prev.value === next.value;
-});
+export const TruthTableCell = memo(
+  TruthTableCell_,
+  (prev, next) => {
+    return prev.value === next.value;
+  }
+);

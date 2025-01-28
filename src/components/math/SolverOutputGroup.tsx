@@ -6,7 +6,7 @@ import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EvaluationDisplay } from "../EvaluationDisplay";
-import { Graph } from "../WidgetEvaluationGraph/Graph";
+import { Graph } from "../EvaluationGraph/Graph";
 import { PropositionConfig } from "./PropositionConfig";
 
 type SolverOutputGroupProps = {

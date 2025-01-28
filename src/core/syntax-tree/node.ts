@@ -2,6 +2,7 @@ import { Operator } from "$types/operators";
 import {
   SyntaxTree,
   SyntaxTreeNodeBinary,
+  SyntaxTreeNodeConst,
   SyntaxTreeNodeType,
   SyntaxTreeNodeUnary,
 } from "$types/syntax-tree";
@@ -43,4 +44,11 @@ export const IMPLIES = (
   right: SyntaxTree
 ) => {
   return BINARY(Operator.IMPL, left, right);
+};
+
+export const CONST = (value: boolean) => {
+  return {
+    nodeType: SyntaxTreeNodeType.CONST,
+    value,
+  } as SyntaxTreeNodeConst;
 };

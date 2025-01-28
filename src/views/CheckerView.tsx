@@ -78,7 +78,7 @@ export const CheckerView: FC = () => {
                     ...data.data.verdict.dependencies,
                   ]
                     .toSorted()
-                    .join(",")}$.}`}
+                    .join(",")}$.`}
                 </StyledLatex>
               )}
             </StyledOutputCard>

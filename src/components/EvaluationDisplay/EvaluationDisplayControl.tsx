@@ -8,14 +8,14 @@ import {
 import { Stack } from "@mui/material";
 import { FC, memo } from "react";
 
-type DisplayControlProps = {
+type EvaluationDisplayControlProps = {
   value: number;
   maxValue: number;
   onChange: (value: number) => void;
 };
-const DisplayControl_: FC<DisplayControlProps> = (
-  props
-) => {
+const EvaluationDisplayControl_: FC<
+  EvaluationDisplayControlProps
+> = (props) => {
   const { maxValue, onChange, value } = props;
   return (
     <Stack
@@ -59,12 +59,12 @@ const DisplayControl_: FC<DisplayControlProps> = (
   );
 };
 export const EvaluationDisplayControl = memo(
-  DisplayControl_,
+  EvaluationDisplayControl_,
   (prev, next) => {
     const keys = [
       "value",
       "maxValue",
-    ] as (keyof DisplayControlProps)[];
+    ] as (keyof EvaluationDisplayControlProps)[];
     return keys.every((key) => prev[key] === next[key]);
   }
 );
