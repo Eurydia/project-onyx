@@ -1,11 +1,11 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { WidgetTruthTable } from "$components/WidgetTruthTable";
+import { TruthTable } from "$components/TruthTable";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { FC, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { EvaluationDisplay } from "../WidgetEvaluationDisplay";
+import { EvaluationDisplay } from "../EvaluationDisplay";
 import { Graph } from "../WidgetEvaluationGraph/Graph";
 import { PropositionConfig } from "./PropositionConfig";
 
@@ -63,7 +63,7 @@ const SolverOutputGroup_: FC<SolverOutputGroupProps> = (
       <StyledOutputCard
         title={t("component:math.truthTable.title")}
       >
-        <WidgetTruthTable
+        <TruthTable
           exprTree={exprTree}
           slotProps={{
             container: {

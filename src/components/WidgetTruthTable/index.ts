@@ -1,1 +1,0 @@
-export { WidgetTruthTable } from "./WidgetTruthTable";

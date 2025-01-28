@@ -4,7 +4,7 @@ import { SymbolTable } from "$types/syntax-tree";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Typography } from "@mui/material";
 import { FC, useState } from "react";
-import { Display } from "./WidgetEvaluationDisplay/Display";
+import { Display } from "./EvaluationDisplay/Display";
 
 type WidgetStepByStepEvaluationManyProps = {
   symbolTable: SymbolTable;

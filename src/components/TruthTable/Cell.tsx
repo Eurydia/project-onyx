@@ -7,11 +7,8 @@ import {
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-type WidgetTableCellProps = { value: boolean };
-
-const WidgetStyledTableCell_: FC<WidgetTableCellProps> = (
-  props
-) => {
+type CellProps = { value: boolean };
+const Cell_: FC<CellProps> = (props) => {
   const { value } = props;
   const { t } = useTranslation();
   const { palette } = useTheme();
@@ -32,9 +29,6 @@ const WidgetStyledTableCell_: FC<WidgetTableCellProps> = (
   );
 };
 
-export const WidgetStyledTableCell = memo(
-  WidgetStyledTableCell_,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
-);
+export const Cell = memo(Cell_, (prev, next) => {
+  return prev.value === next.value;
+});

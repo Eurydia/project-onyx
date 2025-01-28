@@ -1,4 +1,4 @@
-import { WidgetTruthTable } from "$components/WidgetTruthTable";
+import { TruthTable } from "$components/TruthTable";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -43,7 +43,7 @@ export const WidgetTruthTableMany: FC<
           value={index}
         >
           {item.ok && (
-            <WidgetTruthTable
+            <TruthTable
               exprTree={item.data}
               slotProps={{
                 container: {
