@@ -1,10 +1,7 @@
 import { Operator } from "$types/operators";
 import {
   SyntaxTree,
-  SyntaxTreeNodeConst,
-  SyntaxTreeNodeIden,
   SyntaxTreeNodeType,
-  SyntaxTreeNodeUnary,
 } from "$types/syntax-tree";
 import { AND, BINARY, CONST, NOT, OR } from "./node";
 import { syntaxTreeToString } from "./to-string";
@@ -64,13 +61,17 @@ const expandInward = (tree: SyntaxTree): SyntaxTree => {
         case SyntaxTreeNodeType.UNARY:
           return expandInward(operand.operand);
         case SyntaxTreeNodeType.BINARY: {
-          const left = expandInward(NOT(operand.left));
-          const right = expandInward(NOT(operand.right));
           const expandedOp =
             operand.operator === Operator.AND
               ? Operator.OR
               : Operator.AND;
-          return BINARY(expandedOp, left, right);
+          return expandInward(
+            BINARY(
+              expandedOp,
+              NOT(operand.left),
+              NOT(operand.right)
+            )
+          );
         }
       }
       break;
@@ -195,23 +196,6 @@ const collectClause = (
   }
 };
 
-const syntaxTreeFromClause = (clause: Set<SyntaxTree>) => {
-  if (clause.size === 0) {
-    return CONST(true);
-  }
-
-  const nodes = [...clause];
-  if (clause.size === 1) {
-    return nodes[0];
-  }
-
-  let tree: SyntaxTree = OR(nodes[0], nodes[1]);
-  for (const node of nodes.slice(2)) {
-    tree = OR(tree, node);
-  }
-  return tree;
-};
-
 export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   const expr = new Set<Set<SyntaxTree>>();
   collectClause(expandInward(rewriteTree(tree)), expr);
@@ -235,37 +219,70 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
     return CONST(true);
   }
 
-  let normalTree = syntaxTreeFromClause(
-    nonTrivialClauses[0]
-  );
-  const seen = new Set([syntaxTreeToString(normalTree)]);
-  for (const clause of nonTrivialClauses.slice(1)) {
-    const next = syntaxTreeFromClause(clause) as
-      | SyntaxTreeNodeConst
-      | SyntaxTreeNodeIden
-      | SyntaxTreeNodeUnary;
+  let normalTree: SyntaxTree | null = null;
+  const seen = new Set();
+  for (const clause of nonTrivialClauses) {
+    if (clause.size === 1) {
+      const current = [...clause][0];
+      if (
+        current.nodeType === SyntaxTreeNodeType.CONST &&
+        !current.value
+      ) {
+        return CONST(false);
+      }
 
-    switch (next.nodeType) {
-      case SyntaxTreeNodeType.CONST:
-        if (!next.value) {
+      if (current.nodeType === SyntaxTreeNodeType.IDEN) {
+        if (seen.has(syntaxTreeToString(NOT(current)))) {
           return CONST(false);
+        } else {
+          seen.add(syntaxTreeToString(current));
         }
-        break;
-      case SyntaxTreeNodeType.IDEN:
-        if (seen.has(syntaxTreeToString(NOT(next)))) {
+      }
+
+      if (current.nodeType === SyntaxTreeNodeType.UNARY) {
+        if (seen.has(syntaxTreeToString(current.operand))) {
           return CONST(false);
+        } else {
+          seen.add(syntaxTreeToString(current));
         }
-        seen.add(syntaxTreeToString(next));
-        break;
-      case SyntaxTreeNodeType.UNARY:
-        if (seen.has(syntaxTreeToString(next.operand))) {
-          return CONST(false);
-        }
-        seen.add(syntaxTreeToString(next));
-        break;
+      }
+
+      if (normalTree === null) {
+        normalTree = current;
+      } else {
+        normalTree = AND(normalTree, current);
+      }
+      continue;
     }
-    normalTree = AND(normalTree, next);
+
+    const clauses = [...clause];
+    let current: SyntaxTree | null = null;
+    for (const subclause of clauses) {
+      if (
+        subclause.nodeType === SyntaxTreeNodeType.CONST &&
+        subclause.value
+      ) {
+        break;
+      }
+
+      seen.add(syntaxTreeToString(subclause));
+
+      if (current === null) {
+        current = subclause;
+      } else {
+        current = OR(current, subclause);
+      }
+    }
+
+    if (normalTree === null) {
+      normalTree = current;
+    } else {
+      normalTree = AND(normalTree, current!);
+    }
   }
 
+  if (normalTree === null) {
+    return CONST(true);
+  }
   return normalTree;
 };

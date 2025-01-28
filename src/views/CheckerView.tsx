@@ -68,13 +68,15 @@ export const CheckerView: FC = () => {
               {data.data.verdict.constant && (
                 <StyledLatex>
                   {data.data.verdict.value
-                    ? `\\text{The expression is a tautology.}`
-                    : `\\text{The expression is a contradiction.}`}
+                    ? `The expression $$${data.data.input}$$ is a tautology.`
+                    : `The expression $$${data.data.input}$$ is a contradiction.`}
                 </StyledLatex>
               )}
               {!data.data.verdict.constant && (
                 <StyledLatex>
-                  {`The expression is not a tautology. Its truth value depends on $${[
+                  {`The expression $$${
+                    data.data.input
+                  }$$ is not a tautology. Its truth value depends on $${[
                     ...data.data.verdict.dependencies,
                   ]
                     .toSorted()

@@ -1,5 +1,6 @@
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
+import { syntaxTreeToString } from "$core/syntax-tree/to-string";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
@@ -41,6 +42,7 @@ export const CHECKER_ROUTE: RouteObject = {
     const normalSyntaxTree =
       syntaxTreeNormalize(syntaxTree);
 
+    console.debug(syntaxTreeToString(normalSyntaxTree));
     const loaderData: CheckerRouteLoaderData = {
       userInput,
       data: {
