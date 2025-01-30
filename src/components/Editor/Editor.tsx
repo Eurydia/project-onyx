@@ -1,4 +1,5 @@
 import {
+  CheckRounded,
   ContentCopyRounded,
   PlayArrowRounded,
 } from "@mui/icons-material";
@@ -27,6 +28,7 @@ const Editor_: FC<EditorProps> = (props) => {
     keyPrefix: "editor",
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [hasCopied, setHasCopied] = useState(false);
   const [cursorStartPos, setCusorStartPos] = useState(0);
   const [cursorEndPos, setCusorEndPos] = useState(0);
 
@@ -40,6 +42,7 @@ const Editor_: FC<EditorProps> = (props) => {
     onChange(`${left}${text}${right}`);
     setCusorStartPos(`${left}${text}`.length);
     setCusorEndPos(`${left}${text}`.length);
+    setHasCopied(false);
   };
 
   const handleSelect = (
@@ -84,18 +87,28 @@ const Editor_: FC<EditorProps> = (props) => {
           disabled={value.trim().length === 0}
           variant="contained"
           startIcon={<PlayArrowRounded />}
-          onClick={onSubmit}
+          onClick={() => {
+            setHasCopied(false);
+            onSubmit();
+          }}
         >
           {t("run")}
         </Button>
         <Button
-          startIcon={<ContentCopyRounded />}
+          startIcon={
+            !hasCopied ? (
+              <ContentCopyRounded />
+            ) : (
+              <CheckRounded />
+            )
+          }
           variant="outlined"
           onClick={() => {
             navigator.clipboard.writeText(value);
+            setHasCopied(true);
           }}
         >
-          {t("copy")}
+          {!hasCopied ? t("copy") : t("copied")}
         </Button>
       </Stack>
     </Stack>

@@ -1,17 +1,15 @@
 import { Editor } from "$components/Editor/Editor";
-import { EvaluatorOutputGroup } from "$components/math/EvaluatorOutputGroup";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const EvaluatorView: FC = () => {
   const {
     symbols,
-    data,
+    expressions,
     userInput: prevUserInput,
   } = useLoaderData() as EvaluatorRouteLoaderData;
 
@@ -47,32 +45,23 @@ export const EvaluatorView: FC = () => {
           placeholder="p and q; p or q; p implies q; p iff q"
           onSubmit={handleSubmit}
         />
-        {data.length > 0 && data.some(({ ok }) => ok) && (
+        {expressions.some((expr) => expr.success) && (
           <>
             <StyledOutputCard title="Input Interpretation">
               <Stack spacing={2}>
-                {data.map((expr, index) => {
-                  if (!expr.ok) {
-                    return (
-                      <Typography>{`The evaluator could not understand this expression.`}</Typography>
-                    );
-                  }
-                  const latexRepr = exprTreeToLatex(
-                    expr.data
-                  );
-                  const marker = index + 1;
+                {expressions.map((expr, index) => {
                   return (
                     <StyledLatex key={"expr" + index}>
-                      {`$$${latexRepr} \\tag{${marker}}$$`}
+                      {`$$\\text{qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq}$$`}
                     </StyledLatex>
                   );
                 })}
               </Stack>
             </StyledOutputCard>
-            <EvaluatorOutputGroup
+            {/* <EvaluatorOutputGroup
               symbolSet={symbols}
               items={data}
-            />
+            /> */}
           </>
         )}
       </Stack>

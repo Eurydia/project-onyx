@@ -26,7 +26,8 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
     );
   }
 
-  const { normalized, latex } = verdict;
+  const { normalizedTree: normalized, inputLatex: latex } =
+    verdict;
 
   if (normalized.nodeType === SyntaxTreeNodeType.CONST) {
     return (

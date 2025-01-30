@@ -35,27 +35,21 @@ export const EditorRibbonButton: FC<
     <Fragment>
       <ButtonGroup
         ref={anchorRef}
-        disableElevation
-        disableRipple
         variant="outlined"
       >
-        <Button
-          onClick={() => onClick(selected.value)}
-          disableElevation
-          disableRipple
-          sx={{
-            textTransform: "none",
-          }}
-        >
-          <StyledLatex>{`$${selected.label}$`}</StyledLatex>
+        <Button onClick={() => onClick(selected.value)}>
+          <StyledLatex
+            sx={{
+              textTransform: "none",
+              fontFamily: "monospace",
+            }}
+          >
+            {`${selected.label}`}
+          </StyledLatex>
         </Button>
         <Button onClick={() => setOpen(true)}>
-          {!open && (
-            <KeyboardArrowDownRounded fontSize="small" />
-          )}
-          {open && (
-            <KeyboardArrowUpRounded fontSize="small" />
-          )}
+          {!open && <KeyboardArrowDownRounded />}
+          {open && <KeyboardArrowUpRounded />}
         </Button>
       </ButtonGroup>
       <Menu
@@ -79,7 +73,7 @@ export const EditorRibbonButton: FC<
                 {isSelected && <CheckRounded />}
               </ListItemIcon>
               <ListItemText>
-                <StyledLatex>{`$${option.label}$`}</StyledLatex>
+                <StyledLatex>{`${option.label}`}</StyledLatex>
               </ListItemText>
             </MenuItem>
           );

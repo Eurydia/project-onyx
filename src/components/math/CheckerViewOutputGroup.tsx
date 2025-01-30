@@ -30,7 +30,7 @@ export const CheckerViewOutputGroup: FC<
               ? {
                   ok: true,
                   data: exprTreeFromSyntaxTree(
-                    expr.original
+                    expr.originalTree
                   ),
                 }
               : { ok: false }

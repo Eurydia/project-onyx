@@ -36,11 +36,13 @@ export const CHECKER_ROUTE: RouteObject = {
         parseResult.ok
           ? {
               success: true,
-              normalized: syntaxTreeNormalize(
+              normalizedTree: syntaxTreeNormalize(
                 parseResult.data
               ),
-              original: parseResult.data,
-              latex: syntaxTreeToLatex(parseResult.data),
+              originalTree: parseResult.data,
+              inputLatex: syntaxTreeToLatex(
+                parseResult.data
+              ),
             }
           : { success: false }
       );

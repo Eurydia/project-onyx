@@ -1,8 +1,7 @@
 import { parse } from "$core/interpreter/parser";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
-import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { ExprTree } from "$types/expression-tree";
-import { Maybe } from "$types/generic";
+import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
+import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
+import { ArrayElement } from "$types/generic";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { EvaluatorView } from "$views/EvaluatorView";
 import { RouteObject } from "react-router";
@@ -12,47 +11,57 @@ export const EVALUATOR_ROUTE: RouteObject = {
   element: <EvaluatorView />,
   loader: ({ request }) => {
     const url = new URL(request.url);
-    const userInput = url.searchParams.get("input");
+    const userInputRaw = url.searchParams.get("input");
 
     if (
-      userInput === null ||
-      userInput.trim().length === 0
+      userInputRaw === null ||
+      userInputRaw.trim().length === 0
     ) {
       const loaderData: EvaluatorRouteLoaderData = {
         userInput: "",
-        data: [],
         symbols: new Set(),
+        expressions: [],
       };
       return loaderData;
     }
 
     const symbols = new Set<string>();
-    const data: Maybe<ExprTree>[] = [];
-    for (const expr of userInput.split(";")) {
-      if (expr.trim().length === 0) {
+    const expressions: ArrayElement<
+      EvaluatorRouteLoaderData["expressions"]
+    >[] = [];
+    for (const userInput of userInputRaw
+      .trim()
+      .split(";")) {
+      if (userInput.trim().length === 0) {
         continue;
       }
-      const result = parse(expr);
-      if (!result.ok) {
-        data.push({ ok: false });
+      const parseResult = parse(userInput);
+
+      if (!parseResult.ok) {
+        expressions.push({
+          success: false,
+          inputRaw: userInput.trim(),
+        });
         continue;
       }
-      const exprTree = exprTreeFromSyntaxTree(result.data);
-      for (const symbol of exprTreeCollectSymbols(
-        exprTree
+
+      const { data } = parseResult;
+      for (const symbol of syntaxTreeCollectSymbols(
+        parseResult.data
       )) {
         symbols.add(symbol);
       }
-
-      data.push({
-        ok: true,
-        data: exprTree,
+      expressions.push({
+        success: true,
+        inputInterpreted: syntaxTreeToLatex(data),
+        inputRaw: userInput.trim(),
+        tree: data,
       });
     }
 
     const loaderData: EvaluatorRouteLoaderData = {
-      userInput,
-      data: data,
+      userInput: userInputRaw,
+      expressions,
       symbols,
     };
     return loaderData;

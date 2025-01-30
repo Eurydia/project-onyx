@@ -7,23 +7,23 @@ const OPERATOR_TEXT: {
   value: string;
 }[] = [
   {
-    label: "\\text{not}",
+    label: "not",
     value: "not",
   },
   {
-    label: "\\text{and}",
+    label: "and",
     value: "and",
   },
   {
-    label: "\\text{or}",
+    label: "or",
     value: "or",
   },
   {
-    label: "\\text{implies}",
+    label: "implies",
     value: "implies",
   },
   {
-    label: "\\text{iff}",
+    label: "iff",
     value: "iff",
   },
 ];
@@ -33,23 +33,23 @@ const OPERATOR_SYMBOL: {
   value: string;
 }[] = [
   {
-    label: "\\lnot",
+    label: "$\\lnot$",
     value: "\u{00AC}",
   },
   {
-    label: "\\land",
+    label: "$\\land$",
     value: "\u{2227}",
   },
   {
-    label: "\\lor",
+    label: "$\\lor$",
     value: "\u{2228}",
   },
   {
-    label: "\\implies",
+    label: "$\\implies$",
     value: "\u{21D2}",
   },
   {
-    label: "\\iff",
+    label: "$\\iff$",
     value: "\u{21D4}",
   },
 ];

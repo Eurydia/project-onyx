@@ -16,3 +16,7 @@ export type MaybeOr<T, K> =
       ok: false;
       other: K;
     };
+
+export type ArrayElement<T> = T extends Array<infer U>
+  ? U
+  : never;

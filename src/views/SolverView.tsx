@@ -1,20 +1,9 @@
-import { Editor } from "$components/Editor/Editor";
 import { SolverOutputGroup } from "$components/math/SolverOutputGroup";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { SolverRouteLoaderData } from "$types/loader-data";
-import {
-  PlayArrowRounded,
-  WarningRounded,
-} from "@mui/icons-material";
-import {
-  Alert,
-  Box,
-  Button,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -48,19 +37,6 @@ export const SolverView: FC = () => {
       paddingY={2}
     >
       <Stack spacing={2}>
-        <Editor
-          value={userInput}
-          onChange={setUserInput}
-          placeholder="not (p and q) iff (not p or not q)"
-        />
-        <Button
-          disabled={userInput.trim().length === 0}
-          variant="contained"
-          startIcon={<PlayArrowRounded />}
-          onClick={handleSubmit}
-        >
-          RUN
-        </Button>
         {data.ok && (
           <>
             <StyledOutputCard title="Input Interpretation">
@@ -75,19 +51,6 @@ export const SolverView: FC = () => {
               symbolSet={data.data.symbols}
             />
           </>
-        )}
-        {!data.ok && prevUserInput.trim().length > 0 && (
-          <Alert
-            icon={<WarningRounded />}
-            severity="warning"
-            variant="outlined"
-          >
-            <Typography>
-              The solver cannot understand your input.
-              Please make sure the expression is correct and
-              try again.
-            </Typography>
-          </Alert>
         )}
       </Stack>
     </Box>

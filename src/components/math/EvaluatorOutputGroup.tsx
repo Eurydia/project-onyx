@@ -1,12 +1,10 @@
 import { EvaluationDisplayMany } from "$components/EvaluationDisplay/EvaluationDisplayMany";
-import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { TruthTableMany } from "$components/TruthTable/TruthTableMany";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
-import { Stack, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { PropositionConfig } from "./PropositionConfig";
 
@@ -55,34 +53,9 @@ export const EvaluatorOutputGroup: FC<
             }
           />
         )}
+        <Divider flexItem />
       </StyledOutputCard>
-      <StyledOutputCard title="Evaluation Result">
-        <Stack spacing={2}>
-          {items.map((item, index) => (
-            <Stack
-              key={"expr" + index}
-              spacing={1}
-            >
-              {item.ok && (
-                <StyledLatex>
-                  {`The equation $(${
-                    index + 1
-                  })$ $$${exprTreeToLatex(
-                    item.data
-                  )}$$ is ${item.data.eval(symbolTable)}}`}
-                </StyledLatex>
-              )}
-              {!item.ok && (
-                <StyledLatex>
-                  {`The equiation (${
-                    index + 1
-                  }) is invalid.`}
-                </StyledLatex>
-              )}
-            </Stack>
-          ))}
-        </Stack>
-      </StyledOutputCard>
+
       <StyledOutputCard title="Truth Table">
         {items.length === 0 && (
           <Typography fontStyle="italic">
