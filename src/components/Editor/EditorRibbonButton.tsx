@@ -36,20 +36,20 @@ export const EditorRibbonButton: FC<
       <ButtonGroup
         ref={anchorRef}
         disableElevation
+        disableRipple
         variant="outlined"
       >
         <Button
           onClick={() => onClick(selected.value)}
+          disableElevation
+          disableRipple
           sx={{
             textTransform: "none",
           }}
         >
           <StyledLatex>{`$${selected.label}$`}</StyledLatex>
         </Button>
-        <Button
-          size="small"
-          onClick={() => setOpen(true)}
-        >
+        <Button onClick={() => setOpen(true)}>
           {!open && (
             <KeyboardArrowDownRounded fontSize="small" />
           )}

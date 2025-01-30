@@ -28,12 +28,9 @@ const Editor_: FC<EditorProps> = (props) => {
     const left = value.slice(0, cursorStartPos);
     const right = value.slice(cursorEndPos);
 
-    onChange(`${left} ${text} ${right}`);
-    inputRef.current.focus();
-    inputRef.current.setSelectionRange(
-      cursorStartPos,
-      cursorEndPos
-    );
+    onChange(`${left}${text}${right}`);
+    setCusorStartPos(`${left}${text}`.length);
+    setCusorEndPos(`${left}${text}`.length);
   };
 
   const handleSelect = (

@@ -1,4 +1,5 @@
 import { Editor } from "$components/Editor/Editor";
+import { CheckerOutputGroup } from "$components/math/CheckerOutputGroup";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { CheckerRouteLoaderData } from "$types/loader-data";
@@ -14,16 +15,17 @@ import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const CheckerView: FC = () => {
-  const { data, userInput: defaultUserInput } =
+  const loaderData =
     useLoaderData() as CheckerRouteLoaderData;
+
+  const { success, userInput: prevUserInput } = loaderData;
   const submit = useSubmit();
-  const [userInput, setUserInput] = useState(
-    defaultUserInput
-  );
+
+  const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
-    setUserInput(defaultUserInput);
-  }, [defaultUserInput]);
+    setUserInput(userInput);
+  }, [userInput]);
 
   const handleSubmit = () => {
     submit(
@@ -57,36 +59,17 @@ export const CheckerView: FC = () => {
         >
           RUN
         </Button>
-        {data.ok && (
+        {success && (
           <>
             <StyledOutputCard title="Input Intepretation">
               <StyledLatex>
-                {`$$${data.data.input}$$`}
+                {`$$${loaderData.inputLatex}$$`}
               </StyledLatex>
             </StyledOutputCard>
-            <StyledOutputCard title="Verdict">
-              {data.data.verdict.constant && (
-                <StyledLatex>
-                  {data.data.verdict.value
-                    ? `The expression $$${data.data.input}$$ is a tautology.`
-                    : `The expression $$${data.data.input}$$ is a contradiction.`}
-                </StyledLatex>
-              )}
-              {!data.data.verdict.constant && (
-                <StyledLatex>
-                  {`The expression $$${
-                    data.data.input
-                  }$$ is not a tautology. Its truth value depends on $${[
-                    ...data.data.verdict.dependencies,
-                  ]
-                    .toSorted()
-                    .join(",")}$.`}
-                </StyledLatex>
-              )}
-            </StyledOutputCard>
+            <CheckerOutputGroup tree={loaderData.result} />
           </>
         )}
-        {!data.ok && defaultUserInput.trim().length > 0 && (
+        {!success && prevUserInput.trim().length > 0 && (
           <Alert
             severity="warning"
             variant="outlined"

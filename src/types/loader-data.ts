@@ -1,6 +1,7 @@
 import { ExprTree } from "./expression-tree";
 import { Maybe } from "./generic";
 import { Operator } from "./operators";
+import { SyntaxTree } from "./syntax-tree";
 
 export type SolverRouteLoaderData = {
   userInput: string;
@@ -16,18 +17,17 @@ export type EvaluatorRouteLoaderData = {
   symbols: Set<string>;
 };
 
-export type CheckerRouteLoaderData = {
-  userInput: string;
-  data: Maybe<{
-    input: string;
-    verdict:
+export type CheckerRouteLoaderData =
+  | { userInput: string } & (
       | {
-          constant: true;
-          value: boolean;
+          success: false;
         }
-      | { constant: false; dependencies: Set<string> };
-  }>;
-};
+      | {
+          success: true;
+          inputLatex: string;
+          result: SyntaxTree;
+        }
+    );
 
 export type RewriterRouteLoaderData = {
   userInput: string;

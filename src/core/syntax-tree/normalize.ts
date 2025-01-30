@@ -232,7 +232,7 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
     return CONST(true);
   }
 
-  let normalTree: SyntaxTree | null = null;
+  let normalTree: SyntaxTree | undefined = undefined;
   const seen = new Set<string>();
   for (const node of nodes) {
     if (node.nodeType === SyntaxTreeNodeType.IDEN) {
@@ -253,11 +253,11 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
       seen.add(syntaxTreeToString(node));
     }
 
-    if (normalTree === null) {
+    if (normalTree === undefined) {
       normalTree = node;
+    } else {
+      normalTree = AND(normalTree, node);
     }
-
-    normalTree = AND(normalTree, node);
   }
-  return normalTree;
+  return normalTree!;
 };

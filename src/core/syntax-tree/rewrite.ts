@@ -4,9 +4,9 @@ import {
   SyntaxTree,
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
+import { getRewriteRulesFor } from "./helper/rewrite-rules";
 import { BINARY, NOT } from "./node";
 import { syntaxTreeNormalize } from "./normalize";
-import { getRewriteRulesFor } from "./rewrite-rules";
 
 const rewrite = (
   tree: SyntaxTree,

@@ -3,7 +3,7 @@ import {
   SyntaxTree,
   SyntaxTreeNodeBinary,
 } from "$types/syntax-tree";
-import { AND, IMPLIES, NOT, OR } from "./node";
+import { AND, IMPLIES, NOT, OR } from "../node";
 
 type RewriteRule = {
   rewrite: (tree: SyntaxTree) => SyntaxTree;
