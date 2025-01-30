@@ -1,14 +1,16 @@
 import { SxProps, Typography } from "@mui/material";
+import { KatexOptions } from "katex";
 import { FC, ReactNode, useEffect, useRef } from "react";
 
 type StyledLatexProps = {
   children: ReactNode;
   sx?: SxProps;
+  options?: KatexOptions;
 };
 export const StyledLatex: FC<StyledLatexProps> = (
   props
 ) => {
-  const { sx, children } = props;
+  const { sx, children, options } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (ref.current !== null) {
@@ -18,9 +20,10 @@ export const StyledLatex: FC<StyledLatexProps> = (
           { left: "$$", right: "$$", display: true },
           { left: "$", right: "$", display: false },
         ],
+        ...options,
       });
     }
-  }, [children, ref]);
+  }, [children, ref, options]);
 
   return (
     <Typography

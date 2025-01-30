@@ -1,24 +1,16 @@
 import { Editor } from "$components/Editor/Editor";
-import { CheckerOutputGroup } from "$components/math/CheckerOutputGroup";
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { CheckerViewOutputGroup } from "$components/math/CheckerViewOutputGroup";
 import { CheckerRouteLoaderData } from "$types/loader-data";
-import { PlayArrowRounded } from "@mui/icons-material";
-import {
-  Alert,
-  Box,
-  Button,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const CheckerView: FC = () => {
   const loaderData =
     useLoaderData() as CheckerRouteLoaderData;
+  const { expressions, userInput: prevUserInput } =
+    loaderData;
 
-  const { success, userInput: prevUserInput } = loaderData;
   const submit = useSubmit();
 
   const [userInput, setUserInput] = useState(prevUserInput);
@@ -45,41 +37,17 @@ export const CheckerView: FC = () => {
       marginX={{ xs: 2, md: "auto" }}
       paddingY={2}
     >
-      <Stack spacing={2}>
+      <Stack spacing={1}>
         <Editor
           value={userInput}
-          onChange={setUserInput}
           placeholder="not (p and q) iff (not p or not q)"
+          onChange={setUserInput}
+          onSubmit={handleSubmit}
         />
-        <Button
-          disabled={userInput.trim().length === 0}
-          variant="contained"
-          startIcon={<PlayArrowRounded />}
-          onClick={handleSubmit}
-        >
-          RUN
-        </Button>
-        {success && (
-          <>
-            <StyledOutputCard title="Input Intepretation">
-              <StyledLatex>
-                {`$$${loaderData.inputLatex}$$`}
-              </StyledLatex>
-            </StyledOutputCard>
-            <CheckerOutputGroup tree={loaderData.result} />
-          </>
-        )}
-        {!success && prevUserInput.trim().length > 0 && (
-          <Alert
-            severity="warning"
-            variant="outlined"
-          >
-            <Typography>
-              The checker cannot understand your input.
-              Please make sure that it is correct and try
-              again.
-            </Typography>
-          </Alert>
+        {prevUserInput.trim().length > 0 && (
+          <CheckerViewOutputGroup
+            expressions={expressions}
+          />
         )}
       </Stack>
     </Box>

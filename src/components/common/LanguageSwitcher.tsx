@@ -1,15 +1,13 @@
+import { StyledTooltipIconButton } from "$components/Styled/StyledIconButton";
 import {
   CheckRounded,
   TranslateRounded,
 } from "@mui/icons-material";
 import {
-  IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
-  Tooltip,
-  Typography,
 } from "@mui/material";
 import { FC, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,54 +20,39 @@ export const LanguageSwitcher: FC = () => {
     useState<HTMLButtonElement | null>(null);
 
   const handleClose = () => setAnchor(null);
+
   return (
     <Fragment>
-      <Tooltip
-        title={<Typography>{t("language")}</Typography>}
+      <StyledTooltipIconButton
+        title={t("language")}
+        onClick={(e) => setAnchor(e.currentTarget)}
       >
-        <IconButton
-          color="primary"
-          size="large"
-          onClick={(e) => setAnchor(e.currentTarget)}
-        >
-          <TranslateRounded />
-        </IconButton>
-      </Tooltip>
+        <TranslateRounded />
+      </StyledTooltipIconButton>
       <Menu
         anchorEl={anchor}
         open={anchor !== null}
         onClose={handleClose}
         onClick={handleClose}
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: ({ shape }) =>
-                shape.borderRadius,
-            },
-          },
-        }}
       >
         {LANGUAGES.map((lang, index) => {
           const selected = i18n.language === lang;
           return (
             <MenuItem
+              key={"item" + index}
               onClick={() => i18n.changeLanguage(lang)}
               disableRipple
-              key={"item" + index}
               selected={selected}
               sx={{
                 padding: 2,
               }}
             >
               <ListItemIcon>
-                {selected && (
-                  <CheckRounded color="primary" />
-                )}
+                {selected && <CheckRounded />}
               </ListItemIcon>
               <ListItemText
                 slotProps={{
                   primary: {
-                    fontWeight: 500,
                     textTransform: "uppercase",
                   },
                 }}

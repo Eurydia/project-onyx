@@ -1,4 +1,8 @@
-import { Stack, TextField } from "@mui/material";
+import {
+  ContentCopyRounded,
+  PlayArrowRounded,
+} from "@mui/icons-material";
+import { Button, Stack, TextField } from "@mui/material";
 import {
   Dispatch,
   FC,
@@ -7,16 +11,21 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { EditorRibbon } from "./EditorRibbon";
 
 type EditorProps = {
   placeholder: string;
   value: string;
   onChange: Dispatch<string>;
+  onSubmit: () => void;
 };
 const Editor_: FC<EditorProps> = (props) => {
-  const { placeholder, value, onChange } = props;
+  const { placeholder, value, onChange, onSubmit } = props;
 
+  const { t } = useTranslation("component", {
+    keyPrefix: "editor",
+  });
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [cursorStartPos, setCusorStartPos] = useState(0);
   const [cursorEndPos, setCusorEndPos] = useState(0);
@@ -65,6 +74,30 @@ const Editor_: FC<EditorProps> = (props) => {
           },
         }}
       />
+      <Stack
+        spacing={1}
+        useFlexGap
+        flexWrap="wrap"
+        direction="row"
+      >
+        <Button
+          disabled={value.trim().length === 0}
+          variant="contained"
+          startIcon={<PlayArrowRounded />}
+          onClick={onSubmit}
+        >
+          {t("run")}
+        </Button>
+        <Button
+          startIcon={<ContentCopyRounded />}
+          variant="outlined"
+          onClick={() => {
+            navigator.clipboard.writeText(value);
+          }}
+        >
+          {t("copy")}
+        </Button>
+      </Stack>
     </Stack>
   );
 };

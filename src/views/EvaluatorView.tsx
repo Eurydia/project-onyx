@@ -4,13 +4,7 @@ import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
-import { PlayArrowRounded } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -51,15 +45,8 @@ export const EvaluatorView: FC = () => {
           value={userInput}
           onChange={setUserInput}
           placeholder="p and q; p or q; p implies q; p iff q"
+          onSubmit={handleSubmit}
         />
-        <Button
-          disabled={userInput.trim().length === 0}
-          variant="contained"
-          startIcon={<PlayArrowRounded />}
-          onClick={handleSubmit}
-        >
-          RUN
-        </Button>
         {data.length > 0 && data.some(({ ok }) => ok) && (
           <>
             <StyledOutputCard title="Input Interpretation">

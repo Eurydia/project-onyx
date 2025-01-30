@@ -9,7 +9,7 @@ type StyledTooltipIconButtonProps = {
   title: string;
   children: ReactNode;
   disabled?: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onKeyPress?: (
     e: KeyboardEvent<HTMLButtonElement>
   ) => void;

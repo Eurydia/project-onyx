@@ -17,17 +17,20 @@ export type EvaluatorRouteLoaderData = {
   symbols: Set<string>;
 };
 
-export type CheckerRouteLoaderData =
-  | { userInput: string } & (
-      | {
-          success: false;
-        }
-      | {
-          success: true;
-          inputLatex: string;
-          result: SyntaxTree;
-        }
-    );
+export type CheckerRouteExpressionVerdict =
+  | {
+      success: false;
+    }
+  | {
+      success: true;
+      latex: string;
+      normalized: SyntaxTree;
+      original: SyntaxTree;
+    };
+export type CheckerRouteLoaderData = {
+  userInput: string;
+  expressions: CheckerRouteExpressionVerdict[];
+};
 
 export type RewriterRouteLoaderData = {
   userInput: string;

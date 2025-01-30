@@ -7,4 +7,5 @@ export const EN_COMPONENT = {
       title: "Truth Table",
     },
   },
+  editor: { run: "Run", copy: "Copy" },
 };
