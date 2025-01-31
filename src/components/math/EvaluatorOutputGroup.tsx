@@ -1,21 +1,22 @@
 import { EvaluationDisplayMany } from "$components/EvaluationDisplay/EvaluationDisplayMany";
+import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { TruthTableMany } from "$components/TruthTable/TruthTableMany";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
-import { Divider, Typography } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { Divider, Stack, Typography } from "@mui/material";
+import { FC, Fragment, useEffect, useState } from "react";
 import { PropositionConfig } from "./PropositionConfig";
 
 type EvaluatorOutputGroupProps = {
   symbolSet: Set<string>;
-  items: Maybe<ExprTree>[];
+  expressions: Maybe<{ tree: ExprTree }>[];
 };
 export const EvaluatorOutputGroup: FC<
   EvaluatorOutputGroupProps
 > = (props) => {
-  const { symbolSet, items } = props;
+  const { symbolSet, expressions } = props;
 
   const [symbolTable, setSymbolTable] = useState(() => {
     const next: SymbolTable = new Map();
@@ -35,13 +36,8 @@ export const EvaluatorOutputGroup: FC<
 
   return (
     <>
-      <StyledOutputCard title="Propositions">
-        {symbolTable.size === 0 && (
-          <Typography fontStyle="italic">
-            No proposition to display.
-          </Typography>
-        )}
-        {symbolTable.size > 0 && (
+      <StyledOutputCard title="Evaluation Result">
+        <Stack>
           <PropositionConfig
             value={symbolTable}
             onChange={(k, v) =>
@@ -52,30 +48,40 @@ export const EvaluatorOutputGroup: FC<
               })
             }
           />
-        )}
-        <Divider flexItem />
-      </StyledOutputCard>
-
-      <StyledOutputCard title="Truth Table">
-        {items.length === 0 && (
-          <Typography fontStyle="italic">
-            No truth table to display
-          </Typography>
-        )}
-        {items.length > 0 && (
-          <TruthTableMany items={items} />
-        )}
+          <Stack>
+            {expressions.map((expr, index) => {
+              if (!expr.ok) {
+                return <Fragment key={"eval" + index} />;
+              }
+              const latex = exprTreeToLatex(expr.tree);
+              const result = expr.tree.eval(symbolTable);
+              return (
+                <Fragment key={"eval" + index}>
+                  <Stack spacing={-4}>
+                    <StyledLatex>
+                      {`$$${latex}\\tag{${index + 1}}$$`}
+                    </StyledLatex>
+                    <StyledLatex>
+                      {`$$\\equiv\\textbf{${result}}$$`}
+                    </StyledLatex>
+                  </Stack>
+                  <Divider flexItem />
+                </Fragment>
+              );
+            })}
+          </Stack>
+        </Stack>
       </StyledOutputCard>
       <StyledOutputCard title="Step-by-step Evaluation">
-        {items.length === 0 && (
+        {expressions.length === 0 && (
           <Typography fontStyle="italic">
             No step-by-step evaluation to display
           </Typography>
         )}
-        {items.length > 0 && (
+        {expressions.length > 0 && (
           <EvaluationDisplayMany
             symbolTable={symbolTable}
-            items={items}
+            items={expressions}
           />
         )}
       </StyledOutputCard>

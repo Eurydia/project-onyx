@@ -1,15 +1,14 @@
-import { alpha, createTheme } from "@mui/material";
-import { amber, brown, green } from "@mui/material/colors";
+import { createTheme } from "@mui/material";
 
 export const THEME = createTheme({
-  palette: {
-    mode: "light",
-    primary: { main: brown["700"] },
-    secondary: { main: green["100"] },
-    background: { default: alpha(amber["50"], 0.6) },
-    divider: brown["A700"],
-    text: { primary: brown["800"] },
-  },
+  // palette: {
+  //   mode: "light",
+  //   primary: { main: brown["700"] },
+  //   secondary: { main: green["100"] },
+  //   background: { default: alpha(amber["50"], 0.6) },
+  //   divider: brown["A700"],
+  //   text: { primary: brown["800"] },
+  // },
   components: {
     MuiList: {
       defaultProps: {
@@ -22,16 +21,16 @@ export const THEME = createTheme({
         dense: true,
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        arrow: ({ theme: t }) => ({
-          color: t.palette.primary.dark,
-        }),
-        tooltip: ({ theme: t }) => ({
-          backgroundColor: t.palette.primary.dark,
-        }),
-      },
-    },
+    // MuiTooltip: {
+    //   styleOverrides: {
+    //     arrow: ({ theme: t }) => ({
+    //       color: t.palette.primary.dark,
+    //     }),
+    //     tooltip: ({ theme: t }) => ({
+    //       backgroundColor: t.palette.primary.dark,
+    //     }),
+    //   },
+    // },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -47,7 +46,7 @@ export const THEME = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           whiteSpace: "nowrap",
-          backgroundColor: theme.palette.background.paper,
+          // backgroundColor: theme.palette.background.paper,
         }),
       },
     },

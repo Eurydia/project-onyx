@@ -72,8 +72,12 @@ export const EditorRibbonButton: FC<
               <ListItemIcon>
                 {isSelected && <CheckRounded />}
               </ListItemIcon>
-              <ListItemText>
-                <StyledLatex>{`${option.label}`}</StyledLatex>
+              <ListItemText disableTypography>
+                <StyledLatex
+                  sx={{ fontFamily: "monospace" }}
+                >
+                  {`${option.label}`}
+                </StyledLatex>
               </ListItemText>
             </MenuItem>
           );

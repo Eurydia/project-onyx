@@ -29,9 +29,7 @@ export const EVALUATOR_ROUTE: RouteObject = {
     const expressions: ArrayElement<
       EvaluatorRouteLoaderData["expressions"]
     >[] = [];
-    for (const userInput of userInputRaw
-      .trim()
-      .split(";")) {
+    for (const userInput of userInputRaw.split(",")) {
       if (userInput.trim().length === 0) {
         continue;
       }
@@ -39,23 +37,23 @@ export const EVALUATOR_ROUTE: RouteObject = {
 
       if (!parseResult.ok) {
         expressions.push({
-          success: false,
           inputRaw: userInput.trim(),
+          ok: false,
         });
         continue;
       }
 
-      const { data } = parseResult;
+      const { tree } = parseResult;
       for (const symbol of syntaxTreeCollectSymbols(
-        parseResult.data
+        parseResult.tree
       )) {
         symbols.add(symbol);
       }
       expressions.push({
-        success: true,
-        inputInterpreted: syntaxTreeToLatex(data),
+        ok: true,
         inputRaw: userInput.trim(),
-        tree: data,
+        inputInterpretationLatex: syntaxTreeToLatex(tree),
+        tree,
       });
     }
 

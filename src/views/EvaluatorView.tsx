@@ -1,6 +1,8 @@
 import { Editor } from "$components/Editor/Editor";
-import { StyledLatex } from "$components/Styled/StyledLatex";
+import { InputDisplayMany } from "$components/InputTable";
+import { EvaluatorOutputGroup } from "$components/math/EvaluatorOutputGroup";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { Box, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
@@ -38,30 +40,31 @@ export const EvaluatorView: FC = () => {
       marginX={{ xs: 2, md: "auto" }}
       paddingY={2}
     >
-      <Stack spacing={2}>
+      <Stack spacing={4}>
         <Editor
           value={userInput}
           onChange={setUserInput}
-          placeholder="p and q; p or q; p implies q; p iff q"
+          placeholder="p and q, p or q, p implies q, p iff q"
           onSubmit={handleSubmit}
         />
-        {expressions.some((expr) => expr.success) && (
+        {prevUserInput.trim().length > 0 && (
           <>
             <StyledOutputCard title="Input Interpretation">
-              <Stack spacing={2}>
-                {expressions.map((expr, index) => {
-                  return (
-                    <StyledLatex key={"expr" + index}>
-                      {`$$\\text{qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq}$$`}
-                    </StyledLatex>
-                  );
-                })}
-              </Stack>
+              <InputDisplayMany expressions={expressions} />
             </StyledOutputCard>
-            {/* <EvaluatorOutputGroup
+            <EvaluatorOutputGroup
               symbolSet={symbols}
-              items={data}
-            /> */}
+              expressions={expressions.map((expr) =>
+                expr.ok
+                  ? {
+                      ok: true,
+                      tree: exprTreeFromSyntaxTree(
+                        expr.tree
+                      ),
+                    }
+                  : { ok: false }
+              )}
+            />
           </>
         )}
       </Stack>

@@ -20,6 +20,7 @@ export const StyledOutputCard: FC<StyledOutputCardProps> = (
         slotProps={{
           title: {
             fontWeight: 900,
+            textTransform: "capitalize",
           },
         }}
       />

@@ -1,11 +1,16 @@
 import { SymbolTable } from "$types/syntax-tree";
+import { InfoRounded } from "@mui/icons-material";
 import {
+  Alert,
+  AlertTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
   Grid2,
   Radio,
   RadioGroup,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -35,6 +40,31 @@ export const PropositionConfig: FC<
         overflowY: "auto",
       }}
     >
+      {symbols.length === 0 && (
+        <Grid2 size="grow">
+          <Alert
+            icon={false}
+            variant="standard"
+            severity="info"
+          >
+            <AlertTitle>
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                alignItems="flex-end"
+                spacing={2}
+                useFlexGap
+              >
+                <InfoRounded />
+                <Typography fontWeight={900}>
+                  {`Notice`}
+                </Typography>
+              </Stack>
+            </AlertTitle>
+            <Typography>{`No proposition to display.`}</Typography>
+          </Alert>
+        </Grid2>
+      )}
       {symbols.map((sym) => (
         <Grid2
           key={"symbol-" + sym}
@@ -52,18 +82,24 @@ export const PropositionConfig: FC<
               }
             >
               <FormControlLabel
+                disableTypography
                 control={<Radio disableRipple />}
                 value="1"
-                label={t(
-                  "component.playground.config.true"
-                )}
+                label={
+                  <Typography>
+                    {t("component.playground.config.true")}
+                  </Typography>
+                }
               />
               <FormControlLabel
                 control={<Radio disableRipple />}
                 value="0"
-                label={t(
-                  "component.playground.config.false"
-                )}
+                disableTypography
+                label={
+                  <Typography>
+                    {t("component.playground.config.false")}
+                  </Typography>
+                }
               />
             </RadioGroup>
           </FormControl>

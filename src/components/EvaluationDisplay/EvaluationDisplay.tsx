@@ -1,17 +1,11 @@
+import { EvaluationGraph } from "$components/EvaluationGraph";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 import { Divider, Stack, Typography } from "@mui/material";
-import {
-  FC,
-  memo,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { EvaluationDisplayControl } from "./EvaluationDisplayControl";
+import { FC, memo, useMemo } from "react";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
 type EvaluationDisplayProps = {
@@ -23,15 +17,10 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
 ) => {
   const { exprTree, symbolTable } = props;
 
-  const [currentStep, setCurrentStep] = useState(0);
   const steps = useMemo(
     () => exprTreeFlattenStepByStep(exprTree, symbolTable),
     [exprTree, symbolTable]
   );
-
-  useEffect(() => {
-    setCurrentStep(0);
-  }, [steps]);
 
   if (steps.length === 0) {
     return (
@@ -41,26 +30,32 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
     );
   }
 
+  const { evaluated, repr } = steps.at(-1)!;
+
   return (
     <Stack
       spacing={2}
       divider={<Divider flexItem />}
     >
-      <EvaluationDisplayControl
-        value={currentStep}
-        maxValue={steps.length}
-        onChange={setCurrentStep}
+      <EvaluationGraph
+        exprTree={exprTree}
+        symbolTable={symbolTable}
+        slotProps={{
+          container: {
+            height: { xs: "50vh", md: "66vh" },
+          },
+        }}
       />
-      <EvaluationDisplayStep
-        step={steps[currentStep]}
-        stepIndex={currentStep + 1}
-        references={steps}
-      />
-      {currentStep === steps.length - 1 && (
-        <StyledLatex>
-          {`Therefore, the expression $$${steps[currentStep].repr}$$ is ${steps[currentStep].evaluated}.`}
-        </StyledLatex>
-      )}
+      {steps.map((step, index) => (
+        <EvaluationDisplayStep
+          step={step}
+          stepIndex={index + 1}
+          references={steps}
+        />
+      ))}
+      <StyledLatex>
+        {`Therefore, the expression $$${repr}$$ is ${evaluated}.`}
+      </StyledLatex>
     </Stack>
   );
 };

@@ -8,7 +8,7 @@ import { EvaluationDisplay } from "./EvaluationDisplay";
 
 type EvaluationDisplayManyProps = {
   symbolTable: SymbolTable;
-  items: Maybe<ExprTree>[];
+  items: Maybe<{ tree: ExprTree }>[];
 };
 export const EvaluationDisplayMany: FC<
   EvaluationDisplayManyProps
@@ -35,7 +35,7 @@ export const EvaluationDisplayMany: FC<
                 ? "line-through"
                 : undefined,
             }}
-            label={`EQUATION (${index + 1})`}
+            label={`EXPRESSION (${index + 1})`}
           />
         ))}
       </TabList>
@@ -46,7 +46,7 @@ export const EvaluationDisplayMany: FC<
         >
           {item.ok && (
             <EvaluationDisplay
-              exprTree={item.data}
+              exprTree={item.tree}
               symbolTable={symbolTable}
             />
           )}

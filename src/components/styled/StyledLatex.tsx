@@ -1,10 +1,10 @@
-import { SxProps, Typography } from "@mui/material";
+import { SxProps, Theme, Typography } from "@mui/material";
 import { KatexOptions } from "katex";
 import { FC, ReactNode, useEffect, useRef } from "react";
 
 type StyledLatexProps = {
   children: ReactNode;
-  sx?: SxProps;
+  sx?: SxProps<Theme>;
   options?: KatexOptions;
 };
 export const StyledLatex: FC<StyledLatexProps> = (

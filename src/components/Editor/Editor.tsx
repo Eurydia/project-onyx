@@ -42,7 +42,6 @@ const Editor_: FC<EditorProps> = (props) => {
     onChange(`${left}${text}${right}`);
     setCusorStartPos(`${left}${text}`.length);
     setCusorEndPos(`${left}${text}`.length);
-    setHasCopied(false);
   };
 
   const handleSelect = (
@@ -87,10 +86,7 @@ const Editor_: FC<EditorProps> = (props) => {
           disabled={value.trim().length === 0}
           variant="contained"
           startIcon={<PlayArrowRounded />}
-          onClick={() => {
-            setHasCopied(false);
-            onSubmit();
-          }}
+          onClick={onSubmit}
         >
           {t("run")}
         </Button>
@@ -105,7 +101,11 @@ const Editor_: FC<EditorProps> = (props) => {
           variant="outlined"
           onClick={() => {
             navigator.clipboard.writeText(value);
+
             setHasCopied(true);
+            setTimeout(() => {
+              setHasCopied(false);
+            }, 1000);
           }}
         >
           {!hasCopied ? t("copy") : t("copied")}

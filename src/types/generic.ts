@@ -1,21 +1,18 @@
 export type Maybe<T> =
-  | {
+  | ({
       ok: true;
-      data: T;
-    }
+    } & Omit<T, "ok">)
   | {
       ok: false;
     };
 
 export type MaybeOr<T, K> =
-  | {
+  | ({
       ok: true;
-      data: T;
-    }
-  | {
+    } & Omit<T, "ok">)
+  | ({
       ok: false;
-      other: K;
-    };
+    } & Omit<K, "ok">);
 
 export type ArrayElement<T> = T extends Array<infer U>
   ? U

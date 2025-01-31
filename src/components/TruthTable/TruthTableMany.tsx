@@ -6,7 +6,7 @@ import { Tab, Typography } from "@mui/material";
 import { FC, useState } from "react";
 
 type TruthTableManyProps = {
-  items: Maybe<ExprTree>[];
+  items: Maybe<{ tree: ExprTree }>[];
 };
 export const TruthTableMany: FC<TruthTableManyProps> = (
   props
@@ -44,7 +44,7 @@ export const TruthTableMany: FC<TruthTableManyProps> = (
         >
           {item.ok && (
             <TruthTable
-              exprTree={item.data}
+              exprTree={item.tree}
               slotProps={{
                 container: {
                   maxHeight: "60vh",

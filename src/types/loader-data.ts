@@ -13,14 +13,10 @@ export type SolverRouteLoaderData = {
 
 export type EvaluatorRouteLoaderData = {
   userInput: string;
-  expressions: ({ inputRaw: string } & (
-    | {
-        success: true;
-        inputInterpreted: string;
-        tree: SyntaxTree;
-      }
-    | { success: false }
-  ))[];
+  expressions: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    tree: SyntaxTree;
+  }>)[];
   symbols: Set<string>;
 };
 

@@ -48,7 +48,7 @@ export const Graph: FC<GraphProps> = (props) => {
     }
     return () =>
       clearInterval(intervalRef.current ?? undefined);
-  }, [isPlaying, maxStep]);
+  }, [isPlaying, maxStep, step]);
 
   useEffect(() => {
     setStep(1);
