@@ -25,17 +25,19 @@ export const REWRITER_ROUTE: RouteObject = {
 
     const userInput = userInputRaw.toString();
     const basisRaw = url.searchParams.get("basis");
-    if (basisRaw === null) {
-      return {
-        userInput,
-        ok: false,
-      } as RewriterRouteLoaderData;
-    }
+    const basis =
+      basisRaw === null
+        ? []
+        : (basisRaw
+            .split(",")
+            .map((op) => op.trim())
+            .filter((op) => op.length > 0) as Operator[]);
 
     const result = parse(userInput);
 
     if (!result.ok) {
       const loaderData: RewriterRouteLoaderData = {
+        basis,
         userInput,
         ok: false,
       };
@@ -43,12 +45,9 @@ export const REWRITER_ROUTE: RouteObject = {
     }
 
     const { tree: syntaxTree } = result;
-    const basis = new Set(
-      basisRaw.split(",") as Operator[]
-    );
     const rewriteResult = syntaxTreeRewrite(
       syntaxTree,
-      basis
+      new Set(basis)
     );
 
     const loaderData: RewriterRouteLoaderData = {

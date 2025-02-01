@@ -5,7 +5,7 @@ import {
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import { getRewriteRulesFor } from "./helper/rewrite-rules";
-import { BINARY, NOT } from "./node";
+import { BINARY, IMPLIES, NOT } from "./node";
 import { syntaxTreeNormalize } from "./normalize";
 
 const rewrite = (
@@ -17,18 +17,18 @@ const rewrite = (
     case SyntaxTreeNodeType.IDEN:
       return tree;
     case SyntaxTreeNodeType.UNARY: {
-      if (
-        tree.operand.nodeType ===
-          SyntaxTreeNodeType.UNARY &&
-        tree.operand.operator === Operator.NOT
-      ) {
-        return rewrite(tree.operand.operand, basis);
-      }
-      if (!basis.has(Operator.NOT)) {
-        return null;
-      }
       const operand = rewrite(tree.operand, basis);
       if (operand === null) {
+        return null;
+      }
+      if (
+        operand.nodeType === SyntaxTreeNodeType.UNARY &&
+        operand.operator === Operator.NOT
+      ) {
+        return operand.operand;
+      }
+
+      if (!basis.has(Operator.NOT)) {
         return null;
       }
       return NOT(operand);
@@ -45,14 +45,26 @@ const rewrite = (
       }
 
       if (basis.has(tree.operator)) {
+        if (tree.operator === Operator.IMPL) {
+          const { left, right } = tree;
+          if (
+            left.nodeType === SyntaxTreeNodeType.UNARY &&
+            right.nodeType === SyntaxTreeNodeType.UNARY
+          ) {
+            return IMPLIES(right.operand, left.operand);
+          }
+        }
         return BINARY(tree.operator, left, right);
       }
 
       const rules = getRewriteRulesFor(tree.operator);
       for (const rule of rules) {
         if (rule.basis.every((op) => basis.has(op))) {
-          return rule.rewrite(
-            BINARY(tree.operator, left, right)
+          return rewrite(
+            rule.rewrite(
+              BINARY(tree.operator, left, right)
+            ),
+            basis
           );
         }
       }

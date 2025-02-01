@@ -30,8 +30,8 @@ export type CheckerRouteLoaderData = {
 
 export type RewriterRouteLoaderData = {
   userInput: string;
+  basis: Operator[];
 } & Maybe<{
   inputLatex: string;
-  basis: Set<Operator>;
   rewritten: Maybe<{ tree: SyntaxTree }>;
 }>;

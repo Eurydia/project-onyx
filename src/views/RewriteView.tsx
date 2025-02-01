@@ -20,11 +20,15 @@ import { useLoaderData, useSubmit } from "react-router";
 export const RewriteView: FC = () => {
   const loaderData =
     useLoaderData() as RewriterRouteLoaderData;
-  const { ok, userInput: prevUserInput } = loaderData;
+  const {
+    ok,
+    userInput: prevUserInput,
+    basis: prevBasis,
+  } = loaderData;
   const [basis, setBasis] = useState(() => {
     const next = new Map<Operator, boolean>();
-    for (const operator of Object.values(Operator)) {
-      next.set(operator, true);
+    for (const op of Object.values(Operator)) {
+      next.set(op, prevBasis.includes(op));
     }
     return next;
   });
@@ -35,12 +39,15 @@ export const RewriteView: FC = () => {
     setUserInput(prevUserInput);
   }, [prevUserInput]);
 
+  useEffect(() => {
+    const next = new Map<Operator, boolean>();
+    for (const op of Object.values(Operator)) {
+      next.set(op, prevBasis.includes(op));
+    }
+    setBasis(next);
+  }, [prevBasis]);
+
   const handleSubmit = () => {
-    console.debug(
-      [...basis.entries()]
-        .filter(([, isIncluded]) => isIncluded)
-        .map(([k]) => k)
-    );
     submit(
       {
         input: userInput,
