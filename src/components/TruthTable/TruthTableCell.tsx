@@ -20,8 +20,8 @@ const TruthTableCell_: FC<TruthTableCellProps> = (
       align="center"
       sx={{
         backgroundColor: value
-          ? alpha(palette.secondary.light, 0.8)
-          : alpha(palette.secondary.main, 0.2),
+          ? alpha(palette.primary.main, 0.4)
+          : alpha(palette.primary.main, 0.2),
       }}
     >
       <Typography>

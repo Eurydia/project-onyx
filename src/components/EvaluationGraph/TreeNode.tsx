@@ -44,15 +44,15 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
     >
       <circle
         strokeWidth={isNodeHighlighted ? 5 : 0}
-        stroke={palette.primary.light}
+        stroke={palette.primary.dark}
         strokeOpacity={0.8}
         r={r}
-        fill={palette.secondary.light}
+        fill={palette.primary.light}
       />
       <text
         ref={ref}
         fontSize={typography.body1.fontSize}
-        color={palette.secondary.contrastText}
+        fill={palette.primary.contrastText}
         dy="0.33rem"
         textAnchor="middle"
         pointerEvents="none"
@@ -69,14 +69,14 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
           height={30}
           rx={5}
           ry={5}
-          fill={palette.secondary.light}
+          fill={palette.primary.light}
         />
         <text
           x="30"
           y="22"
-          fillOpacity={0.5}
           textAnchor="middle"
           pointerEvents="none"
+          fill={palette.primary.contrastText}
           style={{ userSelect: "none" }}
         >
           {data.eval(symbolTable)

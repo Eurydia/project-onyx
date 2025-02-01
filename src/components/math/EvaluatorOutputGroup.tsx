@@ -1,11 +1,18 @@
 import { EvaluationDisplayMany } from "$components/EvaluationDisplay/EvaluationDisplayMany";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { TruthTable } from "$components/TruthTable";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
-import { Divider, Stack, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC, Fragment, useEffect, useState } from "react";
 import { PropositionConfig } from "./PropositionConfig";
 
@@ -57,15 +64,31 @@ export const EvaluatorOutputGroup: FC<
               const result = expr.tree.eval(symbolTable);
               return (
                 <Fragment key={"eval" + index}>
-                  <Stack spacing={-4}>
-                    <StyledLatex>
-                      {`$$${latex}\\tag{${index + 1}}$$`}
-                    </StyledLatex>
-                    <StyledLatex>
-                      {`$$\\equiv\\textbf{${result}}$$`}
-                    </StyledLatex>
-                  </Stack>
-                  <Divider flexItem />
+                  <Accordion>
+                    <AccordionSummary>
+                      <Stack
+                        spacing={-4}
+                        sx={{ width: "100%" }}
+                      >
+                        <StyledLatex>
+                          {`$$${latex}\\tag{${
+                            index + 1
+                          }}$$`}
+                        </StyledLatex>
+                        <StyledLatex>
+                          {`$$\\equiv\\textbf{${result}}$$`}
+                        </StyledLatex>
+                      </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <TruthTable
+                        exprTree={expr.tree}
+                        slotProps={{
+                          container: { height: "40vh" },
+                        }}
+                      />
+                    </AccordionDetails>
+                  </Accordion>
                 </Fragment>
               );
             })}
