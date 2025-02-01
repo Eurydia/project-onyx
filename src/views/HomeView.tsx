@@ -16,23 +16,23 @@ const CARDS: {
   href: string;
 }[] = [
   {
-    title: "view.home.card.solver.title",
-    desc: "view.home.card.solver.desc",
-    href: "/solver",
-  },
-  {
-    title: "view.home.card.evaluator.title",
-    desc: "view.home.card.evaluator.desc",
+    title: "views:home-view.card.evaluator.title",
+    desc: "views:home-view.card.evaluator.desc",
     href: "/evaluator",
   },
   {
-    title: "view.home.card.rewriter.title",
-    desc: "view.home.card.rewriter.desc",
+    title: "views:home-view.card.comparator.title",
+    desc: "views:home-view.card.comparator.desc",
+    href: "/comparator",
+  },
+  {
+    title: "views:home-view.card.rewriter.title",
+    desc: "views:home-view.card.rewriter.desc",
     href: "/rewriter",
   },
   {
-    title: "view.home.card.checker.title",
-    desc: "view.home.card.checker.desc",
+    title: "views:home-view.card.checker.title",
+    desc: "views:home-view.card.checker.desc",
     href: "/checker",
   },
 ];
@@ -63,7 +63,7 @@ export const HomeView: FC = () => {
                 "transition": "all 0.1s ease",
                 "&:hover": {
                   borderColor: ({ palette }) =>
-                    palette.secondary.light,
+                    palette.primary.light,
                 },
               }}
             >
@@ -72,7 +72,7 @@ export const HomeView: FC = () => {
                 slotProps={{
                   title: {
                     sx: {
-                      fontWeight: 700,
+                      fontWeight: 900,
                       whiteSpace: "break-spaces",
                     },
                   },

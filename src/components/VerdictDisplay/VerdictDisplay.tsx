@@ -1,44 +1,46 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
-import { CheckerRouteExpressionVerdict } from "$types/loader-data";
+import { CheckerRouteLoaderData } from "$types/loader-data";
 import { SyntaxTreeNodeType } from "$types/syntax-tree";
-import { Typography } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 type VerdictDisplayProps = {
-  verdict: CheckerRouteExpressionVerdict;
+  verdict: CheckerRouteLoaderData["expressions"][number];
 };
 export const VerdictDisplay: FC<VerdictDisplayProps> = (
   props
 ) => {
   const { verdict } = props;
-  const { success } = verdict;
+  const { ok } = verdict;
   const { t } = useTranslation("views", {
     keyPrefix: "checker-view",
   });
 
-  if (!success) {
-    return (
-      <Typography>
-        {t("verdict.expression-is-invalid")}
-      </Typography>
-    );
+  if (!ok) {
+    return null;
   }
 
-  const { normalizedTree: normalized, inputLatex: latex } =
-    verdict;
+  const {
+    normalizedTree: normalized,
+    inputInterpretationLatex: latex,
+  } = verdict;
 
   if (normalized.nodeType === SyntaxTreeNodeType.CONST) {
+    if (normalized.value) {
+      return (
+        <StyledLatex>
+          {t("verdict.expression-is-tautology", {
+            eq: `$$${latex}$$`,
+          })}
+        </StyledLatex>
+      );
+    }
     return (
       <StyledLatex>
-        {normalized.value
-          ? t("verdict.expression-is-tautology", {
-              eq: `$$${latex}$$`,
-            })
-          : t("verdict.expression-is-contradiction", {
-              eq: `$$${latex}$$`,
-            })}
+        {t("verdict.expression-is-contradiction", {
+          eq: `$$${latex}$$`,
+        })}
       </StyledLatex>
     );
   }

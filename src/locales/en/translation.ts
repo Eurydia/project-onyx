@@ -17,27 +17,6 @@ export const en = {
       },
     },
     view: {
-      home: {
-        tools: "Tools",
-        card: {
-          solver: {
-            title: "Solver",
-            desc: "Solve an expression with truth table, graph, and step-by-step calculation.",
-          },
-          evaluator: {
-            title: "Evaluator",
-            desc: "Evaluate expressions according to given truth values.",
-          },
-          rewriter: {
-            title: "Rewriter",
-            desc: "Transform an expression into a different basis.",
-          },
-          checker: {
-            title: "Tautology checker",
-            desc: "Check if an expression is always true.",
-          },
-        },
-      },
       solver: {
         truthTable: {
           title: "Truth Table",

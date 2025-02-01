@@ -3,12 +3,12 @@ import { Maybe } from "./generic";
 import { Operator } from "./operators";
 import { SyntaxTree } from "./syntax-tree";
 
-export type SolverRouteLoaderData = {
+export type ComparatorRouteLoaderData = {
   userInput: string;
-  data: Maybe<{
-    exprTree: ExprTree;
-    symbols: Set<string>;
-  }>;
+  expressions: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    tree: SyntaxTree;
+  }>)[];
 };
 
 export type EvaluatorRouteLoaderData = {
@@ -20,19 +20,13 @@ export type EvaluatorRouteLoaderData = {
   symbols: Set<string>;
 };
 
-export type CheckerRouteExpressionVerdict =
-  | {
-      success: false;
-    }
-  | {
-      success: true;
-      inputLatex: string;
-      normalizedTree: SyntaxTree;
-      originalTree: SyntaxTree;
-    };
 export type CheckerRouteLoaderData = {
   userInput: string;
-  expressions: CheckerRouteExpressionVerdict[];
+  expressions: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    normalizedTree: SyntaxTree;
+    originalTree: SyntaxTree;
+  }>)[];
 };
 
 export type RewriterRouteLoaderData = {

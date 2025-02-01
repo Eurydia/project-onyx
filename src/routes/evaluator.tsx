@@ -1,7 +1,6 @@
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
 import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { ArrayElement } from "$types/generic";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { EvaluatorView } from "$views/EvaluatorView";
 import { RouteObject } from "react-router";
@@ -26,9 +25,8 @@ export const EVALUATOR_ROUTE: RouteObject = {
     }
 
     const symbols = new Set<string>();
-    const expressions: ArrayElement<
-      EvaluatorRouteLoaderData["expressions"]
-    >[] = [];
+    const expressions: EvaluatorRouteLoaderData["expressions"] =
+      [];
     for (const userInput of userInputRaw.split(",")) {
       if (userInput.trim().length === 0) {
         continue;

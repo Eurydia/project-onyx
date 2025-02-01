@@ -1,7 +1,9 @@
 import { Editor } from "$components/Editor/Editor";
+import { InputDisplayMany } from "$components/InputTable";
 import { CheckerViewOutputGroup } from "$components/math/CheckerViewOutputGroup";
+import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { CheckerRouteLoaderData } from "$types/loader-data";
-import { Box, Stack } from "@mui/material";
+import { Box, Divider, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -45,9 +47,15 @@ export const CheckerView: FC = () => {
           onSubmit={handleSubmit}
         />
         {prevUserInput.trim().length > 0 && (
-          <CheckerViewOutputGroup
-            expressions={expressions}
-          />
+          <>
+            <StyledOutputCard title="Input Interpretation">
+              <InputDisplayMany expressions={expressions} />
+            </StyledOutputCard>
+            <Divider flexItem />
+            <CheckerViewOutputGroup
+              expressions={expressions}
+            />
+          </>
         )}
       </Stack>
     </Box>

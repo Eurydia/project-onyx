@@ -1,14 +1,13 @@
 import { Editor } from "$components/Editor/Editor";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { operatorToLatex } from "$core/operator";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { RewriterRouteLoaderData } from "$types/loader-data";
 import { Operator } from "$types/operators";
-import { PlayArrowRounded } from "@mui/icons-material";
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -63,8 +62,8 @@ export const RewriteView: FC = () => {
           value={userInput}
           onChange={setUserInput}
           placeholder="not (p and q) iff (not p or not q)"
+          onSubmit={handleSubmit}
         />
-
         <FormGroup row>
           {Object.values(Operator).map(
             (operator, index) => (
@@ -80,26 +79,15 @@ export const RewriteView: FC = () => {
                 }
                 control={<Checkbox disableRipple />}
                 label={
-                  <StyledLatex>{`${operator} `}</StyledLatex>
+                  <StyledLatex>
+                    {`$${operatorToLatex(operator)}$`}
+                  </StyledLatex>
                 }
-                slotProps={{
-                  typography: {
-                    textTransform: "lowercase",
-                  },
-                }}
               />
             )
           )}
         </FormGroup>
 
-        <Button
-          disabled={userInput.trim().length === 0}
-          variant="contained"
-          startIcon={<PlayArrowRounded />}
-          onClick={handleSubmit}
-        >
-          RUN
-        </Button>
         {data.ok && (
           <>
             <StyledOutputCard title="Input Intepretation">

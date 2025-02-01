@@ -15,6 +15,7 @@ export const StyledLatex: FC<StyledLatexProps> = (
   useEffect(() => {
     if (ref.current !== null) {
       window.renderMathInElement(ref.current, {
+        strict: false,
         output: "html",
         delimiters: [
           { left: "$$", right: "$$", display: true },

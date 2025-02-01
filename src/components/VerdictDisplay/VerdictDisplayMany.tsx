@@ -1,48 +1,64 @@
-import { CheckerRouteExpressionVerdict } from "$types/loader-data";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Typography } from "@mui/material";
-import { FC, useState } from "react";
+import { TruthTable } from "$components/TruthTable";
+import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
+import { CheckerRouteLoaderData } from "$types/loader-data";
+import { InfoRounded } from "@mui/icons-material";
+import {
+  Alert,
+  AlertTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { FC, Fragment } from "react";
 import { VerdictDisplay } from "./VerdictDisplay";
 
 type VerdictDisplayManyProps = {
-  verdicts: CheckerRouteExpressionVerdict[];
+  verdicts: CheckerRouteLoaderData["expressions"];
 };
 export const VerdictDisplayMany: FC<
   VerdictDisplayManyProps
 > = (props) => {
-  const { verdicts } = props;
-  const [tab, setTab] = useState(0);
-
-  if (verdicts.length === 0) {
-    return (
-      <Typography>{`No verdict to display. Enter an expression to see its result.`}</Typography>
-    );
-  }
+  const { verdicts: expressions } = props;
 
   return (
-    <TabContext value={tab}>
-      <TabList
-        scrollButtons="auto"
-        variant="scrollable"
-        onChange={(_, value) => setTab(value as number)}
-      >
-        {verdicts.map((_, index) => (
-          <Tab
-            key={"tab" + index}
-            value={index}
-            disableRipple
-            label={`Equation ${index + 1}`}
-          />
-        ))}
-      </TabList>
-      {verdicts.map((verdict, index) => (
-        <TabPanel
-          key={"verdict" + index}
-          value={index}
+    <Fragment>
+      {expressions.length === 0 && (
+        <Alert
+          icon={false}
+          variant="standard"
+          severity="info"
         >
-          <VerdictDisplay verdict={verdict} />
-        </TabPanel>
+          <AlertTitle>
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              alignItems="flex-end"
+              spacing={2}
+              useFlexGap
+            >
+              <InfoRounded />
+              <Typography fontWeight={900}>
+                {`Notice`}
+              </Typography>
+            </Stack>
+          </AlertTitle>
+          <Typography>{`No verdict to display. Enter an expression to see its result.`}</Typography>
+        </Alert>
+      )}
+      {expressions.map((expr, index) => (
+        <Fragment key={"verdict" + index}>
+          <VerdictDisplay verdict={expr} />
+          {expr.ok && (
+            <TruthTable
+              slotProps={{
+                container: { maxHeight: "40vh" },
+              }}
+              exprTree={exprTreeFromSyntaxTree(
+                expr.originalTree
+              )}
+            />
+          )}
+        </Fragment>
       ))}
-    </TabContext>
+    </Fragment>
   );
 };

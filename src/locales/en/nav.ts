@@ -4,4 +4,5 @@ export const EN_NAV = {
   evaluator: "Evaluator",
   rewriter: "Rewriter",
   checker: "Tautology checker",
+  comparator: "Comparator",
 };

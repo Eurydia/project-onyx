@@ -18,7 +18,27 @@ export default {
       "expression-is-satisfiable": `The expression {{eq}} is not a tautology. Its truth value depends on {{dependencies}}.`,
       "expression-is-invalid": `The expression is invalid.`,
     },
-
     "user-manual": [],
+  },
+  "home-view": {
+    tools: "Tools",
+    card: {
+      comparator: {
+        title: "Comparator",
+        desc: "Compare expressions to see which one of them are equivalent.",
+      },
+      evaluator: {
+        title: "Evaluator",
+        desc: "Evaluate expressions according to given truth values.",
+      },
+      rewriter: {
+        title: "Rewriter",
+        desc: "Transform an expression into a different basis.",
+      },
+      checker: {
+        title: "Tautology checker",
+        desc: "Check if an expression is always true.",
+      },
+    },
   },
 };

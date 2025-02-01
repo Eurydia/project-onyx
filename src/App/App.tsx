@@ -13,9 +13,9 @@ import {
   RouterProvider,
 } from "react-router";
 import { CHECKER_ROUTE } from "src/routes/checker";
+import { COMPARATOR_ROUTE } from "src/routes/comparator";
 import { EVALUATOR_ROUTE } from "src/routes/evaluator";
 import { REWRITER_ROUTE } from "src/routes/rewriter";
-import { SOLVER_ROUTE } from "src/routes/solver";
 import { THEME } from "./theme";
 
 const globalStyles = (
@@ -38,10 +38,10 @@ const router = createHashRouter(
       errorElement: <ErrorView />,
       children: [
         { index: true, element: <HomeView /> },
-        SOLVER_ROUTE,
         EVALUATOR_ROUTE,
         CHECKER_ROUTE,
         REWRITER_ROUTE,
+        COMPARATOR_ROUTE,
       ],
     },
   ],

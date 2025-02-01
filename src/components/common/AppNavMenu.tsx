@@ -2,13 +2,11 @@ import { Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { Link } from "react-router";
 
-type ToolNavDropDownProps = {
+type AppNavMenuProps = {
   selected: string;
   items: { label: string; href: string }[];
 };
-export const ToolNavDropDown: FC<ToolNavDropDownProps> = (
-  props
-) => {
+export const AppNavManu: FC<AppNavMenuProps> = (props) => {
   const { items, selected } = props;
 
   return (
@@ -26,6 +24,7 @@ export const ToolNavDropDown: FC<ToolNavDropDownProps> = (
             key={"item" + index}
             textTransform="capitalize"
             component={Link}
+            color="primary"
             to={href}
             sx={{
               "textDecorationLine": "none",
@@ -34,7 +33,6 @@ export const ToolNavDropDown: FC<ToolNavDropDownProps> = (
               },
               "fontWeight": isSelected ? 900 : undefined,
             }}
-            color="primary"
           >
             {label}
           </Typography>

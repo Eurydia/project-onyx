@@ -1,7 +1,5 @@
-import { HomeRounded } from "@mui/icons-material";
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -32,14 +30,19 @@ export const ErrorView: FC = () => {
           }}
         />
         <CardActions disableSpacing>
-          <Button
-            variant="text"
-            startIcon={<HomeRounded />}
+          <Typography
             component={Link}
             to="/"
+            color="primary"
+            sx={{
+              "textDecorationLine": "none",
+              "&:hover": {
+                textDecorationLine: "underline",
+              },
+            }}
           >
             {t("return-home")}
-          </Button>
+          </Typography>
         </CardActions>
         <CardContent>
           <Typography

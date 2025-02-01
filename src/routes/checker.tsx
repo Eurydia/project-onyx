@@ -1,10 +1,7 @@
 import { parse } from "$core/interpreter/parser";
 import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
 import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import {
-  CheckerRouteExpressionVerdict,
-  CheckerRouteLoaderData,
-} from "$types/loader-data";
+import { CheckerRouteLoaderData } from "$types/loader-data";
 import { CheckerView } from "$views/CheckerView";
 import { RouteObject } from "react-router";
 
@@ -26,25 +23,25 @@ export const CHECKER_ROUTE: RouteObject = {
       return loaderData;
     }
 
-    const expressions: CheckerRouteExpressionVerdict[] = [];
+    const expressions: CheckerRouteLoaderData["expressions"] =
+      [];
 
-    for (const userInput of userInputRaw
-      .trim()
-      .split(";")) {
+    for (const userInput of userInputRaw.split(",")) {
       const parseResult = parse(userInput);
       expressions.push(
         parseResult.ok
           ? {
-              success: true,
+              ok: true,
               normalizedTree: syntaxTreeNormalize(
-                parseResult.data
+                parseResult.tree
               ),
-              originalTree: parseResult.data,
-              inputLatex: syntaxTreeToLatex(
-                parseResult.data
+              originalTree: parseResult.tree,
+              inputInterpretationLatex: syntaxTreeToLatex(
+                parseResult.tree
               ),
+              inputRaw: userInput.trim(),
             }
-          : { success: false }
+          : { ok: false, inputRaw: userInput.trim() }
       );
     }
     const loaderData: CheckerRouteLoaderData = {

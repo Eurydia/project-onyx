@@ -1,5 +1,5 @@
+import { AppNavManu } from "$components/common/AppNavMenu";
 import { LanguageSwitcher } from "$components/common/LanguageSwitcher";
-import { ToolNavDropDown } from "$components/common/ToolNavDropdown";
 import { HomeRounded } from "@mui/icons-material";
 import {
   IconButton,
@@ -14,6 +14,7 @@ import { Link, Outlet, useLocation } from "react-router";
 
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/evaluator", label: "nav:evaluator" },
+  { href: "/comparator", label: "nav:comparator" },
   { href: "/rewriter", label: "nav:rewriter" },
   { href: "/checker", label: "nav:checker" },
 ];
@@ -59,7 +60,7 @@ export const MainLayout: FC = () => {
                 <HomeRounded />
               </IconButton>
             </Tooltip>
-            <ToolNavDropDown
+            <AppNavManu
               selected={pathname}
               items={NAV_ITEMS.map(({ href, label }) => ({
                 href,
