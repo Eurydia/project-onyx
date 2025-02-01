@@ -117,5 +117,7 @@ const Editor_: FC<EditorProps> = (props) => {
 
 export const Editor = memo(
   Editor_,
-  (prev, next) => prev.value === next.value
+  (prev, next) =>
+    prev.value === next.value &&
+    prev.onSubmit === next.onSubmit
 );

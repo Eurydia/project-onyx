@@ -65,7 +65,7 @@ const rewrite = (
 export const syntaxTreeRewrite = (
   tree: SyntaxTree,
   basis: Set<Operator>
-) => {
+): Maybe<{ tree: SyntaxTree }> => {
   const normalTree = syntaxTreeNormalize(tree);
   if (
     normalTree.nodeType === SyntaxTreeNodeType.CONST ||
@@ -73,16 +73,16 @@ export const syntaxTreeRewrite = (
   ) {
     return {
       ok: true,
-      data: normalTree,
-    } as Maybe<SyntaxTree>;
+      tree: normalTree,
+    };
   }
 
   const rewrittenTree = rewrite(tree, basis);
   if (rewrittenTree === null) {
-    return { ok: false } as Maybe<SyntaxTree>;
+    return { ok: false };
   }
   return {
     ok: true,
-    data: rewrittenTree,
-  } as Maybe<SyntaxTree>;
+    tree: rewrittenTree,
+  };
 };

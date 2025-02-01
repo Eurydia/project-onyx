@@ -2,7 +2,7 @@ import { Editor } from "$components/Editor/Editor";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { operatorToLatex } from "$core/operator";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
+import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
 import { RewriterRouteLoaderData } from "$types/loader-data";
 import { Operator } from "$types/operators";
 import {
@@ -18,8 +18,9 @@ import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const RewriteView: FC = () => {
-  const { data, userInput: defaultUserInput } =
+  const loaderData =
     useLoaderData() as RewriterRouteLoaderData;
+  const { ok, userInput: prevUserInput } = loaderData;
   const [basis, setBasis] = useState(() => {
     const next = new Map<Operator, boolean>();
     for (const operator of Object.values(Operator)) {
@@ -28,20 +29,23 @@ export const RewriteView: FC = () => {
     return next;
   });
   const submit = useSubmit();
-  const [userInput, setUserInput] = useState(
-    defaultUserInput
-  );
+  const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
-    setUserInput(defaultUserInput);
-  }, [defaultUserInput]);
+    setUserInput(prevUserInput);
+  }, [prevUserInput]);
 
   const handleSubmit = () => {
+    console.debug(
+      [...basis.entries()]
+        .filter(([, isIncluded]) => isIncluded)
+        .map(([k]) => k)
+    );
     submit(
       {
         input: userInput,
         basis: [...basis.entries()]
-          .filter(([, v]) => v)
+          .filter(([, isIncluded]) => isIncluded)
           .map(([k]) => k),
       },
       {
@@ -87,35 +91,32 @@ export const RewriteView: FC = () => {
             )
           )}
         </FormGroup>
-
-        {data.ok && (
+        {ok && (
           <>
             <StyledOutputCard title="Input Intepretation">
               <StyledLatex>
-                {`$$${data.data.inputLatex}$$`}
+                {`$$${loaderData.inputLatex}$$`}
               </StyledLatex>
             </StyledOutputCard>
             <StyledOutputCard title="Output">
-              {!data.data.rewritten.ok && (
+              {!loaderData.rewritten.ok && (
                 <Typography>
                   {`The application could not rewrite the expression into the desired basis.`}
                 </Typography>
               )}
-              {data.data.rewritten.ok && (
+              {loaderData.rewritten.ok && (
                 <StyledLatex>
-                  {`The expression is rewritten to`}
-                  {`$$${exprTreeToLatex(
-                    data.data.rewritten.data
-                  )}$$`}
-                  {`\\text{in the \\{${[
-                    ...data.data.basis,
-                  ].join(",")}\\} basis.}`}
+                  {`The expression is rewritten to $$${syntaxTreeToLatex(
+                    loaderData.rewritten.tree
+                  )}$$ in the $\\{${[...loaderData.basis]
+                    .map(operatorToLatex)
+                    .join(",")}\\}$ basis.`}
                 </StyledLatex>
               )}
             </StyledOutputCard>
           </>
         )}
-        {!data.ok && defaultUserInput.trim().length > 0 && (
+        {!ok && prevUserInput.trim().length > 0 && (
           <Alert
             severity="warning"
             variant="outlined"

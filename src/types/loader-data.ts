@@ -1,4 +1,3 @@
-import { ExprTree } from "./expression-tree";
 import { Maybe } from "./generic";
 import { Operator } from "./operators";
 import { SyntaxTree } from "./syntax-tree";
@@ -31,9 +30,8 @@ export type CheckerRouteLoaderData = {
 
 export type RewriterRouteLoaderData = {
   userInput: string;
-  data: Maybe<{
-    inputLatex: string;
-    basis: Set<Operator>;
-    rewritten: Maybe<ExprTree>;
-  }>;
-};
+} & Maybe<{
+  inputLatex: string;
+  basis: Set<Operator>;
+  rewritten: Maybe<{ tree: SyntaxTree }>;
+}>;

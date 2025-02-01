@@ -19,7 +19,7 @@ export const REWRITER_ROUTE: RouteObject = {
     ) {
       return {
         userInput: "",
-        data: { ok: false },
+        ok: false,
       } as RewriterRouteLoaderData;
     }
 
@@ -28,7 +28,7 @@ export const REWRITER_ROUTE: RouteObject = {
     if (basisRaw === null) {
       return {
         userInput,
-        data: { ok: false },
+        ok: false,
       } as RewriterRouteLoaderData;
     }
 
@@ -37,12 +37,12 @@ export const REWRITER_ROUTE: RouteObject = {
     if (!result.ok) {
       const loaderData: RewriterRouteLoaderData = {
         userInput,
-        data: { ok: false },
+        ok: false,
       };
       return loaderData;
     }
 
-    const { data: syntaxTree } = result;
+    const { tree: syntaxTree } = result;
     const basis = new Set(
       basisRaw.split(",") as Operator[]
     );
@@ -53,23 +53,17 @@ export const REWRITER_ROUTE: RouteObject = {
 
     const loaderData: RewriterRouteLoaderData = {
       userInput,
-      data: {
-        ok: true,
-        data: {
-          basis,
-          inputLatex: exprTreeToLatex(
-            exprTreeFromSyntaxTree(syntaxTree)
-          ),
-          rewritten: rewriteResult.ok
-            ? {
-                ok: true,
-                data: exprTreeFromSyntaxTree(
-                  rewriteResult.data
-                ),
-              }
-            : { ok: false },
-        },
-      },
+      ok: true,
+      basis,
+      inputLatex: exprTreeToLatex(
+        exprTreeFromSyntaxTree(syntaxTree)
+      ),
+      rewritten: rewriteResult.ok
+        ? {
+            ok: true,
+            tree: rewriteResult.tree,
+          }
+        : { ok: false },
     };
     return loaderData;
   },
