@@ -28,7 +28,6 @@ export const THEME = createTheme({
       styleOverrides: {
         root: {
           whiteSpace: "nowrap",
-          // backgroundColor: theme.palette.background.paper,
         },
       },
     },

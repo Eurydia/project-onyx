@@ -1,7 +1,15 @@
+import { checkerRouteLoader } from "$controllers/checker-controller";
+import { comparatorRouteLoader } from "$controllers/comparator-controller";
+import { evaluatorRouteLoader } from "$controllers/evaluator-controller";
+import { rewriterRouteLoader } from "$controllers/rewriter-controller";
 import "$core/interpreter/parser";
 import { MainLayout } from "$layouts/MainLayout";
+import { CheckerView } from "$views/CheckerView";
+import { ComparatorView } from "$views/ComparatorView";
 import { ErrorView } from "$views/ErrorView";
+import { EvaluatorView } from "$views/EvaluatorView";
 import { HomeView } from "$views/HomeView";
+import { RewriterView } from "$views/RewriterView";
 import {
   CssBaseline,
   GlobalStyles,
@@ -12,11 +20,7 @@ import {
   createHashRouter,
   RouterProvider,
 } from "react-router";
-import { CHECKER_ROUTE } from "src/routes/checker";
-import { COMPARATOR_ROUTE } from "src/routes/comparator";
-import { EVALUATOR_ROUTE } from "src/routes/evaluator";
-import { REWRITER_ROUTE } from "src/routes/rewriter";
-import { THEME } from "./theme";
+import { THEME } from "../theme/components";
 
 const globalStyles = (
   <GlobalStyles
@@ -38,10 +42,26 @@ const router = createHashRouter(
       element: <MainLayout />,
       errorElement: <ErrorView />,
       children: [
-        EVALUATOR_ROUTE,
-        CHECKER_ROUTE,
-        REWRITER_ROUTE,
-        COMPARATOR_ROUTE,
+        {
+          path: "/evaluator",
+          element: <EvaluatorView />,
+          loader: evaluatorRouteLoader,
+        },
+        {
+          path: "/comparator",
+          element: <ComparatorView />,
+          loader: comparatorRouteLoader,
+        },
+        {
+          path: "/checker",
+          element: <CheckerView />,
+          loader: checkerRouteLoader,
+        },
+        {
+          path: "/rewriter",
+          element: <RewriterView />,
+          loader: rewriterRouteLoader,
+        },
       ],
     },
   ],

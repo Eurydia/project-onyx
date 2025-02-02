@@ -17,7 +17,7 @@ import {
 import { FC, useEffect, useState } from "react";
 import { useLoaderData, useSubmit } from "react-router";
 
-export const RewriteView: FC = () => {
+export const RewriterView: FC = () => {
   const loaderData =
     useLoaderData() as RewriterRouteLoaderData;
   const {

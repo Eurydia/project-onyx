@@ -10,49 +10,29 @@ import {
   CardActionArea,
   CardContent,
   CardHeader,
-  createTheme,
   Grid2,
-  responsiveFontSizes,
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import {
-  amber,
-  deepOrange,
-  indigo,
-  lightBlue,
-  pink,
-} from "@mui/material/colors";
+import { indigo } from "@mui/material/colors";
 import createPalette from "@mui/material/styles/createPalette";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { PALETTE_HOME } from "src/theme/palette-home";
+
 const CARDS = [
   {
     id: "evaluator",
-    palette: createPalette({
-      primary: { main: deepOrange[200] },
-      contrastThreshold: 9,
-      tonalOffset: 0.47,
-    }),
     icon: <CalculateRounded fontSize="inherit" />,
   },
   {
     id: "comparator",
-    palette: createPalette({
-      primary: { main: amber[200] },
-      contrastThreshold: 9,
-      tonalOffset: 0.47,
-    }),
     icon: <BalanceRounded fontSize="inherit" />,
   },
   {
     id: "rewriter",
-    palette: createPalette({
-      primary: { main: pink[200] },
-      contrastThreshold: 9,
-      tonalOffset: 0.47,
-    }),
+    palette: createPalette(),
     icon: <BorderColorRounded fontSize="inherit" />,
   },
   {
@@ -68,23 +48,13 @@ const CARDS = [
 
 const LANGUAGES = ["en", "th"];
 
-const HOME_THEME_PALETTE = responsiveFontSizes(
-  createTheme({
-    palette: {
-      primary: { main: lightBlue[300] },
-      contrastThreshold: 9,
-      tonalOffset: 0.5,
-    },
-  })
-);
-
 export const HomeView: FC = () => {
   const { t, i18n } = useTranslation("views", {
     keyPrefix: "home-view",
   });
 
   return (
-    <ThemeProvider theme={HOME_THEME_PALETTE}>
+    <ThemeProvider theme={PALETTE_HOME}>
       <Box
         width="100%"
         maxWidth="lg"
@@ -163,7 +133,7 @@ export const HomeView: FC = () => {
             const href = `/${id}`;
             const title = t(`card.${id}.title`);
             const desc = t(`card.${id}.desc`);
-            const { light, dark, main } = palette.primary;
+            const { light, dark } = palette.primary;
             return (
               <Grid2
                 key={"card" + index}

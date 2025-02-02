@@ -10,12 +10,15 @@
     "paths": {
       "$App/*": ["src/App/*"],
       "$layouts/*": ["src/layouts/*"],
+      "$theme/*": ["src/theme/*"],
+      "$theme/": ["src/theme/"],
       "$components/*": ["src/components/*"],
       "$core/*": ["src/core/*"],
       "$hooks/*": ["src/hooks/*"],
       "$locales/*": ["src/locales/*"],
       "$types/*": ["src/types/*"],
-      "$views/*": ["src/views/*"]
+      "$views/*": ["src/views/*"],
+      "$controllers/*": ["src/controllers/*"]
     },
 
     /* Bundler mode */
