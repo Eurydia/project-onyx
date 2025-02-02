@@ -1,7 +1,6 @@
 import {
   TableCell,
   Typography,
-  alpha,
   useTheme,
 } from "@mui/material";
 import { FC, memo } from "react";
@@ -15,13 +14,15 @@ const TruthTableCell_: FC<TruthTableCellProps> = (
   const { t } = useTranslation();
   const { palette } = useTheme();
 
+  const bgColor = value
+    ? palette.primary.light
+    : palette.primary.main;
   return (
     <TableCell
       align="center"
       sx={{
-        backgroundColor: value
-          ? alpha(palette.primary.main, 0.4)
-          : alpha(palette.primary.main, 0.2),
+        backgroundColor: bgColor,
+        color: palette.getContrastText(bgColor),
       }}
     >
       <Typography>

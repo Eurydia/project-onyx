@@ -32,9 +32,10 @@ export const exprTreeEquals = (
 
   const perms = permutation([...symbolsA]);
   for (const symbolTable of perms) {
-    if (a.eval(symbolTable) !== a.eval(symbolTable)) {
+    if (a.eval(symbolTable) !== b.eval(symbolTable)) {
       return false;
     }
   }
+
   return true;
 };

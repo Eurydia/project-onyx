@@ -60,49 +60,54 @@ export const ComparatorView: FC = () => {
               </StyledOutputCard>
               <StyledOutputCard title="Comparison">
                 <Stack spacing={1}>
-                  {expressions.map((expr, index) => {
-                    if (!expr.ok) {
-                      return (
-                        <Fragment key={"eval" + index} />
+                  {expressions
+                    .filter((expr) => expr.ok)
+                    .slice(1)
+                    .map((expr, index) => {
+                      if (!expr.ok) {
+                        return (
+                          <Fragment key={"eval" + index} />
+                        );
+                      }
+
+                      const curr = exprTreeFromSyntaxTree(
+                        expr.tree
                       );
-                    }
+                      const treeEqual = exprTreeEquals(
+                        exprTreeFromSyntaxTree(
+                          primary.tree
+                        ),
+                        curr
+                      )
+                        ? "\\equiv"
+                        : "\\not\\equiv";
 
-                    const curr = exprTreeFromSyntaxTree(
-                      expr.tree
-                    );
-                    const treeEqual = exprTreeEquals(
-                      exprTreeFromSyntaxTree(primary.tree),
-                      curr
-                    )
-                      ? "\\equiv"
-                      : "\\not\\equiv";
-
-                    const currLatex =
-                      expr.inputInterpretationLatex;
-                    const primLatex =
-                      primary.inputInterpretationLatex;
-                    return (
-                      <Paper
-                        key={"eval" + index}
-                        variant="outlined"
-                        sx={{ padding: 4 }}
-                      >
-                        <StyledLatex>
-                          {`$$${currLatex} ${treeEqual} ${primLatex} \\tag{${
-                            index + 1
-                          }}$$`}
-                        </StyledLatex>
-                        <TruthTable
-                          exprTree={curr}
-                          slotProps={{
-                            container: {
-                              maxHeight: "40vh",
-                            },
-                          }}
-                        />
-                      </Paper>
-                    );
-                  })}
+                      const currLatex =
+                        expr.inputInterpretationLatex;
+                      const primLatex =
+                        primary.inputInterpretationLatex;
+                      return (
+                        <Paper
+                          key={"eval" + index}
+                          variant="outlined"
+                          sx={{ padding: 4 }}
+                        >
+                          <StyledLatex>
+                            {`$$${currLatex} ${treeEqual} ${primLatex} \\tag{${
+                              index + 1
+                            }}$$`}
+                          </StyledLatex>
+                          <TruthTable
+                            exprTree={curr}
+                            slotProps={{
+                              container: {
+                                maxHeight: "40vh",
+                              },
+                            }}
+                          />
+                        </Paper>
+                      );
+                    })}
                 </Stack>
               </StyledOutputCard>
             </>
