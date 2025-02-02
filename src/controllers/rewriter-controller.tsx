@@ -17,7 +17,7 @@ export const rewriterRouteLoader: LoaderFunction = ({
   ) {
     const loaderData: RewriterRouteLoaderData = {
       userInput: "",
-      basis: [],
+      basis: Object.values(Operator),
       ok: false,
     };
     return loaderData;

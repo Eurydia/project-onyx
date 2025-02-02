@@ -1,4 +1,5 @@
 import {
+  lighten,
   TableCell,
   Typography,
   useTheme,
@@ -16,13 +17,14 @@ const TruthTableCell_: FC<TruthTableCellProps> = (
 
   const bgColor = value
     ? palette.primary.light
-    : palette.primary.main;
+    : lighten(palette.primary.light, 0.6);
+
   return (
     <TableCell
       align="center"
       sx={{
         backgroundColor: bgColor,
-        color: palette.getContrastText(bgColor),
+        color: palette.primary.dark,
       }}
     >
       <Typography>
