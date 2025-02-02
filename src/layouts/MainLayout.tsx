@@ -25,7 +25,7 @@ export const MainLayout: FC = () => {
   return (
     <Fragment>
       <Paper
-        variant="outlined"
+        elevation={0}
         sx={{
           maxWidth: "lg",
           marginY: 4,

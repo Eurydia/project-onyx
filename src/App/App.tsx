@@ -32,12 +32,12 @@ const globalStyles = (
 
 const router = createHashRouter(
   [
+    { index: true, element: <HomeView /> },
     {
       path: "/",
       element: <MainLayout />,
       errorElement: <ErrorView />,
       children: [
-        { index: true, element: <HomeView /> },
         EVALUATOR_ROUTE,
         CHECKER_ROUTE,
         REWRITER_ROUTE,

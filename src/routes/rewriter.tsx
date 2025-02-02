@@ -17,10 +17,12 @@ export const REWRITER_ROUTE: RouteObject = {
       userInputRaw === null ||
       userInputRaw.toString().trim().length === 0
     ) {
-      return {
+      const loaderData: RewriterRouteLoaderData = {
         userInput: "",
+        basis: [],
         ok: false,
-      } as RewriterRouteLoaderData;
+      };
+      return loaderData;
     }
 
     const userInput = userInputRaw.toString();

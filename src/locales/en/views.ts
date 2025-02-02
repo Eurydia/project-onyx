@@ -21,7 +21,10 @@ export default {
     "user-manual": [],
   },
   "home-view": {
-    tools: "Tools",
+    lang: {
+      en: "ENGLISH",
+      th: "THAI",
+    },
     card: {
       comparator: {
         title: "Comparator",
@@ -37,7 +40,7 @@ export default {
       },
       checker: {
         title: "Tautology checker",
-        desc: "Check if an expression is always true.",
+        desc: "Check if an expression is always true, always false, or in-between.",
       },
     },
   },
