@@ -21,11 +21,11 @@ export default {
     "user-manual": [],
   },
   "home-view": {
-    lang: {
+    "lang": {
       en: "ENGLISH",
       th: "THAI",
     },
-    card: {
+    "card": {
       comparator: {
         title: "Comparator",
         desc: "Compare expressions to see which one of them are equivalent.",
@@ -43,5 +43,7 @@ export default {
         desc: "Check if an expression is always true, always false, or in-between.",
       },
     },
+    "boolean-algebra-interpreter":
+      "Boolean algebra interpreter",
   },
 };

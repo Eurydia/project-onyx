@@ -7,23 +7,23 @@ const OPERATOR_TEXT: {
   value: string;
 }[] = [
   {
-    label: "not",
+    label: "$\\texttt{not}$",
     value: "not",
   },
   {
-    label: "and",
+    label: "$\\texttt{and}$",
     value: "and",
   },
   {
-    label: "or",
+    label: "$\\texttt{or}$",
     value: "or",
   },
   {
-    label: "implies",
+    label: "$\\texttt{implies}$",
     value: "implies",
   },
   {
-    label: "iff",
+    label: "$\\texttt{iff}$",
     value: "iff",
   },
 ];
@@ -63,25 +63,18 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
   const { onClick } = props;
   return (
     <Stack
-      useFlexGap
-      spacing={2}
+      flexDirection="row"
       flexWrap="wrap"
-      direction="row"
+      spacing={1}
+      useFlexGap
     >
-      <Stack
-        direction="row"
-        flexWrap="wrap"
-        spacing={0.5}
-        useFlexGap
-      >
-        {OPERATOR_TEXT.map((option, index) => (
-          <EditorRibbonButton
-            key={"insert-btn-text" + index}
-            onClick={(value) => onClick(value)}
-            options={[option, OPERATOR_SYMBOL[index]]}
-          />
-        ))}
-      </Stack>
+      {OPERATOR_TEXT.map((option, index) => (
+        <EditorRibbonButton
+          key={"insert-btn-text" + index}
+          onClick={(value) => onClick(value)}
+          options={[option, OPERATOR_SYMBOL[index]]}
+        />
+      ))}
     </Stack>
   );
 };

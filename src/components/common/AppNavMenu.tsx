@@ -1,43 +1,72 @@
-import { Stack, Typography } from "@mui/material";
-import { FC } from "react";
+import {
+  Box,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { FC, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-type AppNavMenuProps = {
-  selected: string;
-  items: { label: string; href: string }[];
-};
-export const AppNavManu: FC<AppNavMenuProps> = (props) => {
-  const { items, selected } = props;
+const NAV_ITEMS = [
+  "evaluator",
+  "comparator",
+  "checker",
+  "rewriter",
+];
 
+type AppNavGroupProps = {
+  homeIcon: ReactNode;
+};
+export const AppNavGroup: FC<AppNavGroupProps> = (
+  props
+) => {
+  const { homeIcon } = props;
+  const { t } = useTranslation("nav");
+  const { palette } = useTheme();
   return (
-    <Stack
-      direction="row"
-      spacing={2}
-      flexWrap="wrap"
-      useFlexGap
+    <Box
+      width="100%"
+      maxWidth="lg"
+      marginX={{ xs: 0, md: "auto" }}
+      paddingX={{ xs: 2, md: 0 }}
+      paddingY={4}
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        gap: 2,
+        flexWrap: "wrap",
+        alignItems: "center",
+      }}
     >
-      {items.map(({ href, label }, index) => {
-        const isSelected =
-          href.localeCompare(selected) === 0;
+      <IconButton
+        component={Link}
+        to="/"
+        disableRipple
+        sx={{ color: palette.primary.dark }}
+      >
+        {homeIcon}
+      </IconButton>
+      {NAV_ITEMS.map((id, index) => {
         return (
           <Typography
             key={"item" + index}
             textTransform="capitalize"
             component={Link}
-            color="primary"
-            to={href}
+            to={`/${id}`}
             sx={{
               "textDecorationLine": "none",
               "&:hover": {
                 textDecorationLine: "underline",
               },
-              "fontWeight": isSelected ? 900 : undefined,
+              "color": palette.primary.dark,
             }}
           >
-            {label}
+            {t(id)}
           </Typography>
         );
       })}
-    </Stack>
+    </Box>
   );
 };

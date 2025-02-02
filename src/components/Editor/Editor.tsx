@@ -3,7 +3,12 @@ import {
   ContentCopyRounded,
   PlayArrowRounded,
 } from "@mui/icons-material";
-import { Button, Stack, TextField } from "@mui/material";
+import {
+  Button,
+  Stack,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import {
   Dispatch,
   FC,
@@ -23,7 +28,7 @@ type EditorProps = {
 };
 const Editor_: FC<EditorProps> = (props) => {
   const { placeholder, value, onChange, onSubmit } = props;
-
+  const { palette } = useTheme();
   const { t } = useTranslation("component", {
     keyPrefix: "editor",
   });
@@ -38,7 +43,6 @@ const Editor_: FC<EditorProps> = (props) => {
     }
     const left = value.slice(0, cursorStartPos);
     const right = value.slice(cursorEndPos);
-
     onChange(`${left}${text}${right}`);
     setCusorStartPos(`${left}${text}`.length);
     setCusorEndPos(`${left}${text}`.length);
@@ -83,14 +87,28 @@ const Editor_: FC<EditorProps> = (props) => {
         direction="row"
       >
         <Button
+          disableElevation
+          disableRipple
           disabled={value.trim().length === 0}
           variant="contained"
           startIcon={<PlayArrowRounded />}
           onClick={onSubmit}
+          sx={{
+            "&:hover": {
+              color: palette.getContrastText(
+                palette.primary.main
+              ),
+              backgroundColor: palette.primary.main,
+            },
+            "color": palette.primary.dark,
+            "backgroundColor": palette.primary.light,
+          }}
         >
           {t("run")}
         </Button>
         <Button
+          disableElevation
+          disableRipple
           startIcon={
             !hasCopied ? (
               <ContentCopyRounded />
@@ -98,14 +116,23 @@ const Editor_: FC<EditorProps> = (props) => {
               <CheckRounded />
             )
           }
-          variant="outlined"
+          variant="contained"
           onClick={() => {
             navigator.clipboard.writeText(value);
-
             setHasCopied(true);
             setTimeout(() => {
               setHasCopied(false);
             }, 1000);
+          }}
+          sx={{
+            "&:hover": {
+              color: palette.getContrastText(
+                palette.primary.main
+              ),
+              backgroundColor: palette.primary.main,
+            },
+            "color": palette.primary.dark,
+            "backgroundColor": palette.primary.light,
           }}
         >
           {!hasCopied ? t("copy") : t("copied")}

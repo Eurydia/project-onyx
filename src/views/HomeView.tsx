@@ -1,3 +1,7 @@
+import { PALETTE_CHECKER_ROUTE } from "$theme/palette-checker-route";
+import { PALETTE_COMPARATOR_ROUTE } from "$theme/palette-comparator-route";
+import { PALETTE_EVALUATOR_ROUTE } from "$theme/palette-evaluator-route";
+import { PALETTE_REWRITER_ROUTE } from "$theme/palette-rewriter-route";
 import {
   BalanceRounded,
   BorderColorRounded,
@@ -11,38 +15,33 @@ import {
   CardContent,
   CardHeader,
   Grid2,
-  ThemeProvider,
   Typography,
+  useTheme,
 } from "@mui/material";
-import { indigo } from "@mui/material/colors";
-import createPalette from "@mui/material/styles/createPalette";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { PALETTE_HOME } from "src/theme/palette-home";
 
 const CARDS = [
   {
     id: "evaluator",
     icon: <CalculateRounded fontSize="inherit" />,
+    palette: PALETTE_EVALUATOR_ROUTE,
   },
   {
     id: "comparator",
     icon: <BalanceRounded fontSize="inherit" />,
-  },
-  {
-    id: "rewriter",
-    palette: createPalette(),
-    icon: <BorderColorRounded fontSize="inherit" />,
+    palette: PALETTE_COMPARATOR_ROUTE,
   },
   {
     id: "checker",
-    palette: createPalette({
-      primary: { main: indigo[200] },
-      contrastThreshold: 9,
-      tonalOffset: 0.47,
-    }),
     icon: <RuleRounded fontSize="inherit" />,
+    palette: PALETTE_CHECKER_ROUTE,
+  },
+  {
+    id: "rewriter",
+    icon: <BorderColorRounded fontSize="inherit" />,
+    palette: PALETTE_REWRITER_ROUTE,
   },
 ];
 
@@ -52,9 +51,10 @@ export const HomeView: FC = () => {
   const { t, i18n } = useTranslation("views", {
     keyPrefix: "home-view",
   });
+  const theme = useTheme();
 
   return (
-    <ThemeProvider theme={PALETTE_HOME}>
+    <Fragment>
       <Box
         width="100%"
         maxWidth="lg"
@@ -94,9 +94,8 @@ export const HomeView: FC = () => {
         height={{ xs: "100vh", md: "80vh" }}
         paddingX={{ xs: 2, md: 0 }}
         sx={{
-          backgroundColor: ({ palette }) =>
-            palette.primary.light,
-          color: ({ palette }) => palette.primary.dark,
+          backgroundColor: theme.palette.secondary.light,
+          color: theme.palette.secondary.dark,
           display: "flex",
           alignItems: "center",
         }}
@@ -113,10 +112,9 @@ export const HomeView: FC = () => {
             whiteSpace: "break-spaces",
           }}
         >
-          {`Boolean algebra interpreter`}
+          {t(`boolean-algebra-interpreter`)}
         </Typography>
       </Box>
-
       <Box
         width="100%"
         maxWidth="lg"
@@ -129,7 +127,7 @@ export const HomeView: FC = () => {
           columns={{ xs: 1, md: 2 }}
           spacing={4}
         >
-          {CARDS.map(({ id, palette, icon }, index) => {
+          {CARDS.map(({ id, icon, palette }, index) => {
             const href = `/${id}`;
             const title = t(`card.${id}.title`);
             const desc = t(`card.${id}.desc`);
@@ -167,8 +165,8 @@ export const HomeView: FC = () => {
                     >
                       <Typography
                         sx={{
-                          fontSize: ({ typography }) =>
-                            typography.h1.fontSize,
+                          fontSize:
+                            theme.typography.h1.fontSize,
                         }}
                       >
                         {icon}
@@ -195,6 +193,6 @@ export const HomeView: FC = () => {
           })}
         </Grid2>
       </Box>
-    </ThemeProvider>
+    </Fragment>
   );
 };

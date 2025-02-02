@@ -2,7 +2,6 @@ import { StyledLatex } from "$components/Styled/StyledLatex";
 import {
   CheckRounded,
   KeyboardArrowDownRounded,
-  KeyboardArrowUpRounded,
 } from "@mui/icons-material";
 import {
   Button,
@@ -11,6 +10,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import {
   Dispatch,
@@ -28,6 +28,7 @@ export const EditorRibbonButton: FC<
   EditorRibbonButtonProps
 > = (props) => {
   const { options, onClick } = props;
+  const { palette } = useTheme();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
   const anchorRef = useRef<HTMLDivElement | null>(null);
@@ -35,9 +36,24 @@ export const EditorRibbonButton: FC<
     <Fragment>
       <ButtonGroup
         ref={anchorRef}
-        variant="outlined"
+        variant="contained"
+        disableElevation
+        disableRipple
+        color="primary"
       >
-        <Button onClick={() => onClick(selected.value)}>
+        <Button
+          onClick={() => onClick(selected.value)}
+          sx={{
+            "&:hover": {
+              color: palette.getContrastText(
+                palette.primary.main
+              ),
+              backgroundColor: palette.primary.main,
+            },
+            "color": palette.primary.dark,
+            "backgroundColor": palette.primary.light,
+          }}
+        >
           <StyledLatex
             sx={{
               textTransform: "none",
@@ -47,9 +63,27 @@ export const EditorRibbonButton: FC<
             {`${selected.label}`}
           </StyledLatex>
         </Button>
-        <Button onClick={() => setOpen(true)}>
-          {!open && <KeyboardArrowDownRounded />}
-          {open && <KeyboardArrowUpRounded />}
+        <Button
+          onClick={() => setOpen(true)}
+          sx={{
+            "&:hover": {
+              color: palette.getContrastText(
+                palette.primary.main
+              ),
+              backgroundColor: palette.primary.main,
+            },
+            "color": palette.primary.dark,
+            "backgroundColor": palette.primary.light,
+          }}
+        >
+          <KeyboardArrowDownRounded
+            sx={{
+              transition: "transform 0.2s ease",
+              transform: open
+                ? "rotate(180deg)"
+                : "rotate(0deg)",
+            }}
+          />
         </Button>
       </ButtonGroup>
       <Menu

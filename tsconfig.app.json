@@ -9,9 +9,7 @@
     "skipLibCheck": true,
     "paths": {
       "$App/*": ["src/App/*"],
-      "$layouts/*": ["src/layouts/*"],
       "$theme/*": ["src/theme/*"],
-      "$theme/": ["src/theme/"],
       "$components/*": ["src/components/*"],
       "$core/*": ["src/core/*"],
       "$hooks/*": ["src/hooks/*"],

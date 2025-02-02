@@ -48,6 +48,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
       />
       {steps.map((step, index) => (
         <EvaluationDisplayStep
+          key={"step" + index}
           step={step}
           stepIndex={index + 1}
           references={steps}
