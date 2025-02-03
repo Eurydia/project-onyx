@@ -1,14 +1,22 @@
+import { AppNavGroup } from "$components/common/AppNavMenu";
 import { Editor } from "$components/Editor/Editor";
 import { InputDisplayMany } from "$components/InputTable";
 import { StyledLatex } from "$components/Styled/StyledLatex";
-import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
-import { TruthTable } from "$components/TruthTable";
 import { exprTreeEquals } from "$core/expr-tree/equals";
-import { IFF } from "$core/syntax-tree/node";
+import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { ComparatorRouteLoaderData } from "$types/loader-data";
-import { Box, Paper, Stack } from "@mui/material";
+import { BalanceRounded } from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FC, Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const ComparatorView: FC = () => {
@@ -16,7 +24,9 @@ export const ComparatorView: FC = () => {
     useLoaderData() as ComparatorRouteLoaderData;
 
   const submit = useSubmit();
+  const { t } = useTranslation();
   const [userInput, setUserInput] = useState(prevUserInput);
+  const theme = useTheme();
 
   useEffect(() => {
     setUserInput(prevUserInput);
@@ -34,89 +44,128 @@ export const ComparatorView: FC = () => {
     );
   };
 
-  const primary = expressions
-    .filter((expr) => expr.ok)
-    .at(0);
+  const validExpressions = expressions.filter(
+    (expr) => expr.ok
+  );
 
   return (
-    <Box
-      maxWidth="lg"
-      marginX={{ xs: 2, md: "auto" }}
-      paddingY={2}
-    >
-      <Stack spacing={4}>
-        <Editor
-          value={userInput}
-          onChange={setUserInput}
-          placeholder="p and q, p or q, p implies q, p iff q"
-          onSubmit={handleSubmit}
-        />
-        {primary !== undefined &&
-          prevUserInput.trim().length > 0 && (
-            <>
-              <StyledOutputCard title="Input Interpretation">
+    <Fragment>
+      <AppNavGroup
+        homeIcon={<BalanceRounded fontSize="inherit" />}
+      />
+      <Box
+        paddingY={8}
+        paddingX={{ xs: 2, md: 0 }}
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          color: theme.palette.primary.dark,
+        }}
+      >
+        <Typography
+          variant="h1"
+          fontWeight={900}
+          fontFamily="monospace"
+          textTransform="capitalize"
+          maxWidth="lg"
+          marginX={{ xs: 0, md: "auto" }}
+          sx={{
+            textWrap: "balance",
+            whiteSpace: "break-spaces",
+          }}
+        >
+          {t(`comparator`)}
+        </Typography>
+      </Box>
+      <Box
+        maxWidth="lg"
+        marginX={{ xs: 0, md: "auto" }}
+        paddingX={{ xs: 2, md: 0 }}
+        paddingY={4}
+      >
+        <Stack spacing={8}>
+          <Editor
+            value={userInput}
+            onChange={setUserInput}
+            placeholder="p and q, p or q, p implies q, p iff q"
+            onSubmit={handleSubmit}
+          />
+          {prevUserInput.trim().length > 0 && (
+            <Stack spacing={2}>
+              <Stack spacing={1}>
+                <Typography
+                  fontWeight={900}
+                  fontSize={theme.typography.h3.fontSize}
+                >
+                  {"Input Interpretation"}
+                </Typography>
                 <InputDisplayMany
                   expressions={expressions}
                 />
-              </StyledOutputCard>
-              <StyledOutputCard title="Comparison">
-                <Stack spacing={1}>
-                  {expressions
-                    .filter((expr) => expr.ok)
-                    .slice(1)
-                    .map((expr, index) => {
-                      if (!expr.ok) {
-                        return (
-                          <Fragment key={"eval" + index} />
-                        );
-                      }
-
-                      const curr = exprTreeFromSyntaxTree(
-                        expr.tree
-                      );
-
-                      const treeEqual = exprTreeEquals(
-                        exprTreeFromSyntaxTree(
-                          primary.tree
-                        ),
-                        curr
-                      )
-                        ? "\\equiv"
-                        : "\\not\\equiv";
-
-                      const currLatex =
-                        expr.inputInterpretationLatex;
-                      const primLatex =
-                        primary.inputInterpretationLatex;
-                      return (
-                        <Paper
-                          key={"eval" + index}
-                          variant="outlined"
-                          sx={{ padding: 4 }}
-                        >
-                          <StyledLatex>
-                            {`$$${currLatex} ${treeEqual} ${primLatex} \\tag{${
-                              index + 1
-                            }}$$`}
-                          </StyledLatex>
-                          <TruthTable
-                            exprTree={exprTreeFromSyntaxTree(
-                              IFF(expr.tree, primary.tree)
-                            )}
-                            slotProps={{
-                              container: {
-                                maxHeight: "40vh",
-                              },
-                            }}
-                          />
-                        </Paper>
-                      );
-                    })}
-                </Stack>
-              </StyledOutputCard>
-            </>
+              </Stack>
+              {validExpressions.length > 0 && (
+                <>
+                  <Typography
+                    fontWeight={900}
+                    fontSize={theme.typography.h3.fontSize}
+                  >
+                    {"Comparison"}
+                  </Typography>
+                  {validExpressions.map((expr, index) => {
+                    const exprLatex = syntaxTreeToLatex(
+                      expr.tree
+                    );
+                    const exprTree = exprTreeFromSyntaxTree(
+                      expr.tree
+                    );
+                    const itemNum = index + 1;
+                    return (
+                      <Card
+                        variant="outlined"
+                        key={"expr" + index}
+                      >
+                        <CardContent>
+                          {validExpressions.map(
+                            (otherExpr, otherIndex) => {
+                              if (otherIndex === index) {
+                                return null;
+                              }
+                              const otherLatex =
+                                syntaxTreeToLatex(
+                                  otherExpr.tree
+                                );
+                              const otherTree =
+                                exprTreeFromSyntaxTree(
+                                  otherExpr.tree
+                                );
+                              const result = exprTreeEquals(
+                                exprTree,
+                                otherTree
+                              )
+                                ? "\\equiv"
+                                : "\\not\\equiv";
+                              const otherNum =
+                                otherIndex + 1;
+                              return (
+                                <StyledLatex
+                                  key={
+                                    "subexpr" + otherIndex
+                                  }
+                                >
+                                  {`$$(${itemNum}) ${result} (${otherNum})$$`}
+                                </StyledLatex>
+                              );
+                            }
+                          )}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </>
+              )}
+            </Stack>
           )}
-      </Stack>
-    </Box>
+        </Stack>
+      </Box>
+    </Fragment>
   );
 };

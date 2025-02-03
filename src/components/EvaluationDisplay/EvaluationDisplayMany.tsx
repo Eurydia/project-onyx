@@ -67,6 +67,7 @@ export const EvaluationDisplayMany: FC<
         variant="scrollable"
         scrollButtons="auto"
         sx={{ paddingX: 0 }}
+        textColor="inherit"
       >
         {items.map((item, index) => {
           if (!item.ok) {

@@ -1,4 +1,5 @@
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
+import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 
@@ -7,7 +8,9 @@ function* permutation(symbols: string[]) {
   const size = 1 << symbols.length;
   while (current < size) {
     const perm: SymbolTable = new Map();
-    const permStr = current.toString(2).padStart(size, "0");
+    const permStr = current
+      .toString(2)
+      .padStart(symbols.length, "0");
     for (let i = 0; i < size; i++) {
       perm.set(symbols[i], permStr[i] === "1");
     }
@@ -36,6 +39,6 @@ export const exprTreeEquals = (
       return false;
     }
   }
-
+  console.debug(exprTreeToLatex(a), exprTreeToLatex(b));
   return true;
 };

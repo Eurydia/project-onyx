@@ -93,7 +93,7 @@ export const EvaluatorOutputGroup: FC<
   );
 
   return (
-    <Stack spacing={2}>
+    <Fragment>
       <Typography
         fontWeight={900}
         fontSize={typography.h3.fontSize}
@@ -159,6 +159,6 @@ export const EvaluatorOutputGroup: FC<
         symbolTable={symbolTable}
         items={expressions}
       />
-    </Stack>
+    </Fragment>
   );
 };

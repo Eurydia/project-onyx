@@ -67,14 +67,13 @@ export const EvaluatorView: FC = () => {
             whiteSpace: "break-spaces",
           }}
         >
-          {t(`Evaluator`)}
+          {t(`evaluator`)}
         </Typography>
       </Box>
       <Box
         maxWidth="lg"
         marginX={{ xs: 0, md: "auto" }}
         paddingX={{ xs: 2, md: 0 }}
-        paddingY={4}
       >
         <Stack spacing={4}>
           <Editor
@@ -84,7 +83,7 @@ export const EvaluatorView: FC = () => {
             onSubmit={handleSubmit}
           />
           {prevUserInput.trim().length > 0 && (
-            <>
+            <Stack spacing={2}>
               <Stack>
                 <Typography
                   fontWeight={900}
@@ -109,7 +108,7 @@ export const EvaluatorView: FC = () => {
                     : { ok: false }
                 )}
               />
-            </>
+            </Stack>
           )}
         </Stack>
       </Box>

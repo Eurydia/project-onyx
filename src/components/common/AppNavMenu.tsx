@@ -46,11 +46,7 @@ export const AppNavGroup: FC<AppNavGroupProps> = (
         to="/"
         disableRipple
         sx={{
-          "color": palette.primary.dark,
-          "transition": "all 0.2s ease-in-out",
-          "&:hover": {
-            transform: "scale(1.4)",
-          },
+          color: palette.primary.dark,
         }}
       >
         {homeIcon}
