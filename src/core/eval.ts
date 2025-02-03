@@ -10,7 +10,7 @@ export const getPermutation = (
     const repr = i.toString(2).padStart(size, "0");
     const p = new Map<string, boolean>();
     for (let j = 0; j < size; j++) {
-      p.set(symbols[j], repr[j] === "1");
+      p.set(symbols[j], repr[j] === "0");
     }
     perm.push(p);
   }

@@ -33,23 +33,23 @@ const OPERATOR_SYMBOL: {
   value: string;
 }[] = [
   {
-    label: "$\\lnot$",
+    label: "$\\mathbf{\\lnot}$",
     value: "\u{00AC}",
   },
   {
-    label: "$\\land$",
+    label: "$\\mathbf{\\land}$",
     value: "\u{2227}",
   },
   {
-    label: "$\\lor$",
+    label: "$\\mathbf{\\lor}$",
     value: "\u{2228}",
   },
   {
-    label: "$\\implies$",
+    label: "$\\mathbf{\\implies}$",
     value: "\u{21D2}",
   },
   {
-    label: "$\\iff$",
+    label: "$\\mathbf{\\iff}$",
     value: "\u{21D4}",
   },
 ];
@@ -72,7 +72,7 @@ export const EditorRibbon: FC<EditorRibbonProps> = (
         <EditorRibbonButton
           key={"insert-btn-text" + index}
           onClick={(value) => onClick(value)}
-          options={[option, OPERATOR_SYMBOL[index]]}
+          options={[OPERATOR_SYMBOL[index], option]}
         />
       ))}
     </Stack>

@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "../Styled/StyledLatex";
 
@@ -27,48 +27,50 @@ export const PropositionConfig: FC<
 
   const { t } = useTranslation("translation");
 
-  const symbols = [...value.keys()];
-  symbols.sort();
+  const symbols = useMemo(() => {
+    return [...value.keys()].toSorted((a, b) =>
+      a.localeCompare(b)
+    );
+  }, [value]);
+
+  if (symbols.length === 0) {
+    return (
+      <Alert
+        icon={false}
+        severity="info"
+      >
+        <AlertTitle>
+          <Stack
+            direction="row"
+            flexWrap="wrap"
+            alignItems="flex-end"
+            spacing={2}
+            useFlexGap
+          >
+            <InfoRounded />
+            <Typography fontWeight={900}>
+              {`Notice`}
+            </Typography>
+          </Stack>
+        </AlertTitle>
+        <Typography>{`No proposition to display.`}</Typography>
+      </Alert>
+    );
+  }
 
   return (
     <Grid2
       container
       width="100%"
-      spacing={2}
       sx={{
         maxHeight: 400,
         overflowY: "auto",
       }}
     >
-      {symbols.length === 0 && (
-        <Grid2 size="grow">
-          <Alert
-            icon={false}
-            variant="standard"
-            severity="info"
-          >
-            <AlertTitle>
-              <Stack
-                direction="row"
-                flexWrap="wrap"
-                alignItems="flex-end"
-                spacing={2}
-                useFlexGap
-              >
-                <InfoRounded />
-                <Typography fontWeight={900}>
-                  {`Notice`}
-                </Typography>
-              </Stack>
-            </AlertTitle>
-            <Typography>{`No proposition to display.`}</Typography>
-          </Alert>
-        </Grid2>
-      )}
       {symbols.map((sym) => (
         <Grid2
           key={"symbol-" + sym}
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 4 }}
         >
           <FormControl fullWidth>
             <FormLabel>
@@ -83,7 +85,7 @@ export const PropositionConfig: FC<
             >
               <FormControlLabel
                 disableTypography
-                control={<Radio disableRipple />}
+                control={<Radio />}
                 value="1"
                 label={
                   <Typography>
@@ -92,7 +94,7 @@ export const PropositionConfig: FC<
                 }
               />
               <FormControlLabel
-                control={<Radio disableRipple />}
+                control={<Radio />}
                 value="0"
                 disableTypography
                 label={

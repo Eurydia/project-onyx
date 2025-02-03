@@ -41,10 +41,17 @@ export const AppNavGroup: FC<AppNavGroupProps> = (
       }}
     >
       <IconButton
+        color="default"
         component={Link}
         to="/"
         disableRipple
-        sx={{ color: palette.primary.dark }}
+        sx={{
+          "color": palette.primary.dark,
+          "transition": "all 0.2s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.4)",
+          },
+        }}
       >
         {homeIcon}
       </IconButton>
@@ -57,6 +64,7 @@ export const AppNavGroup: FC<AppNavGroupProps> = (
             to={`/${id}`}
             sx={{
               "textDecorationLine": "none",
+              "transition": "all 0.2s ease-in-out",
               "&:hover": {
                 textDecorationLine: "underline",
               },

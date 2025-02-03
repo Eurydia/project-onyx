@@ -2,7 +2,6 @@ import { AppNavGroup } from "$components/common/AppNavMenu";
 import { Editor } from "$components/Editor/Editor";
 import { InputDisplayMany } from "$components/InputTable";
 import { EvaluatorOutputGroup } from "$components/math/EvaluatorOutputGroup";
-import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { CalculateRounded } from "@mui/icons-material";
@@ -49,7 +48,7 @@ export const EvaluatorView: FC = () => {
         homeIcon={<CalculateRounded fontSize="inherit" />}
       />
       <Box
-        paddingY={4}
+        paddingY={8}
         paddingX={{ xs: 2, md: 0 }}
         sx={{
           backgroundColor: theme.palette.primary.light,
@@ -73,7 +72,8 @@ export const EvaluatorView: FC = () => {
       </Box>
       <Box
         maxWidth="lg"
-        marginX={{ xs: 2, md: "auto" }}
+        marginX={{ xs: 0, md: "auto" }}
+        paddingX={{ xs: 2, md: 0 }}
         paddingY={4}
       >
         <Stack spacing={4}>
@@ -85,11 +85,17 @@ export const EvaluatorView: FC = () => {
           />
           {prevUserInput.trim().length > 0 && (
             <>
-              <StyledOutputCard title="Input Interpretation">
+              <Stack>
+                <Typography
+                  fontWeight={900}
+                  fontSize={theme.typography.h3.fontSize}
+                >
+                  {"Input Interpretation"}
+                </Typography>
                 <InputDisplayMany
                   expressions={expressions}
                 />
-              </StyledOutputCard>
+              </Stack>
               <EvaluatorOutputGroup
                 symbolSet={symbols}
                 expressions={expressions.map((expr) =>

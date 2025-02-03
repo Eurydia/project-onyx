@@ -17,6 +17,7 @@ import {
   TableRow,
   Theme,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,6 +30,7 @@ type WidgetTruthTableProps = {
 const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
   const { exprTree, slotProps } = props;
   const { t } = useTranslation();
+  const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
   const columns = exprTreeFlattenPostOrder(exprTree);
@@ -42,7 +44,10 @@ const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
-      <Stack spacing={1}>
+      <Stack
+        spacing={1}
+        padding={1}
+      >
         <StyledAlert
           severity="warning"
           variant="standard"
@@ -52,8 +57,21 @@ const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
           </Typography>
         </StyledAlert>
         <Button
+          disableElevation
+          disableRipple
           variant="contained"
           onClick={() => setUserConfirmed(true)}
+          sx={{
+            "&:hover": {
+              color: palette.getContrastText(
+                palette.primary.main
+              ),
+              backgroundColor: palette.primary.main,
+            },
+            "color": palette.primary.dark,
+            "backgroundColor": palette.primary.light,
+            "width": "fit-content",
+          }}
         >
           {t("component:math.truthTable.confirm")}
         </Button>

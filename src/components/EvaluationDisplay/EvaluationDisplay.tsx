@@ -4,7 +4,7 @@ import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
-import { Divider, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { FC, memo, useMemo } from "react";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
@@ -33,10 +33,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
   const { evaluated, repr } = steps.at(-1)!;
 
   return (
-    <Stack
-      spacing={2}
-      divider={<Divider flexItem />}
-    >
+    <Stack spacing={2}>
       <EvaluationGraph
         exprTree={exprTree}
         symbolTable={symbolTable}

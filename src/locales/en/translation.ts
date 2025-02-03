@@ -40,8 +40,8 @@ export const en = {
     common: {
       proposition: "Proposition",
       truthValue: "Truth value",
-      true: "True",
-      false: "False",
+      true: "T",
+      false: "F",
       close: "Close",
       connectives: {
         negation: "Negation",

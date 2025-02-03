@@ -1,6 +1,7 @@
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { VerdictDisplayMany } from "$components/VerdictDisplay";
 import { CheckerRouteLoaderData } from "$types/loader-data";
+import { Stack } from "@mui/material";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +20,9 @@ export const CheckerViewOutputGroup: FC<
   return (
     <Fragment>
       <StyledOutputCard title={t("verdict.title")}>
-        <VerdictDisplayMany verdicts={expressions} />
+        <Stack spacing={4}>
+          <VerdictDisplayMany verdicts={expressions} />
+        </Stack>
       </StyledOutputCard>
     </Fragment>
   );

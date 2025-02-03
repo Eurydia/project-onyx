@@ -34,30 +34,34 @@ export const CheckerView: FC = () => {
   };
 
   return (
-    <Box
-      maxWidth="lg"
-      marginX={{ xs: 2, md: "auto" }}
-      paddingY={2}
-    >
-      <Stack spacing={1}>
-        <Editor
-          value={userInput}
-          placeholder="not (p and q) iff (not p or not q)"
-          onChange={setUserInput}
-          onSubmit={handleSubmit}
-        />
-        {prevUserInput.trim().length > 0 && (
-          <>
-            <StyledOutputCard title="Input Interpretation">
-              <InputDisplayMany expressions={expressions} />
-            </StyledOutputCard>
-            <Divider flexItem />
-            <CheckerViewOutputGroup
-              expressions={expressions}
-            />
-          </>
-        )}
-      </Stack>
-    </Box>
+    <>
+      <Box
+        maxWidth="lg"
+        marginX={{ xs: 2, md: "auto" }}
+        paddingY={2}
+      >
+        <Stack spacing={1}>
+          <Editor
+            value={userInput}
+            placeholder="not (p and q) iff (not p or not q)"
+            onChange={setUserInput}
+            onSubmit={handleSubmit}
+          />
+          {prevUserInput.trim().length > 0 && (
+            <>
+              <StyledOutputCard title="Input Interpretation">
+                <InputDisplayMany
+                  expressions={expressions}
+                />
+              </StyledOutputCard>
+              <Divider flexItem />
+              <CheckerViewOutputGroup
+                expressions={expressions}
+              />
+            </>
+          )}
+        </Stack>
+      </Box>
+    </>
   );
 };

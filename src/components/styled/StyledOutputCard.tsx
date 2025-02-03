@@ -14,7 +14,7 @@ export const StyledOutputCard: FC<StyledOutputCardProps> = (
 ) => {
   const { children, title } = props;
   return (
-    <Card elevation={0}>
+    <Card elevation={4}>
       <CardHeader
         title={title}
         slotProps={{

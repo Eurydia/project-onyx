@@ -1,20 +1,66 @@
-import { EvaluationDisplayMany } from "$components/EvaluationDisplay/EvaluationDisplayMany";
+import { EvaluationDisplayMany } from "$components/EvaluationDisplay";
 import { StyledLatex } from "$components/Styled/StyledLatex";
-import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
+import { InfoRounded } from "@mui/icons-material";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Alert,
+  AlertTitle,
+  Card,
+  CardActionArea,
+  CardContent,
+  Collapse,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { FC, Fragment, useEffect, useState } from "react";
 import { PropositionConfig } from "./PropositionConfig";
+
+type EvaluationResultDisplayItemProps = {
+  expression: ExprTree;
+  itemNum: number;
+  result: boolean;
+};
+const EvaluationResultDisplayItem: FC<
+  EvaluationResultDisplayItemProps
+> = (props) => {
+  const { expression, itemNum, result } = props;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const toggleExpanded = () => {
+    setIsExpanded((prev) => !prev);
+  };
+  const exprLatex = exprTreeToLatex(expression);
+  return (
+    <Card variant="outlined">
+      <CardActionArea
+        disableRipple
+        disableTouchRipple
+        onClick={toggleExpanded}
+      >
+        <CardContent>
+          <StyledLatex>
+            {`$$${exprLatex} \\tag{${itemNum}}$$`}
+          </StyledLatex>
+          <StyledLatex>
+            {`$$\\equiv\\textbf{${result}}$$`}
+          </StyledLatex>
+        </CardContent>
+      </CardActionArea>
+      <Collapse in={isExpanded}>
+        <TruthTable
+          exprTree={expression}
+          slotProps={{
+            container: { maxHeight: "40vh" },
+          }}
+        />
+      </Collapse>
+    </Card>
+  );
+};
 
 type EvaluatorOutputGroupProps = {
   symbolSet: Set<string>;
@@ -25,6 +71,7 @@ export const EvaluatorOutputGroup: FC<
 > = (props) => {
   const { symbolSet, expressions } = props;
 
+  const { typography, palette } = useTheme();
   const [symbolTable, setSymbolTable] = useState(() => {
     const next: SymbolTable = new Map();
     for (const symbol of symbolSet) {
@@ -41,73 +88,77 @@ export const EvaluatorOutputGroup: FC<
     setSymbolTable(next);
   }, [symbolSet]);
 
+  const validExpressions = expressions.filter(
+    (expr) => expr.ok
+  );
+
   return (
-    <>
-      <StyledOutputCard title="Evaluation Result">
-        <Stack>
-          <PropositionConfig
-            value={symbolTable}
-            onChange={(k, v) =>
-              setSymbolTable((prev) => {
-                const next = new Map(prev);
-                next.set(k, v);
-                return next;
-              })
-            }
-          />
-          <Stack>
-            {expressions.map((expr, index) => {
-              if (!expr.ok) {
-                return <Fragment key={"eval" + index} />;
-              }
-              const latex = exprTreeToLatex(expr.tree);
-              const result = expr.tree.eval(symbolTable);
-              return (
-                <Fragment key={"eval" + index}>
-                  <Accordion>
-                    <AccordionSummary>
-                      <Stack
-                        spacing={-4}
-                        sx={{ width: "100%" }}
-                      >
-                        <StyledLatex>
-                          {`$$${latex}\\tag{${
-                            index + 1
-                          }}$$`}
-                        </StyledLatex>
-                        <StyledLatex>
-                          {`$$\\equiv\\textbf{${result}}$$`}
-                        </StyledLatex>
-                      </Stack>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <TruthTable
-                        exprTree={expr.tree}
-                        slotProps={{
-                          container: { height: "40vh" },
-                        }}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                </Fragment>
-              );
-            })}
-          </Stack>
-        </Stack>
-      </StyledOutputCard>
-      <StyledOutputCard title="Step-by-step Evaluation">
-        {expressions.length === 0 && (
-          <Typography fontStyle="italic">
-            No step-by-step evaluation to display
-          </Typography>
-        )}
-        {expressions.length > 0 && (
-          <EvaluationDisplayMany
-            symbolTable={symbolTable}
-            items={expressions}
-          />
-        )}
-      </StyledOutputCard>
-    </>
+    <Stack spacing={2}>
+      <Typography
+        fontWeight={900}
+        fontSize={typography.h3.fontSize}
+        sx={{ color: palette.primary.dark }}
+      >
+        {"Evaluation Result"}
+      </Typography>
+      <PropositionConfig
+        value={symbolTable}
+        onChange={(k, v) =>
+          setSymbolTable((prev) => {
+            const next = new Map(prev);
+            next.set(k, v);
+            return next;
+          })
+        }
+      />
+      {validExpressions.length === 0 && (
+        <Alert
+          icon={false}
+          severity="info"
+        >
+          <AlertTitle>
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              alignItems="flex-end"
+              spacing={2}
+              useFlexGap
+            >
+              <InfoRounded />
+              <Typography fontWeight={900}>
+                {`Notice`}
+              </Typography>
+            </Stack>
+          </AlertTitle>
+          <Typography>{`No evaluation result to display.`}</Typography>
+        </Alert>
+      )}
+      {validExpressions.length > 0 &&
+        expressions.map((expr, index) => {
+          if (!expr.ok) {
+            return <Fragment key={"eval" + index} />;
+          }
+          const result = expr.tree.eval(symbolTable);
+          return (
+            <EvaluationResultDisplayItem
+              key={"eval" + index}
+              expression={expr.tree}
+              itemNum={index + 1}
+              result={result}
+            />
+          );
+        })}
+      <Typography
+        fontWeight={900}
+        fontSize={typography.h3.fontSize}
+        sx={{ color: palette.primary.dark }}
+      >
+        {"Step-by-step Evaluation"}
+      </Typography>
+      <EvaluationDisplayMany
+        symbolTable={symbolTable}
+        items={expressions}
+      />
+    </Stack>
   );
 };

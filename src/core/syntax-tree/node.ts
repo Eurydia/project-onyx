@@ -45,6 +45,12 @@ export const IMPLIES = (
 ) => {
   return BINARY(Operator.IMPL, left, right);
 };
+export const IFF = (
+  left: SyntaxTree,
+  right: SyntaxTree
+) => {
+  return BINARY(Operator.IFF, left, right);
+};
 
 export const CONST = (value: boolean) => {
   return {

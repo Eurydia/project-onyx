@@ -4,6 +4,7 @@ import { StyledLatex } from "$components/Styled/StyledLatex";
 import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeEquals } from "$core/expr-tree/equals";
+import { IFF } from "$core/syntax-tree/node";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { ComparatorRouteLoaderData } from "$types/loader-data";
 import { Box, Paper, Stack } from "@mui/material";
@@ -73,6 +74,7 @@ export const ComparatorView: FC = () => {
                       const curr = exprTreeFromSyntaxTree(
                         expr.tree
                       );
+
                       const treeEqual = exprTreeEquals(
                         exprTreeFromSyntaxTree(
                           primary.tree
@@ -98,7 +100,9 @@ export const ComparatorView: FC = () => {
                             }}$$`}
                           </StyledLatex>
                           <TruthTable
-                            exprTree={curr}
+                            exprTree={exprTreeFromSyntaxTree(
+                              IFF(expr.tree, primary.tree)
+                            )}
                             slotProps={{
                               container: {
                                 maxHeight: "40vh",
