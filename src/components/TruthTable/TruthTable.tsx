@@ -23,11 +23,11 @@ import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TruthTableCell } from "./TruthTableCell";
 
-type WidgetTruthTableProps = {
+type TruthTableProps = {
   exprTree: ExprTree;
   slotProps: { container: SxProps<Theme> };
 };
-const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
+const TruthTable_: FC<TruthTableProps> = (props) => {
   const { exprTree, slotProps } = props;
   const { t } = useTranslation();
   const { palette } = useTheme();
@@ -88,6 +88,7 @@ const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
               <TableCell
                 key={"sym" + index}
                 align="center"
+                sx={{ whiteSpace: "nowrap" }}
               >
                 <StyledLatex>{`$${symbol}$`}</StyledLatex>
               </TableCell>
@@ -96,6 +97,7 @@ const TruthTable_: FC<WidgetTruthTableProps> = (props) => {
               <TableCell
                 key={"subexpr" + index}
                 align="center"
+                sx={{ whiteSpace: "nowrap" }}
               >
                 <StyledLatex>{`$${col.label}$`}</StyledLatex>
               </TableCell>

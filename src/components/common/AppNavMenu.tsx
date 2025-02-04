@@ -1,12 +1,7 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { FC, ReactNode } from "react";
+import { Typography, useTheme } from "@mui/material";
+import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const NAV_ITEMS = [
   "evaluator",
@@ -15,62 +10,45 @@ const NAV_ITEMS = [
   "rewriter",
 ];
 
-type AppNavGroupProps = {
-  homeIcon: ReactNode;
-};
-export const AppNavGroup: FC<AppNavGroupProps> = (
-  props
-) => {
-  const { homeIcon } = props;
+export const AppNavGroup: FC = () => {
   const { t } = useTranslation("nav");
   const { palette } = useTheme();
+  const { pathname } = useLocation();
   return (
-    <Box
-      width="100%"
-      maxWidth="lg"
-      marginX={{ xs: 0, md: "auto" }}
-      paddingX={{ xs: 2, md: 0 }}
-      paddingY={4}
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        gap: 2,
-        flexWrap: "wrap",
-        alignItems: "center",
-      }}
-    >
-      <IconButton
-        color="default"
+    <Fragment>
+      <Typography
         component={Link}
-        to="/"
-        disableRipple
+        to={`/`}
         sx={{
           color: palette.primary.dark,
+          textTransform: "capitalize",
+          textDecorationLine: "none",
         }}
       >
-        {homeIcon}
-      </IconButton>
+        {t("home")}
+      </Typography>
       {NAV_ITEMS.map((id, index) => {
+        const target = `/${id}`;
+        const fontWeight =
+          target.localeCompare(pathname) === 0
+            ? 900
+            : undefined;
         return (
           <Typography
             key={"item" + index}
-            textTransform="capitalize"
             component={Link}
-            to={`/${id}`}
+            to={target}
             sx={{
-              "textDecorationLine": "none",
-              "transition": "all 0.2s ease-in-out",
-              "&:hover": {
-                textDecorationLine: "underline",
-              },
-              "color": palette.primary.dark,
+              color: palette.primary.dark,
+              textTransform: "capitalize",
+              fontWeight,
+              textDecorationLine: "none",
             }}
           >
             {t(id)}
           </Typography>
         );
       })}
-    </Box>
+    </Fragment>
   );
 };

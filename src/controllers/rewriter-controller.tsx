@@ -1,9 +1,6 @@
 import { parse } from "$core/interpreter/parser";
-import { syntaxTreeRewrite } from "$core/syntax-tree/rewrite";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
+import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
 import { RewriterRouteLoaderData } from "$types/loader-data";
-import { Operator } from "$types/operators";
 import { LoaderFunction } from "react-router";
 
 export const rewriterRouteLoader: LoaderFunction = ({
@@ -17,52 +14,33 @@ export const rewriterRouteLoader: LoaderFunction = ({
   ) {
     const loaderData: RewriterRouteLoaderData = {
       userInput: "",
-      basis: Object.values(Operator),
-      ok: false,
+      expressions: [],
     };
     return loaderData;
   }
 
   const userInput = userInputRaw.toString();
-  const basisRaw = url.searchParams.get("basis");
-  const basis =
-    basisRaw === null
-      ? []
-      : (basisRaw
-          .split(",")
-          .map((op) => op.trim())
-          .filter((op) => op.length > 0) as Operator[]);
-
-  const result = parse(userInput);
-
-  if (!result.ok) {
-    const loaderData: RewriterRouteLoaderData = {
-      basis,
-      userInput,
-      ok: false,
-    };
-    return loaderData;
+  const expressions: RewriterRouteLoaderData["expressions"] =
+    [];
+  for (const input of userInput.split(",")) {
+    const parseResult = parse(input);
+    expressions.push(
+      parseResult.ok
+        ? {
+            ok: true,
+            inputRaw: input.trim(),
+            inputInterpretationLatex: syntaxTreeToLatex(
+              parseResult.tree
+            ),
+            originalTree: parseResult.tree,
+          }
+        : { ok: false, inputRaw: input.trim() }
+    );
   }
-
-  const { tree: syntaxTree } = result;
-  const rewriteResult = syntaxTreeRewrite(
-    syntaxTree,
-    new Set(basis)
-  );
 
   const loaderData: RewriterRouteLoaderData = {
     userInput,
-    ok: true,
-    basis,
-    inputLatex: exprTreeToLatex(
-      exprTreeFromSyntaxTree(syntaxTree)
-    ),
-    rewritten: rewriteResult.ok
-      ? {
-          ok: true,
-          tree: rewriteResult.tree,
-        }
-      : { ok: false },
+    expressions,
   };
   return loaderData;
 };

@@ -1,4 +1,5 @@
 import { EvaluationDisplayMany } from "$components/EvaluationDisplay";
+import { ExpressionCard } from "$components/ExpressionCard";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
@@ -9,58 +10,12 @@ import { InfoRounded } from "@mui/icons-material";
 import {
   Alert,
   AlertTitle,
-  Card,
-  CardActionArea,
-  CardContent,
-  Collapse,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
 import { FC, Fragment, useEffect, useState } from "react";
 import { PropositionConfig } from "./PropositionConfig";
-
-type EvaluationResultDisplayItemProps = {
-  expression: ExprTree;
-  itemNum: number;
-  result: boolean;
-};
-const EvaluationResultDisplayItem: FC<
-  EvaluationResultDisplayItemProps
-> = (props) => {
-  const { expression, itemNum, result } = props;
-  const [isExpanded, setIsExpanded] = useState(false);
-  const toggleExpanded = () => {
-    setIsExpanded((prev) => !prev);
-  };
-  const exprLatex = exprTreeToLatex(expression);
-  return (
-    <Card variant="outlined">
-      <CardActionArea
-        disableRipple
-        disableTouchRipple
-        onClick={toggleExpanded}
-      >
-        <CardContent>
-          <StyledLatex>
-            {`$$${exprLatex} \\tag{${itemNum}}$$`}
-          </StyledLatex>
-          <StyledLatex>
-            {`$$\\equiv\\textbf{${result}}$$`}
-          </StyledLatex>
-        </CardContent>
-      </CardActionArea>
-      <Collapse in={isExpanded}>
-        <TruthTable
-          exprTree={expression}
-          slotProps={{
-            container: { maxHeight: "40vh" },
-          }}
-        />
-      </Collapse>
-    </Card>
-  );
-};
 
 type EvaluatorOutputGroupProps = {
   symbolSet: Set<string>;
@@ -139,12 +94,28 @@ export const EvaluatorOutputGroup: FC<
             return <Fragment key={"eval" + index} />;
           }
           const result = expr.tree.eval(symbolTable);
+          const exprLatex = exprTreeToLatex(expr.tree);
+          const itemNum = index + 1;
           return (
-            <EvaluationResultDisplayItem
-              key={"eval" + index}
-              expression={expr.tree}
-              itemNum={index + 1}
-              result={result}
+            <ExpressionCard
+              primary={
+                <>
+                  <StyledLatex>
+                    {`$$${exprLatex} \\tag{${itemNum}}$$`}
+                  </StyledLatex>
+                  <StyledLatex>
+                    {`$$\\equiv\\textbf{${result}}$$`}
+                  </StyledLatex>
+                </>
+              }
+              secondary={
+                <TruthTable
+                  exprTree={expr.tree}
+                  slotProps={{
+                    container: { maxHeight: "40vh" },
+                  }}
+                />
+              }
             />
           );
         })}

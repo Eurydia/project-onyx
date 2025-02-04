@@ -2,32 +2,43 @@ import { Operator } from "$types/operators";
 import {
   SyntaxTree,
   SyntaxTreeNodeBinary,
+  SyntaxTreeNodeType,
+  SyntaxTreeNodeUnary,
 } from "$types/syntax-tree";
 import { AND, IMPLIES, NOT, OR } from "../node";
 
 type RewriteRule = {
   rewrite: (tree: SyntaxTree) => SyntaxTree;
-  basis: Operator[];
+  isApplicable: (
+    tree: SyntaxTree,
+    basis: Set<Operator>
+  ) => boolean;
 };
 const REWRITE_REGISTRY = new Map<Operator, RewriteRule[]>();
 
 const registerRewriteRule = (
   trigger: Operator,
-  basis: Operator[],
+  isApplicable: (
+    tree: SyntaxTree,
+    basis: Set<Operator>
+  ) => boolean,
   rewrite: (tree: SyntaxTree) => SyntaxTree
 ) => {
   if (!REWRITE_REGISTRY.has(trigger)) {
     REWRITE_REGISTRY.set(trigger, []);
   }
   REWRITE_REGISTRY.get(trigger)!.push({
-    basis,
+    isApplicable,
     rewrite,
   });
 };
 
 registerRewriteRule(
   Operator.IFF,
-  [Operator.NOT, Operator.AND, Operator.OR],
+  (_, basis) =>
+    [Operator.NOT, Operator.AND, Operator.OR].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -37,7 +48,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IFF,
-  [Operator.NOT, Operator.OR, Operator.IMPL],
+  (_, basis) =>
+    [Operator.NOT, Operator.OR, Operator.IMPL].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -47,7 +61,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IFF,
-  [Operator.AND, Operator.NOT],
+  (_, basis) =>
+    [Operator.AND, Operator.NOT].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left, right } = tree as SyntaxTreeNodeBinary;
     return NOT(
@@ -61,7 +78,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IFF,
-  [Operator.NOT, Operator.OR],
+  (_, basis) =>
+    [Operator.NOT, Operator.OR].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left, right } = tree as SyntaxTreeNodeBinary;
     return OR(
@@ -73,7 +93,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IFF,
-  [Operator.NOT, Operator.IMPL],
+  (_, basis) =>
+    [Operator.NOT, Operator.IMPL].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left, right } = tree as SyntaxTreeNodeBinary;
     return NOT(
@@ -87,7 +110,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IMPL,
-  [Operator.NOT, Operator.AND],
+  (_, basis) =>
+    [Operator.NOT, Operator.AND].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -97,7 +123,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.IMPL,
-  [Operator.NOT, Operator.OR],
+  (_, basis) =>
+    [Operator.NOT, Operator.OR].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -107,7 +136,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.AND,
-  [Operator.NOT, Operator.OR],
+  (_, basis) =>
+    [Operator.NOT, Operator.OR].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -117,7 +149,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.AND,
-  [Operator.NOT, Operator.IMPL],
+  (_, basis) =>
+    [Operator.NOT, Operator.IMPL].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -127,7 +162,10 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.OR,
-  [Operator.NOT, Operator.AND],
+  (_, basis) =>
+    [Operator.NOT, Operator.AND].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
@@ -137,11 +175,51 @@ registerRewriteRule(
 
 registerRewriteRule(
   Operator.OR,
-  [Operator.NOT, Operator.IMPL],
+  (_, basis) =>
+    [Operator.NOT, Operator.IMPL].every((op) =>
+      basis.has(op)
+    ),
   (tree) => {
     const { left: p, right: q } =
       tree as SyntaxTreeNodeBinary;
     return IMPLIES(NOT(p), q);
+  }
+);
+
+registerRewriteRule(
+  Operator.OR,
+  (tree, basis) => {
+    if (!basis.has(Operator.IMPL)) {
+      return false;
+    }
+    if (tree.nodeType !== SyntaxTreeNodeType.BINARY) {
+      return false;
+    }
+    return tree.left.nodeType === SyntaxTreeNodeType.UNARY;
+  },
+  (tree) => {
+    const { left: p, right: q } =
+      tree as SyntaxTreeNodeBinary;
+    return IMPLIES((p as SyntaxTreeNodeUnary).operand, q);
+  }
+);
+
+registerRewriteRule(
+  Operator.OR,
+  (tree, basis) => {
+    if (!basis.has(Operator.IMPL)) {
+      return false;
+    }
+    if (tree.nodeType !== SyntaxTreeNodeType.BINARY) {
+      return false;
+    }
+    return tree.right.nodeType === SyntaxTreeNodeType.UNARY;
+  },
+  (tree) => {
+    const { left: p, right: q } =
+      tree as SyntaxTreeNodeBinary;
+
+    return IMPLIES((q as SyntaxTreeNodeUnary).operand, p);
   }
 );
 

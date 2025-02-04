@@ -1,59 +1,53 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
-import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
-import { CheckerRouteLoaderData } from "$types/loader-data";
-import { SyntaxTreeNodeType } from "$types/syntax-tree";
+import {
+  SyntaxTree,
+  SyntaxTreeNodeType,
+} from "$types/syntax-tree";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 type VerdictDisplayProps = {
-  verdict: CheckerRouteLoaderData["expressions"][number];
+  result: SyntaxTree;
+  originalLatex: string;
 };
 export const VerdictDisplay: FC<VerdictDisplayProps> = (
   props
 ) => {
-  const { verdict } = props;
-  const { ok } = verdict;
+  const { result, originalLatex } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "checker-view",
   });
 
-  if (!ok) {
-    return null;
-  }
-
-  const {
-    normalizedTree: normalized,
-    inputInterpretationLatex: latex,
-  } = verdict;
-
-  if (normalized.nodeType === SyntaxTreeNodeType.CONST) {
-    if (normalized.value) {
-      return (
-        <StyledLatex>
-          {t("verdict.expression-is-tautology", {
-            eq: `$$${latex}$$`,
-          })}
-        </StyledLatex>
-      );
-    }
+  if (
+    result.nodeType === SyntaxTreeNodeType.CONST &&
+    result.value
+  ) {
     return (
       <StyledLatex>
-        {t("verdict.expression-is-contradiction", {
-          eq: `$$${latex}$$`,
+        {t("verdict.formula-is-tautology", {
+          eq: `$$${originalLatex}$$`,
+        })}
+      </StyledLatex>
+    );
+  }
+  if (
+    result.nodeType === SyntaxTreeNodeType.CONST &&
+    !result.value
+  ) {
+    return (
+      <StyledLatex>
+        {t("verdict.formula-is-contradiction", {
+          eq: `$$${originalLatex}$$`,
         })}
       </StyledLatex>
     );
   }
 
-  const dependencies = syntaxTreeCollectSymbols(normalized)
-    .toSorted((a, b) => a.localeCompare(b))
-    .join(",");
-
   return (
     <StyledLatex>
-      {t("verdict.expression-is-satisfiable", {
-        eq: `$$${latex}$$`,
-        dependencies: `$${dependencies}$`,
+      {t("verdict.formula-is-satisfiable", {
+        eq: `$$${originalLatex}$$`,
+        // dependencies: `$${dependencies}$`,
       })}
     </StyledLatex>
   );

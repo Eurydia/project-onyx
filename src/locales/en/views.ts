@@ -11,12 +11,11 @@ export default {
     },
     "verdict": {
       "title": "Verdict",
-      "expression-is-tautology":
-        "The expression {{eq}} is a tautology.",
-      "expression-is-contradiction":
-        "The expression {{eq}} is a contradiction.",
-      "expression-is-satisfiable": `The expression {{eq}} is not a tautology. Its truth value depends on {{dependencies}}.`,
-      "expression-is-invalid": `The expression is invalid.`,
+      "formula-is-tautology":
+        "The formula {{eq}} is a tautology.",
+      "formula-is-contradiction":
+        "The formula {{eq}} is a contradiction.",
+      "formula-is-satisfiable": `The formula {{eq}} is neither a tautology or a contradiction.`,
     },
     "user-manual": [],
   },
@@ -45,5 +44,25 @@ export default {
     },
     "boolean-algebra-interpreter":
       "Boolean algebra interpreter",
+  },
+  "comparator-view": {
+    "banner": "Comparator",
+    "warning-notice": "Notice",
+    "cards": {
+      "output": {
+        "title": "Result",
+        "formulas-are-equivalent":
+          "The formula {{first}} and the formula {{second}} are equivalent.",
+        "formulas-are-not-equivalent":
+          "The formula {{first}} and the formula {{second}} are not equivalent.",
+        "warnings": {
+          "not-enough-formula-for-comparison":
+            "There is not enough valid formulas to perform comparisons.",
+        },
+      },
+      "input-interpretation": {
+        title: "Input Interpretation",
+      },
+    },
   },
 };

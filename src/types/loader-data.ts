@@ -1,5 +1,4 @@
 import { Maybe } from "./generic";
-import { Operator } from "./operators";
 import { SyntaxTree } from "./syntax-tree";
 
 export type ComparatorRouteLoaderData = {
@@ -30,8 +29,8 @@ export type CheckerRouteLoaderData = {
 
 export type RewriterRouteLoaderData = {
   userInput: string;
-  basis: Operator[];
-} & Maybe<{
-  inputLatex: string;
-  rewritten: Maybe<{ tree: SyntaxTree }>;
-}>;
+  expressions: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    originalTree: SyntaxTree;
+  }>)[];
+};

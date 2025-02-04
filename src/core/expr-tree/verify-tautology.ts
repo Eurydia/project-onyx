@@ -1,5 +1,4 @@
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 
@@ -19,26 +18,13 @@ function* permutation(symbols: string[]) {
   }
 }
 
-export const exprTreeEquals = (
-  a: ExprTree,
-  b: ExprTree
-) => {
-  const symbolsA = exprTreeCollectSymbols(a);
-  const symbolsB = exprTreeCollectSymbols(b);
-
-  if (
-    [...symbolsA].some((symbol) => !symbolsB.has(symbol)) ||
-    [...symbolsB].some((symbol) => !symbolsA.has(symbol))
-  ) {
-    return false;
-  }
-
-  const perms = permutation([...symbolsA]);
+export const exprTreeVerifyTautology = (tree: ExprTree) => {
+  const symbols = exprTreeCollectSymbols(tree);
+  const perms = permutation([...symbols]);
   for (const symbolTable of perms) {
-    if (a.eval(symbolTable) !== b.eval(symbolTable)) {
+    if (!tree.eval(symbolTable)) {
       return false;
     }
   }
-  console.debug(exprTreeToLatex(a), exprTreeToLatex(b));
   return true;
 };

@@ -33,7 +33,7 @@ export const EvaluationDisplayStep: FC<
         />
       ))}
       <StyledLatex>
-        {`As such $\\text{(${tagMaker})}$ is ${evaluated}.`}
+        {`By the truth table of the connective, $\\text{(${tagMaker})}$ is ${evaluated}.`}
       </StyledLatex>
     </Stack>
   );

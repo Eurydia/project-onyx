@@ -1,10 +1,12 @@
-import { Editor } from "$components/Editor/Editor";
+import { AppNavGroup } from "$components/common/AppNavMenu";
+import { Editor } from "$components/Editor";
 import { InputDisplayMany } from "$components/InputTable";
-import { CheckerViewOutputGroup } from "$components/math/CheckerViewOutputGroup";
-import { StyledOutputCard } from "$components/Styled/StyledOutputCard";
+import { VerdictDisplayMany } from "$components/VerdictDisplay";
+import { BaseLayout } from "$layouts/BaseLayout";
 import { CheckerRouteLoaderData } from "$types/loader-data";
-import { Box, Divider, Stack } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { Stack, Typography, useTheme } from "@mui/material";
+import { FC, Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const CheckerView: FC = () => {
@@ -14,7 +16,8 @@ export const CheckerView: FC = () => {
     loaderData;
 
   const submit = useSubmit();
-
+  const { t } = useTranslation();
+  const { typography } = useTheme();
   const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
@@ -34,34 +37,40 @@ export const CheckerView: FC = () => {
   };
 
   return (
-    <>
-      <Box
-        maxWidth="lg"
-        marginX={{ xs: 2, md: "auto" }}
-        paddingY={2}
-      >
-        <Stack spacing={1}>
-          <Editor
-            value={userInput}
-            placeholder="not (p and q) iff (not p or not q)"
-            onChange={setUserInput}
-            onSubmit={handleSubmit}
-          />
-          {prevUserInput.trim().length > 0 && (
-            <>
-              <StyledOutputCard title="Input Interpretation">
-                <InputDisplayMany
-                  expressions={expressions}
-                />
-              </StyledOutputCard>
-              <Divider flexItem />
-              <CheckerViewOutputGroup
-                expressions={expressions}
-              />
-            </>
-          )}
-        </Stack>
-      </Box>
-    </>
+    <BaseLayout
+      appHeader={<AppNavGroup />}
+      banner={t("tautology-checker")}
+    >
+      <Stack spacing={8}>
+        <Editor
+          value={userInput}
+          onChange={setUserInput}
+          placeholder="p or not p, not q and q, p implies q"
+          onSubmit={handleSubmit}
+        />
+        {expressions.length > 0 && (
+          <Fragment>
+            <Stack spacing={2}>
+              <Typography
+                fontWeight={900}
+                fontSize={typography.h3.fontSize}
+              >
+                {"Input Interpretation"}
+              </Typography>
+              <InputDisplayMany expressions={expressions} />
+            </Stack>
+            <Stack spacing={2}>
+              <Typography
+                fontWeight={900}
+                fontSize={typography.h3.fontSize}
+              >
+                {t("verdict.title")}
+              </Typography>
+              <VerdictDisplayMany formulas={expressions} />
+            </Stack>
+          </Fragment>
+        )}
+      </Stack>
+    </BaseLayout>
   );
 };
