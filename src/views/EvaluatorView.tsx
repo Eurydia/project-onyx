@@ -51,15 +51,13 @@ export const EvaluatorView: FC = () => {
         />
         {prevUserInput.trim().length > 0 && (
           <Stack spacing={2}>
-            <Stack>
-              <Typography
-                fontWeight={900}
-                fontSize={theme.typography.h3.fontSize}
-              >
-                {"Input Interpretation"}
-              </Typography>
-              <InputDisplayMany expressions={expressions} />
-            </Stack>
+            <Typography
+              fontWeight={900}
+              fontSize={theme.typography.h3.fontSize}
+            >
+              {"Input Interpretation"}
+            </Typography>
+            <InputDisplayMany expressions={expressions} />
             <EvaluatorOutputGroup
               symbolSet={symbols}
               expressions={expressions.map((expr) =>

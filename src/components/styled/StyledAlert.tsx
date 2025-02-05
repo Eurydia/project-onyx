@@ -1,18 +1,46 @@
-import { Alert, AlertProps, useTheme } from "@mui/material";
+import { InfoRounded } from "@mui/icons-material";
+import {
+  Alert,
+  AlertProps,
+  AlertTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
-export const StyledAlert: FC<AlertProps> = (props) => {
-  const { sx, ...rest } = props;
-  const { shape } = useTheme();
+type StyledAlertProps = {
+  severity: AlertProps["severity"];
+  children: string;
+};
+export const StyledAlert: FC<StyledAlertProps> = (
+  props
+) => {
+  const { children, severity } = props;
+  const { t } = useTranslation("components", {
+    keyPrefix: "alert",
+  });
+
   return (
     <Alert
       icon={false}
-      {...rest}
-      sx={{
-        borderRadius: shape.borderRadius,
-        padding: 4,
-        ...sx,
-      }}
-    />
+      severity={severity}
+    >
+      <AlertTitle>
+        <Stack
+          direction="row"
+          flexWrap="wrap"
+          alignItems="flex-end"
+          spacing={2}
+          useFlexGap
+        >
+          <InfoRounded />
+          <Typography fontWeight={900}>
+            {t("notice")}
+          </Typography>
+        </Stack>
+      </AlertTitle>
+      <Typography>{children}</Typography>
+    </Alert>
   );
 };

@@ -16,7 +16,6 @@ import {
   TableHead,
   TableRow,
   Theme,
-  Typography,
   useTheme,
 } from "@mui/material";
 import { FC, memo, useState } from "react";
@@ -29,7 +28,9 @@ type TruthTableProps = {
 };
 const TruthTable_: FC<TruthTableProps> = (props) => {
   const { exprTree, slotProps } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation("components", {
+    keyPrefix: "truth-table",
+  });
   const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
@@ -48,18 +49,14 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
         spacing={1}
         padding={1}
       >
-        <StyledAlert
-          severity="warning"
-          variant="standard"
-        >
-          <Typography>
-            {t("component:math.truthTable.warning")}
-          </Typography>
+        <StyledAlert severity="warning">
+          {t(
+            "warnings.large-truth-table-can-slow-application-down"
+          )}
         </StyledAlert>
         <Button
           disableElevation
           disableRipple
-          variant="contained"
           onClick={() => setUserConfirmed(true)}
           sx={{
             "&:hover": {
@@ -73,7 +70,7 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
             "width": "fit-content",
           }}
         >
-          {t("component:math.truthTable.confirm")}
+          {t("warnings.confirm")}
         </Button>
       </Stack>
     );

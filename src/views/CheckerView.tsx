@@ -5,24 +5,24 @@ import { VerdictDisplayMany } from "$components/VerdictDisplay";
 import { BaseLayout } from "$layouts/BaseLayout";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const CheckerView: FC = () => {
-  const loaderData =
-    useLoaderData() as CheckerRouteLoaderData;
   const { expressions, userInput: prevUserInput } =
-    loaderData;
+    useLoaderData() as CheckerRouteLoaderData;
 
   const submit = useSubmit();
-  const { t } = useTranslation();
+  const { t } = useTranslation("views", {
+    keyPrefix: "checker-view",
+  });
   const { typography } = useTheme();
   const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
-    setUserInput(userInput);
-  }, [userInput]);
+    setUserInput(prevUserInput);
+  }, [prevUserInput]);
 
   const handleSubmit = () => {
     submit(
@@ -39,7 +39,7 @@ export const CheckerView: FC = () => {
   return (
     <BaseLayout
       appHeader={<AppNavGroup />}
-      banner={t("tautology-checker")}
+      banner={t("banner")}
     >
       <Stack spacing={8}>
         <Editor
@@ -49,26 +49,22 @@ export const CheckerView: FC = () => {
           onSubmit={handleSubmit}
         />
         {expressions.length > 0 && (
-          <Fragment>
-            <Stack spacing={2}>
-              <Typography
-                fontWeight={900}
-                fontSize={typography.h3.fontSize}
-              >
-                {"Input Interpretation"}
-              </Typography>
-              <InputDisplayMany expressions={expressions} />
-            </Stack>
-            <Stack spacing={2}>
-              <Typography
-                fontWeight={900}
-                fontSize={typography.h3.fontSize}
-              >
-                {t("verdict.title")}
-              </Typography>
-              <VerdictDisplayMany formulas={expressions} />
-            </Stack>
-          </Fragment>
+          <Stack spacing={2}>
+            <Typography
+              fontWeight={900}
+              fontSize={typography.h3.fontSize}
+            >
+              {t("cards.input-interpretation.title")}
+            </Typography>
+            <InputDisplayMany expressions={expressions} />
+            <Typography
+              fontWeight={900}
+              fontSize={typography.h3.fontSize}
+            >
+              {t("cards.output.title")}
+            </Typography>
+            <VerdictDisplayMany formulas={expressions} />
+          </Stack>
         )}
       </Stack>
     </BaseLayout>

@@ -15,7 +15,7 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
 ) => {
   const { result, originalLatex } = props;
   const { t } = useTranslation("views", {
-    keyPrefix: "checker-view",
+    keyPrefix: "checker-view.cards.output",
   });
 
   if (
@@ -24,8 +24,8 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
   ) {
     return (
       <StyledLatex>
-        {t("verdict.formula-is-tautology", {
-          eq: `$$${originalLatex}$$`,
+        {t("formula-is-tautology", {
+          formula: `$$${originalLatex}$$`,
         })}
       </StyledLatex>
     );
@@ -36,8 +36,8 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
   ) {
     return (
       <StyledLatex>
-        {t("verdict.formula-is-contradiction", {
-          eq: `$$${originalLatex}$$`,
+        {t("formula-is-contradiction", {
+          formula: `$$${originalLatex}$$`,
         })}
       </StyledLatex>
     );
@@ -45,8 +45,8 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
 
   return (
     <StyledLatex>
-      {t("verdict.formula-is-satisfiable", {
-        eq: `$$${originalLatex}$$`,
+      {t("formula-is-satisfiable", {
+        formula: `$$${originalLatex}$$`,
         // dependencies: `$${dependencies}$`,
       })}
     </StyledLatex>

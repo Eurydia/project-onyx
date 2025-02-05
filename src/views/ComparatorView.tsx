@@ -106,154 +106,148 @@ export const ComparatorView: FC = () => {
         />
         {expressions.length > 0 && (
           <Stack spacing={2}>
-            <Stack>
-              <Typography
-                fontWeight={900}
-                fontSize={theme.typography.h3.fontSize}
-                sx={{ color: theme.palette.primary.dark }}
+            <Typography
+              fontWeight={900}
+              fontSize={theme.typography.h3.fontSize}
+              sx={{ color: theme.palette.primary.dark }}
+            >
+              {t("cards.input-interpretation.title")}
+            </Typography>
+            <InputDisplayMany expressions={expressions} />
+            <Typography
+              fontWeight={900}
+              fontSize={theme.typography.h3.fontSize}
+              sx={{ color: theme.palette.primary.dark }}
+            >
+              {t("cards.output.title")}
+            </Typography>
+            {validExpressions.length <= 1 && (
+              <Alert
+                icon={false}
+                variant="standard"
+                severity="warning"
               >
-                {t("cards.input-interpretation.title")}
-              </Typography>
-              <InputDisplayMany expressions={expressions} />
-            </Stack>
-            <Stack spacing={2}>
-              <Typography
-                fontWeight={900}
-                fontSize={theme.typography.h3.fontSize}
-                sx={{ color: theme.palette.primary.dark }}
-              >
-                {t("cards.output.title")}
-              </Typography>
-              {validExpressions.length <= 1 && (
-                <Alert
-                  icon={false}
-                  variant="standard"
-                  severity="warning"
-                >
-                  <AlertTitle>
-                    <Stack
-                      direction="row"
-                      flexWrap="wrap"
-                      alignItems="flex-end"
-                      spacing={2}
-                      useFlexGap
-                    >
-                      <WarningRounded />
-                      <Typography fontWeight={900}>
-                        {t(`warning-notice`)}
-                      </Typography>
-                    </Stack>
-                  </AlertTitle>
-                  <Typography>
-                    {t(
-                      "cards.output.warnings.not-enough-formula-for-comparison"
-                    )}
-                  </Typography>
-                </Alert>
-              )}
-              {mainExprIndex !== null &&
-                validExpressions.length > 1 && (
-                  <RadioGroup
-                    value={mainExprIndex}
-                    onChange={(_, value) =>
-                      setMainExprIndex(
-                        Number.parseInt(value)
-                      )
-                    }
+                <AlertTitle>
+                  <Stack
+                    direction="row"
+                    flexWrap="wrap"
+                    alignItems="flex-end"
+                    spacing={2}
+                    useFlexGap
                   >
-                    {expressions.map((expr, index) => {
-                      if (!expr.ok) {
-                        return null;
-                      }
-                      const exprLatex =
-                        expr.inputInterpretationLatex;
-                      return (
-                        <FormControlLabel
-                          key={"main-expr-option" + index}
-                          control={
-                            <Radio
-                              disableFocusRipple
-                              disableRipple
-                              disableTouchRipple
-                            />
-                          }
-                          value={index}
-                          label={
-                            <StyledLatex>{`$$${exprLatex}$$`}</StyledLatex>
-                          }
-                          slotProps={{
-                            typography: { width: "100%" },
-                          }}
-                        />
-                      );
-                    })}
-                  </RadioGroup>
-                )}
-              {mainExpr !== null &&
-                mainExprIndex !== null &&
-                validExpressions.length > 1 &&
-                expressions.map((expr, index) => {
-                  if (!expr.ok) {
-                    return null;
+                    <WarningRounded />
+                    <Typography fontWeight={900}>
+                      {t(`warning-notice`)}
+                    </Typography>
+                  </Stack>
+                </AlertTitle>
+                <Typography>
+                  {t(
+                    "cards.output.warnings.not-enough-formula-for-comparison"
+                  )}
+                </Typography>
+              </Alert>
+            )}
+            {mainExprIndex !== null &&
+              validExpressions.length > 1 && (
+                <RadioGroup
+                  value={mainExprIndex}
+                  onChange={(_, value) =>
+                    setMainExprIndex(Number.parseInt(value))
                   }
-                  if (index === mainExprIndex) {
-                    return null;
-                  }
-                  const iffTree = exprTreeFromSyntaxTree(
-                    IFF(mainExpr.tree, expr.tree)
-                  );
-                  const areEqual =
-                    exprTreeVerifyTautology(iffTree);
-                  const mainItemNum = mainExprIndex + 1;
-                  const itemNum = index + 1;
-                  const mainLatex =
-                    mainExpr.inputInterpretationLatex;
-                  const exprLatex =
-                    expr.inputInterpretationLatex;
+                >
+                  {expressions.map((expr, index) => {
+                    if (!expr.ok) {
+                      return null;
+                    }
+                    const exprLatex =
+                      expr.inputInterpretationLatex;
+                    return (
+                      <FormControlLabel
+                        key={"main-expr-option" + index}
+                        control={
+                          <Radio
+                            disableFocusRipple
+                            disableRipple
+                            disableTouchRipple
+                          />
+                        }
+                        value={index}
+                        label={
+                          <StyledLatex>{`$$${exprLatex}$$`}</StyledLatex>
+                        }
+                        slotProps={{
+                          typography: { width: "100%" },
+                        }}
+                      />
+                    );
+                  })}
+                </RadioGroup>
+              )}
+            {mainExpr !== null &&
+              mainExprIndex !== null &&
+              validExpressions.length > 1 &&
+              expressions.map((expr, index) => {
+                if (!expr.ok) {
+                  return null;
+                }
+                if (index === mainExprIndex) {
+                  return null;
+                }
+                const iffTree = exprTreeFromSyntaxTree(
+                  IFF(mainExpr.tree, expr.tree)
+                );
+                const areEqual =
+                  exprTreeVerifyTautology(iffTree);
+                const mainItemNum = mainExprIndex + 1;
+                const itemNum = index + 1;
+                const mainLatex =
+                  mainExpr.inputInterpretationLatex;
+                const exprLatex =
+                  expr.inputInterpretationLatex;
 
-                  return (
-                    <ExpressionCard
-                      key={"comparison-pair" + index}
-                      primary={
-                        <Fragment>
-                          {areEqual && (
-                            <StyledLatex>
-                              {t(
-                                "cards.output.formulas-are-equivalent",
-                                {
-                                  first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
-                                  second: `$$${exprLatex} \\tag{${itemNum}}$$`,
-                                }
-                              )}
-                            </StyledLatex>
-                          )}
-                          {!areEqual && (
-                            <StyledLatex>
-                              {t(
-                                "cards.output.formulas-are-not-equivalent",
-                                {
-                                  first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
-                                  second: `$$${exprLatex} \\tag{${itemNum}}$$`,
-                                }
-                              )}
-                            </StyledLatex>
-                          )}
-                        </Fragment>
-                      }
-                      secondary={
-                        <TruthTable
-                          exprTree={iffTree}
-                          slotProps={{
-                            container: {
-                              maxHeight: "40vh",
-                            },
-                          }}
-                        />
-                      }
-                    />
-                  );
-                })}
-            </Stack>
+                return (
+                  <ExpressionCard
+                    key={"comparison-pair" + index}
+                    primary={
+                      <Fragment>
+                        {areEqual && (
+                          <StyledLatex>
+                            {t(
+                              "cards.output.formulas-are-equivalent",
+                              {
+                                first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
+                                second: `$$${exprLatex} \\tag{${itemNum}}$$`,
+                              }
+                            )}
+                          </StyledLatex>
+                        )}
+                        {!areEqual && (
+                          <StyledLatex>
+                            {t(
+                              "cards.output.formulas-are-not-equivalent",
+                              {
+                                first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
+                                second: `$$${exprLatex} \\tag{${itemNum}}$$`,
+                              }
+                            )}
+                          </StyledLatex>
+                        )}
+                      </Fragment>
+                    }
+                    secondary={
+                      <TruthTable
+                        exprTree={iffTree}
+                        slotProps={{
+                          container: {
+                            maxHeight: "40vh",
+                          },
+                        }}
+                      />
+                    }
+                  />
+                );
+              })}
           </Stack>
         )}
       </Stack>

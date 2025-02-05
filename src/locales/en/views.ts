@@ -4,20 +4,24 @@ export default {
     "return-home": "Return to home page",
   },
   "checker-view": {
-    "input-interpretation": {
-      "title": "Input Interpretation",
-      "interpretation-is-unsuccessful":
-        "The checker cannot understand this expression.",
+    banner: "Tautology checker",
+    cards: {
+      "input-interpretation": {
+        title: "Input Interpretation",
+      },
+      "output": {
+        "title": "Result",
+        "formula-is-tautology":
+          "The formula {{formula}} is a tautology.",
+        "formula-is-contradiction":
+          "The formula {{formula}} is a contradiction.",
+        "formula-is-satisfiable": `The formula {{formula}} is neither a tautology or a contradiction.`,
+        "warnings": {
+          "no-formula-to-display":
+            "There is no valid formula to display.",
+        },
+      },
     },
-    "verdict": {
-      "title": "Verdict",
-      "formula-is-tautology":
-        "The formula {{eq}} is a tautology.",
-      "formula-is-contradiction":
-        "The formula {{eq}} is a contradiction.",
-      "formula-is-satisfiable": `The formula {{eq}} is neither a tautology or a contradiction.`,
-    },
-    "user-manual": [],
   },
   "home-view": {
     "lang": {
@@ -45,6 +49,7 @@ export default {
     "boolean-algebra-interpreter":
       "Boolean algebra interpreter",
   },
+
   "comparator-view": {
     "banner": "Comparator",
     "warning-notice": "Notice",
@@ -57,7 +62,7 @@ export default {
           "The formula {{first}} and the formula {{second}} are not equivalent.",
         "warnings": {
           "not-enough-formula-for-comparison":
-            "There is not enough valid formulas to perform comparisons.",
+            "There is not enough valid formula to perform comparisons.",
         },
       },
       "input-interpretation": {

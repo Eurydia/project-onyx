@@ -29,7 +29,7 @@ type EditorProps = {
 const Editor_: FC<EditorProps> = (props) => {
   const { placeholder, value, onChange, onSubmit } = props;
   const { palette } = useTheme();
-  const { t } = useTranslation("component", {
+  const { t } = useTranslation("components", {
     keyPrefix: "editor",
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
