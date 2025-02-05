@@ -17,7 +17,7 @@ export const EvaluationDisplayStep: FC<
   const { evaluated, repr, substitutions, connective } =
     step;
   const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.step-by-step",
+    keyPrefix: "evaluator-view.cards.step-by-step",
   });
   const tag = `${stepIndex}.a`;
   return (
@@ -42,22 +42,13 @@ export const EvaluationDisplayStep: FC<
           references={references}
         />
       ))}
-      {evaluated && (
-        <StyledLatex>
-          {t("by-truth-table-formula-is-true", {
-            operator: `$${connective}$`,
-            formula: `$(${tag})$`,
-          })}
-        </StyledLatex>
-      )}
-      {!evaluated && (
-        <StyledLatex>
-          {t("by-truth-table-formula-is-false", {
-            operator: `$${connective}$`,
-            formula: `$(${tag})$`,
-          })}
-        </StyledLatex>
-      )}
+      <StyledLatex>
+        {t("by-truth-table-formula-is-value", {
+          operator: `$${connective}$`,
+          formula: `$(${tag})$`,
+          value: evaluated ? t("true") : t("false"),
+        })}
+      </StyledLatex>
     </Stack>
   );
 };

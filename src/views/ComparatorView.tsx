@@ -2,6 +2,7 @@ import { AppNavGroup } from "$components/AppNavMenu";
 import { Editor } from "$components/Editor/Editor";
 import { ExpressionCard } from "$components/ExpressionCard";
 import { InputDisplayMany } from "$components/InputTable";
+import { StyledAlert } from "$components/Styled/StyledAlert";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeVerifyTautology } from "$core/expr-tree/verify-tautology";
@@ -9,10 +10,7 @@ import { IFF } from "$core/syntax-tree/node";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { BaseLayout } from "$layouts/BaseLayout";
 import { ComparatorRouteLoaderData } from "$types/loader-data";
-import { WarningRounded } from "@mui/icons-material";
 import {
-  Alert,
-  AlertTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -20,13 +18,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  FC,
-  Fragment,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 
@@ -122,31 +114,13 @@ export const ComparatorView: FC = () => {
               {t("cards.output.title")}
             </Typography>
             {validExpressions.length <= 1 && (
-              <Alert
-                icon={false}
-                variant="standard"
-                severity="warning"
-              >
-                <AlertTitle>
-                  <Stack
-                    direction="row"
-                    flexWrap="wrap"
-                    alignItems="flex-end"
-                    spacing={2}
-                    useFlexGap
-                  >
-                    <WarningRounded />
-                    <Typography fontWeight={900}>
-                      {t(`warning-notice`)}
-                    </Typography>
-                  </Stack>
-                </AlertTitle>
+              <StyledAlert severity="warning">
                 <Typography>
                   {t(
                     "cards.output.warnings.not-enough-formula-for-comparison"
                   )}
                 </Typography>
-              </Alert>
+              </StyledAlert>
             )}
             {mainExprIndex !== null &&
               validExpressions.length > 1 && (
@@ -210,30 +184,27 @@ export const ComparatorView: FC = () => {
                   <ExpressionCard
                     key={"comparison-pair" + index}
                     primary={
-                      <Fragment>
-                        {areEqual && (
-                          <StyledLatex>
-                            {t(
-                              "cards.output.formulas-are-equivalent",
-                              {
-                                first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
-                                second: `$$${exprLatex} \\tag{${itemNum}}$$`,
-                              }
-                            )}
-                          </StyledLatex>
-                        )}
-                        {!areEqual && (
-                          <StyledLatex>
-                            {t(
-                              "cards.output.formulas-are-not-equivalent",
-                              {
-                                first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
-                                second: `$$${exprLatex} \\tag{${itemNum}}$$`,
-                              }
-                            )}
-                          </StyledLatex>
-                        )}
-                      </Fragment>
+                      areEqual ? (
+                        <StyledLatex>
+                          {t(
+                            "cards.output.formulas-are-equivalent",
+                            {
+                              first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
+                              second: `$$${exprLatex} \\tag{${itemNum}}$$`,
+                            }
+                          )}
+                        </StyledLatex>
+                      ) : (
+                        <StyledLatex>
+                          {t(
+                            "cards.output.formulas-are-not-equivalent",
+                            {
+                              first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
+                              second: `$$${exprLatex} \\tag{${itemNum}}$$`,
+                            }
+                          )}
+                        </StyledLatex>
+                      )
                     }
                     secondary={
                       <TruthTable

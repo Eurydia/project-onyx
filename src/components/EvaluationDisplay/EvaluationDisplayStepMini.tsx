@@ -19,7 +19,7 @@ export const EvaluationDisplayStepMini: FC<
     subStepIndex + 97 + 1
   );
   const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.step-by-step",
+    keyPrefix: "evaluator-view.cards.step-by-step",
   });
 
   const { substituted, evaluated, repr, stepRef } = subStep;

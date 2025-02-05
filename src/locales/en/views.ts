@@ -10,11 +10,11 @@ export default {
         title: "Input interpretation",
       },
       "output": {
+        "true": "true",
+        "false": "false",
         "title": "Result",
-        "formula-evalutes-to-true":
-          "The formula {{formula}} evaluates to true.",
-        "formula-evalutes-to-false":
-          "The formula {{formula}} evaluates to false.",
+        "formula-evaluates-to-value":
+          "The formula {{formula}} evaluates to {{value}}.",
         "infos": {
           "no-valid-formula-to-display":
             "There is no valid formula to display.",
@@ -27,13 +27,10 @@ export default {
         "tab-item": "Expression ({{num}})",
         "no-evaluation-step-to-display":
           "No evaluation step to display.",
-        "therefore-formula-is-true":
-          "Therefore, the formula {{formula}} is true.",
-        "therefore-formula-is-false":
-          "Therefore, the formula {{formula}} is false.",
+        "therefore-formula-is-value":
+          "Therefore, the formula {{formula}} is {{value}}.",
         "step-x-of-y": "Step {{current}} of {{total}}",
-        "by-truth-table-formula-is-true": `By the truth table of {{operator}}, {{formula}} is true.`,
-        "by-truth-table-formula-is-false": `By the truth table of {{operator}}, {{formula}} is false.`,
+        "by-truth-table-formula-is-value": `By the truth table of {{operator}}, {{formula}} is {{value}}.`,
         "consider-the-formula":
           "Consider the formula {{formula}}",
         "given-variable-is-value":
@@ -116,7 +113,6 @@ export default {
     "boolean-algebra-interpreter":
       "Boolean algebra interpreter",
   },
-
   "comparator-view": {
     "banner": "Comparator",
     "warning-notice": "Notice",

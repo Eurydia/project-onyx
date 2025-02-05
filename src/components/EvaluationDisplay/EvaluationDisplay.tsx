@@ -18,7 +18,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
 ) => {
   const { exprTree, symbolTable } = props;
   const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.step-by-step",
+    keyPrefix: "evaluator-view.cards.step-by-step",
   });
 
   const steps = useMemo(
@@ -55,20 +55,12 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
           references={steps}
         />
       ))}
-      {evaluated && (
-        <StyledLatex>
-          {t("therefore-the-formula-is-true", {
-            formula: `$$${repr}$$`,
-          })}
-        </StyledLatex>
-      )}
-      {!evaluated && (
-        <StyledLatex>
-          {t("therefore-the-formula-is-false", {
-            formula: `$$${repr}$$`,
-          })}
-        </StyledLatex>
-      )}
+      <StyledLatex>
+        {t("therefore-formula-is-value", {
+          formula: `$$${repr}$$`,
+          value: t(evaluated ? "true" : "false"),
+        })}
+      </StyledLatex>
     </Stack>
   );
 };

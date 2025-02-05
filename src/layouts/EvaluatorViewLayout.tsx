@@ -5,68 +5,12 @@ import { StyledAlert } from "$components/Styled/StyledAlert";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
-import { ExprTree } from "$types/expression-tree";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography, useTheme } from "@mui/material";
 import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { PropositionConfig } from "../components/math/PropositionConfig";
-
-type EvaluationOutputItemProps = {
-  latex: string;
-  result: boolean;
-  tree: ExprTree;
-};
-const EvaluationOutputItem: FC<
-  EvaluationOutputItemProps
-> = (props) => {
-  const { latex, result, tree } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards.output",
-  });
-
-  if (result) {
-    return (
-      <ExpressionCard
-        primary={
-          <StyledLatex>
-            {t("formula-evaluates-to-true", {
-              formula: `$$${latex}$$`,
-            })}
-          </StyledLatex>
-        }
-        secondary={
-          <TruthTable
-            exprTree={tree}
-            slotProps={{
-              container: { maxHeight: "40vh" },
-            }}
-          />
-        }
-      />
-    );
-  }
-  return (
-    <ExpressionCard
-      primary={
-        <StyledLatex>
-          {t("formula-evaluates-to-false", {
-            formula: `$$${latex}$$`,
-          })}
-        </StyledLatex>
-      }
-      secondary={
-        <TruthTable
-          exprTree={tree}
-          slotProps={{
-            container: { maxHeight: "40vh" },
-          }}
-        />
-      }
-    />
-  );
-};
 
 type EvaluatorViewLayoutProps = {
   symbolTable: SymbolTable;
@@ -118,12 +62,29 @@ export const EvaluatorViewLayout: FC<
             return null;
           }
           const expr = exprTreeFromSyntaxTree(item.tree);
+          const latex = item.inputInterpretationLatex;
+          const result = expr.eval(symbolTable);
           return (
-            <EvaluationOutputItem
+            <ExpressionCard
               key={"output-item" + index}
-              tree={expr}
-              result={expr.eval(symbolTable)}
-              latex={item.inputInterpretationLatex}
+              primary={
+                <StyledLatex>
+                  {t("output.formula-evaluates-to-value", {
+                    formula: `$$${latex}$$`,
+                    value: result
+                      ? t("output.true")
+                      : t("output.false"),
+                  })}
+                </StyledLatex>
+              }
+              secondary={
+                <TruthTable
+                  exprTree={expr}
+                  slotProps={{
+                    container: { maxHeight: "40vh" },
+                  }}
+                />
+              }
             />
           );
         })}

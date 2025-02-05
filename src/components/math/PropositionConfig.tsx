@@ -1,15 +1,11 @@
 import { SymbolTable } from "$types/syntax-tree";
-import { InfoRounded } from "@mui/icons-material";
 import {
-  Alert,
-  AlertTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
   Grid2,
   Radio,
   RadioGroup,
-  Stack,
   Typography,
 } from "@mui/material";
 import { FC, useMemo } from "react";
@@ -25,7 +21,9 @@ export const PropositionConfig: FC<
 > = (props) => {
   const { value, onChange } = props;
 
-  const { t } = useTranslation("translation");
+  const { t } = useTranslation("components", {
+    keyPrefix: "symbol-config",
+  });
 
   const symbols = useMemo(() => {
     return [...value.keys()].toSorted((a, b) =>
@@ -34,28 +32,7 @@ export const PropositionConfig: FC<
   }, [value]);
 
   if (symbols.length === 0) {
-    return (
-      <Alert
-        icon={false}
-        severity="info"
-      >
-        <AlertTitle>
-          <Stack
-            direction="row"
-            flexWrap="wrap"
-            alignItems="flex-end"
-            spacing={2}
-            useFlexGap
-          >
-            <InfoRounded />
-            <Typography fontWeight={900}>
-              {`Notice`}
-            </Typography>
-          </Stack>
-        </AlertTitle>
-        <Typography>{`No proposition to display.`}</Typography>
-      </Alert>
-    );
+    return null;
   }
 
   return (
@@ -85,22 +62,28 @@ export const PropositionConfig: FC<
             >
               <FormControlLabel
                 disableTypography
-                control={<Radio />}
-                value="1"
-                label={
-                  <Typography>
-                    {t("component.playground.config.true")}
-                  </Typography>
+                control={
+                  <Radio
+                    disableFocusRipple
+                    disableRipple
+                    disableTouchRipple
+                  />
                 }
+                value="1"
+                label={<Typography>{t("true")}</Typography>}
               />
               <FormControlLabel
-                control={<Radio />}
+                control={
+                  <Radio
+                    disableFocusRipple
+                    disableRipple
+                    disableTouchRipple
+                  />
+                }
                 value="0"
                 disableTypography
                 label={
-                  <Typography>
-                    {t("component.playground.config.false")}
-                  </Typography>
+                  <Typography>{t("false")}</Typography>
                 }
               />
             </RadioGroup>

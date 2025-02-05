@@ -15,4 +15,5 @@ export const EN_COMPONENTS = {
         "The following expressions appear to be invalid or incorrect.",
     },
   },
+  "symbol-config": { true: "True", false: "False" },
 };
