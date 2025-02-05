@@ -1,3 +1,4 @@
+import { operatorToLatex } from "$core/operator";
 import {
   ExprTreeBinary,
   ExprTreeConst,
@@ -10,14 +11,6 @@ import {
   SyntaxTree,
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
-
-const OPERATOR_REPR: Record<Operator, string> = {
-  [Operator.AND]: `\\land`,
-  [Operator.OR]: `\\lor`,
-  [Operator.IFF]: `\\iff`,
-  [Operator.IMPL]: `\\implies`,
-  [Operator.NOT]: `\\lnot`,
-};
 
 type EvalFn = (t: SymbolTable) => boolean;
 const OPERATOR_EVAL_FN: Record<
@@ -69,7 +62,7 @@ const _syntaxTreetoExprTree = (
         orderStart
       );
       const node: ExprTreeUnary = {
-        repr: OPERATOR_REPR[tree.operator],
+        repr: operatorToLatex(tree.operator),
         child,
         nodeType,
         eval: (t) => !child.eval(t),
@@ -95,7 +88,7 @@ const _syntaxTreetoExprTree = (
         left,
         right,
         order: right.order + 1,
-        repr: OPERATOR_REPR[tree.operator],
+        repr: operatorToLatex(tree.operator),
       };
       return node;
     }

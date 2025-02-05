@@ -3,6 +3,7 @@ import { StyledAlert } from "$components/Styled/StyledAlert";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { CheckerRouteLoaderData } from "$types/loader-data";
+import { Typography } from "@mui/material";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { VerdictDisplay } from "./VerdictDisplay";
@@ -20,8 +21,10 @@ export const VerdictDisplayMany: FC<
 
   if (formulas.filter((f) => f.ok).length === 0) {
     return (
-      <StyledAlert severity="warning">
-        {t("warnings.no-formula-to-display")}
+      <StyledAlert severity="info">
+        <Typography>
+          {t("warnings.no-formula-to-display")}
+        </Typography>
       </StyledAlert>
     );
   }

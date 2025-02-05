@@ -1,7 +1,7 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
-import { Stack } from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 type EvaluationDisplayStepMiniProps = {
   references: EvaluationStep[];
@@ -18,13 +18,20 @@ export const EvaluationDisplayStepMini: FC<
   const currMarker = String.fromCharCode(
     subStepIndex + 97 + 1
   );
+  const { t } = useTranslation("views", {
+    keyPrefix: "evaluator-view.step-by-step",
+  });
 
   const { substituted, evaluated, repr, stepRef } = subStep;
 
   if (stepRef === false) {
     return (
       <StyledLatex>
-        {`Given $${repr}$ is ${evaluated}, rewrite $${repr}$ with ${evaluated} in $\\text{(${stepIndex}.${prevMarker})}$, $$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`}
+        {t("given-variable-is-value", {
+          variable: `$${repr}$`,
+          formula: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
+          value: t(evaluated ? "true" : "false"),
+        })}
       </StyledLatex>
     );
   }
@@ -32,13 +39,14 @@ export const EvaluationDisplayStepMini: FC<
   const refRepr = references[stepRef - 1].repr;
 
   return (
-    <Stack>
-      <StyledLatex>
-        {`From $\\text{(${stepRef}.a)}$, $$${refRepr}$$ is ${evaluated}.`}
-      </StyledLatex>
-      <StyledLatex>
-        {`Substitute into $\\text{(${stepIndex}.${prevMarker})}$, $$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`}
-      </StyledLatex>
-    </Stack>
+    <StyledLatex>
+      {t("from-previous-step-substitute-into-formula", {
+        step: `$\\text{(${stepRef}.a)}$`,
+        formula: `$$${refRepr}$$`,
+        value: t(evaluated ? "true" : "false"),
+        current: `$\\text{(${stepIndex}.${prevMarker})}$`,
+        result: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
+      })}
+    </StyledLatex>
   );
 };

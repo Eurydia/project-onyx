@@ -1,4 +1,4 @@
-import { AppNavGroup } from "$components/common/AppNavMenu";
+import { AppNavGroup } from "$components/AppNavMenu";
 import { Editor } from "$components/Editor";
 import { InputDisplayMany } from "$components/InputTable";
 import { VerdictDisplayMany } from "$components/VerdictDisplay";
@@ -56,7 +56,7 @@ export const CheckerView: FC = () => {
             >
               {t("cards.input-interpretation.title")}
             </Typography>
-            <InputDisplayMany expressions={expressions} />
+            <InputDisplayMany items={expressions} />
             <Typography
               fontWeight={900}
               fontSize={typography.h3.fontSize}

@@ -1,7 +1,8 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
 type EvaluationDisplayProps = {
@@ -13,15 +14,24 @@ export const EvaluationDisplayStep: FC<
   EvaluationDisplayProps
 > = (props) => {
   const { step, stepIndex, references } = props;
-  const { evaluated, repr, substitutions } = step;
-  const tagMaker = `${stepIndex}.a`;
+  const { evaluated, repr, substitutions, connective } =
+    step;
+  const { t } = useTranslation("views", {
+    keyPrefix: "evaluator-view.step-by-step",
+  });
+  const tag = `${stepIndex}.a`;
   return (
     <Stack spacing={1}>
-      <StyledLatex sx={{ fontWeight: 700 }}>
-        {`Step ${stepIndex} of ${references.length}`}
-      </StyledLatex>
+      <Typography fontWeight={900}>
+        {t("step-x-of-y", {
+          current: stepIndex,
+          total: references.length,
+        })}
+      </Typography>
       <StyledLatex>
-        {`Consider the expression $$${repr}.\\tag{${tagMaker}}$$`}
+        {t("consider-the-formula", {
+          formula: `$$${repr}.\\tag{${tag}}$$`,
+        })}
       </StyledLatex>
       {substitutions.map((subStep, subStepIndex) => (
         <EvaluationDisplayStepMini
@@ -32,9 +42,22 @@ export const EvaluationDisplayStep: FC<
           references={references}
         />
       ))}
-      <StyledLatex>
-        {`By the truth table of the connective, $\\text{(${tagMaker})}$ is ${evaluated}.`}
-      </StyledLatex>
+      {evaluated && (
+        <StyledLatex>
+          {t("by-truth-table-formula-is-true", {
+            operator: `$${connective}$`,
+            formula: `$(${tag})$`,
+          })}
+        </StyledLatex>
+      )}
+      {!evaluated && (
+        <StyledLatex>
+          {t("by-truth-table-formula-is-false", {
+            operator: `$${connective}$`,
+            formula: `$(${tag})$`,
+          })}
+        </StyledLatex>
+      )}
     </Stack>
   );
 };

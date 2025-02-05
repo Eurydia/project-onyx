@@ -13,6 +13,7 @@ export type EvaluationStep = {
     stepRef: number | false;
     evaluated: boolean;
   }[];
+  connective: string | null;
   evaluated: boolean;
 };
 
@@ -39,6 +40,7 @@ const traverse = (
               substituted: `\\text{${evaluated}}`,
             },
           ],
+          connective: null,
         });
       }
       break;
@@ -56,12 +58,6 @@ const traverse = (
           traverse(child, table, steps);
           childStep = steps.length;
         }
-
-        // not (x and y)
-        // From (9), x and y === True
-        // not True
-        // False
-
         const substitutions: EvaluationStep["substitutions"] =
           [];
         if (child.nodeType !== SyntaxTreeNodeType.CONST) {
@@ -77,6 +73,7 @@ const traverse = (
           repr: exprTreeToLatex(tree),
           substitutions,
           evaluated: tree.eval(table),
+          connective: tree.repr,
         });
       }
       break;
@@ -143,6 +140,7 @@ const traverse = (
           repr: exprTreeToLatex(tree),
           evaluated: tree.eval(table),
           substitutions,
+          connective: tree.repr,
         });
       }
       break;

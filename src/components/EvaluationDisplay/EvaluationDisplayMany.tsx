@@ -1,17 +1,11 @@
+import { StyledAlert } from "$components/Styled/StyledAlert";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";
-import { InfoRounded } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import {
-  Alert,
-  AlertTitle,
-  Stack,
-  Tab,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { Tab, Typography } from "@mui/material";
+import { FC, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { EvaluationDisplay } from "./EvaluationDisplay";
 
 type EvaluationDisplayManyProps = {
@@ -21,9 +15,12 @@ type EvaluationDisplayManyProps = {
 export const EvaluationDisplayMany: FC<
   EvaluationDisplayManyProps
 > = (props) => {
-  const { items: items, symbolTable } = props;
+  const { items, symbolTable } = props;
 
-  const { palette } = useTheme();
+  const { t } = useTranslation("views", {
+    keyPrefix: "evaluator-view.cards.step-by-step",
+  });
+
   const [tab, setTab] = useState(() => {
     return items.findIndex((item) => item.ok);
   });
@@ -32,42 +29,29 @@ export const EvaluationDisplayMany: FC<
     setTab(items.findIndex((item) => item.ok));
   }, [items]);
 
-  const validExpressions = items.filter((item) => item.ok);
+  const validExpressions = useMemo(
+    () => items.filter((item) => item.ok),
+    [items]
+  );
+
   if (validExpressions.length === 0) {
     return (
-      <Alert
-        icon={false}
-        severity="info"
-      >
-        <AlertTitle>
-          <Stack
-            direction="row"
-            flexWrap="wrap"
-            alignItems="flex-end"
-            spacing={2}
-            useFlexGap
-          >
-            <InfoRounded />
-            <Typography fontWeight={900}>
-              {`Notice`}
-            </Typography>
-          </Stack>
-        </AlertTitle>
+      <StyledAlert severity="info">
         <Typography>
-          {`No step-by-step evaluation to display`}
+          {t("infos.no-valid-formula-to-display")}
         </Typography>
-      </Alert>
+      </StyledAlert>
     );
   }
 
   return (
     <TabContext value={tab}>
       <TabList
-        onChange={(_, v) => setTab(v as number)}
+        onChange={(_, v) => setTab(Number.parseInt(v))}
         variant="scrollable"
         scrollButtons="auto"
-        sx={{ paddingX: 0 }}
         textColor="inherit"
+        sx={{ paddingX: 0 }}
       >
         {items.map((item, index) => {
           if (!item.ok) {
@@ -78,10 +62,7 @@ export const EvaluationDisplayMany: FC<
               key={"tab" + index}
               value={index}
               disableRipple
-              label={`EXPRESSION (${index + 1})`}
-              sx={{
-                color: palette.primary.dark,
-              }}
+              label={t("tab-item", { num: index + 1 })}
             />
           );
         })}

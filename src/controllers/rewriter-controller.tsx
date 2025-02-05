@@ -10,37 +10,35 @@ export const rewriterRouteLoader: LoaderFunction = ({
   const userInputRaw = url.searchParams.get("input");
   if (
     userInputRaw === null ||
-    userInputRaw.toString().trim().length === 0
+    userInputRaw.trim().length === 0
   ) {
     const loaderData: RewriterRouteLoaderData = {
       userInput: "",
-      expressions: [],
+      items: [],
     };
     return loaderData;
   }
 
-  const userInput = userInputRaw.toString();
-  const expressions: RewriterRouteLoaderData["expressions"] =
-    [];
-  for (const input of userInput.split(",")) {
-    const parseResult = parse(input);
-    expressions.push(
-      parseResult.ok
-        ? {
-            ok: true,
-            inputRaw: input.trim(),
-            inputInterpretationLatex: syntaxTreeToLatex(
-              parseResult.tree
-            ),
-            originalTree: parseResult.tree,
-          }
-        : { ok: false, inputRaw: input.trim() }
-    );
+  const expressions: RewriterRouteLoaderData["items"] = [];
+  for (const userInput of userInputRaw.split(",")) {
+    const parseResult = parse(userInput);
+    if (!parseResult.ok) {
+      expressions.push({ ok: false, inputRaw: userInput });
+      continue;
+    }
+    expressions.push({
+      ok: true,
+      inputRaw: userInput,
+      originalTree: parseResult.tree,
+      inputInterpretationLatex: syntaxTreeToLatex(
+        parseResult.tree
+      ),
+    });
   }
 
   const loaderData: RewriterRouteLoaderData = {
-    userInput,
-    expressions,
+    userInput: userInputRaw,
+    items: expressions,
   };
   return loaderData;
 };

@@ -1,17 +1,14 @@
-import { InfoRounded } from "@mui/icons-material";
 import {
   Alert,
   AlertProps,
   AlertTitle,
-  Stack,
-  Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 type StyledAlertProps = {
   severity: AlertProps["severity"];
-  children: string;
+  children: ReactNode;
 };
 export const StyledAlert: FC<StyledAlertProps> = (
   props
@@ -22,25 +19,11 @@ export const StyledAlert: FC<StyledAlertProps> = (
   });
 
   return (
-    <Alert
-      icon={false}
-      severity={severity}
-    >
-      <AlertTitle>
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          alignItems="flex-end"
-          spacing={2}
-          useFlexGap
-        >
-          <InfoRounded />
-          <Typography fontWeight={900}>
-            {t("notice")}
-          </Typography>
-        </Stack>
+    <Alert severity={severity}>
+      <AlertTitle sx={{ fontWeight: 900 }}>
+        {t("notice")}
       </AlertTitle>
-      <Typography>{children}</Typography>
+      {children}
     </Alert>
   );
 };

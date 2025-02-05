@@ -1,5 +1,4 @@
 import { parse } from "$core/interpreter/parser";
-import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
 import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { LoaderFunction } from "react-router";
@@ -16,19 +15,13 @@ export const evaluatorRouteLoader: LoaderFunction = ({
   ) {
     const loaderData: EvaluatorRouteLoaderData = {
       userInput: "",
-      symbols: new Set(),
-      expressions: [],
+      items: [],
     };
     return loaderData;
   }
 
-  const symbols = new Set<string>();
-  const expressions: EvaluatorRouteLoaderData["expressions"] =
-    [];
+  const expressions: EvaluatorRouteLoaderData["items"] = [];
   for (const userInput of userInputRaw.split(",")) {
-    if (userInput.trim().length === 0) {
-      continue;
-    }
     const parseResult = parse(userInput);
 
     if (!parseResult.ok) {
@@ -40,11 +33,6 @@ export const evaluatorRouteLoader: LoaderFunction = ({
     }
 
     const { tree } = parseResult;
-    for (const symbol of syntaxTreeCollectSymbols(
-      parseResult.tree
-    )) {
-      symbols.add(symbol);
-    }
     expressions.push({
       ok: true,
       inputRaw: userInput.trim(),
@@ -55,8 +43,7 @@ export const evaluatorRouteLoader: LoaderFunction = ({
 
   const loaderData: EvaluatorRouteLoaderData = {
     userInput: userInputRaw,
-    expressions,
-    symbols,
+    items: expressions,
   };
   return loaderData;
 };

@@ -8,4 +8,11 @@ export const EN_COMPONENTS = {
   },
   "editor": { run: "Run", copy: "Copy", copied: "Copied" },
   "alert": { notice: "Notice" },
+  "input-display": {
+    "empty-string": "Empty",
+    "warnings": {
+      "the-following-input-are-invalid":
+        "The following expressions appear to be invalid or incorrect.",
+    },
+  },
 };

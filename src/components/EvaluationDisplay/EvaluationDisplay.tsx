@@ -6,6 +6,7 @@ import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography } from "@mui/material";
 import { FC, memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
 type EvaluationDisplayProps = {
@@ -16,6 +17,9 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
   props
 ) => {
   const { exprTree, symbolTable } = props;
+  const { t } = useTranslation("views", {
+    keyPrefix: "evaluator-view.step-by-step",
+  });
 
   const steps = useMemo(
     () => exprTreeFlattenStepByStep(exprTree, symbolTable),
@@ -25,7 +29,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
   if (steps.length === 0) {
     return (
       <Typography fontStyle="italic">
-        No step to display.
+        {t("no-evaluation-step-to-display")}
       </Typography>
     );
   }
@@ -51,9 +55,20 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
           references={steps}
         />
       ))}
-      <StyledLatex>
-        {`Therefore, the expression $$${repr}$$ is ${evaluated}.`}
-      </StyledLatex>
+      {evaluated && (
+        <StyledLatex>
+          {t("therefore-the-formula-is-true", {
+            formula: `$$${repr}$$`,
+          })}
+        </StyledLatex>
+      )}
+      {!evaluated && (
+        <StyledLatex>
+          {t("therefore-the-formula-is-false", {
+            formula: `$$${repr}$$`,
+          })}
+        </StyledLatex>
+      )}
     </Stack>
   );
 };

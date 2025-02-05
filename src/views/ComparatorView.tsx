@@ -1,4 +1,4 @@
-import { AppNavGroup } from "$components/common/AppNavMenu";
+import { AppNavGroup } from "$components/AppNavMenu";
 import { Editor } from "$components/Editor/Editor";
 import { ExpressionCard } from "$components/ExpressionCard";
 import { InputDisplayMany } from "$components/InputTable";
@@ -113,7 +113,7 @@ export const ComparatorView: FC = () => {
             >
               {t("cards.input-interpretation.title")}
             </Typography>
-            <InputDisplayMany expressions={expressions} />
+            <InputDisplayMany items={expressions} />
             <Typography
               fontWeight={900}
               fontSize={theme.typography.h3.fontSize}

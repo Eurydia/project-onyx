@@ -1,9 +1,7 @@
+import { StyledAlert } from "$components/Styled/StyledAlert";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { Maybe } from "$types/generic";
-import { WarningRounded } from "@mui/icons-material";
 import {
-  Alert,
-  AlertTitle,
   List,
   ListItem,
   ListItemIcon,
@@ -12,65 +10,53 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 type InputDisplayManyProps = {
-  expressions: ({ inputRaw: string } & Maybe<{
+  items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
   }>)[];
 };
 export const InputDisplayMany: FC<InputDisplayManyProps> = (
   props
 ) => {
-  const { expressions } = props;
+  const { items } = props;
+  const { t } = useTranslation("components", {
+    keyPrefix: "input-display",
+  });
 
   return (
     <Stack spacing={1}>
-      {expressions.map((expr, index) => {
+      {items.map((item, index) => {
         const inputNum = index + 1;
+
+        if (!item.ok) {
+          return (
+            <StyledLatex
+              key={"expr" + index}
+              sx={{
+                color: ({ palette }) => palette.error.main,
+              }}
+            >
+              {`$$\\varnothing \\tag{${inputNum}}$$`}
+            </StyledLatex>
+          );
+        }
+
         return (
-          <Stack key={"expr" + index}>
-            {expr.ok && (
-              <StyledLatex>
-                {`$$${expr.inputInterpretationLatex} \\tag{${inputNum}}$$`}
-              </StyledLatex>
-            )}
-            {!expr.ok && (
-              <StyledLatex
-                sx={{
-                  color: ({ palette }) =>
-                    palette.error.main,
-                }}
-              >
-                {`$$\\varnothing\\tag{${inputNum}}$$`}
-              </StyledLatex>
-            )}
-          </Stack>
+          <StyledLatex key={"expr" + index}>
+            {`$$${item.inputInterpretationLatex} \\tag{${inputNum}}$$`}
+          </StyledLatex>
         );
       })}
-      {expressions.some((expr) => !expr.ok) && (
-        <Alert
-          icon={false}
-          variant="standard"
-          severity="warning"
-        >
-          <AlertTitle>
-            <Stack
-              direction="row"
-              flexWrap="wrap"
-              alignItems="flex-end"
-              spacing={2}
-              useFlexGap
-            >
-              <WarningRounded />
-              <Typography fontWeight={900}>
-                {`Notice`}
-              </Typography>
-            </Stack>
-          </AlertTitle>
-          <Typography>{`The evaluator could not understand the following input. Please make sure that they are correct.`}</Typography>
+      {items.some((expr) => !expr.ok) && (
+        <StyledAlert severity="warning">
+          <Typography>
+            {t("warnings.the-following-input-are-invalid")}
+          </Typography>
           <List>
-            {expressions.map((expr, index) => {
-              if (expr.ok) {
+            {items.map((item, index) => {
+              if (item.ok) {
                 return null;
               }
               const inputNum = index + 1;
@@ -82,15 +68,21 @@ export const InputDisplayMany: FC<InputDisplayManyProps> = (
                     </Typography>
                   </ListItemIcon>
                   <ListItemText disableTypography>
-                    <Typography fontFamily="monospace">
-                      {`${expr.inputRaw}`}
-                    </Typography>
+                    {item.inputRaw.length === 0 ? (
+                      <Typography fontStyle="italic">
+                        {t("empty-string")}
+                      </Typography>
+                    ) : (
+                      <Typography fontFamily="monospace">
+                        {item.inputRaw}
+                      </Typography>
+                    )}
                   </ListItemText>
                 </ListItem>
               );
             })}
           </List>
-        </Alert>
+        </StyledAlert>
       )}
     </Stack>
   );

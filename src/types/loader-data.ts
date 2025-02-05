@@ -11,11 +11,11 @@ export type ComparatorRouteLoaderData = {
 
 export type EvaluatorRouteLoaderData = {
   userInput: string;
-  expressions: ({ inputRaw: string } & Maybe<{
+  symbols: string[];
+  items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
     tree: SyntaxTree;
   }>)[];
-  symbols: Set<string>;
 };
 
 export type CheckerRouteLoaderData = {
@@ -29,7 +29,7 @@ export type CheckerRouteLoaderData = {
 
 export type RewriterRouteLoaderData = {
   userInput: string;
-  expressions: ({ inputRaw: string } & Maybe<{
+  items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
     originalTree: SyntaxTree;
   }>)[];

@@ -3,6 +3,73 @@ export default {
     "title": "Uh oh, that's not good...",
     "return-home": "Return to home page",
   },
+  "evaluator-view": {
+    banner: "Evaluator",
+    cards: {
+      "input-interpretation": {
+        title: "Input interpretation",
+      },
+      "output": {
+        "title": "Result",
+        "formula-evalutes-to-true":
+          "The formula {{formula}} evaluates to true.",
+        "formula-evalutes-to-false":
+          "The formula {{formula}} evaluates to false.",
+        "infos": {
+          "no-valid-formula-to-display":
+            "There is no valid formula to display.",
+        },
+      },
+      "step-by-step": {
+        "true": "true",
+        "false": "false",
+        "title": "Step-by-step Evaluation",
+        "tab-item": "Expression ({{num}})",
+        "no-evaluation-step-to-display":
+          "No evaluation step to display.",
+        "therefore-formula-is-true":
+          "Therefore, the formula {{formula}} is true.",
+        "therefore-formula-is-false":
+          "Therefore, the formula {{formula}} is false.",
+        "step-x-of-y": "Step {{current}} of {{total}}",
+        "by-truth-table-formula-is-true": `By the truth table of {{operator}}, {{formula}} is true.`,
+        "by-truth-table-formula-is-false": `By the truth table of {{operator}}, {{formula}} is false.`,
+        "consider-the-formula":
+          "Consider the formula {{formula}}",
+        "given-variable-is-value":
+          "Given {{variable}} is true, substitute {{variable}} with true in {{formula}}",
+        "from-previous-step-substitute-into-formula":
+          "From {{step}}, {{formula}} is {{value}}. Substitute into {{current}} to obtain {{result}}",
+        "infos": {
+          "no-valid-formula-to-display":
+            "There is no valid formula to display step-by-step evaluation.",
+        },
+      },
+    },
+  },
+  "rewriter-view": {
+    banner: "Rewriter",
+    cards: {
+      "input-interpretation": {
+        title: "Input interpretation",
+      },
+      "output": {
+        "title": "Result",
+        "formula-cannot-be-expressed-in-the-desired-basis":
+          "The formula {{formula}} cannot be expressed in the desired basis.",
+        "formula-is-expressed-as-in-the-desired-basis":
+          "The formula {{formula}} can be expressed as {{result}} in the desired basis.",
+        "warnings": {
+          "no-valid-formula-to-display":
+            "There is no valid formula to display.",
+        },
+        "infos": {
+          "truth-table-is-not-available":
+            "The truth table for this formula is not available",
+        },
+      },
+    },
+  },
   "checker-view": {
     banner: "Tautology checker",
     cards: {

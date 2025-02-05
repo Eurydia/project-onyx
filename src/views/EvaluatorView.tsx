@@ -1,31 +1,48 @@
-import { AppNavGroup } from "$components/common/AppNavMenu";
+import { AppNavGroup } from "$components/AppNavMenu";
 import { Editor } from "$components/Editor/Editor";
-import { InputDisplayMany } from "$components/InputTable";
-import { EvaluatorOutputGroup } from "$components/math/EvaluatorOutputGroup";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { BaseLayout } from "$layouts/BaseLayout";
+import { EvaluatorViewLayout } from "$layouts/EvaluatorViewLayout";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
-import { Stack, Typography, useTheme } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { Stack } from "@mui/material";
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 
 export const EvaluatorView: FC = () => {
   const {
-    symbols,
-    expressions,
+    items,
     userInput: prevUserInput,
+    symbols: prevSymbols,
   } = useLoaderData() as EvaluatorRouteLoaderData;
-  const theme = useTheme();
   const submit = useSubmit();
   const { t } = useTranslation();
   const [userInput, setUserInput] = useState(prevUserInput);
+  const [symbolTable, setSymbolTable] = useState(() => {
+    const next = new Map<string, boolean>();
+    for (const symbol of prevSymbols) {
+      next.set(symbol, true);
+    }
+    return next;
+  });
 
   useEffect(() => {
     setUserInput(prevUserInput);
   }, [prevUserInput]);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    const next = new Map<string, boolean>();
+    for (const symbol of prevSymbols) {
+      next.set(symbol, true);
+    }
+    setSymbolTable(next);
+  }, [prevSymbols]);
+
+  const handleSubmit = useCallback(() => {
     submit(
       {
         input: userInput,
@@ -35,7 +52,19 @@ export const EvaluatorView: FC = () => {
         action: "/evaluator",
       }
     );
-  };
+  }, [submit, userInput]);
+
+  const handleSymbolChange = useCallback(
+    (k: string, v: boolean) => {
+      setSymbolTable((prev) => {
+        const next = new Map(prev);
+        next.set(k, v);
+        return next;
+      });
+      return;
+    },
+    []
+  );
 
   return (
     <BaseLayout
@@ -49,29 +78,12 @@ export const EvaluatorView: FC = () => {
           placeholder="p and q, p or q, p implies q, p iff q"
           onSubmit={handleSubmit}
         />
-        {prevUserInput.trim().length > 0 && (
-          <Stack spacing={2}>
-            <Typography
-              fontWeight={900}
-              fontSize={theme.typography.h3.fontSize}
-            >
-              {"Input Interpretation"}
-            </Typography>
-            <InputDisplayMany expressions={expressions} />
-            <EvaluatorOutputGroup
-              symbolSet={symbols}
-              expressions={expressions.map((expr) =>
-                expr.ok
-                  ? {
-                      ok: true,
-                      tree: exprTreeFromSyntaxTree(
-                        expr.tree
-                      ),
-                    }
-                  : { ok: false }
-              )}
-            />
-          </Stack>
+        {items.length > 0 && (
+          <EvaluatorViewLayout
+            symbolTable={symbolTable}
+            items={items}
+            onSymbolChange={handleSymbolChange}
+          />
         )}
       </Stack>
     </BaseLayout>
