@@ -7,7 +7,6 @@ import {
   BalanceRounded,
   BorderColorRounded,
   CalculateRounded,
-  EmojiObjectsRounded,
   RuleRounded,
 } from "@mui/icons-material";
 import {
@@ -45,11 +44,11 @@ const CARDS = [
     icon: <BorderColorRounded fontSize="inherit" />,
     palette: PALETTE_REWRITER_ROUTE,
   },
-  {
-    id: "reasoner",
-    icon: <EmojiObjectsRounded fontSize="inherit" />,
-    palette: PALETTE_REWRITER_ROUTE,
-  },
+  // {
+  //   id: "reasoner",
+  //   icon: <EmojiObjectsRounded fontSize="inherit" />,
+  //   palette: PALETTE_REWRITER_ROUTE,
+  // },
 ];
 
 const LANGUAGES = ["en", "th"];
