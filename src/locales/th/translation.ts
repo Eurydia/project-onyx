@@ -1,11 +1,10 @@
-export const en = {
+export const TH_TRANSLATION = {
   translation: {
     common: {
       proposition: "Proposition",
       truthValue: "Truth value",
       true: "T",
       false: "F",
-      close: "Close",
       connectives: {
         negation: "Negation",
         conjunction: "Conjunction",
@@ -15,6 +14,10 @@ export const en = {
       },
     },
     playground: {
+      feedback: {
+        dialogInfo:
+          "Tap on a circle to modify the truth value of the expression.",
+      },
       graph: {
         noEvaluationToDisplay:
           "No evaluation step to display. Evaluate an expression to see steps here.",

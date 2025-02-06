@@ -16,13 +16,12 @@ export const checkerRouteLoader: LoaderFunction = ({
   ) {
     const loaderData: CheckerRouteLoaderData = {
       userInput: "",
-      expressions: [],
+      items: [],
     };
     return loaderData;
   }
 
-  const expressions: CheckerRouteLoaderData["expressions"] =
-    [];
+  const expressions: CheckerRouteLoaderData["items"] = [];
 
   for (const userInput of userInputRaw.split(",")) {
     const parseResult = parse(userInput);
@@ -44,7 +43,7 @@ export const checkerRouteLoader: LoaderFunction = ({
   }
   const loaderData: CheckerRouteLoaderData = {
     userInput: userInputRaw,
-    expressions,
+    items: expressions,
   };
   return loaderData;
 };

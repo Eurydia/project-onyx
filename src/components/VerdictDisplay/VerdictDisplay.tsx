@@ -15,39 +15,19 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
 ) => {
   const { result, originalLatex } = props;
   const { t } = useTranslation("views", {
-    keyPrefix: "checker-view.cards.output",
+    keyPrefix: "checker-view",
   });
 
-  if (
-    result.nodeType === SyntaxTreeNodeType.CONST &&
-    result.value
-  ) {
-    return (
-      <StyledLatex>
-        {t("formula-is-tautology", {
-          formula: `$$${originalLatex}$$`,
-        })}
-      </StyledLatex>
-    );
-  }
-  if (
-    result.nodeType === SyntaxTreeNodeType.CONST &&
-    !result.value
-  ) {
-    return (
-      <StyledLatex>
-        {t("formula-is-contradiction", {
-          formula: `$$${originalLatex}$$`,
-        })}
-      </StyledLatex>
-    );
+  let resultT = t("contingent");
+  if (result.nodeType === SyntaxTreeNodeType.CONST) {
+    resultT = result ? t("tautology") : t("contradiction");
   }
 
   return (
     <StyledLatex>
-      {t("formula-is-satisfiable", {
+      {t("cards.output.text.formula-is-value", {
         formula: `$$${originalLatex}$$`,
-        // dependencies: `$${dependencies}$`,
+        value: `$$\\boxed{\\textbf{${resultT}}}$$`,
       })}
     </StyledLatex>
   );

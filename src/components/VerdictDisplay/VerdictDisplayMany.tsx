@@ -9,21 +9,21 @@ import { useTranslation } from "react-i18next";
 import { VerdictDisplay } from "./VerdictDisplay";
 
 type VerdictDisplayManyProps = {
-  formulas: CheckerRouteLoaderData["expressions"];
+  items: CheckerRouteLoaderData["items"];
 };
 export const VerdictDisplayMany: FC<
   VerdictDisplayManyProps
 > = (props) => {
-  const { formulas } = props;
+  const { items } = props;
   const { t } = useTranslation("views", {
-    keyPrefix: "checker-view.cards.output",
+    keyPrefix: "checker-view.cards.output.infos",
   });
 
-  if (formulas.filter((f) => f.ok).length === 0) {
+  if (items.filter((f) => f.ok).length === 0) {
     return (
       <StyledAlert severity="info">
         <Typography>
-          {t("warnings.no-formula-to-display")}
+          {t("no-formula-to-display")}
         </Typography>
       </StyledAlert>
     );
@@ -31,7 +31,7 @@ export const VerdictDisplayMany: FC<
 
   return (
     <Fragment>
-      {formulas.map((f, index) => {
+      {items.map((f, index) => {
         if (!f.ok) {
           return null;
         }

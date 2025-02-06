@@ -2,12 +2,12 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { FC, Fragment, ReactNode } from "react";
 
 type BaseLayoutProps = {
-  banner: string;
+  title: string;
   appHeader: ReactNode;
   children: ReactNode;
 };
 export const BaseLayout: FC<BaseLayoutProps> = (props) => {
-  const { appHeader, banner, children } = props;
+  const { appHeader, title: banner, children } = props;
   const { palette } = useTheme();
   return (
     <Fragment>

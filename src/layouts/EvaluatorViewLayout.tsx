@@ -1,6 +1,7 @@
 import { EvaluationDisplayMany } from "$components/EvaluationDisplay";
 import { ExpressionCard } from "$components/ExpressionCard";
-import { InputDisplayMany } from "$components/InputTable";
+import { InputDisplayMany } from "$components/InputDisplay";
+import { PropositionConfig } from "$components/PropositionConfig";
 import { StyledAlert } from "$components/Styled/StyledAlert";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
@@ -8,9 +9,8 @@ import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { PropositionConfig } from "../components/math/PropositionConfig";
 
 type EvaluatorViewLayoutProps = {
   symbolTable: SymbolTable;
@@ -25,10 +25,6 @@ export const EvaluatorViewLayout: FC<
   const { t } = useTranslation("views", {
     keyPrefix: "evaluator-view.cards",
   });
-
-  const validItems = useMemo(() => {
-    return items.filter((item) => item.ok);
-  }, [items]);
 
   return (
     <Stack spacing={2}>
@@ -64,6 +60,10 @@ export const EvaluatorViewLayout: FC<
           const expr = exprTreeFromSyntaxTree(item.tree);
           const latex = item.inputInterpretationLatex;
           const result = expr.eval(symbolTable);
+          const resultT = result
+            ? t("output.true")
+            : t("output.false");
+
           return (
             <ExpressionCard
               key={"output-item" + index}
@@ -71,9 +71,7 @@ export const EvaluatorViewLayout: FC<
                 <StyledLatex>
                   {t("output.formula-evaluates-to-value", {
                     formula: `$$${latex}$$`,
-                    value: result
-                      ? t("output.true")
-                      : t("output.false"),
+                    value: `$$\\boxed{\\textbf{${resultT}}}$$`,
                   })}
                 </StyledLatex>
               }

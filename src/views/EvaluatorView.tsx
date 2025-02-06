@@ -20,9 +20,7 @@ export const EvaluatorView: FC = () => {
     symbols: prevSymbols,
   } = useLoaderData() as EvaluatorRouteLoaderData;
   const submit = useSubmit();
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view",
-  });
+  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
   const [symbolTable, setSymbolTable] = useState(() => {
     const next = new Map<string, boolean>();
@@ -71,7 +69,7 @@ export const EvaluatorView: FC = () => {
   return (
     <BaseLayout
       appHeader={<AppNavGroup />}
-      banner={t(`banner`)}
+      title={t("evaluator")}
     >
       <Stack spacing={8}>
         <Editor

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "../Styled/StyledLatex";
+import { StyledLatex } from "./Styled/StyledLatex";
 
 type PropositionConfigProps = {
   value: SymbolTable;
@@ -44,20 +44,20 @@ export const PropositionConfig: FC<
         overflowY: "auto",
       }}
     >
-      {symbols.map((sym) => (
+      {symbols.map((symbol) => (
         <Grid2
-          key={"symbol-" + sym}
+          key={"symbol-" + symbol}
           size={{ xs: 12, md: 4 }}
         >
           <FormControl fullWidth>
             <FormLabel>
-              <StyledLatex>{`$${sym}$`}</StyledLatex>
+              <StyledLatex>{`$${symbol}$`}</StyledLatex>
             </FormLabel>
             <RadioGroup
               row
-              value={value.get(sym) ? "1" : "0"}
+              value={value.get(symbol) ? "1" : "0"}
               onChange={(_, value) =>
-                onChange(sym, value === "1")
+                onChange(symbol, value === "1")
               }
             >
               <FormControlLabel

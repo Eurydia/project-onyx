@@ -3,7 +3,7 @@ import { SyntaxTree } from "./syntax-tree";
 
 export type ComparatorRouteLoaderData = {
   userInput: string;
-  expressions: ({ inputRaw: string } & Maybe<{
+  items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
     tree: SyntaxTree;
   }>)[];
@@ -20,7 +20,7 @@ export type EvaluatorRouteLoaderData = {
 
 export type CheckerRouteLoaderData = {
   userInput: string;
-  expressions: ({ inputRaw: string } & Maybe<{
+  items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
     normalizedTree: SyntaxTree;
     originalTree: SyntaxTree;

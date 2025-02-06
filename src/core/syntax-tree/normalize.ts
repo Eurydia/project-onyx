@@ -207,7 +207,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   const nodes = [...expr].map((clause) =>
     syntaxTreeFromClause(clause)
   );
-  console.debug(syntaxTreeToString(rewriteTree(tree)));
   if (nodes.length === 0) {
     return CONST(false);
   }

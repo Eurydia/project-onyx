@@ -4,7 +4,6 @@ export default {
     "return-home": "Return to home page",
   },
   "evaluator-view": {
-    banner: "Evaluator",
     cards: {
       "input-interpretation": {
         title: "Input interpretation",
@@ -14,7 +13,7 @@ export default {
         "false": "false",
         "title": "Result",
         "formula-evaluates-to-value":
-          "The formula {{formula}} evaluates to {{value}}.",
+          "The formula {{formula}} evaluates to {{value}} as answer.",
         "infos": {
           "no-valid-formula-to-display":
             "There is no valid formula to display.",
@@ -28,15 +27,15 @@ export default {
         "no-evaluation-step-to-display":
           "No evaluation step to display.",
         "therefore-formula-is-value":
-          "Therefore, the formula {{formula}} is {{value}}.",
+          "Therefore, the formula {{formula}} is {{value}} as answer.",
         "step-x-of-y": "Step {{current}} of {{total}}",
-        "by-truth-table-formula-is-value": `By the truth table of {{operator}}, {{formula}} is {{value}}.`,
+        "by-truth-table-formula-is-value": `By the truth table of {{operator}}, {{formula}} is {{value}} as answer for this step.`,
         "consider-the-formula":
-          "Consider the formula {{formula}}",
+          "Consider the formula {{formula}} in this step.",
         "given-variable-is-value":
-          "Given {{variable}} is true, substitute {{variable}} with true in {{formula}}",
+          "Given {{variable}} is true, substitute {{variable}} with true in {{formula}} as simplified formula.",
         "from-previous-step-substitute-into-formula":
-          "From {{step}}, {{formula}} is {{value}}. Substitute into {{current}} to obtain {{result}}",
+          "From {{step}}, {{formula}} is {{value}}. Substitute into {{current}} to obtain {{result}} as simplified formula.",
         "infos": {
           "no-valid-formula-to-display":
             "There is no valid formula to display step-by-step evaluation.",
@@ -45,7 +44,6 @@ export default {
     },
   },
   "rewriter-view": {
-    banner: "Rewriter",
     cards: {
       "input-interpretation": {
         title: "Input interpretation",
@@ -56,31 +54,31 @@ export default {
           "The formula {{formula}} cannot be expressed in the desired basis.",
         "formula-is-expressed-as-in-the-desired-basis":
           "The formula {{formula}} can be expressed as {{result}} in the desired basis.",
-        "warnings": {
+        "infos": {
           "no-valid-formula-to-display":
             "There is no valid formula to display.",
-        },
-        "infos": {
           "truth-table-is-not-available":
-            "The truth table for this formula is not available",
+            "The truth table for this formula is not available.",
         },
       },
     },
   },
   "checker-view": {
-    banner: "Tautology checker",
+    tautology: "tautology",
+    contradiction: "contradiction",
+    contingent: "contingent",
     cards: {
       "input-interpretation": {
         title: "Input Interpretation",
       },
       "output": {
-        "title": "Result",
-        "formula-is-tautology":
-          "The formula {{formula}} is a tautology.",
-        "formula-is-contradiction":
-          "The formula {{formula}} is a contradiction.",
-        "formula-is-satisfiable": `The formula {{formula}} is neither a tautology or a contradiction.`,
-        "warnings": {
+        title: "Result",
+
+        text: {
+          "formula-is-value":
+            "The formula {{formula}} is {{value}}",
+        },
+        warnings: {
           "no-formula-to-display":
             "There is no valid formula to display.",
         },
@@ -92,21 +90,17 @@ export default {
       en: "ENGLISH",
       th: "THAI",
     },
-    "card": {
+    "cards": {
       comparator: {
-        title: "Comparator",
         desc: "Compare expressions to see which one of them are equivalent.",
       },
       evaluator: {
-        title: "Evaluator",
         desc: "Evaluate expressions according to given truth values.",
       },
       rewriter: {
-        title: "Rewriter",
         desc: "Transform an expression into a different basis.",
       },
       checker: {
-        title: "Tautology checker",
         desc: "Check if an expression is always true, always false, or in-between.",
       },
     },
@@ -114,16 +108,16 @@ export default {
       "Boolean algebra interpreter",
   },
   "comparator-view": {
-    "banner": "Comparator",
-    "warning-notice": "Notice",
+    "equivalent": "Equivalent",
+    "not-equivalent": "Not equivalent",
     "cards": {
       "output": {
-        "title": "Result",
-        "formulas-are-equivalent":
-          "The formula {{first}} and the formula {{second}} are equivalent.",
-        "formulas-are-not-equivalent":
-          "The formula {{first}} and the formula {{second}} are not equivalent.",
-        "warnings": {
+        title: "Result",
+        text: {
+          "formulas-are-value":
+            "The formula {{first}} and the formula {{second}} are {{value}}",
+        },
+        warnings: {
           "not-enough-formula-for-comparison":
             "There is not enough valid formula to perform comparisons.",
         },

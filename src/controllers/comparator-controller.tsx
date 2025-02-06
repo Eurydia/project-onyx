@@ -12,12 +12,12 @@ export const comparatorRouteLoader: LoaderFunction = ({
   if (inputRaw === null || inputRaw.trim().length === 0) {
     const loaderData: ComparatorRouteLoaderData = {
       userInput: "",
-      expressions: [],
+      items: [],
     };
     return loaderData;
   }
 
-  const expressions: ComparatorRouteLoaderData["expressions"] =
+  const expressions: ComparatorRouteLoaderData["items"] =
     [];
   for (const userInput of inputRaw.split(",")) {
     const parseResult = parse(userInput);
@@ -40,7 +40,7 @@ export const comparatorRouteLoader: LoaderFunction = ({
 
   const loaderData: ComparatorRouteLoaderData = {
     userInput: inputRaw.trim(),
-    expressions,
+    items: expressions,
   };
   return loaderData;
 };

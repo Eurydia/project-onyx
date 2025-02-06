@@ -54,14 +54,12 @@ const CARDS = [
 const LANGUAGES = ["en", "th"];
 
 export const HomeView: FC = () => {
-  const { t, i18n } = useTranslation("views", {
-    keyPrefix: "home-view",
-  });
+  const { t, i18n } = useTranslation(["views", "nav"]);
   const theme = useTheme();
 
   return (
     <BaseLayout
-      banner={t(`boolean-algebra-interpreter`)}
+      title={t(`home-view.boolean-algebra-interpreter`)}
       appHeader={
         <Stack
           useFlexGap
@@ -86,7 +84,7 @@ export const HomeView: FC = () => {
                   textTransform: "capitalize",
                 }}
               >
-                {t(`lang.${lang}`)}
+                {t(`home-view.lang.${lang}`)}
               </Typography>
             );
           })}
@@ -100,8 +98,6 @@ export const HomeView: FC = () => {
       >
         {CARDS.map(({ id, icon, palette }, index) => {
           const href = `/${id}`;
-          const title = t(`card.${id}.title`);
-          const desc = t(`card.${id}.desc`);
           const { light, dark } = palette.primary;
           return (
             <Grid2
@@ -144,7 +140,7 @@ export const HomeView: FC = () => {
                     </Typography>
                   </CardContent>
                   <CardHeader
-                    title={title}
+                    title={t(id, { ns: "nav" })}
                     slotProps={{
                       title: {
                         sx: {
@@ -155,7 +151,9 @@ export const HomeView: FC = () => {
                     }}
                   />
                   <CardContent>
-                    <Typography>{desc}</Typography>
+                    <Typography>
+                      {t(`home-view.cards.${id}.desc`)}
+                    </Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>

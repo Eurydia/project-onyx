@@ -1,4 +1,3 @@
-import { StyledFAB } from "$components/Styled/StyledFAB";
 import { exprTreeToLatex } from "$core/tree/expr/latex";
 import { ExprTree } from "$types/expression-tree";
 import {
@@ -6,7 +5,12 @@ import {
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
 import { ControlCameraRounded } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import {
+  Box,
+  Fab,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { Group } from "@visx/group";
 import {
   hierarchy,
@@ -120,12 +124,27 @@ const Tree_: FC<TreeProps> = (props) => {
                 </VisxTree>
               </Group>
             </svg>
-            <StyledFAB
-              onClick={zoom.center}
-              title={t("playground.graph.center")}
+            <Tooltip
+              placement="right"
+              title={
+                <Typography>
+                  {t("playground.graph.center")}
+                </Typography>
+              }
             >
-              <ControlCameraRounded />
-            </StyledFAB>
+              <Fab
+                size="medium"
+                color="primary"
+                onClick={zoom.center}
+                sx={{
+                  position: "absolute",
+                  left: 16,
+                  bottom: 16,
+                }}
+              >
+                <ControlCameraRounded />
+              </Fab>
+            </Tooltip>
           </Fragment>
         )}
       </Zoom>

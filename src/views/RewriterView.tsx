@@ -69,7 +69,7 @@ export const RewriterView: FC = () => {
 
   return (
     <BaseLayout
-      banner={t("banner")}
+      title={t("banner")}
       appHeader={<AppNavGroup />}
     >
       <Stack spacing={8}>

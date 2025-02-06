@@ -1,5 +1,5 @@
 import { ExpressionCard } from "$components/ExpressionCard";
-import { InputDisplayMany } from "$components/InputTable";
+import { InputDisplayMany } from "$components/InputDisplay";
 import { StyledAlert } from "$components/Styled/StyledAlert";
 import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
