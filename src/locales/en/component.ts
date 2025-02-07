@@ -1,5 +1,9 @@
 export const EN_COMPONENTS = {
   "truth-table": {
+    text: {
+      true: "T",
+      false: "F",
+    },
     warnings: {
       "large-truth-table-can-slow-application-down":
         "The truth table for this expression is automatically hidden due to its size. You can press the button below to show the table, but this process can take a long time to complete or even crash the application. For expressions with many propositions, truth table is not the recommemnded way to visualize them.",
@@ -16,4 +20,16 @@ export const EN_COMPONENTS = {
     },
   },
   "symbol-config": { true: "True", false: "False" },
+  "graph": {
+    center: "Center",
+    true: "True",
+    false: "False",
+    playback: {
+      forward: "Forward",
+      previous: "Previous",
+      play: "Play",
+      pause: "Pause",
+      replay: "Replay",
+    },
+  },
 };

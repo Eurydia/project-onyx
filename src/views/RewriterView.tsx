@@ -20,9 +20,7 @@ export const RewriterView: FC = () => {
     useLoaderData() as RewriterRouteLoaderData;
 
   const submit = useSubmit();
-  const { t } = useTranslation("views", {
-    keyPrefix: "rewriter-view",
-  });
+  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
   const [basis, setBasis] = useState(() => {
     const next = new Map<Operator, boolean>();
@@ -69,7 +67,7 @@ export const RewriterView: FC = () => {
 
   return (
     <BaseLayout
-      title={t("banner")}
+      title={t("rewriter")}
       appHeader={<AppNavGroup />}
     >
       <Stack spacing={8}>

@@ -12,7 +12,9 @@ const TruthTableCell_: FC<TruthTableCellProps> = (
   props
 ) => {
   const { value } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation("components", {
+    keyPrefix: "truth-table.text",
+  });
   const { palette } = useTheme();
 
   const bgColor = value
@@ -28,7 +30,7 @@ const TruthTableCell_: FC<TruthTableCellProps> = (
       }}
     >
       <Typography>
-        {value ? t("common.true") : t("common.false")}
+        {value ? t("true") : t("false")}
       </Typography>
     </TableCell>
   );

@@ -31,20 +31,24 @@ export const VerdictDisplayMany: FC<
 
   return (
     <Fragment>
-      {items.map((f, index) => {
-        if (!f.ok) {
+      {items.map((item, index) => {
+        if (!item.ok) {
           return null;
         }
         const exprTree = exprTreeFromSyntaxTree(
-          f.originalTree
+          item.originalTree
         );
+        const itemNum = index + 1;
         return (
           <ExpressionCard
             key={"verdict" + index}
             primary={
               <VerdictDisplay
-                result={f.normalizedTree}
-                originalLatex={f.inputInterpretationLatex}
+                itemNum={itemNum}
+                result={item.normalizedTree}
+                originalLatex={
+                  item.inputInterpretationLatex
+                }
               />
             }
             secondary={

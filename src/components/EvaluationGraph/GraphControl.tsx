@@ -32,8 +32,8 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
     onAnimationReplay,
   } = props;
 
-  const { t } = useTranslation("translation", {
-    keyPrefix: "playground.playback",
+  const { t } = useTranslation("components", {
+    keyPrefix: "graph.playback",
   });
 
   const handleForward = () => {
@@ -67,14 +67,14 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
       >
         <StyledTooltipIconButton
           disabled={value <= minValue}
-          title="Previous"
+          title={t("previous")}
           onClick={handleRewind}
         >
           <KeyboardArrowLeftRounded />
         </StyledTooltipIconButton>
         {value === maxValue && (
           <StyledTooltipIconButton
-            title="Replay"
+            title={t("replay")}
             onClick={onAnimationReplay}
           >
             <ReplayRounded />
@@ -82,7 +82,7 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
         )}
         {value !== maxValue && isAnimationPlaying && (
           <StyledTooltipIconButton
-            title="Pause"
+            title={t("pause")}
             onClick={onAnimationPause}
           >
             <PauseRounded />
@@ -90,7 +90,7 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
         )}
         {value !== maxValue && !isAnimationPlaying && (
           <StyledTooltipIconButton
-            title="Play"
+            title={t("play")}
             onClick={onAnimationPlay}
           >
             <PlayArrowRounded />

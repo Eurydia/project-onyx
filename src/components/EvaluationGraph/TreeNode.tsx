@@ -17,7 +17,9 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
   props
 ) => {
   const { r, order, node, symbolTable } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation("components", {
+    keyPrefix: "graph",
+  });
   const { x, y, data } = node;
   const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
@@ -79,9 +81,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
           fill={palette.primary.contrastText}
           style={{ userSelect: "none" }}
         >
-          {data.eval(symbolTable)
-            ? t("common.true")
-            : t("common.false")}
+          {data.eval(symbolTable) ? t("true") : t("false")}
         </text>
       </Group>
     </Group>

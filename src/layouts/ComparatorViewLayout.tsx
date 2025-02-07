@@ -54,20 +54,20 @@ export const ComparatorViewLayout: FC<
         fontWeight={900}
         fontSize={typography.h3.fontSize}
       >
-        {t("cards.input-interpretation.title")}
+        {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
       <Typography
         fontWeight={900}
         fontSize={typography.h3.fontSize}
       >
-        {t("cards.output.title")}
+        {t("output.title")}
       </Typography>
       {validItems.length <= 1 && (
         <StyledAlert severity="info">
           <Typography>
             {t(
-              "cards.output.infos.not-enough-formula-for-comparison"
+              "output.infos.not-enough-formula-for-comparison"
             )}
           </Typography>
         </StyledAlert>
@@ -126,8 +126,8 @@ export const ComparatorViewLayout: FC<
             mainItem.inputInterpretationLatex;
           const exprLatex = expr.inputInterpretationLatex;
           const areEqualT = areEqual
-            ? t("equivalent")
-            : t("not-equivalent");
+            ? t("output.text.equivalent")
+            : t("output.text.not-equivalent");
           return (
             <ExpressionCard
               key={"comparison-pair" + index}

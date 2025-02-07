@@ -59,7 +59,9 @@ export const HomeView: FC = () => {
 
   return (
     <BaseLayout
-      title={t(`home-view.boolean-algebra-interpreter`)}
+      title={t(`home-view.boolean-algebra-interpreter`, {
+        ns: "views",
+      })}
       appHeader={
         <Stack
           useFlexGap
@@ -84,7 +86,9 @@ export const HomeView: FC = () => {
                   textTransform: "capitalize",
                 }}
               >
-                {t(`home-view.lang.${lang}`)}
+                {t(`home-view.lang.${lang}`, {
+                  ns: "views",
+                })}
               </Typography>
             );
           })}
@@ -152,7 +156,9 @@ export const HomeView: FC = () => {
                   />
                   <CardContent>
                     <Typography>
-                      {t(`home-view.cards.${id}.desc`)}
+                      {t(`home-view.cards.${id}.desc`, {
+                        ns: "views",
+                      })}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

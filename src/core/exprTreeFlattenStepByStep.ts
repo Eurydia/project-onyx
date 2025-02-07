@@ -65,7 +65,10 @@ const traverse = (
             repr: exprTreeToLatex(child),
             evaluated: childEval,
             stepRef: childStep,
-            substituted: `\\lnot \\text{${childEval}}`,
+            substituted: `\\lnot ${
+              childEval ? "\\top" : "\\bot"
+            }
+            }`,
           });
         }
 
@@ -82,7 +85,9 @@ const traverse = (
         const { right, left } = tree;
 
         const leftEval = left.eval(table);
-        const leftSubstituted = `\\text{${leftEval}}`;
+        const leftSubstituted = leftEval
+          ? "\\top"
+          : "\\bot";
         let leftStep: number | false = false;
         if (
           left.nodeType !== SyntaxTreeNodeType.CONST &&
@@ -98,7 +103,9 @@ const traverse = (
           right.nodeType === SyntaxTreeNodeType.BINARY
             ? `( ${rightRawRepr} )`
             : rightRawRepr;
-        const rightSubstituted = `\\text{${rightEval}}`;
+        const rightSubstituted = rightEval
+          ? "\\top"
+          : "\\bot";
         let rightStep: number | false = false;
         if (
           right.nodeType !== SyntaxTreeNodeType.CONST &&

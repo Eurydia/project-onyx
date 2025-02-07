@@ -9,7 +9,7 @@ import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography, useTheme } from "@mui/material";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 type EvaluatorViewLayoutProps = {
@@ -25,6 +25,10 @@ export const EvaluatorViewLayout: FC<
   const { t } = useTranslation("views", {
     keyPrefix: "evaluator-view.cards",
   });
+
+  const validItems = useMemo(() => {
+    return items.filter((item) => item.ok);
+  }, [items]);
 
   return (
     <Stack spacing={2}>

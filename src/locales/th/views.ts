@@ -9,11 +9,11 @@ export default {
         title: "ผลการอ่านประโยค",
       },
       "output": {
-        "true": "จริง",
-        "false": "เท็จ",
+        "true": "เป็นจริง",
+        "false": "เป็นเท็จ",
         "title": "ผลลัพท์",
         "formula-evaluates-to-value":
-          "ประพจน์ {{formula}} เป็น{{value}}",
+          "{{formula}} {{value}}",
         "infos": {
           "no-valid-formula-to-display":
             "ไม่มีประพจน์ที่เขียนถูกต้องให้แสดง",
@@ -49,12 +49,14 @@ export default {
         title: "ผลการอ่านประโยค",
       },
       "output": {
-        "title": "ผลลัพท์การเปลี่ยนฐาน",
-        "formula-cannot-be-expressed-in-the-desired-basis":
-          "ไม่สามารถเปลี่ยนประพจน์ {{formula}} ไปสู่ฐานที่ต้องการได้",
-        "formula-is-expressed-as-in-the-desired-basis":
-          "ประพจน์ {{formula}} สามารถเขียนแทนได้ด้วย {{result}} โดยใช้ตัวเชื่อมที่กำหนด",
-        "infos": {
+        title: "ผลลัพท์การเปลี่ยนฐาน",
+        text: {
+          "formula-cannot-be-expressed-in-the-desired-basis":
+            "ไม่สามารถเปลี่ยนประพจน์ {{formula}} ไปสู่ฐานที่ต้องการได้",
+          "formula-is-expressed-as-in-the-desired-basis":
+            "{{formula}} {{result}} ",
+        },
+        infos: {
           "no-valid-formula-to-display":
             "ไม่มีประพจน์ที่ถูกต้องให้แสดง",
           "truth-table-is-not-available":
@@ -69,14 +71,15 @@ export default {
         title: "ผลการอ่านประโยค",
       },
       "output": {
-        "title": "Result",
-        "formula-is-tautology":
-          "ประพจน์ {{formula}} เป็นสัจนิรันด์",
-        "formula-is-contradiction":
-          "ประพจน์ {{formula}} เป็นเท็จเสมอ",
-        "formula-is-contigent":
-          "ประพจน์ {{formula}} ไม่ได้เป็นสัจนิรันด์และไม่ได้เป็นเท็จเสมอ",
-        "warnings": {
+        title: "ผลการตรวจสอบ",
+        text: {
+          "formula-is-value": "{{formula}} {{value}}",
+          "contingent":
+            "ไม่ใช่สัจนิรันด์และไม่ได้เป็นเท็จเสมอ",
+          "tautology": "เป็นสัจนิรันด์",
+          "contradiction": "เป็นเท็จเสมอ",
+        },
+        infos: {
           "no-formula-to-display":
             "ไม่มีประพจน์ที่ถูกต้องให้แสดง",
         },
@@ -88,7 +91,7 @@ export default {
       en: "อังกฤษ",
       th: "ไทย",
     },
-    "card": {
+    "cards": {
       comparator: {
         desc: "เปรียบเทียบประพจน์เพื่อให้ว่าประพจน์ไหนบ้างที่สมมูลกัน",
       },
@@ -107,12 +110,14 @@ export default {
   "comparator-view": {
     cards: {
       "output": {
-        "title": "ผลลัพท์การเปรียบเทียบ",
-        "formulas-are-equivalent":
-          "ประพจน์ {{first}} และประพจน์ {{second}} สมมูลกัน",
-        "formulas-are-not-equivalent":
-          "ประพจน์ {{first}} และประพจน์ {{second}} ไม่สมมูลกัน",
-        "infos": {
+        title: "ผลลัพท์การเปรียบเทียบ",
+        text: {
+          "equivalent": "สมมูลกัน",
+          "not-equivalent": "ไม่สมมูลกัน",
+          "formulas-are-value":
+            "{{first}} {{second}} {{value}}",
+        },
+        infos: {
           "not-enough-formula-for-comparison":
             "จำนวณประพจน์ไม่เพียงพอที่จะเปรียบเทียบ ต้องการอย่างน้อยสองประพจน์ที่ถูกต้องก่อนที่จะเริ่มเปรียบเทียบได้",
         },

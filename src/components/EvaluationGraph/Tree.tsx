@@ -10,6 +10,7 @@ import {
   Fab,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Group } from "@visx/group";
 import {
@@ -30,7 +31,10 @@ type TreeProps = {
 const Tree_: FC<TreeProps> = (props) => {
   const { tree, order, symbolTable } = props;
 
-  const { t } = useTranslation();
+  const { palette } = useTheme();
+  const { t } = useTranslation("components", {
+    keyPrefix: "graph",
+  });
   const viewportRef = useRef<HTMLDivElement | null>(null);
 
   const data = hierarchy(tree, (d) => {
@@ -126,20 +130,22 @@ const Tree_: FC<TreeProps> = (props) => {
             </svg>
             <Tooltip
               placement="right"
-              title={
-                <Typography>
-                  {t("playground.graph.center")}
-                </Typography>
-              }
+              title={<Typography>{t("center")}</Typography>}
             >
               <Fab
-                size="medium"
-                color="primary"
                 onClick={zoom.center}
                 sx={{
-                  position: "absolute",
-                  left: 16,
-                  bottom: 16,
+                  "position": "absolute",
+                  "left": 16,
+                  "bottom": 16,
+                  "&:hover": {
+                    color: palette.getContrastText(
+                      palette.primary.main
+                    ),
+                    backgroundColor: palette.primary.main,
+                  },
+                  "color": palette.primary.dark,
+                  "backgroundColor": palette.primary.light,
                 }}
               >
                 <ControlCameraRounded />

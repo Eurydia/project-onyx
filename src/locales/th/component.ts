@@ -1,5 +1,9 @@
 export const TH_COMPONENTS = {
   "truth-table": {
+    text: {
+      true: "T",
+      false: "F",
+    },
     warnings: {
       "large-truth-table-can-slow-application-down":
         "ตารางค่าความจริงของประพจน์นี้ถูกซ่อนอยู่เพราะตารางมีขนาดใหญ่ กดปุ่มด้านล่างเพื่อแสดงตารางค่าความจริง แต่อาจใช้เวลานานในการแสดงตารางและโปรแกรมอาจะตอบสนองช้าลง",
@@ -20,4 +24,16 @@ export const TH_COMPONENTS = {
     },
   },
   "symbol-config": { true: "จริง", false: "เท็จ" },
+  "graph": {
+    center: "ศูนย์กลาง",
+    true: "จริง",
+    false: "เท็จ",
+    playback: {
+      forward: "เดินหน้า",
+      previous: "ถอยหลัง",
+      play: "เล่น",
+      pause: "หยุด",
+      replay: "เล่นใหม่",
+    },
+  },
 };

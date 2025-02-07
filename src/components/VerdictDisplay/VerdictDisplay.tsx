@@ -9,24 +9,27 @@ import { useTranslation } from "react-i18next";
 type VerdictDisplayProps = {
   result: SyntaxTree;
   originalLatex: string;
+  itemNum: number;
 };
 export const VerdictDisplay: FC<VerdictDisplayProps> = (
   props
 ) => {
-  const { result, originalLatex } = props;
+  const { itemNum, result, originalLatex } = props;
   const { t } = useTranslation("views", {
-    keyPrefix: "checker-view",
+    keyPrefix: "checker-view.cards.output.text",
   });
 
   let resultT = t("contingent");
   if (result.nodeType === SyntaxTreeNodeType.CONST) {
-    resultT = result ? t("tautology") : t("contradiction");
+    resultT = result.value
+      ? t("tautology")
+      : t("contradiction");
   }
 
   return (
     <StyledLatex>
-      {t("cards.output.text.formula-is-value", {
-        formula: `$$${originalLatex}$$`,
+      {t("formula-is-value", {
+        formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
         value: `$$\\boxed{\\textbf{${resultT}}}$$`,
       })}
     </StyledLatex>

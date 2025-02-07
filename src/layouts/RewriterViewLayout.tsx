@@ -23,13 +23,14 @@ import { FC, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 type RewriterOutputItemProps = {
+  itemNum: number;
   originalLatex: string;
   result: Maybe<{ tree: ExprTree; latex: string }>;
 };
 const RewriterOutputItem: FC<RewriterOutputItemProps> = (
   props
 ) => {
-  const { result, originalLatex } = props;
+  const { result, originalLatex, itemNum } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "rewriter-view.cards.output",
   });
@@ -40,8 +41,10 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (
         primary={
           <StyledLatex>
             {t(
-              "formula-cannot-be-expressed-in-the-desired-basis",
-              { formula: `$$${originalLatex}$$` }
+              "text.formula-cannot-be-expressed-in-the-desired-basis",
+              {
+                formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
+              }
             )}
           </StyledLatex>
         }
@@ -61,9 +64,9 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (
       primary={
         <StyledLatex>
           {t(
-            "formula-is-expressed-as-in-the-desired-basis",
+            "text.formula-is-expressed-as-in-the-desired-basis",
             {
-              formula: `$$${originalLatex}$$`,
+              formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
               result: `$$${result.latex}$$`,
             }
           )}
@@ -118,9 +121,7 @@ export const RewriterViewLayout: FC<
       {validItems.length === 0 && (
         <StyledAlert severity="info">
           <Typography>
-            {t(
-              "output.warnings.no-valid-formula-to-display"
-            )}
+            {t("output.infos.no-valid-formula-to-display")}
           </Typography>
         </StyledAlert>
       )}
@@ -159,10 +160,12 @@ export const RewriterViewLayout: FC<
               item.originalTree,
               basis
             );
+            const itemNum = index + 1;
 
             return (
               <RewriterOutputItem
                 key={"result" + index}
+                itemNum={itemNum}
                 originalLatex={
                   item.inputInterpretationLatex
                 }

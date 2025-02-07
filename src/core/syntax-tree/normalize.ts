@@ -251,12 +251,12 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
       }
       seen.add(syntaxTreeToString(node));
     }
-
     if (normalTree === undefined) {
       normalTree = node;
     } else {
       normalTree = AND(normalTree, node);
     }
   }
+
   return normalTree!;
 };

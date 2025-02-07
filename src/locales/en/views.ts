@@ -13,7 +13,7 @@ export default {
         "false": "false",
         "title": "Result",
         "formula-evaluates-to-value":
-          "The formula {{formula}} evaluates to {{value}} as answer.",
+          "{{formula}} {{value}}.",
         "infos": {
           "no-valid-formula-to-display":
             "There is no valid formula to display.",
@@ -27,7 +27,7 @@ export default {
         "no-evaluation-step-to-display":
           "No evaluation step to display.",
         "therefore-formula-is-value":
-          "Therefore, the formula {{formula}} is {{value}} as answer.",
+          "Therefore, the formula {{formula}} {{value}}",
         "step-x-of-y": "Step {{current}} of {{total}}",
         "by-truth-table-formula-is-value": `By the truth table of {{operator}}, {{formula}} is {{value}} as answer for this step.`,
         "consider-the-formula":
@@ -49,12 +49,14 @@ export default {
         title: "Input interpretation",
       },
       "output": {
-        "title": "Result",
-        "formula-cannot-be-expressed-in-the-desired-basis":
-          "The formula {{formula}} cannot be expressed in the desired basis.",
-        "formula-is-expressed-as-in-the-desired-basis":
-          "The formula {{formula}} can be expressed as {{result}} in the desired basis.",
-        "infos": {
+        title: "Result",
+        text: {
+          "formula-cannot-be-expressed-in-the-desired-basis":
+            "{{formula}} cannot be expressed in the desired basis.",
+          "formula-is-expressed-as-in-the-desired-basis":
+            "{{formula}} can be expressed as {{result}}",
+        },
+        infos: {
           "no-valid-formula-to-display":
             "There is no valid formula to display.",
           "truth-table-is-not-available":
@@ -73,10 +75,8 @@ export default {
       },
       "output": {
         title: "Result",
-
         text: {
-          "formula-is-value":
-            "The formula {{formula}} is {{value}}",
+          "formula-is-value": "{{formula}} {{value}}",
         },
         warnings: {
           "no-formula-to-display":
@@ -108,14 +108,14 @@ export default {
       "Boolean algebra interpreter",
   },
   "comparator-view": {
-    "equivalent": "Equivalent",
-    "not-equivalent": "Not equivalent",
-    "cards": {
+    cards: {
       "output": {
         title: "Result",
         text: {
+          "equivalent": "Equivalent",
+          "not-equivalent": "Not equivalent",
           "formulas-are-value":
-            "The formula {{first}} and the formula {{second}} are {{value}}",
+            "{{first}} {{second}} {{value}}",
         },
         warnings: {
           "not-enough-formula-for-comparison":
