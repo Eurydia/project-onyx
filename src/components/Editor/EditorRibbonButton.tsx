@@ -1,4 +1,4 @@
-import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import {
   CheckRounded,
   KeyboardArrowDownRounded,

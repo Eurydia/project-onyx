@@ -1,4 +1,4 @@
-import { StyledTooltipIconButton } from "$components/Styled/StyledIconButton";
+import { StyledTooltipIconButton } from "$components/styled/StyledIconButton";
 import {
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,

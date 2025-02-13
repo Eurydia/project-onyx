@@ -1,4 +1,4 @@
-import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";

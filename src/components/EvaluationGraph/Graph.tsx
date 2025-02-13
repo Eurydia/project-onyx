@@ -19,7 +19,7 @@ export const Graph: FC<GraphProps> = (props) => {
   const [maxStep, setMaxStep] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const isPlayingRef = useRef(isPlaying);
   const currentFrameRef = useRef(step);
 

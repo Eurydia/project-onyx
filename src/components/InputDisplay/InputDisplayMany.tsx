@@ -1,5 +1,5 @@
-import { StyledAlert } from "$components/Styled/StyledAlert";
-import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledAlert } from "$components/styled/StyledAlert";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import { Maybe } from "$types/generic";
 import {
   List,

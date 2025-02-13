@@ -1,5 +1,5 @@
-import { StyledAlert } from "$components/Styled/StyledAlert";
-import { StyledLatex } from "$components/Styled/StyledLatex";
+import { StyledAlert } from "$components/styled/StyledAlert";
+import { StyledLatex } from "$components/styled/StyledLatex";
 import { getPermutation } from "$core/eval";
 import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
 import { exprTreeToLatex } from "$core/tree/expr/latex";

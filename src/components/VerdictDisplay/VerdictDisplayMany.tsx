@@ -1,5 +1,5 @@
 import { ExpressionCard } from "$components/ExpressionCard";
-import { StyledAlert } from "$components/Styled/StyledAlert";
+import { StyledAlert } from "$components/styled/StyledAlert";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { CheckerRouteLoaderData } from "$types/loader-data";
