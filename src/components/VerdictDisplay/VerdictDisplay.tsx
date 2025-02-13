@@ -1,4 +1,5 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
+import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
 import {
   SyntaxTree,
   SyntaxTreeNodeType,
@@ -19,7 +20,14 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
     keyPrefix: "checker-view.cards.output.text",
   });
 
-  let resultT = t("contingent");
+  let resultT = t("contingent", {
+    variables:
+      "$" +
+      syntaxTreeCollectSymbols(result)
+        .toSorted()
+        .join(",") +
+      "$",
+  });
   if (result.nodeType === SyntaxTreeNodeType.CONST) {
     resultT = result.value
       ? t("tautology")

@@ -54,7 +54,7 @@ export default {
           "formula-cannot-be-expressed-in-the-desired-basis":
             "{{formula}} cannot be expressed in the desired basis.",
           "formula-is-expressed-as-in-the-desired-basis":
-            "{{formula}} can be expressed as {{result}}",
+            "{{formula}} {{result}}",
         },
         infos: {
           "no-valid-formula-to-display":
@@ -66,9 +66,6 @@ export default {
     },
   },
   "checker-view": {
-    tautology: "tautology",
-    contradiction: "contradiction",
-    contingent: "contingent",
     cards: {
       "input-interpretation": {
         title: "Input Interpretation",
@@ -77,6 +74,9 @@ export default {
         title: "Result",
         text: {
           "formula-is-value": "{{formula}} {{value}}",
+          "tautology": "tautology",
+          "contradiction": "contradiction",
+          "contingent": "contingent on {{variables}}",
         },
         warnings: {
           "no-formula-to-display":

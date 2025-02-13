@@ -67,7 +67,7 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (
             "text.formula-is-expressed-as-in-the-desired-basis",
             {
               formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
-              result: `$$${result.latex}$$`,
+              result: `$$\\boxed{${result.latex}}$$`,
             }
           )}
         </StyledLatex>
@@ -161,7 +161,6 @@ export const RewriterViewLayout: FC<
               basis
             );
             const itemNum = index + 1;
-
             return (
               <RewriterOutputItem
                 key={"result" + index}

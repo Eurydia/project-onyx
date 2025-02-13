@@ -170,7 +170,6 @@ const collectClause = (
       if (tree.operator === Operator.AND) {
         collectClause(tree.left, clause);
         collectClause(tree.right, clause);
-
         return;
       }
       const subClause = new Set<Set<SyntaxTree>>();
@@ -201,10 +200,10 @@ const syntaxTreeFromClause = (clause: Set<SyntaxTree>) => {
 };
 
 export const syntaxTreeNormalize = (tree: SyntaxTree) => {
-  const expr = new Set<Set<SyntaxTree>>();
-  collectClause(expandInward(rewriteTree(tree)), expr);
+  const clauses = new Set<Set<SyntaxTree>>();
+  collectClause(expandInward(rewriteTree(tree)), clauses);
 
-  const nodes = [...expr].map((clause) =>
+  const nodes = [...clauses].map((clause) =>
     syntaxTreeFromClause(clause)
   );
   if (nodes.length === 0) {
@@ -231,7 +230,7 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
     return CONST(true);
   }
 
-  let normalTree: SyntaxTree | undefined = undefined;
+  // Top level complement
   const seen = new Set<string>();
   for (const node of nodes) {
     if (node.nodeType === SyntaxTreeNodeType.IDEN) {
@@ -251,12 +250,75 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
       }
       seen.add(syntaxTreeToString(node));
     }
+  }
+
+  const flatClauses = [...clauses];
+  let hasMatchThisCycle = false;
+  do {
+    if (hasMatchThisCycle) {
+      hasMatchThisCycle = false;
+    }
+
+    for (let i = 0; i < flatClauses.length; i++) {
+      for (let j = 0; j < flatClauses.length; j++) {
+        if (i === j) {
+          continue;
+        }
+        const left = flatClauses[i];
+        const right = flatClauses[j];
+
+        if (left.size === right.size) {
+          const diff = setDifference(left, right);
+          if (diff.size === 1) {
+            const newLeft = setDifference(left, diff);
+            flatClauses.splice(i, 1, newLeft);
+            const rightNewIndex =
+              flatClauses.indexOf(right);
+            if (rightNewIndex !== -1) {
+              flatClauses.splice(rightNewIndex, 1);
+            }
+            hasMatchThisCycle = true;
+            break;
+          }
+        }
+      }
+
+      if (hasMatchThisCycle) {
+        break;
+      }
+    }
+  } while (hasMatchThisCycle);
+
+  let normalTree: SyntaxTree | undefined = undefined;
+  for (const clause of flatClauses) {
+    const current = syntaxTreeFromClause(clause);
     if (normalTree === undefined) {
-      normalTree = node;
+      normalTree = current;
     } else {
-      normalTree = AND(normalTree, node);
+      normalTree = AND(normalTree, current);
     }
   }
 
-  return normalTree!;
+  if (normalTree === undefined) {
+    return CONST(false);
+  }
+
+  return normalTree;
+};
+
+const setDifference = <T extends SyntaxTree>(
+  ls: Set<T>,
+  rs: Set<T>
+) => {
+  const rStringSet = new Set();
+  rs.forEach((r) => rStringSet.add(syntaxTreeToString(r)));
+
+  const c = new Set<T>();
+  ls.forEach((l) => {
+    const lString = syntaxTreeToString(l);
+    if (!rStringSet.has(lString)) {
+      c.add(l);
+    }
+  });
+  return c;
 };

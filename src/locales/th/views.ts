@@ -75,7 +75,7 @@ export default {
         text: {
           "formula-is-value": "{{formula}} {{value}}",
           "contingent":
-            "ไม่ใช่สัจนิรันด์และไม่ได้เป็นเท็จเสมอ",
+            "ค่าความจริงขึ้นอยู่กับ {{variables}}",
           "tautology": "เป็นสัจนิรันด์",
           "contradiction": "เป็นเท็จเสมอ",
         },
