@@ -33,4 +33,4 @@ jobs:
         run: npm run build
       
       - name: publish project
-      - run: npm run deploy
+        run: npm run deploy
