@@ -50,8 +50,6 @@ BooleanExpressions {
 
   Primary
     = "(" Expression ")" --group
-    | true_sym    --lit_true
-    | false_sym   --lit_false
     | identifier  --variable
 
   identifier
@@ -76,16 +74,6 @@ BooleanExpressions {
   not_sym
     = "not"
     | "¬"
-
-  true_sym
-    = "⊤"
-    | "T"
-    | "1"
-
-  false_sym
-    = "⊥"
-    | "F"
-    | "0"
 }
 `);
 
@@ -169,20 +157,6 @@ semantics.addOperation("buildTree", {
 
   Primary_group(_open, expr, _close) {
     return expr.buildTree();
-  },
-
-  Primary_lit_true(_id) {
-    return {
-      nodeType: SyntaxTreeNodeType.CONST,
-      value: true,
-    };
-  },
-
-  Primary_lit_false(_id) {
-    return {
-      nodeType: SyntaxTreeNodeType.CONST,
-      value: false,
-    };
   },
 
   Primary_variable(id) {

@@ -27,7 +27,13 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "no-console": "warn",
+      "no-unused-vars": [
+        "errors",
+        {
+          varsIgnorePattern: "^_",
+          argsIgnorePattern: "^_",
+        },
+      ],
     },
   }
 );
-
