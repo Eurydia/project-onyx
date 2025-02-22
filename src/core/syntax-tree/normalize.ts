@@ -267,7 +267,7 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
         const left = flatClauses[i];
         const right = flatClauses[j];
 
-        if (left.size === right.size) {
+        if (left.size === right.size && left.size > 1) {
           const diff = setDifference(left, right);
           if (diff.size === 1) {
             const newLeft = setDifference(left, diff);
@@ -292,6 +292,7 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   let normalTree: SyntaxTree | undefined = undefined;
   for (const clause of flatClauses) {
     const current = syntaxTreeFromClause(clause);
+
     if (normalTree === undefined) {
       normalTree = current;
     } else {
