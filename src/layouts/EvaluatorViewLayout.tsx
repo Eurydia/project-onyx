@@ -5,7 +5,7 @@ import { PropositionConfig } from "$components/PropositionConfig";
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
+import { exprTreeFromSyntaxTree } from "$core/expr-tree/from-syntax-tree";
 import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography, useTheme } from "@mui/material";

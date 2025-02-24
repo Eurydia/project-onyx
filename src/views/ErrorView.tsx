@@ -8,7 +8,11 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useRouteError } from "react-router";
+import {
+  isRouteErrorResponse,
+  Link,
+  useRouteError,
+} from "react-router";
 
 export const ErrorView: FC = () => {
   const error = useRouteError();
@@ -44,15 +48,17 @@ export const ErrorView: FC = () => {
             {t("return-home")}
           </Typography>
         </CardActions>
-        <CardContent>
-          <Typography
-            fontFamily="monospace"
-            color="error"
-            component="pre"
-          >
-            {JSON.stringify(error, null, 4)}
-          </Typography>
-        </CardContent>
+        {isRouteErrorResponse(error) && (
+          <CardContent>
+            <Typography
+              fontFamily="monospace"
+              color="error"
+              component="pre"
+            >
+              {JSON.stringify(error, null, 4)}
+            </Typography>
+          </CardContent>
+        )}
       </Card>
     </Box>
   );

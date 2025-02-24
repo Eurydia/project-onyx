@@ -3,8 +3,8 @@ import {
   SymbolTable,
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
-import { exprTreeCollectSymbols } from "./expr/evaluate";
-import { exprTreeToLatexSubstitute } from "./expr/latex";
+import { exprTreeCollectSymbols } from "./collect-symbols";
+import { exprTreeToLatexSubstitute } from "./to-latex";
 
 type MinifiedSyntaxTree = {
   label: string;
@@ -60,9 +60,7 @@ const traverse = (
   }
 };
 
-export const exprTreeFlattenPostOrder = (
-  tree: ExprTree
-) => {
+export const exprTreeCollectSubExpr = (tree: ExprTree) => {
   const accum: MinifiedSyntaxTree[] = [];
   const seen = new Set<string>();
   const symbolMap = new Map<string, string>();

@@ -19,14 +19,14 @@ export const rewriterRouteLoader: LoaderFunction = ({
     return loaderData;
   }
 
-  const expressions: RewriterRouteLoaderData["items"] = [];
+  const items: RewriterRouteLoaderData["items"] = [];
   for (const userInput of userInputRaw.split(",")) {
     const parseResult = parse(userInput);
     if (!parseResult.ok) {
-      expressions.push({ ok: false, inputRaw: userInput });
+      items.push({ ok: false, inputRaw: userInput });
       continue;
     }
-    expressions.push({
+    items.push({
       ok: true,
       inputRaw: userInput,
       originalTree: parseResult.tree,
@@ -38,7 +38,7 @@ export const rewriterRouteLoader: LoaderFunction = ({
 
   const loaderData: RewriterRouteLoaderData = {
     userInput: userInputRaw,
-    items: expressions,
+    items,
   };
   return loaderData;
 };

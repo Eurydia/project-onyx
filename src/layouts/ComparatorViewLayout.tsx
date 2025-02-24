@@ -3,9 +3,9 @@ import { InputDisplayMany } from "$components/InputDisplay";
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
+import { exprTreeFromSyntaxTree } from "$core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$core/expr-tree/verify-tautology";
 import { IFF } from "$core/syntax-tree/node";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
 import { ComparatorRouteLoaderData } from "$types/loader-data";
 import {
   FormControlLabel,

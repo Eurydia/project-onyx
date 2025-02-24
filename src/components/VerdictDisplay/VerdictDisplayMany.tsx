@@ -1,7 +1,7 @@
 import { ExpressionCard } from "$components/ExpressionCard";
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { TruthTable } from "$components/TruthTable";
-import { exprTreeFromSyntaxTree } from "$core/tree/conversion";
+import { exprTreeFromSyntaxTree } from "$core/expr-tree/from-syntax-tree";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { Typography } from "@mui/material";
 import { FC, Fragment } from "react";

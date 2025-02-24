@@ -3,7 +3,7 @@ import {
   SymbolTable,
   SyntaxTreeNodeType,
 } from "$types/syntax-tree";
-import { exprTreeToLatex } from "./tree/expr/latex";
+import { exprTreeToLatex } from "./expr-tree/to-latex";
 
 export type EvaluationStep = {
   repr: string;

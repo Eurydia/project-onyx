@@ -1,4 +1,4 @@
-import { exprTreeToLatex } from "$core/tree/expr/latex";
+import { exprTreeToLatex } from "$core/expr-tree/to-latex";
 import { ExprTree } from "$types/expression-tree";
 import {
   SymbolTable,

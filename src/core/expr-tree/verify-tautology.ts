@@ -1,4 +1,4 @@
-import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
+import { exprTreeCollectSymbols } from "$core/expr-tree/collect-symbols";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 

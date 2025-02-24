@@ -1,9 +1,9 @@
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
 import { getPermutation } from "$core/eval";
-import { exprTreeCollectSymbols } from "$core/tree/expr/evaluate";
-import { exprTreeToLatex } from "$core/tree/expr/latex";
-import { exprTreeFlattenPostOrder } from "$core/tree/flatten";
+import { exprTreeCollectSubExpr } from "$core/expr-tree/collect-subexpr";
+import { exprTreeCollectSymbols } from "$core/expr-tree/collect-symbols";
+import { exprTreeToLatex } from "$core/expr-tree/to-latex";
 import { ExprTree } from "$types/expression-tree";
 import {
   Button,
@@ -34,7 +34,7 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
-  const columns = exprTreeFlattenPostOrder(exprTree);
+  const columns = exprTreeCollectSubExpr(exprTree);
   const symbols = [...exprTreeCollectSymbols(exprTree)];
   symbols.sort();
 
