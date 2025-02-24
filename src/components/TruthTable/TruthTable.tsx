@@ -34,16 +34,20 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   const [userConfirmed, setUserConfirmed] = useState(false);
 
   const symbols = useMemo(() => {
-    return [...exprTreeCollectSymbols(exprTree)].toSorted();
+    const _symbols = [...exprTreeCollectSymbols(exprTree)];
+    _symbols.sort();
+    return _symbols;
   }, [exprTree]);
+
   const exprLatex = useMemo(() => {
     return exprTreeToLatex(exprTree);
   }, [exprTree]);
 
-  const interpretations =
-    symbols.length > 3 && !userConfirmed
+  const interpretations = useMemo(() => {
+    return symbols.length > 3 && !userConfirmed
       ? []
       : getInterpretations(symbols.length, symbols);
+  }, [userConfirmed, symbols.length]);
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
@@ -83,13 +87,13 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {symbols.map((symbol, index) => (
+            {symbols.map((col, index) => (
               <TableCell
                 key={"sym" + index}
                 align="center"
                 sx={{ whiteSpace: "nowrap" }}
               >
-                <StyledLatex>{`$${symbol}$`}</StyledLatex>
+                <StyledLatex>{`$${col}$`}</StyledLatex>
               </TableCell>
             ))}
             <TableCell

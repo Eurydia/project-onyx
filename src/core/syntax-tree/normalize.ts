@@ -268,18 +268,49 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
         const right = flatClauses[j];
 
         if (left.size === right.size && left.size > 1) {
-          const diff = setDifference(left, right);
-          if (diff.size === 1) {
-            const newLeft = setDifference(left, diff);
-            flatClauses.splice(i, 1, newLeft);
-            const rightNewIndex =
-              flatClauses.indexOf(right);
-            if (rightNewIndex !== -1) {
-              flatClauses.splice(rightNewIndex, 1);
-            }
-            hasMatchThisCycle = true;
-            break;
+          const leftSetDiff = setDifference(left, right);
+          const rightSetDiff = setDifference(right, left);
+          if (
+            leftSetDiff.size !== 1 ||
+            rightSetDiff.size !== 1
+          ) {
+            continue;
           }
+
+          const leftDiff = [...leftSetDiff].pop()!;
+          const rightDiff = [...rightSetDiff].pop()!;
+
+          const isComplementLeft =
+            leftDiff.nodeType === SyntaxTreeNodeType.IDEN &&
+            rightDiff.nodeType ===
+              SyntaxTreeNodeType.UNARY &&
+            syntaxTreeToString(rightDiff).localeCompare(
+              syntaxTreeToString(NOT(leftDiff))
+            ) === 0;
+
+          const isComplementRight =
+            leftDiff.nodeType ===
+              SyntaxTreeNodeType.UNARY &&
+            rightDiff.nodeType ===
+              SyntaxTreeNodeType.IDEN &&
+            syntaxTreeToString(
+              NOT(rightDiff)
+            ).localeCompare(
+              syntaxTreeToString(leftDiff)
+            ) === 0;
+
+          if (!isComplementLeft && !isComplementRight) {
+            continue;
+          }
+
+          const newLeft = setDifference(left, leftSetDiff);
+          flatClauses.splice(i, 1, newLeft);
+          const rightNewIndex = flatClauses.indexOf(right);
+          if (rightNewIndex !== -1) {
+            flatClauses.splice(rightNewIndex, 1);
+          }
+          hasMatchThisCycle = true;
+          break;
         }
       }
 
@@ -292,7 +323,6 @@ export const syntaxTreeNormalize = (tree: SyntaxTree) => {
   let normalTree: SyntaxTree | undefined = undefined;
   for (const clause of flatClauses) {
     const current = syntaxTreeFromClause(clause);
-
     if (normalTree === undefined) {
       normalTree = current;
     } else {
