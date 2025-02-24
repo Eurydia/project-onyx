@@ -1,8 +1,7 @@
 import { StyledAlert } from "$components/styled/StyledAlert";
 import { StyledLatex } from "$components/styled/StyledLatex";
-import { getPermutation } from "$core/eval";
-import { exprTreeCollectSubExpr } from "$core/expr-tree/collect-subexpr";
 import { exprTreeCollectSymbols } from "$core/expr-tree/collect-symbols";
+import { getInterpretations } from "$core/expr-tree/interpretations";
 import { exprTreeToLatex } from "$core/expr-tree/to-latex";
 import { ExprTree } from "$types/expression-tree";
 import {
@@ -18,7 +17,7 @@ import {
   Theme,
   useTheme,
 } from "@mui/material";
-import { FC, memo, useState } from "react";
+import { FC, memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TruthTableCell } from "./TruthTableCell";
 
@@ -34,14 +33,17 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
-  const columns = exprTreeCollectSubExpr(exprTree);
-  const symbols = [...exprTreeCollectSymbols(exprTree)];
-  symbols.sort();
+  const symbols = useMemo(() => {
+    return [...exprTreeCollectSymbols(exprTree)].toSorted();
+  }, [exprTree]);
+  const exprLatex = useMemo(() => {
+    return exprTreeToLatex(exprTree);
+  }, [exprTree]);
 
-  const perm =
+  const interpretations =
     symbols.length > 3 && !userConfirmed
       ? []
-      : getPermutation(symbols.length, symbols);
+      : getInterpretations(symbols.length, symbols);
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
@@ -90,32 +92,26 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
                 <StyledLatex>{`$${symbol}$`}</StyledLatex>
               </TableCell>
             ))}
-            {columns.map((col, index) => (
-              <TableCell
-                key={"subexpr" + index}
-                align="center"
-                sx={{ whiteSpace: "nowrap" }}
-              >
-                <StyledLatex>{`$${col.label}$`}</StyledLatex>
-              </TableCell>
-            ))}
+            <TableCell
+              align="center"
+              sx={{ whiteSpace: "nowrap" }}
+            >
+              <StyledLatex>{`$${exprLatex}$`}</StyledLatex>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {perm.map((p, index) => (
+          {interpretations.map((interpretations, index) => (
             <TableRow key={"perm" + index}>
               {symbols.map((sym, index) => (
                 <TruthTableCell
                   key={"sym" + index}
-                  value={p.get(sym) || false}
+                  value={interpretations.get(sym) || false}
                 />
               ))}
-              {columns.map((column, colIndex) => (
-                <TruthTableCell
-                  key={"col" + colIndex}
-                  value={column.eval(p)}
-                />
-              ))}
+              <TruthTableCell
+                value={exprTree.eval(interpretations)}
+              />
             </TableRow>
           ))}
         </TableBody>
