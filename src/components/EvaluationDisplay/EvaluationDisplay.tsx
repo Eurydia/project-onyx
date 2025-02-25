@@ -1,5 +1,5 @@
 import { EvaluationGraph } from "$components/EvaluationGraph";
-import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledLatex } from "$components/Styled/StyledLatex";
 import { exprTreeToLatex } from "$core/expr-tree/to-latex";
 import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { ExprTree } from "$types/expression-tree";

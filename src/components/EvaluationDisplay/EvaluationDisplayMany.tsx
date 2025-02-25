@@ -1,4 +1,4 @@
-import { StyledAlert } from "$components/styled/StyledAlert";
+import { StyledAlert } from "$components/Styled/StyledAlert";
 import { ExprTree } from "$types/expression-tree";
 import { Maybe } from "$types/generic";
 import { SymbolTable } from "$types/syntax-tree";

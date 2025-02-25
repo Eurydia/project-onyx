@@ -1,4 +1,4 @@
-import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledLatex } from "$components/Styled/StyledLatex";
 import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
 import { Stack, Typography } from "@mui/material";
 import { FC } from "react";

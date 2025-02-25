@@ -1,4 +1,4 @@
-import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledLatex } from "$components/Styled/StyledLatex";
 import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
 import {
   SyntaxTree,

@@ -1,7 +1,7 @@
 import { ExpressionCard } from "$components/ExpressionCard";
 import { InputDisplayMany } from "$components/InputDisplay";
-import { StyledAlert } from "$components/styled/StyledAlert";
-import { StyledLatex } from "$components/styled/StyledLatex";
+import { StyledAlert } from "$components/Styled/StyledAlert";
+import { StyledLatex } from "$components/Styled/StyledLatex";
 import { TruthTable } from "$components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$core/expr-tree/verify-tautology";
