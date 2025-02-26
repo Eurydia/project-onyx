@@ -1,7 +1,7 @@
 import { Typography, useTheme } from "@mui/material";
 import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 
 const NAV_ITEMS = [
   "evaluator",
@@ -10,43 +10,44 @@ const NAV_ITEMS = [
   "rewriter",
 ];
 
+type CustomNavItemProps = {
+  href: string;
+  label: string;
+};
+
+const CustomNavItem: FC<CustomNavItemProps> = (props) => {
+  const { href, label } = props;
+  const { palette } = useTheme();
+  return (
+    <Typography
+      component={Link}
+      to={href}
+      sx={{
+        color: palette.primary.dark,
+        textTransform: "capitalize",
+        textDecorationLine: "none",
+      }}
+    >
+      {label}
+    </Typography>
+  );
+};
+
 export const AppNavGroup: FC = () => {
   const { t } = useTranslation("nav");
-  const { palette } = useTheme();
-  const { pathname } = useLocation();
   return (
     <Fragment>
-      <Typography
-        component={Link}
-        to={`/`}
-        sx={{
-          color: palette.primary.dark,
-          textTransform: "capitalize",
-          textDecorationLine: "none",
-        }}
-      >
-        {t("home")}
-      </Typography>
+      <CustomNavItem
+        href="/"
+        label={t("home")}
+      />
       {NAV_ITEMS.map((id, index) => {
-        const target = `/${id}`;
-        const fontWeight =
-          target.localeCompare(pathname) === 0
-            ? 900
-            : undefined;
         return (
-          <Typography
+          <CustomNavItem
             key={"item" + index}
-            component={Link}
-            to={target}
-            sx={{
-              color: palette.primary.dark,
-              textTransform: "capitalize",
-              fontWeight,
-              textDecorationLine: "none",
-            }}
-          >
-            {t(id)}
-          </Typography>
+            href={`/${id}`}
+            label={t(id)}
+          />
         );
       })}
     </Fragment>
