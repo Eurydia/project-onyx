@@ -117,7 +117,7 @@ export default {
           "formulas-are-value":
             "{{first}} {{second}} {{value}}",
         },
-        warnings: {
+        infos: {
           "not-enough-formula-for-comparison":
             "There is not enough valid formula to perform comparisons.",
         },

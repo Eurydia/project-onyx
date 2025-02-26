@@ -13,10 +13,12 @@
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
+    "@monaco-editor/react": "^4.7.0",
     "@mui/icons-material": "^6.1.7",
     "@mui/lab": "^6.0.0-beta.17",
     "@mui/material": "^6.1.7",
     "katex": "^0.16.21",
+    "monaco-editor": "^0.52.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.1.1"
@@ -47,4 +49,3 @@
     "vite-tsconfig-paths": "^5.1.3"
   }
 }
-
