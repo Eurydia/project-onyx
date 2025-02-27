@@ -1,5 +1,5 @@
 import { StyledLatex } from "$components/Styled/StyledLatex";
-import { EvaluationStep } from "$core/exprTreeFlattenStepByStep";
+import { EvaluationStep } from "$core/expr-tree/exprTreeFlattenStepByStep";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 

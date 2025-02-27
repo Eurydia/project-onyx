@@ -74,7 +74,9 @@ export const EvaluatorViewLayout: FC<
               primary={
                 <StyledLatex>
                   {t("output.formula-evaluates-to-value", {
-                    formula: `$$${latex}$$`,
+                    formula: `$$${latex} \\tag{${
+                      index + 1
+                    }}$$`,
                     value: `$$\\boxed{\\textbf{${resultT}}}$$`,
                   })}
                 </StyledLatex>

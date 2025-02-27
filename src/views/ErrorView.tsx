@@ -2,20 +2,14 @@ import {
   Box,
   Card,
   CardActions,
-  CardContent,
   CardHeader,
   Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  isRouteErrorResponse,
-  Link,
-  useRouteError,
-} from "react-router";
+import { Link } from "react-router";
 
 export const ErrorView: FC = () => {
-  const error = useRouteError();
   const { t } = useTranslation("views", {
     keyPrefix: "error-view",
   });
@@ -48,17 +42,6 @@ export const ErrorView: FC = () => {
             {t("return-home")}
           </Typography>
         </CardActions>
-        {isRouteErrorResponse(error) && (
-          <CardContent>
-            <Typography
-              fontFamily="monospace"
-              color="error"
-              component="pre"
-            >
-              {JSON.stringify(error, null, 4)}
-            </Typography>
-          </CardContent>
-        )}
       </Card>
     </Box>
   );

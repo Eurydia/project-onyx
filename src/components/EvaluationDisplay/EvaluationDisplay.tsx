@@ -1,7 +1,7 @@
 import { EvaluationGraph } from "$components/EvaluationGraph";
 import { StyledLatex } from "$components/Styled/StyledLatex";
+import { exprTreeFlattenStepByStep } from "$core/expr-tree/collect-steps";
 import { exprTreeToLatex } from "$core/expr-tree/to-latex";
-import { exprTreeFlattenStepByStep } from "$core/exprTreeFlattenStepByStep";
 import { ExprTree } from "$types/expression-tree";
 import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography } from "@mui/material";

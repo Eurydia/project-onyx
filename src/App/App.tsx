@@ -16,30 +16,14 @@ import { ErrorView } from "$views/ErrorView";
 import { EvaluatorView } from "$views/EvaluatorView";
 import { HomeView } from "$views/HomeView";
 import { RewriterView } from "$views/RewriterView";
-import {
-  CssBaseline,
-  GlobalStyles,
-  ThemeProvider,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { FC } from "react";
 import {
   createHashRouter,
   RouterProvider,
 } from "react-router";
 
-const globalStyles = (
-  <GlobalStyles
-    styles={{
-      tableLayout: "auto",
-      borderCollapse: "collapse",
-      html: {
-        scrollBehavior: "smooth",
-      },
-    }}
-  />
-);
-
-const router = createHashRouter(
+const ROUTER = createHashRouter(
   [
     {
       index: true,
@@ -97,8 +81,7 @@ export const App: FC = () => {
   return (
     <ThemeProvider theme={THEME_GLOBAL}>
       <CssBaseline />
-      {globalStyles}
-      <RouterProvider router={router} />
+      <RouterProvider router={ROUTER} />
     </ThemeProvider>
   );
 };
