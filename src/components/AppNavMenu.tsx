@@ -3,12 +3,7 @@ import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-const NAV_ITEMS = [
-  "evaluator",
-  "comparator",
-  "checker",
-  "rewriter",
-];
+const NAV_ITEMS = ["evaluator", "comparator", "checker", "rewriter"];
 
 type CustomNavItemProps = {
   href: string;
@@ -37,17 +32,10 @@ export const AppNavGroup: FC = () => {
   const { t } = useTranslation("nav");
   return (
     <Fragment>
-      <CustomNavItem
-        href="/"
-        label={t("home")}
-      />
+      <CustomNavItem href="/" label={t("home")} />
       {NAV_ITEMS.map((id, index) => {
         return (
-          <CustomNavItem
-            key={"item" + index}
-            href={`/${id}`}
-            label={t(id)}
-          />
+          <CustomNavItem key={"item" + index} href={`/${id}`} label={t(id)} />
         );
       })}
     </Fragment>

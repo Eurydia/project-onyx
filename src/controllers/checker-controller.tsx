@@ -4,16 +4,11 @@ import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
 import { CheckerRouteLoaderData } from "$types/loader-data";
 import { LoaderFunction } from "react-router";
 
-export const checkerRouteLoader: LoaderFunction = ({
-  request,
-}) => {
+export const checkerRouteLoader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);
   const userInputRaw = url.searchParams.get("input");
 
-  if (
-    userInputRaw === null ||
-    userInputRaw.trim().length === 0
-  ) {
+  if (userInputRaw === null || userInputRaw.trim().length === 0) {
     const loaderData: CheckerRouteLoaderData = {
       userInput: "",
       items: [],
@@ -29,16 +24,12 @@ export const checkerRouteLoader: LoaderFunction = ({
       parseResult.ok
         ? {
             ok: true,
-            normalizedTree: syntaxTreeNormalize(
-              parseResult.tree
-            ),
+            normalizedTree: syntaxTreeNormalize(parseResult.tree),
             originalTree: parseResult.tree,
-            inputInterpretationLatex: syntaxTreeToLatex(
-              parseResult.tree
-            ),
+            inputInterpretationLatex: syntaxTreeToLatex(parseResult.tree),
             inputRaw: userInput.trim(),
           }
-        : { ok: false, inputRaw: userInput.trim() }
+        : { ok: false, inputRaw: userInput.trim() },
     );
   }
   const loaderData: CheckerRouteLoaderData = {
