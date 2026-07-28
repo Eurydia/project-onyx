@@ -1,12 +1,10 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
   base: "/project-onyx/",
-  // publicDir: "public",
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react()],
   build: {
     rollupOptions: {
       cache: true,
@@ -28,4 +26,3 @@ export default defineConfig({
   },
   assetsInclude: ["**/*.md"],
 });
-
