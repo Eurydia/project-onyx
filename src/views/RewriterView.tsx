@@ -23,7 +23,6 @@ export const RewriterView: FC = () => {
     return next;
   });
 
-  m["components.alert.notice"]();
   const basisSet = useMemo(() => {
     return new Set(
       [...basis.entries()]
