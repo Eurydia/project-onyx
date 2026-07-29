@@ -1,6 +1,10 @@
 import { createRoot } from "react-dom/client";
 import "$/App/core/interpreter/grammar";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import {
+  createHashHistory,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { routeTree } from "./routeTree.gen";
 
@@ -8,6 +12,7 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
+  history: createHashHistory(),
 });
 
 declare module "@tanstack/react-router" {
@@ -21,11 +26,9 @@ if (rootElement === null) {
   throw Error("Root not found");
 }
 
-if (!rootElement.innerHTML) {
-  const root = createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>,
-  );
-}
+const root = createRoot(rootElement);
+root.render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
+);

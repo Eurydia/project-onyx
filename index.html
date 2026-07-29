@@ -3,10 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
+    />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="application-name" content="Project ONYX" />
+    <meta name="theme-color" content="#4fc3f7" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="canonical" href="https://eurydia.github.io/project-onyx/" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://eurydia.github.io/project-onyx/" />
+    <meta
+      property="og:title"
+      content="Boolean Algebra Interpreter, Visualizer, and Explorer | Project ONYX"
+    />
+    <meta
+      property="og:description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
+    />
+    <meta property="og:site_name" content="Project ONYX" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="th_TH" />
+    <meta
+      property="og:image"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="2846" />
+    <meta property="og:image:height" content="2656" />
+    <meta
+      property="og:image:alt"
+      content="Preview of Project ONYX Boolean algebra tools"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Project ONYX | Boolean Algebra Interpreter, Visualizer, and Explorer"
+    />
+    <meta
+      name="twitter:description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
+    />
+    <meta
+      name="twitter:image"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Preview of Project ONYX Boolean algebra tools"
+    />
 
     <link
       rel="stylesheet"
@@ -31,11 +92,89 @@
       crossorigin="anonymous"
     ></script>
     <title>
-      Boolean Algebra Interpreter, Visualizer, and Explorer | Project: ONYX
+      Boolean Algebra Interpreter, Visualizer, and Explorer | Project ONYX
     </title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://eurydia.github.io/project-onyx/#website",
+            "url": "https://eurydia.github.io/project-onyx/",
+            "name": "Project ONYX",
+            "alternateName": "Boolean Algebra Interpreter"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://eurydia.github.io/project-onyx/#application",
+            "url": "https://eurydia.github.io/project-onyx/",
+            "name": "Project ONYX",
+            "description": "Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases.",
+            "image": "https://eurydia.github.io/project-onyx/og.png",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and a modern web browser.",
+            "isAccessibleForFree": true,
+            "inLanguage": ["en", "th"],
+            "featureList": [
+              "Evaluate Boolean formulas with configurable truth values",
+              "Visualize step-by-step Boolean evaluation",
+              "Generate truth tables",
+              "Compare expressions for logical equivalence",
+              "Classify tautologies, contradictions, and contingencies",
+              "Rewrite expressions into different operator bases"
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <header>
+        <h1>Project ONYX</h1>
+        <p>Boolean Algebra Interpreter, Visualizer, and Explorer</p>
+        <nav>
+          <ul>
+            <li><a href="/#/">Home</a></li>
+            <li><a href="/#/evaluator">Evaluator</a></li>
+            <li><a href="/#/comparator">Comparator</a></li>
+            <li><a href="/#/checker">Tautology Checker</a></li>
+            <li><a href="/#/rewriter">Rewriter</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <section>
+          <h2>Evaluate and visualize Boolean formulas</h2>
+          <p>
+            Assign truth values, evaluate expressions, inspect truth tables, and
+            follow step-by-step visual explanations.
+          </p>
+        </section>
+        <section>
+          <h2>Compare logical equivalence</h2>
+          <p>
+            Compare Boolean expressions and determine whether they are logically
+            equivalent.
+          </p>
+        </section>
+        <section>
+          <h2>Check tautologies, contradictions, and contingencies</h2>
+          <p>
+            Classify formulas that are always true, always false, or dependent
+            on their proposition values.
+          </p>
+        </section>
+        <section>
+          <h2>Rewrite expressions</h2>
+          <p>
+            Transform Boolean formulas into different logical operator bases.
+          </p>
+        </section>
+      </main>
+    </div>
     <script type="module" src="/src/router.tsx"></script>
   </body>
 </html>

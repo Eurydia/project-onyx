@@ -1,19 +1,54 @@
 {
-  "name": "",
-  "short_name": "",
+  "id": "/project-onyx/",
+  "name": "Project ONYX: Boolean Algebra Interpreter",
+  "short_name": "Project ONYX",
+  "description": "Evaluate and visualize Boolean formulas, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4fc3f7",
+  "categories": ["education", "utilities"],
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "./android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "./android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "shortcuts": [
+    {
+      "name": "Boolean Formula Evaluator",
+      "short_name": "Evaluator",
+      "description": "Evaluate formulas with configurable truth values and step-by-step explanations.",
+      "url": "./#/evaluator"
+    },
+    {
+      "name": "Logical Equivalence Comparator",
+      "short_name": "Comparator",
+      "description": "Compare Boolean expressions for logical equivalence.",
+      "url": "./#/comparator"
+    },
+    {
+      "name": "Tautology Checker",
+      "short_name": "Checker",
+      "description": "Classify formulas as tautologies, contradictions, or contingencies.",
+      "url": "./#/checker"
+    },
+    {
+      "name": "Boolean Formula Rewriter",
+      "short_name": "Rewriter",
+      "description": "Rewrite formulas into different logical operator bases.",
+      "url": "./#/rewriter"
+    }
+  ]
 }
