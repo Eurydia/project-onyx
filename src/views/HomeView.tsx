@@ -13,11 +13,11 @@ import Typography from "@mui/material/Typography";
 import { type FC, memo, type ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { PALETTE_CHECKER_ROUTE } from "$/App/theme/palette-checker-route";
 import { PALETTE_COMPARATOR_ROUTE } from "$/App/theme/palette-comparator-route";
 import { PALETTE_EVALUATOR_ROUTE } from "$/App/theme/palette-evaluator-route";
 import { PALETTE_REWRITER_ROUTE } from "$/App/theme/palette-rewriter-route";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
 
 const TOOLS = [
   {

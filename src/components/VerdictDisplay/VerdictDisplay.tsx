@@ -1,4 +1,4 @@
-import { useMemo, type FC } from "react";
+import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
 import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
@@ -14,14 +14,14 @@ export const VerdictDisplay: FC<{
     keyPrefix: "checker-view.cards.output.text",
   });
 
-  let resultT = useMemo(() => {
+  const resultT = useMemo(() => {
     if (result.nodeType === SyntaxTreeNodeType.CONST) {
       return result.value ? t("tautology") : t("contradiction");
     }
     return t("contingent", {
       variables: `$${syntaxTreeCollectSymbols(result).toSorted().join(",")}$`,
     });
-  }, []);
+  }, [result, t]);
 
   return (
     <StyledLatex>
