@@ -2,7 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { THEME_GLOBAL } from "$/App/theme";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import { type Locale, setLocale } from "$/paraglide/runtime.js";
+import { type Locale, setLocale } from "$/libs/paraglide/runtime.js";
 
 export const LanguageItemCard: FC<{
   locale: Locale;

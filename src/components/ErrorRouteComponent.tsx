@@ -4,7 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { Link } from "@tanstack/react-router";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 
 export function ErrorRouteComponent() {
   return (

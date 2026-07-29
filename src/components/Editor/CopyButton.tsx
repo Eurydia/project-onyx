@@ -2,7 +2,7 @@ import CheckRounded from "@mui/icons-material/CheckRounded";
 import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded";
 import Button from "@mui/material/Button";
 import { type FC, useState } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 
 export const CopyButton: FC<{
   onClick: () => void;

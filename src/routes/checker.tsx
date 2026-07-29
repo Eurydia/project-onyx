@@ -8,10 +8,10 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { CheckerViewLayout } from "$/components/layouts/CheckerViewLayout";
-import { parse } from "$/core/interpreter/parser";
-import { syntaxTreeNormalize } from "$/core/syntax-tree/normalize";
-import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
-import { m } from "$/paraglide/messages";
+import { parse } from "$/App/core/interpreter/parser";
+import { syntaxTreeNormalize } from "$/App/core/syntax-tree/normalize";
+import { syntaxTreeToLatex } from "$/App/core/syntax-tree/to-latex";
+import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SyntaxTree } from "$/types/syntax-tree";
 
@@ -41,9 +41,7 @@ export const Route = createFileRoute("/checker")({
               ok: true,
               normalizedTree: syntaxTreeNormalize(parseResult.tree),
               originalTree: parseResult.tree,
-              inputInterpretationLatex: syntaxTreeToLatex(
-                parseResult.tree,
-              ),
+              inputInterpretationLatex: syntaxTreeToLatex(parseResult.tree),
               inputRaw: userInput.trim(),
             }
           : {
@@ -80,10 +78,7 @@ function CheckerRouteComponent() {
 
   return (
     <ThemeProvider theme={THEME_CHECKER_ROUTE}>
-      <BaseLayout
-        appHeader={<AppNavGroup />}
-        title={m["nav.checker"]()}
-      >
+      <BaseLayout appHeader={<AppNavGroup />} title={m["nav.checker"]()}>
         <Stack spacing={8}>
           <Editor
             value={userInput}

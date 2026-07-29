@@ -8,10 +8,10 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { EvaluatorViewLayout } from "$/components/layouts/EvaluatorViewLayout";
-import { parse } from "$/core/interpreter/parser";
-import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
-import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
-import { m } from "$/paraglide/messages";
+import { parse } from "$/App/core/interpreter/parser";
+import { syntaxTreeCollectSymbols } from "$/App/core/syntax-tree/collect-symbols";
+import { syntaxTreeToLatex } from "$/App/core/syntax-tree/to-latex";
+import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SyntaxTree } from "$/types/syntax-tree";
 
@@ -112,10 +112,7 @@ function EvaluatorRouteComponent() {
 
   return (
     <ThemeProvider theme={THEME_EVALUATOR_ROUTE}>
-      <BaseLayout
-        appHeader={<AppNavGroup />}
-        title={m["nav.evaluator"]()}
-      >
+      <BaseLayout appHeader={<AppNavGroup />} title={m["nav.evaluator"]()}>
         <Stack spacing={8}>
           <Editor
             value={userInput}

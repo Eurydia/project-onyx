@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import { StyledTooltipIconButton } from "../styled/StyledIconButton";
 
 export const GraphControl: FC<{

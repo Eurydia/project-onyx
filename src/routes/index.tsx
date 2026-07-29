@@ -14,8 +14,8 @@ import {
 import { LanguageItemCard } from "$/components/Home/LanguageItemCard";
 import { ToolCard } from "$/components/Home/ToolCard";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
-import { m } from "$/paraglide/messages";
-import type { Locale } from "$/paraglide/runtime.js";
+import { m } from "$/libs/paraglide/messages";
+import type { Locale } from "$/libs/paraglide/runtime.js";
 
 export const Route = createFileRoute("/")({
   component: HomeRouteComponent,

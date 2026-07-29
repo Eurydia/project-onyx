@@ -3,7 +3,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import type { SymbolTable } from "$/types/syntax-tree";
 
 export const PropositionRadioGroup: FC<{

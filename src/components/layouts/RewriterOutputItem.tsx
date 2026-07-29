@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { TruthTable } from "$/components/TruthTable";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import { StyledAlert } from "../styled/StyledAlert";

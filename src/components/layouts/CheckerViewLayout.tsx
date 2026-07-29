@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { VerdictDisplayMany } from "$/components/VerdictDisplay";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SyntaxTree } from "$/types/syntax-tree";
 

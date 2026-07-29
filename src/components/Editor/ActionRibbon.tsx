@@ -2,7 +2,7 @@ import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import type { FC } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import { CopyButton } from "./CopyButton";
 
 export const ActionRibbon: FC<{

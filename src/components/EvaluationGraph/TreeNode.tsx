@@ -3,7 +3,7 @@ import { Group } from "@visx/group";
 import type { HierarchyPointNode } from "@visx/hierarchy";
 import katex from "katex";
 import { type FC, useEffect, useRef } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
 

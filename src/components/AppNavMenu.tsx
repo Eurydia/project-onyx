@@ -1,5 +1,5 @@
 import { type FC, Fragment } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import { AppNavItem } from "./AppNavItem";
 
 const NAV_ITEMS = [

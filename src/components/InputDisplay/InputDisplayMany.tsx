@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";

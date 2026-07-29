@@ -8,9 +8,9 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { ComparatorViewLayout } from "$/components/layouts/ComparatorViewLayout";
-import { parse } from "$/core/interpreter/parser";
-import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
-import { m } from "$/paraglide/messages";
+import { parse } from "$/App/core/interpreter/parser";
+import { syntaxTreeToLatex } from "$/App/core/syntax-tree/to-latex";
+import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SyntaxTree } from "$/types/syntax-tree";
 
@@ -39,9 +39,7 @@ export const Route = createFileRoute("/comparator")({
               ok: true,
               inputRaw: userInput.trim(),
               tree: parseResult.tree,
-              inputInterpretationLatex: syntaxTreeToLatex(
-                parseResult.tree,
-              ),
+              inputInterpretationLatex: syntaxTreeToLatex(parseResult.tree),
             }
           : {
               ok: false,
@@ -95,10 +93,7 @@ function ComparatorRouteComponent() {
 
   return (
     <ThemeProvider theme={THEME_COMPARATOR_ROUTE}>
-      <BaseLayout
-        appHeader={<AppNavGroup />}
-        title={m["nav.comparator"]()}
-      >
+      <BaseLayout appHeader={<AppNavGroup />} title={m["nav.comparator"]()}>
         <Stack spacing={8}>
           <Editor
             value={userInput}

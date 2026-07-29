@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
-import { m } from "$/paraglide/messages";
+import type { EvaluationStep } from "$/App/core/expr-tree/collect-steps";
+import { m } from "$/libs/paraglide/messages";
 import { StyledLatex } from "../styled/StyledLatex";
 
 export const EvaluationDisplayStepMini: FC<{

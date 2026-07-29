@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import "$/core/interpreter/grammar";
+import "$/App/core/interpreter/grammar";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { routeTree } from "./routeTree.gen";

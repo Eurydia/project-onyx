@@ -1,6 +1,6 @@
 import { type FC, useMemo } from "react";
-import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
-import { m } from "$/paraglide/messages";
+import { syntaxTreeCollectSymbols } from "$/App/core/syntax-tree/collect-symbols";
+import { m } from "$/libs/paraglide/messages";
 import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { StyledLatex } from "../styled/StyledLatex";
 

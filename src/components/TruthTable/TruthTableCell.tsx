@@ -1,7 +1,7 @@
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import { m } from "$/paraglide/messages";
+import { m } from "$/libs/paraglide/messages";
 
 export const TruthTableCell: FC<{
   value: boolean;
