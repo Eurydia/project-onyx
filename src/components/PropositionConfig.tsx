@@ -10,12 +10,11 @@ import { useTranslation } from "react-i18next";
 import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledLatex } from "./styled/StyledLatex";
 
-type CustomRadioGroupProps = {
+const CustomRadioGroup: FC<{
   symbol: string;
   value: SymbolTable;
   onChange: (k: string, v: boolean) => void;
-};
-const CustomRadioGroup: FC<CustomRadioGroupProps> = (props) => {
+}> = (props) => {
   const { symbol, value, onChange } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "symbol-config",
@@ -29,12 +28,12 @@ const CustomRadioGroup: FC<CustomRadioGroupProps> = (props) => {
     >
       <FormControlLabel
         disableTypography
-        control={<Radio disableFocusRipple disableRipple disableTouchRipple />}
+        control={<Radio />}
         value="1"
         label={<Typography>{t("true")}</Typography>}
       />
       <FormControlLabel
-        control={<Radio disableFocusRipple disableRipple disableTouchRipple />}
+        control={<Radio />}
         value="0"
         disableTypography
         label={<Typography>{t("false")}</Typography>}
@@ -43,11 +42,10 @@ const CustomRadioGroup: FC<CustomRadioGroupProps> = (props) => {
   );
 };
 
-type PropositionConfigProps = {
+export const PropositionConfig: FC<{
   value: SymbolTable;
   onChange: (k: string, v: boolean) => void;
-};
-export const PropositionConfig: FC<PropositionConfigProps> = (props) => {
+}> = (props) => {
   const { value, onChange } = props;
 
   const symbols = useMemo(() => {

@@ -8,26 +8,20 @@ import { TruthTable } from "$/components/TruthTable";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 
-type TruthTableManyProps = {
+export const TruthTableMany: FC<{
   items: Maybe<{ tree: ExprTree }>[];
-};
-export const TruthTableMany: FC<TruthTableManyProps> = (props) => {
+}> = (props) => {
   const { items } = props;
 
   const [tab, setTab] = useState(0);
 
   return (
     <TabContext value={tab}>
-      <TabList
-        onChange={(_, v) => setTab(v)}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
+      <TabList onChange={(_, v) => setTab(v)}>
         {items.map((item, index) => (
           <Tab
             key={`tab${index}`}
             value={index}
-            disableRipple
             disabled={!item.ok}
             sx={{
               textDecorationLine: !item.ok ? "line-through" : undefined,

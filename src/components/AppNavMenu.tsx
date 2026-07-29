@@ -6,12 +6,10 @@ import { Link } from "react-router";
 
 const NAV_ITEMS = ["evaluator", "comparator", "checker", "rewriter"];
 
-type CustomNavItemProps = {
+const CustomNavItem: FC<{
   href: string;
   label: string;
-};
-
-const CustomNavItem: FC<CustomNavItemProps> = (props) => {
+}> = (props) => {
   const { href, label } = props;
   const { palette } = useTheme();
   return (

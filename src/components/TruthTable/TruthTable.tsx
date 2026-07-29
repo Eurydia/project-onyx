@@ -17,11 +17,10 @@ import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 import { TruthTableCell } from "./TruthTableCell";
 
-type TruthTableProps = {
+export const TruthTable: FC<{
   exprTree: ExprTree;
   slotProps: { container: SxProps<Theme> };
-};
-const TruthTable_: FC<TruthTableProps> = (props) => {
+}> = memo((props) => {
   const { exprTree, slotProps } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "truth-table",
@@ -52,8 +51,6 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
           {t("warnings.large-truth-table-can-slow-application-down")}
         </StyledAlert>
         <Button
-          disableElevation
-          disableRipple
           onClick={() => setUserConfirmed(true)}
           sx={{
             "&:hover": {
@@ -106,8 +103,6 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-export const TruthTable = memo(TruthTable_, (prev, next) => {
+}, (prev, next) => {
   return exprTreeToLatex(prev.exprTree) === exprTreeToLatex(next.exprTree);
 });

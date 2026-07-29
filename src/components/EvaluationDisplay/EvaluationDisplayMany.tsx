@@ -11,13 +11,10 @@ import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { EvaluationDisplay } from "./EvaluationDisplay";
 
-type EvaluationDisplayManyProps = {
+export const EvaluationDisplayMany: FC<{
   symbolTable: SymbolTable;
   items: Maybe<{ tree: ExprTree }>[];
-};
-export const EvaluationDisplayMany: FC<EvaluationDisplayManyProps> = (
-  props,
-) => {
+}> = (props) => {
   const { items, symbolTable } = props;
 
   const { t } = useTranslation("views", {
@@ -49,8 +46,6 @@ export const EvaluationDisplayMany: FC<EvaluationDisplayManyProps> = (
     <TabContext value={tab}>
       <TabList
         onChange={(_, v) => setTab(Number.parseInt(v, 10))}
-        variant="scrollable"
-        scrollButtons="auto"
         textColor="inherit"
         sx={{ paddingX: 0 }}
       >
@@ -62,7 +57,6 @@ export const EvaluationDisplayMany: FC<EvaluationDisplayManyProps> = (
             <Tab
               key={`tab${index}`}
               value={index}
-              disableRipple
               label={t("tab-item", { num: index + 1 })}
             />
           );

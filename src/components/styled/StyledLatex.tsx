@@ -1,14 +1,12 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import type { KatexOptions } from "katex";
-import { type FC, type ReactNode, useEffect, useRef } from "react";
+import { type FC, type PropsWithChildren, useEffect, useRef } from "react";
 
-type StyledLatexProps = {
-  children: ReactNode;
+export const StyledLatex: FC<PropsWithChildren<{
   sx?: SxProps<Theme>;
   options?: KatexOptions;
-};
-export const StyledLatex: FC<StyledLatexProps> = (props) => {
+}>> = (props) => {
   const { sx, children, options } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {

@@ -7,13 +7,12 @@ import { useTranslation } from "react-i18next";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
 
-type TreeGraphNodeProps = {
+export const TreeGraphNode: FC<{
   node: HierarchyPointNode<ExprTree>;
   order: number;
   symbolTable: SymbolTable;
   r: number;
-};
-export const TreeGraphNode: FC<TreeGraphNodeProps> = (props) => {
+}> = (props) => {
   const { r, order, node, symbolTable } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "graph",

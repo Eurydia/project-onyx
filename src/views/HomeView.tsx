@@ -14,10 +14,10 @@ import { type FC, memo, type ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
-import { PALETTE_CHECKER_ROUTE } from "$theme/palette-checker-route";
-import { PALETTE_COMPARATOR_ROUTE } from "$theme/palette-comparator-route";
-import { PALETTE_EVALUATOR_ROUTE } from "$theme/palette-evaluator-route";
-import { PALETTE_REWRITER_ROUTE } from "$theme/palette-rewriter-route";
+import { PALETTE_CHECKER_ROUTE } from "$/App/theme/palette-checker-route";
+import { PALETTE_COMPARATOR_ROUTE } from "$/App/theme/palette-comparator-route";
+import { PALETTE_EVALUATOR_ROUTE } from "$/App/theme/palette-evaluator-route";
+import { PALETTE_REWRITER_ROUTE } from "$/App/theme/palette-rewriter-route";
 
 const TOOLS = [
   {
@@ -49,10 +49,9 @@ const TOOLS = [
 
 const LANGUAGES = ["en", "th"] as const;
 
-type LanguageItemCardProps = {
+const LanguageItemCard: FC<{
   lang: string;
-};
-const LanguageItemCard: FC<LanguageItemCardProps> = memo(
+}> = memo(
   (props) => {
     const { lang } = props;
     const { t, i18n } = useTranslation("views", {
@@ -77,12 +76,11 @@ const LanguageItemCard: FC<LanguageItemCardProps> = memo(
   () => true,
 );
 
-type ToolCardProps = {
+const ToolCard: FC<{
   palette: Theme["palette"];
   id: string;
   icon: ReactElement;
-};
-const ToolCard: FC<ToolCardProps> = memo(
+}> = memo(
   (props) => {
     const { palette, id, icon } = props;
     const theme = useTheme();
@@ -105,7 +103,6 @@ const ToolCard: FC<ToolCardProps> = memo(
         }}
       >
         <CardActionArea
-          disableRipple
           component={Link}
           to={href}
           sx={{ padding: 2, height: "100%" }}
@@ -157,7 +154,6 @@ export const HomeView: FC = () => {
       title={t(`boolean-algebra-interpreter`)}
       appHeader={
         <Stack
-          useFlexGap
           direction="row"
           spacing={2}
           sx={{

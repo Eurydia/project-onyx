@@ -7,10 +7,9 @@ import { InputDisplayMany } from "$/components/InputDisplay";
 import { VerdictDisplayMany } from "$/components/VerdictDisplay";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
-type CheckerViewLayoutProps = {
+export const CheckerViewLayout: FC<{
   items: CheckerRouteLoaderData["items"];
-};
-export const CheckerViewLayout: FC<CheckerViewLayoutProps> = (props) => {
+}> = (props) => {
   const { items } = props;
   const { typography } = useTheme();
   const { t } = useTranslation("views", {

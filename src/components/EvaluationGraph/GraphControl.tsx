@@ -10,7 +10,7 @@ import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledTooltipIconButton } from "../styled/StyledIconButton";
 
-type GraphControlProps = {
+export const GraphControl: FC<{
   maxValue: number;
   minValue: number;
   value: number;
@@ -19,8 +19,7 @@ type GraphControlProps = {
   onAnimationPlay: () => void;
   onAnimationPause: () => void;
   onAnimationReplay: () => void;
-};
-const GraphControl_: FC<GraphControlProps> = (props) => {
+}> = memo((props) => {
   const {
     value,
     maxValue,
@@ -100,14 +99,12 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
       </Stack>
     </Stack>
   );
-};
-
-export const GraphControl = memo(GraphControl_, (prev, next) => {
+}, (prev, next) => {
   const keys = [
     "value",
     "maxValue",
     "minValue",
     "isAnimationPlaying",
-  ] as (keyof GraphControlProps)[];
+  ] as const;
   return keys.every((key) => prev[key] === next[key]);
 });

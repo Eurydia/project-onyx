@@ -16,12 +16,11 @@ import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
-type ComparatorViewLayoutProps = {
+export const ComparatorViewLayout: FC<{
   items: ComparatorRouteLoaderData["items"];
   mainItemIndex: number | null;
   onMainItemIndexChange: (v: number) => void;
-};
-export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
+}> = (props) => {
   const { items, onMainItemIndexChange, mainItemIndex } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "comparator-view.cards",
@@ -74,9 +73,7 @@ export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
             return (
               <FormControlLabel
                 key={`main-expr-option${index}`}
-                control={
-                  <Radio disableFocusRipple disableRipple disableTouchRipple />
-                }
+                control={<Radio />}
                 value={index}
                 label={<StyledLatex>{`$$${exprLatex}$$`}</StyledLatex>}
                 slotProps={{

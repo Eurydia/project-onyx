@@ -6,12 +6,11 @@ import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
 import { StyledLatex } from "../styled/StyledLatex";
 import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
-type EvaluationDisplayProps = {
+export const EvaluationDisplayStep: FC<{
   stepIndex: number;
   step: EvaluationStep;
   references: EvaluationStep[];
-};
-export const EvaluationDisplayStep: FC<EvaluationDisplayProps> = (props) => {
+}> = (props) => {
   const { step, stepIndex, references } = props;
   const { evaluated, repr, substitutions, connective } = step;
   const { t } = useTranslation("views", {

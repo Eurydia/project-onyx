@@ -4,11 +4,10 @@ import { LinkVertical } from "@visx/shape";
 import type { FC } from "react";
 import type { ExprTree } from "$/types/expression-tree";
 
-type TreeGraphLinkProps = {
+export const TreeGraphLink: FC<{
   link: HierarchyPointLink<ExprTree>;
   order: number;
-};
-export const TreeGraphLink: FC<TreeGraphLinkProps> = (props) => {
+}> = (props) => {
   const { link, order } = props;
   const { palette } = useTheme();
   const { source, target } = link;

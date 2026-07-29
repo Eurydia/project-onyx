@@ -1,15 +1,11 @@
 import Alert, { type AlertProps } from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import type { FC, ReactNode } from "react";
+import type { FC, PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
-type StyledAlertProps = {
+export const StyledAlert: FC<PropsWithChildren<{
   severity: AlertProps["severity"];
-  children: ReactNode;
-};
-export const StyledAlert: FC<StyledAlertProps> = (
-  props
-) => {
+}>> = (props) => {
   const { children, severity } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "alert",

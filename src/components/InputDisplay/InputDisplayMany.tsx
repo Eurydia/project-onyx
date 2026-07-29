@@ -10,12 +10,11 @@ import type { Maybe } from "$/types/generic";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
-type InputDisplayManyProps = {
+export const InputDisplayMany: FC<{
   items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
   }>)[];
-};
-export const InputDisplayMany: FC<InputDisplayManyProps> = (props) => {
+}> = (props) => {
   const { items } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "input-display",

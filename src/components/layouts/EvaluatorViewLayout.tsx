@@ -14,12 +14,11 @@ import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
-type EvaluatorViewLayoutProps = {
+export const EvaluatorViewLayout: FC<{
   symbolTable: SymbolTable;
   onSymbolChange: (k: string, v: boolean) => void;
   items: EvaluatorRouteLoaderData["items"];
-};
-export const EvaluatorViewLayout: FC<EvaluatorViewLayoutProps> = (props) => {
+}> = (props) => {
   const { items, symbolTable, onSymbolChange } = props;
   const { typography } = useTheme();
   const { t } = useTranslation("views", {

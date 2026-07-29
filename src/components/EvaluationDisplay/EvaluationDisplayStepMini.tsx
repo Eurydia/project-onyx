@@ -3,15 +3,12 @@ import { useTranslation } from "react-i18next";
 import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
 import { StyledLatex } from "../styled/StyledLatex";
 
-type EvaluationDisplayStepMiniProps = {
+export const EvaluationDisplayStepMini: FC<{
   references: EvaluationStep[];
   subStep: EvaluationStep["substitutions"][number];
   stepIndex: number;
   subStepIndex: number;
-};
-export const EvaluationDisplayStepMini: FC<EvaluationDisplayStepMiniProps> = (
-  props,
-) => {
+}> = (props) => {
   const { subStep, references, subStepIndex, stepIndex } = props;
   const prevMarker = String.fromCharCode(subStepIndex + 97);
   const currMarker = String.fromCharCode(subStepIndex + 97 + 1);

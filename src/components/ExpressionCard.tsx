@@ -4,13 +4,10 @@ import CardContent from "@mui/material/CardContent";
 import Collapse from "@mui/material/Collapse";
 import { type FC, type ReactNode, useState } from "react";
 
-type ExpressionCardProps = {
+export const ExpressionCard: FC<{
   primary: ReactNode;
   secondary: ReactNode;
-};
-export const ExpressionCard: FC<ExpressionCardProps> = (
-  props
-) => {
+}> = (props) => {
   const { primary, secondary } = props;
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpanded = () => {
@@ -18,11 +15,7 @@ export const ExpressionCard: FC<ExpressionCardProps> = (
   };
   return (
     <Card variant="outlined">
-      <CardActionArea
-        disableRipple
-        disableTouchRipple
-        onClick={toggleExpanded}
-      >
+      <CardActionArea onClick={toggleExpanded}>
         <CardContent>{primary}</CardContent>
       </CardActionArea>
       <Collapse in={isExpanded}>{secondary}</Collapse>

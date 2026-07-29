@@ -1,27 +1,22 @@
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import type { FC, KeyboardEvent, ReactNode } from "react";
+import type { FC, KeyboardEvent, PropsWithChildren } from "react";
 
-type StyledTooltipIconButtonProps = {
+export const StyledTooltipIconButton: FC<PropsWithChildren<{
   title: string;
-  children: ReactNode;
   disabled?: boolean;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onKeyPress?: (
     e: KeyboardEvent<HTMLButtonElement>
   ) => void;
-};
-export const StyledTooltipIconButton: FC<
-  StyledTooltipIconButtonProps
-> = (props) => {
+}>> = (props) => {
   const { children, onKeyPress, onClick, title, disabled } =
     props;
   return (
     <Tooltip title={<Typography>{title}</Typography>}>
       <span>
         <IconButton
-          disableRipple
           disabled={disabled}
           onClick={onClick}
           onKeyDown={onKeyPress}

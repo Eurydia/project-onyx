@@ -7,14 +7,13 @@ import type { SymbolTable } from "$/types/syntax-tree";
 import { GraphControl } from "./GraphControl";
 import { Tree } from "./Tree";
 
-type GraphProps = {
+export const Graph: FC<{
   exprTree: ExprTree;
   symbolTable: SymbolTable;
   slotProps: {
     container: SxProps;
   };
-};
-export const Graph: FC<GraphProps> = (props) => {
+}> = (props) => {
   const { exprTree, symbolTable, slotProps } = props;
 
   const [step, setStep] = useState(1);

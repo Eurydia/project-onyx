@@ -20,12 +20,11 @@ import { Operator } from "$/types/operators";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
-type RewriterOutputItemProps = {
+const RewriterOutputItem: FC<{
   itemNum: number;
   originalLatex: string;
   result: Maybe<{ tree: ExprTree; latex: string }>;
-};
-const RewriterOutputItem: FC<RewriterOutputItemProps> = (props) => {
+}> = (props) => {
   const { result, originalLatex, itemNum } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "rewriter-view.cards.output",
@@ -74,12 +73,11 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (props) => {
   );
 };
 
-type RewriterViewLayoutProps = {
+export const RewriterViewLayout: FC<{
   items: RewriterRouteLoaderData["items"];
   basis: Set<Operator>;
   onBasisChange: (k: Operator, v: boolean) => void;
-};
-export const RewriterViewLayout: FC<RewriterViewLayoutProps> = (props) => {
+}> = (props) => {
   const { items, basis, onBasisChange } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "rewriter-view.cards",
@@ -113,13 +111,7 @@ export const RewriterViewLayout: FC<RewriterViewLayoutProps> = (props) => {
                 key={`operator${index}`}
                 checked={basis.has(operator)}
                 onChange={(_, value) => onBasisChange(operator, value)}
-                control={
-                  <Checkbox
-                    disableRipple
-                    disableFocusRipple
-                    disableTouchRipple
-                  />
-                }
+                control={<Checkbox />}
                 label={
                   <StyledLatex>{`$${operatorToLatex(operator)}$`}</StyledLatex>
                 }

@@ -15,12 +15,11 @@ import { type SymbolTable, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { TreeGraphLink } from "./TreeLink";
 import { TreeGraphNode } from "./TreeNode";
 
-type TreeProps = {
+export const Tree: FC<{
   symbolTable: SymbolTable;
   tree: ExprTree;
   order: number;
-};
-const Tree_: FC<TreeProps> = (props) => {
+}> = memo((props) => {
   const { tree, order, symbolTable } = props;
 
   const { palette } = useTheme();
@@ -135,9 +134,7 @@ const Tree_: FC<TreeProps> = (props) => {
       </Zoom>
     </Box>
   );
-};
-
-export const Tree = memo(Tree_, (prev, next) => {
+}, (prev, next) => {
   if (prev.order !== next.order) {
     return false;
   }

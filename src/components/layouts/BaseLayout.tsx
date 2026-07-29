@@ -1,14 +1,17 @@
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { type FC, Fragment, type ReactNode } from "react";
+import {
+  type FC,
+  Fragment,
+  type PropsWithChildren,
+  type ReactNode,
+} from "react";
 
-type BaseLayoutProps = {
+export const BaseLayout: FC<PropsWithChildren<{
   title: string;
   appHeader: ReactNode;
-  children: ReactNode;
-};
-export const BaseLayout: FC<BaseLayoutProps> = (props) => {
+}>> = (props) => {
   const { appHeader, title: banner, children } = props;
   const { palette } = useTheme();
   return (

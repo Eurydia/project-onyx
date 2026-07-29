@@ -1,15 +1,11 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import type { FC, ReactNode } from "react";
+import type { FC, PropsWithChildren } from "react";
 
-type StyledOutputCardProps = {
+export const StyledOutputCard: FC<PropsWithChildren<{
   title: string;
-  children: ReactNode;
-};
-export const StyledOutputCard: FC<StyledOutputCardProps> = (
-  props
-) => {
+}>> = (props) => {
   const { children, title } = props;
   return (
     <Card elevation={4}>

@@ -10,11 +10,10 @@ import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledLatex } from "../styled/StyledLatex";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
-type EvaluationDisplayProps = {
+export const EvaluationDisplay: FC<{
   exprTree: ExprTree;
   symbolTable: SymbolTable;
-};
-const EvaluationDisplay_: FC<EvaluationDisplayProps> = (props) => {
+}> = memo((props) => {
   const { exprTree, symbolTable } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "evaluator-view.cards.step-by-step",
@@ -60,9 +59,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (props) => {
       {t("no-evaluation-step-to-display")}
     </Typography>
   );
-};
-
-export const EvaluationDisplay = memo(EvaluationDisplay_, (prev, next) => {
+}, (prev, next) => {
   if (exprTreeToLatex(prev.exprTree) !== exprTreeToLatex(next.exprTree)) {
     return false;
   }
