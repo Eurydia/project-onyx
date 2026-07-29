@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import type { Maybe } from "$/types/generic";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
@@ -16,9 +16,6 @@ export const InputDisplayMany: FC<{
   }>)[];
 }> = (props) => {
   const { items } = props;
-  const { t } = useTranslation("components", {
-    keyPrefix: "input-display",
-  });
 
   return (
     <Stack spacing={1}>
@@ -30,7 +27,7 @@ export const InputDisplayMany: FC<{
             <StyledLatex
               key={`expr${index}`}
               sx={{
-                color: ({ palette }) => palette.error.main,
+                color: (theme) => theme.palette.error.main,
               }}
             >
               {`$$\\varnothing \\tag{${inputNum}}$$`}
@@ -47,7 +44,9 @@ export const InputDisplayMany: FC<{
       {items.some((expr) => !expr.ok) && (
         <StyledAlert severity="warning">
           <Typography>
-            {t("warnings.the-following-input-are-invalid")}
+            {m[
+              "components.input-display.warnings.the-following-input-are-invalid"
+            ]()}
           </Typography>
           <List>
             {items.map((item, index) => {
@@ -63,7 +62,7 @@ export const InputDisplayMany: FC<{
                   <ListItemText disableTypography>
                     {item.inputRaw.length === 0 ? (
                       <Typography sx={{ fontStyle: "italic" }}>
-                        {t("empty-string")}
+                        {m["components.input-display.empty-string"]()}
                       </Typography>
                     ) : (
                       <Typography sx={{ fontFamily: "monospace" }}>

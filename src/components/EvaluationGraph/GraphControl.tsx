@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import { StyledTooltipIconButton } from "../styled/StyledIconButton";
 
 export const GraphControl: FC<{
@@ -30,10 +30,6 @@ export const GraphControl: FC<{
     onAnimationPlay,
     onAnimationReplay,
   } = props;
-
-  const { t } = useTranslation("components", {
-    keyPrefix: "graph.playback",
-  });
 
   const handleForward = () => {
     if (value >= maxValue) {
@@ -62,14 +58,14 @@ export const GraphControl: FC<{
       <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
         <StyledTooltipIconButton
           disabled={value <= minValue}
-          title={t("previous")}
+          title={m["components.graph.playback.previous"]()}
           onClick={handleRewind}
         >
           <KeyboardArrowLeftRounded />
         </StyledTooltipIconButton>
         {value === maxValue && (
           <StyledTooltipIconButton
-            title={t("replay")}
+            title={m["components.graph.playback.replay"]()}
             onClick={onAnimationReplay}
           >
             <ReplayRounded />
@@ -77,20 +73,23 @@ export const GraphControl: FC<{
         )}
         {value !== maxValue && isAnimationPlaying && (
           <StyledTooltipIconButton
-            title={t("pause")}
+            title={m["components.graph.playback.pause"]()}
             onClick={onAnimationPause}
           >
             <PauseRounded />
           </StyledTooltipIconButton>
         )}
         {value !== maxValue && !isAnimationPlaying && (
-          <StyledTooltipIconButton title={t("play")} onClick={onAnimationPlay}>
+          <StyledTooltipIconButton
+            title={m["components.graph.playback.play"]()}
+            onClick={onAnimationPlay}
+          >
             <PlayArrowRounded />
           </StyledTooltipIconButton>
         )}
         <StyledTooltipIconButton
           disabled={value >= maxValue}
-          title={t("forward")}
+          title={m["components.graph.playback.forward"]()}
           onClick={handleForward}
         >
           <KeyboardArrowRightRounded />

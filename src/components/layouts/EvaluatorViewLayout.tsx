@@ -1,14 +1,13 @@
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { EvaluationDisplayMany } from "$/components/EvaluationDisplay";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { PropositionConfig } from "$/components/PropositionConfig";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
+import * as m from "$/paraglide/messages.js";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
@@ -20,10 +19,6 @@ export const EvaluatorViewLayout: FC<{
   items: EvaluatorRouteLoaderData["items"];
 }> = (props) => {
   const { items, symbolTable, onSymbolChange } = props;
-  const { typography } = useTheme();
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards",
-  });
 
   const validItems = useMemo(() => {
     return items.filter((item) => item.ok);
@@ -31,18 +26,30 @@ export const EvaluatorViewLayout: FC<{
 
   return (
     <Stack spacing={2}>
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("input-interpretation.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.evaluator-view.cards.input-interpretation.title"]()}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("output.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.evaluator-view.cards.output.title"]()}
       </Typography>
       <PropositionConfig value={symbolTable} onChange={onSymbolChange} />
       {validItems.length === 0 && (
         <StyledAlert severity="info">
           <Typography>
-            {t("output.infos.no-valid-formula-to-display")}
+            {m[
+              "views.evaluator-view.cards.output.infos.no-valid-formula-to-display"
+            ]()}
           </Typography>
         </StyledAlert>
       )}
@@ -54,14 +61,18 @@ export const EvaluatorViewLayout: FC<{
           const expr = exprTreeFromSyntaxTree(item.tree);
           const latex = item.inputInterpretationLatex;
           const result = expr.eval(symbolTable);
-          const resultT = result ? t("output.true") : t("output.false");
+          const resultT = result
+            ? m["views.evaluator-view.cards.output.true"]()
+            : m["views.evaluator-view.cards.output.false"]();
 
           return (
             <ExpressionCard
               key={`output-item${index}`}
               primary={
                 <StyledLatex>
-                  {t("output.formula-evaluates-to-value", {
+                  {m[
+                    "views.evaluator-view.cards.output.formula-evaluates-to-value"
+                  ]({
                     formula: `$$${latex} \\tag{${index + 1}}$$`,
                     value: `$$\\boxed{\\textbf{${resultT}}}$$`,
                   })}
@@ -78,8 +89,13 @@ export const EvaluatorViewLayout: FC<{
             />
           );
         })}
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("step-by-step.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.evaluator-view.cards.step-by-step.title"]()}
       </Typography>
       <EvaluationDisplayMany
         symbolTable={symbolTable}

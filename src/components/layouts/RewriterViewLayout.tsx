@@ -2,10 +2,8 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { TruthTable } from "$/components/TruthTable";
@@ -13,6 +11,7 @@ import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { operatorToLatex } from "$/core/operator";
 import { syntaxTreeRewrite } from "$/core/syntax-tree/rewrite";
 import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import type { RewriterRouteLoaderData } from "$/types/loader-data";
@@ -26,20 +25,21 @@ const RewriterOutputItem: FC<{
   result: Maybe<{ tree: ExprTree; latex: string }>;
 }> = (props) => {
   const { result, originalLatex, itemNum } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "rewriter-view.cards.output",
-  });
 
   const primary = result.ok ? (
     <StyledLatex>
-      {t("text.formula-is-expressed-as-in-the-desired-basis", {
+      {m[
+        "views.rewriter-view.cards.output.text.formula-is-expressed-as-in-the-desired-basis"
+      ]({
         formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
         result: `$$\\boxed{${result.latex}}$$`,
       })}
     </StyledLatex>
   ) : (
     <StyledLatex>
-      {t("text.formula-cannot-be-expressed-in-the-desired-basis", {
+      {m[
+        "views.rewriter-view.cards.output.text.formula-cannot-be-expressed-in-the-desired-basis"
+      ]({
         formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
       })}
     </StyledLatex>
@@ -55,7 +55,11 @@ const RewriterOutputItem: FC<{
     />
   ) : (
     <StyledAlert severity="info">
-      <Typography>{t("infos.truth-table-is-not-available")}</Typography>
+      <Typography>
+        {m[
+          "views.rewriter-view.cards.output.infos.truth-table-is-not-available"
+        ]()}
+      </Typography>
     </StyledAlert>
   );
 
@@ -68,27 +72,35 @@ export const RewriterViewLayout: FC<{
   onBasisChange: (k: Operator, v: boolean) => void;
 }> = (props) => {
   const { items, basis, onBasisChange } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "rewriter-view.cards",
-  });
-  const { typography } = useTheme();
   const validItems = useMemo(() => {
     return items.filter((item) => item.ok);
   }, [items]);
 
   return (
     <Stack spacing={2}>
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("input-interpretation.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.rewriter-view.cards.input-interpretation.title"]()}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("output.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.rewriter-view.cards.output.title"]()}
       </Typography>
       {validItems.length === 0 && (
         <StyledAlert severity="info">
           <Typography>
-            {t("output.infos.no-valid-formula-to-display")}
+            {m[
+              "views.rewriter-view.cards.output.infos.no-valid-formula-to-display"
+            ]()}
           </Typography>
         </StyledAlert>
       )}

@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import {
   type FC,
@@ -13,7 +12,6 @@ export const BaseLayout: FC<PropsWithChildren<{
   appHeader: ReactNode;
 }>> = (props) => {
   const { appHeader, title: banner, children } = props;
-  const { palette } = useTheme();
   return (
     <Fragment>
       <Box
@@ -34,13 +32,13 @@ export const BaseLayout: FC<PropsWithChildren<{
         {appHeader}
       </Box>
       <Box
-        sx={{
+        sx={(theme) => ({
           px: { xs: 2, md: 0 },
           py: 4,
-          backgroundColor: palette.primary.light,
-          color: palette.primary.dark,
+          backgroundColor: theme.palette.primary.light,
+          color: theme.palette.primary.dark,
           alignItems: "center",
-        }}
+        })}
       >
         <Typography
           variant="h1"

@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
 import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
+import * as m from "$/paraglide/messages.js";
 import { StyledLatex } from "../styled/StyledLatex";
 
 export const EvaluationDisplayStepMini: FC<{
@@ -12,26 +12,31 @@ export const EvaluationDisplayStepMini: FC<{
   const { subStep, references, subStepIndex, stepIndex } = props;
   const prevMarker = String.fromCharCode(subStepIndex + 97);
   const currMarker = String.fromCharCode(subStepIndex + 97 + 1);
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards.step-by-step",
-  });
 
   const { substituted, evaluated, repr, stepRef } = subStep;
 
   return stepRef === false ? (
     <StyledLatex>
-      {t("given-variable-is-value", {
+      {m[
+        "views.evaluator-view.cards.step-by-step.given-variable-is-value"
+      ]({
         variable: `$${repr}$`,
         formula: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
-        value: t(evaluated ? "true" : "false"),
+        value: evaluated
+          ? m["views.evaluator-view.cards.step-by-step.true"]()
+          : m["views.evaluator-view.cards.step-by-step.false"](),
       })}
     </StyledLatex>
   ) : (
     <StyledLatex>
-      {t("from-previous-step-substitute-into-formula", {
+      {m[
+        "views.evaluator-view.cards.step-by-step.from-previous-step-substitute-into-formula"
+      ]({
         step: `$\\text{(${stepRef}.a)}$`,
         formula: `$$${references[stepRef - 1].repr}$$`,
-        value: t(evaluated ? "true" : "false"),
+        value: evaluated
+          ? m["views.evaluator-view.cards.step-by-step.true"]()
+          : m["views.evaluator-view.cards.step-by-step.false"](),
         current: `$\\text{(${stepIndex}.${prevMarker})}$`,
         result: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
       })}

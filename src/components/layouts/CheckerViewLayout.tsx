@@ -1,32 +1,33 @@
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { VerdictDisplayMany } from "$/components/VerdictDisplay";
+import * as m from "$/paraglide/messages.js";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
 export const CheckerViewLayout: FC<{
   items: CheckerRouteLoaderData["items"];
 }> = (props) => {
   const { items } = props;
-  const { typography } = useTheme();
-  const { t } = useTranslation("views", {
-    keyPrefix: "checker-view.cards",
-  });
   return (
     <Stack spacing={2}>
       <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
       >
-        {t("input-interpretation.title")}
+        {m["views.checker-view.cards.input-interpretation.title"]()}
       </Typography>
       <InputDisplayMany items={items} />
       <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
       >
-        {t("output.title")}
+        {m["views.checker-view.cards.output.title"]()}
       </Typography>
       <VerdictDisplayMany items={items} />
     </Stack>

@@ -6,7 +6,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledLatex } from "./styled/StyledLatex";
 
@@ -16,9 +16,6 @@ const CustomRadioGroup: FC<{
   onChange: (k: string, v: boolean) => void;
 }> = (props) => {
   const { symbol, value, onChange } = props;
-  const { t } = useTranslation("components", {
-    keyPrefix: "symbol-config",
-  });
 
   return (
     <RadioGroup
@@ -30,13 +27,17 @@ const CustomRadioGroup: FC<{
         disableTypography
         control={<Radio />}
         value="1"
-        label={<Typography>{t("true")}</Typography>}
+        label={
+          <Typography>{m["components.symbol-config.true"]()}</Typography>
+        }
       />
       <FormControlLabel
         control={<Radio />}
         value="0"
         disableTypography
-        label={<Typography>{t("false")}</Typography>}
+        label={
+          <Typography>{m["components.symbol-config.false"]()}</Typography>
+        }
       />
     </RadioGroup>
   );

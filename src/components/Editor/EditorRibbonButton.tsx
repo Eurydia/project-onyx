@@ -6,7 +6,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useTheme } from "@mui/material/styles";
 import { type FC, Fragment, useRef, useState } from "react";
 import { StyledLatex } from "$/components/styled/StyledLatex";
 
@@ -15,7 +14,6 @@ export const EditorRibbonButton: FC<{
   onClick: (value: string) => void;
 }> = (props) => {
   const { options, onClick } = props;
-  const { palette } = useTheme();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
   const anchorRef = useRef<HTMLDivElement | null>(null);
@@ -29,14 +27,14 @@ export const EditorRibbonButton: FC<{
       >
         <Button
           onClick={() => onClick(selected.value)}
-          sx={{
+          sx={(theme) => ({
             "&:hover": {
-              color: palette.getContrastText(palette.primary.main),
-              backgroundColor: palette.primary.main,
+              color: theme.palette.getContrastText(theme.palette.primary.main),
+              backgroundColor: theme.palette.primary.main,
             },
-            color: palette.primary.dark,
-            backgroundColor: palette.primary.light,
-          }}
+            color: theme.palette.primary.dark,
+            backgroundColor: theme.palette.primary.light,
+          })}
         >
           <StyledLatex
             sx={{
@@ -49,14 +47,14 @@ export const EditorRibbonButton: FC<{
         </Button>
         <Button
           onClick={() => setOpen(true)}
-          sx={{
+          sx={(theme) => ({
             "&:hover": {
-              color: palette.getContrastText(palette.primary.main),
-              backgroundColor: palette.primary.main,
+              color: theme.palette.getContrastText(theme.palette.primary.main),
+              backgroundColor: theme.palette.primary.main,
             },
-            color: palette.primary.dark,
-            backgroundColor: palette.primary.light,
-          }}
+            color: theme.palette.primary.dark,
+            backgroundColor: theme.palette.primary.light,
+          })}
         >
           <KeyboardArrowDownRounded
             sx={{

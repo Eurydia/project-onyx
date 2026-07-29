@@ -1,9 +1,9 @@
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
+import * as m from "$/paraglide/messages.js";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 import { StyledAlert } from "../styled/StyledAlert";
 import { VerdictDisplay } from "./VerdictDisplay";
@@ -12,15 +12,16 @@ export const VerdictDisplayMany: FC<{
   items: CheckerRouteLoaderData["items"];
 }> = (props) => {
   const { items } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "checker-view.cards.output.infos",
-  });
 
   return (
     <Fragment>
       {items.filter((f) => f.ok).length === 0 ? (
         <StyledAlert severity="info">
-          <Typography>{t("no-formula-to-display")}</Typography>
+          <Typography>
+            {m[
+              "views.checker-view.cards.output.infos.no-formula-to-display"
+            ]()}
+          </Typography>
         </StyledAlert>
       ) : (
         items.map((item, index) => {

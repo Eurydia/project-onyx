@@ -5,10 +5,9 @@ import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import type { editor } from "monaco-editor";
 import { type FC, memo, useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import { EditorRibbon } from "./EditorRibbon";
 
 export const CopyButton: FC<{
@@ -16,10 +15,6 @@ export const CopyButton: FC<{
 }> = (props) => {
   const { onClick } = props;
   const [hasCopied, setHasCopied] = useState(false);
-  const { palette } = useTheme();
-  const { t } = useTranslation("components", {
-    keyPrefix: "editor",
-  });
 
   return (
     <Button
@@ -33,16 +28,18 @@ export const CopyButton: FC<{
           setHasCopied(false);
         }, 1000);
       }}
-      sx={{
+      sx={(theme) => ({
         "&:hover": {
-          color: palette.getContrastText(palette.primary.main),
-          backgroundColor: palette.primary.main,
+          color: theme.palette.getContrastText(theme.palette.primary.main),
+          backgroundColor: theme.palette.primary.main,
         },
-        color: palette.primary.dark,
-        backgroundColor: palette.primary.light,
-      }}
+        color: theme.palette.primary.dark,
+        backgroundColor: theme.palette.primary.light,
+      })}
     >
-      {hasCopied ? t("copied") : t("copy")}
+      {hasCopied
+        ? m["components.editor.copied"]()
+        : m["components.editor.copy"]()}
     </Button>
   );
 };
@@ -52,10 +49,6 @@ const ActionRibbon: FC<{
   onCopy: () => void;
 }> = (props) => {
   const { onSubmit, onCopy } = props;
-  const { palette } = useTheme();
-  const { t } = useTranslation("components", {
-    keyPrefix: "editor",
-  });
 
   return (
     <Stack
@@ -66,16 +59,16 @@ const ActionRibbon: FC<{
       <Button
         startIcon={<PlayArrowRounded />}
         onClick={onSubmit}
-        sx={{
+        sx={(theme) => ({
           "&:hover": {
-            color: palette.getContrastText(palette.primary.main),
-            backgroundColor: palette.primary.main,
+            color: theme.palette.getContrastText(theme.palette.primary.main),
+            backgroundColor: theme.palette.primary.main,
           },
-          color: palette.primary.dark,
-          backgroundColor: palette.primary.light,
-        }}
+          color: theme.palette.primary.dark,
+          backgroundColor: theme.palette.primary.light,
+        })}
       >
-        {t("run")}
+        {m["components.editor.run"]()}
       </Button>
       <CopyButton onClick={onCopy} />
     </Stack>

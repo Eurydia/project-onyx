@@ -1,11 +1,11 @@
 import Stack from "@mui/material/Stack";
 import { type FC, useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { ComparatorViewLayout } from "$/components/layouts/ComparatorViewLayout";
+import * as m from "$/paraglide/messages.js";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 
 export const ComparatorView: FC = () => {
@@ -13,7 +13,6 @@ export const ComparatorView: FC = () => {
     useLoaderData() as ComparatorRouteLoaderData;
 
   const submit = useSubmit();
-  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
   const [mainItemIndex, setMainItemIndex] = useState(() => {
     for (const [index, expr] of items.entries()) {
@@ -51,7 +50,7 @@ export const ComparatorView: FC = () => {
   }, [submit, userInput]);
 
   return (
-    <BaseLayout appHeader={<AppNavGroup />} title={t("comparator")}>
+    <BaseLayout appHeader={<AppNavGroup />} title={m["nav.comparator"]()}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

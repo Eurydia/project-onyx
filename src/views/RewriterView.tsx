@@ -1,11 +1,11 @@
 import Stack from "@mui/material/Stack";
 import { type FC, useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { RewriterViewLayout } from "$/components/layouts/RewriterViewLayout";
+import { m } from "$/paraglide/messages";
 import type { RewriterRouteLoaderData } from "$/types/loader-data";
 import { Operator } from "$/types/operators";
 
@@ -14,7 +14,6 @@ export const RewriterView: FC = () => {
     useLoaderData() as RewriterRouteLoaderData;
 
   const submit = useSubmit();
-  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
   const [basis, setBasis] = useState(() => {
     const next = new Map<Operator, boolean>();
@@ -24,6 +23,7 @@ export const RewriterView: FC = () => {
     return next;
   });
 
+  m["components.alert.notice"]();
   const basisSet = useMemo(() => {
     return new Set(
       [...basis.entries()]
@@ -57,7 +57,7 @@ export const RewriterView: FC = () => {
   }, []);
 
   return (
-    <BaseLayout title={t("rewriter")} appHeader={<AppNavGroup />}>
+    <BaseLayout title={m["nav.rewriter"]()} appHeader={<AppNavGroup />}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

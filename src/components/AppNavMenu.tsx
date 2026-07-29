@@ -1,26 +1,41 @@
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import * as m from "$/paraglide/messages.js";
 
-const NAV_ITEMS = ["evaluator", "comparator", "checker", "rewriter"];
+const NAV_ITEMS = [
+  {
+    id: "evaluator",
+    label: m["nav.evaluator"],
+  },
+  {
+    id: "comparator",
+    label: m["nav.comparator"],
+  },
+  {
+    id: "checker",
+    label: m["nav.checker"],
+  },
+  {
+    id: "rewriter",
+    label: m["nav.rewriter"],
+  },
+] as const;
 
 const CustomNavItem: FC<{
   href: string;
   label: string;
 }> = (props) => {
   const { href, label } = props;
-  const { palette } = useTheme();
   return (
     <Typography
       component={Link}
       to={href}
-      sx={{
-        color: palette.primary.dark,
+      sx={(theme) => ({
+        color: theme.palette.primary.dark,
         textTransform: "capitalize",
         textDecorationLine: "none",
-      }}
+      })}
     >
       {label}
     </Typography>
@@ -28,13 +43,16 @@ const CustomNavItem: FC<{
 };
 
 export const AppNavGroup: FC = () => {
-  const { t } = useTranslation("nav");
   return (
     <Fragment>
-      <CustomNavItem href="/" label={t("home")} />
-      {NAV_ITEMS.map((id, index) => {
+      <CustomNavItem href="/" label={m["nav.home"]()} />
+      {NAV_ITEMS.map(({ id, label }, index) => {
         return (
-          <CustomNavItem key={`item${index}`} href={`/${id}`} label={t(id)} />
+          <CustomNavItem
+            key={`item${index}`}
+            href={`/${id}`}
+            label={label()}
+          />
         );
       })}
     </Fragment>

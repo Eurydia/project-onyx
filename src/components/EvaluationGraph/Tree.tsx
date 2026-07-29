@@ -1,15 +1,14 @@
 import ControlCameraRounded from "@mui/icons-material/ControlCameraRounded";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
-import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { Group } from "@visx/group";
 import { hierarchy, Tree as VisxTree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
 import { type FC, Fragment, memo, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import { type SymbolTable, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { TreeGraphLink } from "./TreeLink";
@@ -22,10 +21,6 @@ export const Tree: FC<{
 }> = memo((props) => {
   const { tree, order, symbolTable } = props;
 
-  const { palette } = useTheme();
-  const { t } = useTranslation("components", {
-    keyPrefix: "graph",
-  });
   const viewportRef = useRef<HTMLDivElement | null>(null);
 
   const data = hierarchy(tree, (d) => {
@@ -110,21 +105,25 @@ export const Tree: FC<{
             </svg>
             <Tooltip
               placement="right"
-              title={<Typography>{t("center")}</Typography>}
+              title={
+                <Typography>{m["components.graph.center"]()}</Typography>
+              }
             >
               <Fab
                 onClick={zoom.center}
-                sx={{
+                sx={(theme) => ({
                   position: "absolute",
                   left: 16,
                   bottom: 16,
                   "&:hover": {
-                    color: palette.getContrastText(palette.primary.main),
-                    backgroundColor: palette.primary.main,
+                    color: theme.palette.getContrastText(
+                      theme.palette.primary.main,
+                    ),
+                    backgroundColor: theme.palette.primary.main,
                   },
-                  color: palette.primary.dark,
-                  backgroundColor: palette.primary.light,
-                }}
+                  color: theme.palette.primary.dark,
+                  backgroundColor: theme.palette.primary.light,
+                })}
               >
                 <ControlCameraRounded />
               </Fab>

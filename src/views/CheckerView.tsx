@@ -1,11 +1,11 @@
 import Stack from "@mui/material/Stack";
 import { type FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { CheckerViewLayout } from "$/components/layouts/CheckerViewLayout";
+import * as m from "$/paraglide/messages.js";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
 export const CheckerView: FC = () => {
@@ -13,7 +13,6 @@ export const CheckerView: FC = () => {
     useLoaderData() as CheckerRouteLoaderData;
 
   const submit = useSubmit();
-  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export const CheckerView: FC = () => {
   };
 
   return (
-    <BaseLayout appHeader={<AppNavGroup />} title={t("checker")}>
+    <BaseLayout appHeader={<AppNavGroup />} title={m["nav.checker"]()}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

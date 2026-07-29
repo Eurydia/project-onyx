@@ -8,37 +8,48 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import { type Theme, useTheme } from "@mui/material/styles";
+import type { Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { type FC, memo, type ReactElement, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { type FC, memo, type ReactElement } from "react";
 import { Link } from "react-router";
-import { PALETTE_CHECKER_ROUTE } from "$/App/theme/palette-checker-route";
-import { PALETTE_COMPARATOR_ROUTE } from "$/App/theme/palette-comparator-route";
-import { PALETTE_EVALUATOR_ROUTE } from "$/App/theme/palette-evaluator-route";
-import { PALETTE_REWRITER_ROUTE } from "$/App/theme/palette-rewriter-route";
+import {
+  THEME_CHECKER_ROUTE,
+  THEME_COMPARATOR_ROUTE,
+  THEME_EVALUATOR_ROUTE,
+  THEME_REWRITER_ROUTE,
+} from "$/App/theme";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
+import * as m from "$/paraglide/messages.js";
+import { setLocale, type Locale } from "$/paraglide/runtime.js";
 
 const TOOLS = [
   {
     id: "evaluator",
     icon: <CalculateRounded fontSize="inherit" />,
-    palette: PALETTE_EVALUATOR_ROUTE,
+    palette: THEME_EVALUATOR_ROUTE.palette,
+    title: m["views.home-view.cards.evaluator.title"],
+    description: m["views.home-view.cards.evaluator.desc"],
   },
   {
     id: "comparator",
     icon: <BalanceRounded fontSize="inherit" />,
-    palette: PALETTE_COMPARATOR_ROUTE,
+    palette: THEME_COMPARATOR_ROUTE.palette,
+    title: m["views.home-view.cards.comparator.title"],
+    description: m["views.home-view.cards.comparator.desc"],
   },
   {
     id: "checker",
     icon: <RuleRounded fontSize="inherit" />,
-    palette: PALETTE_CHECKER_ROUTE,
+    palette: THEME_CHECKER_ROUTE.palette,
+    title: m["views.home-view.cards.checker.title"],
+    description: m["views.home-view.cards.checker.desc"],
   },
   {
     id: "rewriter",
     icon: <BorderColorRounded fontSize="inherit" />,
-    palette: PALETTE_REWRITER_ROUTE,
+    palette: THEME_REWRITER_ROUTE.palette,
+    title: m["views.home-view.cards.rewriter.title"],
+    description: m["views.home-view.cards.rewriter.desc"],
   },
   // {
   //   id: "reasoner",
@@ -47,29 +58,37 @@ const TOOLS = [
   // },
 ] as const;
 
-const LANGUAGES = ["en", "th"] as const;
+const LANGUAGES = [
+  {
+    locale: "en",
+    label: m["views.home-view.lang.en"],
+  },
+  {
+    locale: "th",
+    label: m["views.home-view.lang.th"],
+  },
+] as const satisfies readonly {
+  locale: Locale;
+  label: () => string;
+}[];
 
 const LanguageItemCard: FC<{
-  lang: string;
+  locale: Locale;
+  label: string;
 }> = memo(
   (props) => {
-    const { lang } = props;
-    const { t, i18n } = useTranslation("views", {
-      keyPrefix: "home-view.lang",
-    });
-    const handleClick = useCallback(
-      () => i18n.changeLanguage(lang),
-      [lang, i18n.changeLanguage],
-    );
+    const { locale, label } = props;
     return (
       <Typography
-        onClick={handleClick}
+        onClick={() => {
+          void setLocale(locale);
+        }}
         sx={{
           cursor: "pointer",
           textTransform: "capitalize",
         }}
       >
-        {t(lang)}
+        {label}
       </Typography>
     );
   },
@@ -80,13 +99,11 @@ const ToolCard: FC<{
   palette: Theme["palette"];
   id: string;
   icon: ReactElement;
+  title: string;
+  description: string;
 }> = memo(
   (props) => {
-    const { palette, id, icon } = props;
-    const theme = useTheme();
-    const { t } = useTranslation("views", {
-      keyPrefix: "home-view.cards",
-    });
+    const { palette, id, icon, title, description } = props;
     const href = `/${id}`;
     const { light, dark } = palette.primary;
     return (
@@ -116,15 +133,15 @@ const ToolCard: FC<{
             }}
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: theme.typography.h1.fontSize,
-              }}
+              })}
             >
               {icon}
             </Typography>
           </CardContent>
           <CardHeader
-            title={t(`${id}.title`)}
+            title={title}
             slotProps={{
               title: {
                 sx: {
@@ -135,7 +152,7 @@ const ToolCard: FC<{
             }}
           />
           <CardContent>
-            <Typography>{t(`${id}.desc`)}</Typography>
+            <Typography>{description}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -145,13 +162,9 @@ const ToolCard: FC<{
 );
 
 export const HomeView: FC = () => {
-  const { t } = useTranslation("views", {
-    keyPrefix: "home-view",
-  });
-
   return (
     <BaseLayout
-      title={t(`boolean-algebra-interpreter`)}
+      title={m["views.home-view.boolean-algebra-interpreter"]()}
       appHeader={
         <Stack
           direction="row"
@@ -162,18 +175,30 @@ export const HomeView: FC = () => {
             width: "100%",
           }}
         >
-          {LANGUAGES.map((lang, index) => (
-            <LanguageItemCard lang={lang} key={`lang${index}`} />
+          {LANGUAGES.map(({ locale, label }) => (
+            <LanguageItemCard
+              locale={locale}
+              label={label()}
+              key={locale}
+            />
           ))}
         </Stack>
       }
     >
       <Grid container columns={{ xs: 1, md: 2 }} spacing={4}>
-        {TOOLS.map(({ id, icon, palette }, index) => (
+        {TOOLS.map(
+          ({ id, icon, palette, title, description }, index) => (
           <Grid key={`card${index}`} size={1}>
-            <ToolCard id={id} icon={icon} palette={palette} />
+            <ToolCard
+              id={id}
+              icon={icon}
+              palette={palette}
+              title={title()}
+              description={description()}
+            />
           </Grid>
-        ))}
+          ),
+        )}
       </Grid>
     </BaseLayout>
   );

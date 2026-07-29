@@ -2,16 +2,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
-import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$/core/expr-tree/verify-tautology";
 import { IFF } from "$/core/syntax-tree/node";
+import * as m from "$/paraglide/messages.js";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
@@ -22,10 +21,6 @@ export const ComparatorViewLayout: FC<{
   onMainItemIndexChange: (v: number) => void;
 }> = (props) => {
   const { items, onMainItemIndexChange, mainItemIndex } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "comparator-view.cards",
-  });
-  const { typography } = useTheme();
 
   const validItems = useMemo(() => {
     return items.filter((item) => item.ok);
@@ -44,17 +39,29 @@ export const ComparatorViewLayout: FC<{
 
   return (
     <Stack spacing={2}>
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("input-interpretation.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.comparator-view.cards.input-interpretation.title"]()}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
-        {t("output.title")}
+      <Typography
+        sx={(theme) => ({
+          fontWeight: 900,
+          fontSize: theme.typography.h3.fontSize,
+        })}
+      >
+        {m["views.comparator-view.cards.output.title"]()}
       </Typography>
       {validItems.length <= 1 && (
         <StyledAlert severity="info">
           <Typography>
-            {t("output.infos.not-enough-formula-for-comparison")}
+            {m[
+              "views.comparator-view.cards.output.infos.not-enough-formula-for-comparison"
+            ]()}
           </Typography>
         </StyledAlert>
       )}
@@ -101,14 +108,16 @@ export const ComparatorViewLayout: FC<{
           const mainLatex = mainItem.inputInterpretationLatex;
           const exprLatex = expr.inputInterpretationLatex;
           const areEqualT = areEqual
-            ? t("output.text.equivalent")
-            : t("output.text.not-equivalent");
+            ? m["views.comparator-view.cards.output.text.equivalent"]()
+            : m["views.comparator-view.cards.output.text.not-equivalent"]();
           return (
             <ExpressionCard
               key={`comparison-pair${index}`}
               primary={
                 <StyledLatex>
-                  {t("output.text.formulas-are-value", {
+                  {m[
+                    "views.comparator-view.cards.output.text.formulas-are-value"
+                  ]({
                     first: `$$${mainLatex} \\tag{${mainItemNum}}$$`,
                     second: `$$${exprLatex} \\tag{${itemNum}}$$`,
                     value: `$$\\boxed{\\textbf{${areEqualT}}}$$`,

@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
+import type { SxProps, Theme } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,10 +8,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { type FC, memo, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { exprTreeCollectSymbols } from "$/core/expr-tree/collect-symbols";
 import { getInterpretations } from "$/core/expr-tree/interpretations";
 import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
@@ -22,10 +22,6 @@ export const TruthTable: FC<{
   slotProps: { container: SxProps<Theme> };
 }> = memo((props) => {
   const { exprTree, slotProps } = props;
-  const { t } = useTranslation("components", {
-    keyPrefix: "truth-table",
-  });
-  const { palette } = useTheme();
   const [userConfirmed, setUserConfirmed] = useState(false);
 
   const symbols = useMemo(() => {
@@ -48,21 +44,23 @@ export const TruthTable: FC<{
     return (
       <Stack spacing={1} sx={{ p: 1 }}>
         <StyledAlert severity="warning">
-          {t("warnings.large-truth-table-can-slow-application-down")}
+          {m[
+            "components.truth-table.warnings.large-truth-table-can-slow-application-down"
+          ]()}
         </StyledAlert>
         <Button
           onClick={() => setUserConfirmed(true)}
-          sx={{
+          sx={(theme) => ({
             "&:hover": {
-              color: palette.getContrastText(palette.primary.main),
-              backgroundColor: palette.primary.main,
+              color: theme.palette.getContrastText(theme.palette.primary.main),
+              backgroundColor: theme.palette.primary.main,
             },
-            color: palette.primary.dark,
-            backgroundColor: palette.primary.light,
+            color: theme.palette.primary.dark,
+            backgroundColor: theme.palette.primary.light,
             width: "fit-content",
-          }}
+          })}
         >
-          {t("warnings.confirm")}
+          {m["components.truth-table.warnings.confirm"]()}
         </Button>
       </Stack>
     );

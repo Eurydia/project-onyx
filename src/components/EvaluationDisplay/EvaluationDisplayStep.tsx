@@ -1,8 +1,8 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
 import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
+import * as m from "$/paraglide/messages.js";
 import { StyledLatex } from "../styled/StyledLatex";
 import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
@@ -13,20 +13,19 @@ export const EvaluationDisplayStep: FC<{
 }> = (props) => {
   const { step, stepIndex, references } = props;
   const { evaluated, repr, substitutions, connective } = step;
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards.step-by-step",
-  });
   const tag = `${stepIndex}.a`;
   return (
     <Stack spacing={1}>
       <Typography sx={{ fontWeight: 900 }}>
-        {t("step-x-of-y", {
+        {m["views.evaluator-view.cards.step-by-step.step-x-of-y"]({
           current: stepIndex,
           total: references.length,
         })}
       </Typography>
       <StyledLatex>
-        {t("consider-the-formula", {
+        {m[
+          "views.evaluator-view.cards.step-by-step.consider-the-formula"
+        ]({
           formula: `$$${repr}.\\tag{${tag}}$$`,
         })}
       </StyledLatex>
@@ -40,10 +39,14 @@ export const EvaluationDisplayStep: FC<{
         />
       ))}
       <StyledLatex>
-        {t("by-truth-table-formula-is-value", {
+        {m[
+          "views.evaluator-view.cards.step-by-step.by-truth-table-formula-is-value"
+        ]({
           operator: `$${connective}$`,
           formula: `$(${tag})$`,
-          value: evaluated ? t("true") : t("false"),
+          value: evaluated
+            ? m["views.evaluator-view.cards.step-by-step.true"]()
+            : m["views.evaluator-view.cards.step-by-step.false"](),
         })}
       </StyledLatex>
     </Stack>

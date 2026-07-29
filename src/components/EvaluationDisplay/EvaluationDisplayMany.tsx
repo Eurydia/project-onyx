@@ -4,7 +4,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import { type FC, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import type { SymbolTable } from "$/types/syntax-tree";
@@ -16,10 +16,6 @@ export const EvaluationDisplayMany: FC<{
   items: Maybe<{ tree: ExprTree }>[];
 }> = (props) => {
   const { items, symbolTable } = props;
-
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards.step-by-step",
-  });
 
   const [tab, setTab] = useState(() => {
     return items.findIndex((item) => item.ok);
@@ -36,7 +32,11 @@ export const EvaluationDisplayMany: FC<{
 
   return validExpressions.length === 0 ? (
     <StyledAlert severity="info">
-      <Typography>{t("infos.no-valid-formula-to-display")}</Typography>
+      <Typography>
+        {m[
+          "views.evaluator-view.cards.step-by-step.infos.no-valid-formula-to-display"
+        ]()}
+      </Typography>
     </StyledAlert>
   ) : (
     <TabContext value={tab}>
@@ -53,7 +53,9 @@ export const EvaluationDisplayMany: FC<{
             <Tab
               key={`tab${index}`}
               value={index}
-              label={t("tab-item", { num: index + 1 })}
+              label={m[
+                "views.evaluator-view.cards.step-by-step.tab-item"
+              ]({ num: index + 1 })}
             />
           );
         })}

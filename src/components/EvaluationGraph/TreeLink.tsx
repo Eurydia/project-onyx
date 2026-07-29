@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import type { HierarchyPointLink, HierarchyPointNode } from "@visx/hierarchy";
 import { LinkVertical } from "@visx/shape";
 import type { FC } from "react";
@@ -9,7 +9,6 @@ export const TreeGraphLink: FC<{
   order: number;
 }> = (props) => {
   const { link, order } = props;
-  const { palette } = useTheme();
   const { source, target } = link;
   const isSourceVisible = source.data.order <= order;
 
@@ -20,13 +19,19 @@ export const TreeGraphLink: FC<{
   const isLinkVisible = isSourceVisible && isTargetVisible;
 
   return (
-    <LinkVertical<HierarchyPointLink<ExprTree>, HierarchyPointNode<ExprTree>>
-      data={link}
-      stroke={palette.primary.light}
-      visibility={isLinkVisible ? "visible" : "hidden"}
-      strokeOpacity={isTargetVisible ? "0.6" : "0.3"}
-      strokeWidth="5"
-      fill="none"
-    />
+    <Box
+      component="g"
+      sx={(theme) => ({
+        stroke: theme.palette.primary.light,
+      })}
+    >
+      <LinkVertical<HierarchyPointLink<ExprTree>, HierarchyPointNode<ExprTree>>
+        data={link}
+        visibility={isLinkVisible ? "visible" : "hidden"}
+        strokeOpacity={isTargetVisible ? "0.6" : "0.3"}
+        strokeWidth="5"
+        fill="none"
+      />
+    </Box>
   );
 };

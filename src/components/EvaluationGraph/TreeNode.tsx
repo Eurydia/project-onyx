@@ -1,9 +1,9 @@
-import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import { Group } from "@visx/group";
 import type { HierarchyPointNode } from "@visx/hierarchy";
 import katex from "katex";
 import { type FC, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
 
@@ -14,11 +14,7 @@ export const TreeGraphNode: FC<{
   r: number;
 }> = (props) => {
   const { r, order, node, symbolTable } = props;
-  const { t } = useTranslation("components", {
-    keyPrefix: "graph",
-  });
   const { x, y, data } = node;
-  const { palette, typography } = useTheme();
   const ref = useRef<SVGTextElement>(null);
 
   useEffect(() => {
@@ -40,43 +36,57 @@ export const TreeGraphNode: FC<{
       opacity={isNodeVisibleNow ? 1 : 0.5}
       visibility={isNodeVisible ? "visible" : "hidden"}
     >
-      <circle
+      <Box
+        component="circle"
         strokeWidth={isNodeHighlighted ? 5 : 0}
-        stroke={palette.primary.dark}
         strokeOpacity={0.8}
         r={r}
-        fill={palette.primary.light}
+        sx={(theme) => ({
+          stroke: theme.palette.primary.dark,
+          fill: theme.palette.primary.light,
+        })}
       />
-      <text
+      <Box
+        component="text"
         ref={ref}
-        fontSize={typography.body1.fontSize}
-        fill={palette.primary.contrastText}
         dy="0.33rem"
         textAnchor="middle"
         pointerEvents="none"
-        style={{ userSelect: "none" }}
+        sx={(theme) => ({
+          fontSize: theme.typography.body1.fontSize,
+          fill: theme.palette.primary.contrastText,
+          userSelect: "none",
+        })}
       />
       <Group
         transform={`translate(${r / 3}, ${r / 3})`}
         visibility={data.order < order ? "visible" : "hidden"}
       >
-        <rect
+        <Box
+          component="rect"
           width={60}
           height={30}
           rx={5}
           ry={5}
-          fill={palette.primary.light}
+          sx={(theme) => ({
+            fill: theme.palette.primary.light,
+          })}
         />
-        <text
+        <Box
+          component="text"
           x="30"
           y="22"
           textAnchor="middle"
           pointerEvents="none"
-          fill={palette.primary.contrastText}
-          style={{ userSelect: "none" }}
+          sx={(theme) => ({
+            fill: theme.palette.primary.contrastText,
+            userSelect: "none",
+          })}
         >
-          {data.eval(symbolTable) ? t("true") : t("false")}
-        </text>
+          {data.eval(symbolTable)
+            ? m["components.graph.true"]()
+            : m["components.graph.false"]()}
+        </Box>
       </Group>
     </Group>
   );

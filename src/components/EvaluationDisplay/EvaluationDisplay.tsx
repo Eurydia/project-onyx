@@ -1,10 +1,10 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { EvaluationGraph } from "$/components/EvaluationGraph";
 import { exprTreeFlattenStepByStep } from "$/core/expr-tree/collect-steps";
 import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import * as m from "$/paraglide/messages.js";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledLatex } from "../styled/StyledLatex";
@@ -15,9 +15,6 @@ export const EvaluationDisplay: FC<{
   symbolTable: SymbolTable;
 }> = memo((props) => {
   const { exprTree, symbolTable } = props;
-  const { t } = useTranslation("views", {
-    keyPrefix: "evaluator-view.cards.step-by-step",
-  });
 
   const steps = useMemo(
     () => exprTreeFlattenStepByStep(exprTree, symbolTable),
@@ -48,15 +45,21 @@ export const EvaluationDisplay: FC<{
         />
       ))}
       <StyledLatex>
-        {t("therefore-formula-is-value", {
+        {m[
+          "views.evaluator-view.cards.step-by-step.therefore-formula-is-value"
+        ]({
           formula: `$$${stepLast.repr}$$`,
-          value: t(stepLast.evaluated ? "true" : "false"),
+          value: stepLast.evaluated
+            ? m["views.evaluator-view.cards.step-by-step.true"]()
+            : m["views.evaluator-view.cards.step-by-step.false"](),
         })}
       </StyledLatex>
     </Stack>
   ) : (
     <Typography sx={{ fontStyle: "italic" }}>
-      {t("no-evaluation-step-to-display")}
+      {m[
+        "views.evaluator-view.cards.step-by-step.no-evaluation-step-to-display"
+      ]()}
     </Typography>
   );
 }, (prev, next) => {

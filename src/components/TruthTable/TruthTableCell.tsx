@@ -1,16 +1,13 @@
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import { useTranslation } from "react-i18next";
+import * as m from "$/paraglide/messages.js";
 
 export const TruthTableCell: FC<{
   value: boolean;
 }> = memo(
   (props) => {
     const { value } = props;
-    const { t } = useTranslation("components", {
-      keyPrefix: "truth-table.text",
-    });
 
     return (
       <TableCell
@@ -23,7 +20,11 @@ export const TruthTableCell: FC<{
               : theme.lighten(theme.palette.primary.light, 0.6),
         }}
       >
-        <Typography>{value ? t("true") : t("false")}</Typography>
+        <Typography>
+          {value
+            ? m["components.truth-table.text.true"]()
+            : m["components.truth-table.text.false"]()}
+        </Typography>
       </TableCell>
     );
   },

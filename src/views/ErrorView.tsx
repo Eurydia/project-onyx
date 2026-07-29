@@ -4,14 +4,10 @@ import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import * as m from "$/paraglide/messages.js";
 
 export const ErrorView: FC = () => {
-  const { t } = useTranslation("views", {
-    keyPrefix: "error-view",
-  });
-
   return (
     <Box
       sx={{
@@ -22,7 +18,7 @@ export const ErrorView: FC = () => {
     >
       <Card variant="outlined">
         <CardHeader
-          title={t("title")}
+          title={m["views.error-view.title"]()}
           slotProps={{
             title: { sx: { fontWeight: 900 } },
           }}
@@ -39,7 +35,7 @@ export const ErrorView: FC = () => {
               },
             }}
           >
-            {t("return-home")}
+            {m["views.error-view.return-home"]()}
           </Typography>
         </CardActions>
       </Card>

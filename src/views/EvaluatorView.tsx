@@ -1,11 +1,11 @@
 import Stack from "@mui/material/Stack";
 import { type FC, useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { EvaluatorViewLayout } from "$/components/layouts/EvaluatorViewLayout";
+import * as m from "$/paraglide/messages.js";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 
 export const EvaluatorView: FC = () => {
@@ -15,7 +15,6 @@ export const EvaluatorView: FC = () => {
     symbols: prevSymbols,
   } = useLoaderData() as EvaluatorRouteLoaderData;
   const submit = useSubmit();
-  const { t } = useTranslation("nav");
   const [userInput, setUserInput] = useState(prevUserInput);
   const [symbolTable, setSymbolTable] = useState(() => {
     const next = new Map<string, boolean>();
@@ -59,7 +58,7 @@ export const EvaluatorView: FC = () => {
   }, []);
 
   return (
-    <BaseLayout appHeader={<AppNavGroup />} title={t("evaluator")}>
+    <BaseLayout appHeader={<AppNavGroup />} title={m["nav.evaluator"]()}>
       <Stack spacing={8}>
         <Editor
           value={userInput}
