@@ -52,11 +52,7 @@ export const PropositionConfig: FC<{
     return [...value.keys()].toSorted((a, b) => a.localeCompare(b));
   }, [value]);
 
-  if (symbols.length === 0) {
-    return null;
-  }
-
-  return (
+  return symbols.length === 0 ? null : (
     <Grid
       container
       sx={{

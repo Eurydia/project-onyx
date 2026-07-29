@@ -30,47 +30,36 @@ const RewriterOutputItem: FC<{
     keyPrefix: "rewriter-view.cards.output",
   });
 
-  if (!result.ok) {
-    return (
-      <ExpressionCard
-        primary={
-          <StyledLatex>
-            {t("text.formula-cannot-be-expressed-in-the-desired-basis", {
-              formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
-            })}
-          </StyledLatex>
-        }
-        secondary={
-          <StyledAlert severity="info">
-            <Typography>{t("infos.truth-table-is-not-available")}</Typography>
-          </StyledAlert>
-        }
-      />
-    );
-  }
-
-  return (
-    <ExpressionCard
-      primary={
-        <StyledLatex>
-          {t("text.formula-is-expressed-as-in-the-desired-basis", {
-            formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
-            result: `$$\\boxed{${result.latex}}$$`,
-          })}
-        </StyledLatex>
-      }
-      secondary={
-        <TruthTable
-          exprTree={result.tree}
-          slotProps={{
-            container: {
-              maxHeight: "40vh",
-            },
-          }}
-        />
-      }
-    />
+  const primary = result.ok ? (
+    <StyledLatex>
+      {t("text.formula-is-expressed-as-in-the-desired-basis", {
+        formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
+        result: `$$\\boxed{${result.latex}}$$`,
+      })}
+    </StyledLatex>
+  ) : (
+    <StyledLatex>
+      {t("text.formula-cannot-be-expressed-in-the-desired-basis", {
+        formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
+      })}
+    </StyledLatex>
   );
+  const secondary = result.ok ? (
+    <TruthTable
+      exprTree={result.tree}
+      slotProps={{
+        container: {
+          maxHeight: "40vh",
+        },
+      }}
+    />
+  ) : (
+    <StyledAlert severity="info">
+      <Typography>{t("infos.truth-table-is-not-available")}</Typography>
+    </StyledAlert>
+  );
+
+  return <ExpressionCard primary={primary} secondary={secondary} />;
 };
 
 export const RewriterViewLayout: FC<{

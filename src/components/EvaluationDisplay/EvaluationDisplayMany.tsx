@@ -34,15 +34,11 @@ export const EvaluationDisplayMany: FC<{
     [items],
   );
 
-  if (validExpressions.length === 0) {
-    return (
-      <StyledAlert severity="info">
-        <Typography>{t("infos.no-valid-formula-to-display")}</Typography>
-      </StyledAlert>
-    );
-  }
-
-  return (
+  return validExpressions.length === 0 ? (
+    <StyledAlert severity="info">
+      <Typography>{t("infos.no-valid-formula-to-display")}</Typography>
+    </StyledAlert>
+  ) : (
     <TabContext value={tab}>
       <TabList
         onChange={(_, v) => setTab(Number.parseInt(v, 10))}

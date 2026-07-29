@@ -24,6 +24,12 @@ const createAppTheme = (palette: typeof PALETTE_BASE) =>
             disableElevation: true,
           },
         },
+        MuiButtonGroup: {
+          defaultProps: {
+            disableElevation: true,
+            disableRipple: true,
+          },
+        },
         MuiRadio: {
           defaultProps: {
             disableFocusRipple: true,

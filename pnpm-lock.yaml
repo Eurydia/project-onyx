@@ -29,6 +29,9 @@ importers:
       katex:
         specifier: ^0.18.1
         version: 0.18.1
+      monaco-editor:
+        specifier: ^0.56.0
+        version: 0.56.0
       react:
         specifier: ^19.2.8
         version: 19.2.8

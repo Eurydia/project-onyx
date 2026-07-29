@@ -18,25 +18,19 @@ export const EvaluationDisplayStepMini: FC<{
 
   const { substituted, evaluated, repr, stepRef } = subStep;
 
-  if (stepRef === false) {
-    return (
-      <StyledLatex>
-        {t("given-variable-is-value", {
-          variable: `$${repr}$`,
-          formula: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
-          value: t(evaluated ? "true" : "false"),
-        })}
-      </StyledLatex>
-    );
-  }
-
-  const refRepr = references[stepRef - 1].repr;
-
-  return (
+  return stepRef === false ? (
+    <StyledLatex>
+      {t("given-variable-is-value", {
+        variable: `$${repr}$`,
+        formula: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
+        value: t(evaluated ? "true" : "false"),
+      })}
+    </StyledLatex>
+  ) : (
     <StyledLatex>
       {t("from-previous-step-substitute-into-formula", {
         step: `$\\text{(${stepRef}.a)}$`,
-        formula: `$$${refRepr}$$`,
+        formula: `$$${references[stepRef - 1].repr}$$`,
         value: t(evaluated ? "true" : "false"),
         current: `$\\text{(${stepIndex}.${prevMarker})}$`,
         result: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
