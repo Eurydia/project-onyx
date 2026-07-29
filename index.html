@@ -1,31 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
+      name="description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
     />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/project-onyx/apple-touch-icon.png"
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/project-onyx/favicon-32x32.png"
+    <meta name="application-name" content="Project ONYX" />
+    <meta name="theme-color" content="#4fc3f7" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="canonical" href="https://eurydia.github.io/project-onyx/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/project-onyx/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/project-onyx/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/project-onyx/favicon-16x16.png" />
+    <link rel="icon" href="/project-onyx/favicon.ico" sizes="any" />
+    <link rel="manifest" href="/project-onyx/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://eurydia.github.io/project-onyx/" />
+    <meta
+      property="og:title"
+      content="Boolean Algebra Interpreter, Visualizer, and Explorer | Project ONYX"
     />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/project-onyx/favicon-16x16.png"
+    <meta
+      property="og:description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
     />
-    <link
-      rel="manifest"
-      href="/project-onyx/site.webmanifest"
+    <meta property="og:site_name" content="Project ONYX" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="th_TH" />
+    <meta
+      property="og:image"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="2846" />
+    <meta property="og:image:height" content="2656" />
+    <meta
+      property="og:image:alt"
+      content="Preview of Project ONYX Boolean algebra tools"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Project ONYX | Boolean Algebra Interpreter, Visualizer, and Explorer"
+    />
+    <meta
+      name="twitter:description"
+      content="Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases."
+    />
+    <meta
+      name="twitter:image"
+      content="https://eurydia.github.io/project-onyx/og.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Preview of Project ONYX Boolean algebra tools"
     />
 
     <link
@@ -50,38 +91,101 @@
       integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh"
       crossorigin="anonymous"
     ></script>
-    <title> Boolean Algebra Interpreter</title>
-    <script type="module" crossorigin src="/project-onyx/assets/index-DQj5zh2p.js"></script>
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/classnames-DHUZR2-n.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-BKepnraI.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/ohm-js-o5RsQ8tt.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/hoist-non-react-statics-mLZj6LgC.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@babel-B4YMtfbM.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/stylis-DDa9OTMq.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@emotion-B2ONKW_I.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/clsx-B-dksMZM.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/scheduler-pDHB_tJ7.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-dom-D3Ec8Wlr.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-transition-group-JfMTsH4s.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@popperjs-CMBiYTiD.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-is-BmsGHj3B.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@mui-Dg3bsdNd.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/cookie--_YQFYBD.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-router-m1Kpz3Mo.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/react-i18next-BoEMxySj.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/prop-types-CZ1f4sS1.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/d3-hierarchy-B72UHu4D.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@use-gesture-BB74HTca.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/d3-path-BevWroqt.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/d3-shape-rFcaQ0O8.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/@visx-CiICbwka.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/katex-Dn761jRB.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/i18next-C77IuWVK.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/i18next-browser-languagedetector-Dt8Tv9E6.js">
-    <link rel="modulepreload" crossorigin href="/project-onyx/assets/i18next-http-backend-BtL6gqeX.js">
+    <title>
+      Boolean Algebra Interpreter, Visualizer, and Explorer | Project ONYX
+    </title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://eurydia.github.io/project-onyx/#website",
+            "url": "https://eurydia.github.io/project-onyx/",
+            "name": "Project ONYX",
+            "alternateName": "Boolean Algebra Interpreter"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://eurydia.github.io/project-onyx/#application",
+            "url": "https://eurydia.github.io/project-onyx/",
+            "name": "Project ONYX",
+            "description": "Project ONYX is an interactive Boolean algebra interpreter and visualizer: evaluate formulas with configurable truth values and step-by-step graphs, generate truth tables, compare logical equivalence, classify tautologies, contradictions, and contingencies, and rewrite expressions into different operator bases.",
+            "image": "https://eurydia.github.io/project-onyx/og.png",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and a modern web browser.",
+            "isAccessibleForFree": true,
+            "inLanguage": ["en", "th"],
+            "featureList": [
+              "Evaluate Boolean formulas with configurable truth values",
+              "Visualize step-by-step Boolean evaluation",
+              "Generate truth tables",
+              "Compare expressions for logical equivalence",
+              "Classify tautologies, contradictions, and contingencies",
+              "Rewrite expressions into different operator bases"
+            ]
+          }
+        ]
+      }
+    </script>
+    <script type="module" crossorigin src="/project-onyx/assets/index-CamikAXR.js"></script>
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/rolldown-runtime-QTnfLwEv.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/useSlot-DO_oSlkR.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/to-latex-DUFeJUpB.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/CardHeader-Gujuvcrk.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/node-KoavZPfu.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/normalize-CgrQjmDb.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/checker-Conot7fj.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/comparator-C_YNDlaw.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/collect-symbols-DSMb3o85.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/evaluator-DZ2-XSAj.js">
+    <link rel="modulepreload" crossorigin href="/project-onyx/assets/rewriter-C2BdwJ_B.js">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="app">
+      <header>
+        <h1>Project ONYX</h1>
+        <p>Boolean Algebra Interpreter, Visualizer, and Explorer</p>
+        <nav>
+          <ul>
+            <li><a href="/#/">Home</a></li>
+            <li><a href="/#/evaluator">Evaluator</a></li>
+            <li><a href="/#/comparator">Comparator</a></li>
+            <li><a href="/#/checker">Tautology Checker</a></li>
+            <li><a href="/#/rewriter">Rewriter</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <section>
+          <h2>Evaluate and visualize Boolean formulas</h2>
+          <p>
+            Assign truth values, evaluate expressions, inspect truth tables, and
+            follow step-by-step visual explanations.
+          </p>
+        </section>
+        <section>
+          <h2>Compare logical equivalence</h2>
+          <p>
+            Compare Boolean expressions and determine whether they are logically
+            equivalent.
+          </p>
+        </section>
+        <section>
+          <h2>Check tautologies, contradictions, and contingencies</h2>
+          <p>
+            Classify formulas that are always true, always false, or dependent
+            on their proposition values.
+          </p>
+        </section>
+        <section>
+          <h2>Rewrite expressions</h2>
+          <p>
+            Transform Boolean formulas into different logical operator bases.
+          </p>
+        </section>
+      </main>
+    </div>
   </body>
 </html>
-
