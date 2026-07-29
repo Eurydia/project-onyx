@@ -1,5 +1,6 @@
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
-import react from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 // https://vite.dev/config/
@@ -14,6 +15,9 @@ export default defineConfig({
       localStorageKey: "language",
     }),
     react(),
+    babel({
+      presets: [reactCompilerPreset()],
+    }),
   ],
   assetsInclude: ["**/*.md"],
   resolve: {
