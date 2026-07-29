@@ -5,7 +5,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { Link } from "react-router";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 
 export const ErrorView: FC = () => {
   return (
@@ -28,8 +28,8 @@ export const ErrorView: FC = () => {
             component={Link}
             to="/"
             sx={{
-              "color": "primary.main",
-              "textDecorationLine": "none",
+              color: "primary.main",
+              textDecorationLine: "none",
               "&:hover": {
                 textDecorationLine: "underline",
               },

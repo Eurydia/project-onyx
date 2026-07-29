@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import { StyledLatex } from "../styled/StyledLatex";
 
 export const EvaluationDisplayStepMini: FC<{
@@ -17,9 +17,7 @@ export const EvaluationDisplayStepMini: FC<{
 
   return stepRef === false ? (
     <StyledLatex>
-      {m[
-        "views.evaluator-view.cards.step-by-step.given-variable-is-value"
-      ]({
+      {m["views.evaluator-view.cards.step-by-step.given-variable-is-value"]({
         variable: `$${repr}$`,
         formula: `$$${substituted}.\\tag{${stepIndex}.${currMarker}}$$`,
         value: evaluated

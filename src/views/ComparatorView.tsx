@@ -5,7 +5,7 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { ComparatorViewLayout } from "$/components/layouts/ComparatorViewLayout";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 
 export const ComparatorView: FC = () => {

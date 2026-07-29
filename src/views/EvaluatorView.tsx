@@ -5,7 +5,7 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { EvaluatorViewLayout } from "$/components/layouts/EvaluatorViewLayout";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 
 export const EvaluatorView: FC = () => {

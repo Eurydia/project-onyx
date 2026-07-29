@@ -10,7 +10,7 @@ import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$/core/expr-tree/verify-tautology";
 import { IFF } from "$/core/syntax-tree/node";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";

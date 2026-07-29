@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import type { editor } from "monaco-editor";
 import { type FC, memo, useCallback, useState } from "react";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import { EditorRibbon } from "./EditorRibbon";
 
 export const CopyButton: FC<{
@@ -18,9 +18,7 @@ export const CopyButton: FC<{
 
   return (
     <Button
-      startIcon={
-        hasCopied ? <CheckRounded /> : <ContentCopyRounded />
-      }
+      startIcon={hasCopied ? <CheckRounded /> : <ContentCopyRounded />}
       onClick={() => {
         onClick();
         setHasCopied(true);
@@ -51,11 +49,7 @@ const ActionRibbon: FC<{
   const { onSubmit, onCopy } = props;
 
   return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{ flexWrap: "wrap" }}
-    >
+    <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
       <Button
         startIcon={<PlayArrowRounded />}
         onClick={onSubmit}
@@ -95,11 +89,12 @@ export const Editor: FC<{
       return;
     }
 
-    const edits: editor.IIdentifiedSingleEditOperation[] =
-      selections.map((selection) => ({
+    const edits: editor.IIdentifiedSingleEditOperation[] = selections.map(
+      (selection) => ({
         range: selection,
         text,
-      }));
+      }),
+    );
     monacoInstance.executeEdits("insert", edits);
     monacoInstance.focus();
   };

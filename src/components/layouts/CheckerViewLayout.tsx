@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { VerdictDisplayMany } from "$/components/VerdictDisplay";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
 export const CheckerViewLayout: FC<{

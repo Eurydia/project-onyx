@@ -5,7 +5,7 @@ import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { CheckerViewLayout } from "$/components/layouts/CheckerViewLayout";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
 export const CheckerView: FC = () => {

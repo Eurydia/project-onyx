@@ -11,7 +11,7 @@ import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { operatorToLatex } from "$/core/operator";
 import { syntaxTreeRewrite } from "$/core/syntax-tree/rewrite";
 import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import type { RewriterRouteLoaderData } from "$/types/loader-data";

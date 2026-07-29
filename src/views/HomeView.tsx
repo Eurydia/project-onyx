@@ -19,7 +19,7 @@ import {
   THEME_REWRITER_ROUTE,
 } from "$/App/theme";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import { setLocale, type Locale } from "$/paraglide/runtime.js";
 
 const TOOLS = [
@@ -176,18 +176,13 @@ export const HomeView: FC = () => {
           }}
         >
           {LANGUAGES.map(({ locale, label }) => (
-            <LanguageItemCard
-              locale={locale}
-              label={label()}
-              key={locale}
-            />
+            <LanguageItemCard locale={locale} label={label()} key={locale} />
           ))}
         </Stack>
       }
     >
       <Grid container columns={{ xs: 1, md: 2 }} spacing={4}>
-        {TOOLS.map(
-          ({ id, icon, palette, title, description }, index) => (
+        {TOOLS.map(({ id, icon, palette, title, description }, index) => (
           <Grid key={`card${index}`} size={1}>
             <ToolCard
               id={id}
@@ -197,8 +192,7 @@ export const HomeView: FC = () => {
               description={description()}
             />
           </Grid>
-          ),
-        )}
+        ))}
       </Grid>
     </BaseLayout>
   );

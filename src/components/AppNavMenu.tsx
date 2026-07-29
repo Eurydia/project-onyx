@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
 import { Link } from "react-router";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 
 const NAV_ITEMS = [
   {
@@ -48,11 +48,7 @@ export const AppNavGroup: FC = () => {
       <CustomNavItem href="/" label={m["nav.home"]()} />
       {NAV_ITEMS.map(({ id, label }, index) => {
         return (
-          <CustomNavItem
-            key={`item${index}`}
-            href={`/${id}`}
-            label={label()}
-          />
+          <CustomNavItem key={`item${index}`} href={`/${id}`} label={label()} />
         );
       })}
     </Fragment>

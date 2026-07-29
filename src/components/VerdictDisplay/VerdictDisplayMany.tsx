@@ -3,7 +3,7 @@ import { type FC, Fragment } from "react";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
 import { StyledAlert } from "../styled/StyledAlert";
 import { VerdictDisplay } from "./VerdictDisplay";
@@ -18,9 +18,7 @@ export const VerdictDisplayMany: FC<{
       {items.filter((f) => f.ok).length === 0 ? (
         <StyledAlert severity="info">
           <Typography>
-            {m[
-              "views.checker-view.cards.output.infos.no-formula-to-display"
-            ]()}
+            {m["views.checker-view.cards.output.infos.no-formula-to-display"]()}
           </Typography>
         </StyledAlert>
       ) : (

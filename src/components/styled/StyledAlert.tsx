@@ -1,11 +1,13 @@
 import Alert, { type AlertProps } from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import type { FC, PropsWithChildren } from "react";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 
-export const StyledAlert: FC<PropsWithChildren<{
-  severity: AlertProps["severity"];
-}>> = (props) => {
+export const StyledAlert: FC<
+  PropsWithChildren<{
+    severity: AlertProps["severity"];
+  }>
+> = (props) => {
   const { children, severity } = props;
 
   return (

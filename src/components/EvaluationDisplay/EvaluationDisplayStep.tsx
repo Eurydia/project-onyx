@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import { StyledLatex } from "../styled/StyledLatex";
 import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
@@ -23,9 +23,7 @@ export const EvaluationDisplayStep: FC<{
         })}
       </Typography>
       <StyledLatex>
-        {m[
-          "views.evaluator-view.cards.step-by-step.consider-the-formula"
-        ]({
+        {m["views.evaluator-view.cards.step-by-step.consider-the-formula"]({
           formula: `$$${repr}.\\tag{${tag}}$$`,
         })}
       </StyledLatex>

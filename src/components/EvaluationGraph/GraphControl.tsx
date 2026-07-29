@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import { StyledTooltipIconButton } from "../styled/StyledIconButton";
 
 export const GraphControl: FC<{
@@ -19,91 +19,94 @@ export const GraphControl: FC<{
   onAnimationPlay: () => void;
   onAnimationPause: () => void;
   onAnimationReplay: () => void;
-}> = memo((props) => {
-  const {
-    value,
-    maxValue,
-    minValue,
-    onChange,
-    isAnimationPlaying,
-    onAnimationPause,
-    onAnimationPlay,
-    onAnimationReplay,
-  } = props;
+}> = memo(
+  (props) => {
+    const {
+      value,
+      maxValue,
+      minValue,
+      onChange,
+      isAnimationPlaying,
+      onAnimationPause,
+      onAnimationPlay,
+      onAnimationReplay,
+    } = props;
 
-  const handleForward = () => {
-    if (value >= maxValue) {
-      return;
-    }
-    onChange(value + 1);
-  };
+    const handleForward = () => {
+      if (value >= maxValue) {
+        return;
+      }
+      onChange(value + 1);
+    };
 
-  const handleRewind = () => {
-    if (value <= minValue) {
-      return;
-    }
-    onChange(value - 1);
-  };
+    const handleRewind = () => {
+      if (value <= minValue) {
+        return;
+      }
+      onChange(value - 1);
+    };
 
-  return (
-    <Stack>
-      <Slider
-        valueLabelDisplay="auto"
-        onChange={(_, v) => onChange(v as number)}
-        value={value}
-        max={maxValue}
-        min={minValue}
-        step={1}
-      />
-      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-        <StyledTooltipIconButton
-          disabled={value <= minValue}
-          title={m["components.graph.playback.previous"]()}
-          onClick={handleRewind}
-        >
-          <KeyboardArrowLeftRounded />
-        </StyledTooltipIconButton>
-        {value === maxValue && (
+    return (
+      <Stack>
+        <Slider
+          valueLabelDisplay="auto"
+          onChange={(_, v) => onChange(v as number)}
+          value={value}
+          max={maxValue}
+          min={minValue}
+          step={1}
+        />
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <StyledTooltipIconButton
-            title={m["components.graph.playback.replay"]()}
-            onClick={onAnimationReplay}
+            disabled={value <= minValue}
+            title={m["components.graph.playback.previous"]()}
+            onClick={handleRewind}
           >
-            <ReplayRounded />
+            <KeyboardArrowLeftRounded />
           </StyledTooltipIconButton>
-        )}
-        {value !== maxValue && isAnimationPlaying && (
+          {value === maxValue && (
+            <StyledTooltipIconButton
+              title={m["components.graph.playback.replay"]()}
+              onClick={onAnimationReplay}
+            >
+              <ReplayRounded />
+            </StyledTooltipIconButton>
+          )}
+          {value !== maxValue && isAnimationPlaying && (
+            <StyledTooltipIconButton
+              title={m["components.graph.playback.pause"]()}
+              onClick={onAnimationPause}
+            >
+              <PauseRounded />
+            </StyledTooltipIconButton>
+          )}
+          {value !== maxValue && !isAnimationPlaying && (
+            <StyledTooltipIconButton
+              title={m["components.graph.playback.play"]()}
+              onClick={onAnimationPlay}
+            >
+              <PlayArrowRounded />
+            </StyledTooltipIconButton>
+          )}
           <StyledTooltipIconButton
-            title={m["components.graph.playback.pause"]()}
-            onClick={onAnimationPause}
+            disabled={value >= maxValue}
+            title={m["components.graph.playback.forward"]()}
+            onClick={handleForward}
           >
-            <PauseRounded />
+            <KeyboardArrowRightRounded />
           </StyledTooltipIconButton>
-        )}
-        {value !== maxValue && !isAnimationPlaying && (
-          <StyledTooltipIconButton
-            title={m["components.graph.playback.play"]()}
-            onClick={onAnimationPlay}
-          >
-            <PlayArrowRounded />
-          </StyledTooltipIconButton>
-        )}
-        <StyledTooltipIconButton
-          disabled={value >= maxValue}
-          title={m["components.graph.playback.forward"]()}
-          onClick={handleForward}
-        >
-          <KeyboardArrowRightRounded />
-        </StyledTooltipIconButton>
-        <Typography>{`${value}/${maxValue}`}</Typography>
+          <Typography>{`${value}/${maxValue}`}</Typography>
+        </Stack>
       </Stack>
-    </Stack>
-  );
-}, (prev, next) => {
-  const keys = [
-    "value",
-    "maxValue",
-    "minValue",
-    "isAnimationPlaying",
-  ] as const;
-  return keys.every((key) => prev[key] === next[key]);
-});
+    );
+  },
+  (prev, next) => {
+    const keys = [
+      "value",
+      "maxValue",
+      "minValue",
+      "isAnimationPlaying",
+    ] as const;
+    return keys.every((key) => prev[key] === next[key]);
+  },
+);

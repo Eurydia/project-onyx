@@ -7,7 +7,7 @@ import { InputDisplayMany } from "$/components/InputDisplay";
 import { PropositionConfig } from "$/components/PropositionConfig";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
-import * as m from "$/paraglide/messages.js";
+import { m } from "$/paraglide/messages";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 import type { SymbolTable } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
