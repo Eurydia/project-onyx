@@ -1,11 +1,9 @@
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledAlert } from "$/components/Styled/StyledAlert";
@@ -65,11 +63,11 @@ export const InputDisplayMany: FC<InputDisplayManyProps> = (props) => {
                   </ListItemIcon>
                   <ListItemText disableTypography>
                     {item.inputRaw.length === 0 ? (
-                      <Typography fontStyle="italic">
+                      <Typography sx={{ fontStyle: "italic" }}>
                         {t("empty-string")}
                       </Typography>
                     ) : (
-                      <Typography fontFamily="monospace">
+                      <Typography sx={{ fontFamily: "monospace" }}>
                         {item.inputRaw}
                       </Typography>
                     )}

@@ -1,5 +1,9 @@
-import { ControlCameraRounded } from "@mui/icons-material";
-import { Box, Fab, Tooltip, Typography, useTheme } from "@mui/material";
+import ControlCameraRounded from "@mui/icons-material/ControlCameraRounded";
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import { useTheme } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { Group } from "@visx/group";
 import { hierarchy, Tree as VisxTree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
@@ -53,7 +57,10 @@ const Tree_: FC<TreeProps> = (props) => {
   const nodeRadius = 30;
 
   return (
-    <Box ref={viewportRef} width="100%" height="100%" position="relative">
+    <Box
+      ref={viewportRef}
+      sx={{ width: "100%", height: "100%", position: "relative" }}
+    >
       <Zoom<SVGSVGElement>
         width={viewportWidth}
         height={viewportHeight}

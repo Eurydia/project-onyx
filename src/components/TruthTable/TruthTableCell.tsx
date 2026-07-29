@@ -1,9 +1,6 @@
-import {
-  lighten,
-  TableCell,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { lighten, useTheme } from "@mui/material/styles";
+import TableCell from "@mui/material/TableCell";
+import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 

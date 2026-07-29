@@ -1,8 +1,6 @@
-import {
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import type { FC, KeyboardEvent, ReactNode } from "react";
 
 type StyledTooltipIconButtonProps = {

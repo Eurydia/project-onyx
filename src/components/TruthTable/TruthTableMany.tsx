@@ -1,5 +1,8 @@
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Typography } from "@mui/material";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
 import { type FC, useState } from "react";
 import { TruthTable } from "$/components/TruthTable";
 import type { ExprTree } from "$/types/expression-tree";
@@ -46,7 +49,7 @@ export const TruthTableMany: FC<TruthTableManyProps> = (props) => {
             />
           )}
           {!item.ok && (
-            <Typography fontStyle="italic">No applicable</Typography>
+            <Typography sx={{ fontStyle: "italic" }}>No applicable</Typography>
           )}
         </TabPanel>
       ))}

@@ -1,8 +1,10 @@
 import { orange } from "@mui/material/colors";
-import createPalette from "@mui/material/styles/createPalette";
+import { createTheme } from "@mui/material/styles";
 
-export const PALETTE_COMPARATOR_ROUTE = createPalette({
-  primary: { main: orange[200] },
-  tonalOffset: 0.47,
-  contrastThreshold: 9,
-});
+export const PALETTE_COMPARATOR_ROUTE = createTheme({
+  palette: {
+    primary: { main: orange[200] },
+    tonalOffset: 0.47,
+    contrastThreshold: 9,
+  },
+}).palette;

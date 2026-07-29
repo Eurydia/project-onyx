@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { Group } from "@visx/group";
 import type { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import katex from "katex";

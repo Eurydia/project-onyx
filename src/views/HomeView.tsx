@@ -1,20 +1,15 @@
-import {
-  BalanceRounded,
-  BorderColorRounded,
-  CalculateRounded,
-  RuleRounded,
-} from "@mui/icons-material";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  Grid2,
-  Stack,
-  type Theme,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import BalanceRounded from "@mui/icons-material/BalanceRounded";
+import BorderColorRounded from "@mui/icons-material/BorderColorRounded";
+import CalculateRounded from "@mui/icons-material/CalculateRounded";
+import RuleRounded from "@mui/icons-material/RuleRounded";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import { type Theme, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { type FC, memo, type ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
@@ -163,11 +158,13 @@ export const HomeView: FC = () => {
       appHeader={
         <Stack
           useFlexGap
-          flexDirection="row"
-          flexWrap="wrap"
+          direction="row"
           spacing={2}
-          justifyContent="flex-end"
-          width="100%"
+          sx={{
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
+            width: "100%",
+          }}
         >
           {LANGUAGES.map((lang, index) => (
             <LanguageItemCard
@@ -178,13 +175,13 @@ export const HomeView: FC = () => {
         </Stack>
       }
     >
-      <Grid2
+      <Grid
         container
         columns={{ xs: 1, md: 2 }}
         spacing={4}
       >
         {TOOLS.map(({ id, icon, palette }, index) => (
-          <Grid2
+          <Grid
             key={`card${index}`}
             size={1}
           >
@@ -193,9 +190,9 @@ export const HomeView: FC = () => {
               icon={icon}
               palette={palette}
             />
-          </Grid2>
+          </Grid>
         ))}
-      </Grid2>
+      </Grid>
     </BaseLayout>
   );
 };

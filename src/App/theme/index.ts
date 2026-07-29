@@ -1,7 +1,7 @@
 import {
   createTheme,
   responsiveFontSizes,
-} from "@mui/material";
+} from "@mui/material/styles";
 import { PALETTE_BASE } from "./palette-base";
 import { PALETTE_CHECKER_ROUTE } from "./palette-checker-route";
 import { PALETTE_COMPARATOR_ROUTE } from "./palette-comparator-route";

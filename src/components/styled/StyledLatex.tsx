@@ -1,4 +1,5 @@
-import { type SxProps, type Theme, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import type { KatexOptions } from "katex";
 import { type FC, type ReactNode, useEffect, useRef } from "react";
 

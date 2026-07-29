@@ -1,16 +1,12 @@
-import {
-  Button,
-  Stack,
-  type SxProps,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  type Theme,
-  useTheme,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import { type SxProps, type Theme, useTheme } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { type FC, memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledAlert } from "$/components/Styled/StyledAlert";
@@ -51,7 +47,7 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
-      <Stack spacing={1} padding={1}>
+      <Stack spacing={1} sx={{ p: 1 }}>
         <StyledAlert severity="warning">
           {t("warnings.large-truth-table-can-slow-application-down")}
         </StyledAlert>

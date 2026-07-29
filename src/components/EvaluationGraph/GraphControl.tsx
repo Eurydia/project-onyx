@@ -1,11 +1,11 @@
-import {
-  KeyboardArrowLeftRounded,
-  KeyboardArrowRightRounded,
-  PauseRounded,
-  PlayArrowRounded,
-  ReplayRounded,
-} from "@mui/icons-material";
-import { Slider, Stack, Typography } from "@mui/material";
+import KeyboardArrowLeftRounded from "@mui/icons-material/KeyboardArrowLeftRounded";
+import KeyboardArrowRightRounded from "@mui/icons-material/KeyboardArrowRightRounded";
+import PauseRounded from "@mui/icons-material/PauseRounded";
+import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
+import ReplayRounded from "@mui/icons-material/ReplayRounded";
+import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledTooltipIconButton } from "$/components/Styled/StyledIconButton";
@@ -60,7 +60,7 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
         min={minValue}
         step={1}
       />
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
         <StyledTooltipIconButton
           disabled={value <= minValue}
           title={t("previous")}

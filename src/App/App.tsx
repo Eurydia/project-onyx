@@ -3,7 +3,8 @@ import { comparatorRouteLoader } from "$controllers/comparator-controller";
 import { evaluatorRouteLoader } from "$controllers/evaluator-controller";
 import { rewriterRouteLoader } from "$controllers/rewriter-controller";
 import "$/core/interpreter/parser";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import type { FC } from "react";
 import { createHashRouter, RouterProvider } from "react-router";
 import {

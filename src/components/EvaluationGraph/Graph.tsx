@@ -1,4 +1,6 @@
-import { Paper, Stack, type SxProps } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import type { SxProps } from "@mui/material/styles";
 import { type FC, useEffect, useRef, useState } from "react";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";

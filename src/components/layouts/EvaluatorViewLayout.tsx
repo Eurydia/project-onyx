@@ -1,4 +1,6 @@
-import { Stack, Typography, useTheme } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { EvaluationDisplayMany } from "$/components/EvaluationDisplay";
@@ -30,11 +32,15 @@ export const EvaluatorViewLayout: FC<EvaluatorViewLayoutProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
+      <Typography
+        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+      >
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
+      <Typography
+        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+      >
         {t("output.title")}
       </Typography>
       <PropositionConfig value={symbolTable} onChange={onSymbolChange} />
@@ -77,7 +83,9 @@ export const EvaluatorViewLayout: FC<EvaluatorViewLayoutProps> = (props) => {
             />
           );
         })}
-      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
+      <Typography
+        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+      >
         {t("step-by-step.title")}
       </Typography>
       <EvaluationDisplayMany

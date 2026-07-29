@@ -1,4 +1,5 @@
-import { Stack, Typography } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledLatex } from "$/components/Styled/StyledLatex";
@@ -19,7 +20,7 @@ export const EvaluationDisplayStep: FC<EvaluationDisplayProps> = (props) => {
   const tag = `${stepIndex}.a`;
   return (
     <Stack spacing={1}>
-      <Typography fontWeight={900}>
+      <Typography sx={{ fontWeight: 900 }}>
         {t("step-x-of-y", {
           current: stepIndex,
           total: references.length,

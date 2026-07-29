@@ -1,10 +1,8 @@
-import {
-  Box,
-  Card,
-  CardActions,
-  CardHeader,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
+import Typography from "@mui/material/Typography";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
@@ -16,23 +14,25 @@ export const ErrorView: FC = () => {
 
   return (
     <Box
-      maxWidth="md"
-      marginX={{ xs: 2, md: "auto" }}
-      paddingY={2}
+      sx={{
+        maxWidth: "md",
+        mx: { xs: 2, md: "auto" },
+        py: 2,
+      }}
     >
       <Card variant="outlined">
         <CardHeader
           title={t("title")}
           slotProps={{
-            title: { fontWeight: 900 },
+            title: { sx: { fontWeight: 900 } },
           }}
         />
         <CardActions disableSpacing>
           <Typography
             component={Link}
             to="/"
-            color="primary"
             sx={{
+              "color": "primary.main",
               "textDecorationLine": "none",
               "&:hover": {
                 textDecorationLine: "underline",

@@ -1,5 +1,8 @@
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Typography } from "@mui/material";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
 import { type FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledAlert } from "$/components/Styled/StyledAlert";

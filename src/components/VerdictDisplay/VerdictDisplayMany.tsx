@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";

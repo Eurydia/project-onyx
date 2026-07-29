@@ -1,11 +1,9 @@
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
@@ -47,11 +45,15 @@ export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
+      <Typography
+        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+      >
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
+      <Typography
+        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
+      >
         {t("output.title")}
       </Typography>
       {validItems.length <= 1 && (
@@ -80,7 +82,7 @@ export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
                 value={index}
                 label={<StyledLatex>{`$$${exprLatex}$$`}</StyledLatex>}
                 slotProps={{
-                  typography: { width: "100%" },
+                  typography: { sx: { width: "100%" } },
                 }}
               />
             );

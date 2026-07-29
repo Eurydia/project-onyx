@@ -1,4 +1,6 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { type FC, Fragment, type ReactNode } from "react";
 
 type BaseLayoutProps = {
@@ -12,12 +14,12 @@ export const BaseLayout: FC<BaseLayoutProps> = (props) => {
   return (
     <Fragment>
       <Box
-        width="100%"
-        maxWidth="lg"
-        marginX={{ xs: 0, md: "auto" }}
-        paddingX={{ xs: 2, md: 0 }}
-        paddingY={4}
         sx={{
+          width: "100%",
+          maxWidth: "lg",
+          mx: { xs: 0, md: "auto" },
+          px: { xs: 2, md: 0 },
+          py: 4,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
@@ -29,9 +31,9 @@ export const BaseLayout: FC<BaseLayoutProps> = (props) => {
         {appHeader}
       </Box>
       <Box
-        paddingX={{ xs: 2, md: 0 }}
-        paddingY={4}
         sx={{
+          px: { xs: 2, md: 0 },
+          py: 4,
           backgroundColor: palette.primary.light,
           color: palette.primary.dark,
           alignItems: "center",
@@ -39,12 +41,12 @@ export const BaseLayout: FC<BaseLayoutProps> = (props) => {
       >
         <Typography
           variant="h1"
-          fontWeight={900}
-          fontFamily="monospace"
-          textTransform="capitalize"
-          maxWidth="lg"
-          marginX={{ xs: 0, md: "auto" }}
           sx={{
+            fontWeight: 900,
+            fontFamily: "monospace",
+            textTransform: "capitalize",
+            maxWidth: "lg",
+            mx: { xs: 0, md: "auto" },
             textWrap: "balance",
             whiteSpace: "normal",
             overflowWrap: "break-word",
@@ -55,11 +57,13 @@ export const BaseLayout: FC<BaseLayoutProps> = (props) => {
         </Typography>
       </Box>
       <Box
-        width="100%"
-        maxWidth="lg"
-        marginX={{ xs: 0, md: "auto" }}
-        paddingX={{ xs: 2, md: 0 }}
-        paddingY={8}
+        sx={{
+          width: "100%",
+          maxWidth: "lg",
+          mx: { xs: 0, md: "auto" },
+          px: { xs: 2, md: 0 },
+          py: 8,
+        }}
       >
         {children}
       </Box>

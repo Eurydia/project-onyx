@@ -1,4 +1,5 @@
-import { Stack, Typography } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { type FC, memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { EvaluationGraph } from "$/components/EvaluationGraph";
@@ -55,7 +56,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (props) => {
       </StyledLatex>
     </Stack>
   ) : (
-    <Typography fontStyle="italic">
+    <Typography sx={{ fontStyle: "italic" }}>
       {t("no-evaluation-step-to-display")}
     </Typography>
   );

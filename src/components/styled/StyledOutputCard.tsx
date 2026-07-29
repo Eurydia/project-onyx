@@ -1,8 +1,6 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import type { FC, ReactNode } from "react";
 
 type StyledOutputCardProps = {
@@ -19,8 +17,10 @@ export const StyledOutputCard: FC<StyledOutputCardProps> = (
         title={title}
         slotProps={{
           title: {
-            fontWeight: 900,
-            textTransform: "capitalize",
+            sx: {
+              fontWeight: 900,
+              textTransform: "capitalize",
+            },
           },
         }}
       />

@@ -1,4 +1,5 @@
-import { Typography, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";

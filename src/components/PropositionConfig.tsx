@@ -1,12 +1,10 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid2,
-  Radio,
-  RadioGroup,
-  Typography,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Grid from "@mui/material/Grid";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { SymbolTable } from "$/types/syntax-tree";
@@ -61,16 +59,16 @@ export const PropositionConfig: FC<PropositionConfigProps> = (props) => {
   }
 
   return (
-    <Grid2
+    <Grid
       container
-      width="100%"
       sx={{
+        width: "100%",
         maxHeight: 400,
         overflowY: "auto",
       }}
     >
       {symbols.map((symbol) => (
-        <Grid2 key={`symbol-${symbol}`} size={{ xs: 12, md: 4 }}>
+        <Grid key={`symbol-${symbol}`} size={{ xs: 12, md: 4 }}>
           <FormControl fullWidth>
             <FormLabel>
               <StyledLatex>{`$${symbol}$`}</StyledLatex>
@@ -81,8 +79,8 @@ export const PropositionConfig: FC<PropositionConfigProps> = (props) => {
               onChange={onChange}
             />
           </FormControl>
-        </Grid2>
+        </Grid>
       ))}
-    </Grid2>
+    </Grid>
   );
 };
