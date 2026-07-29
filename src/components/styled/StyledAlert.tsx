@@ -1,9 +1,9 @@
 import {
   Alert,
-  AlertProps,
+  type AlertProps,
   AlertTitle,
 } from "@mui/material";
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 type StyledAlertProps = {

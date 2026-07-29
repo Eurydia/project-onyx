@@ -1,16 +1,3 @@
-import { ExpressionCard } from "$components/ExpressionCard";
-import { InputDisplayMany } from "$components/InputDisplay";
-import { StyledAlert } from "$components/Styled/StyledAlert";
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { TruthTable } from "$components/TruthTable";
-import { exprTreeFromSyntaxTree } from "$core/expr-tree/from-syntax-tree";
-import { operatorToLatex } from "$core/operator";
-import { syntaxTreeRewrite } from "$core/syntax-tree/rewrite";
-import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { ExprTree } from "$types/expression-tree";
-import { Maybe } from "$types/generic";
-import { RewriterRouteLoaderData } from "$types/loader-data";
-import { Operator } from "$types/operators";
 import {
   Checkbox,
   FormControlLabel,
@@ -19,17 +6,28 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, Fragment, useMemo } from "react";
+import { type FC, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { ExpressionCard } from "$/components/ExpressionCard";
+import { InputDisplayMany } from "$/components/InputDisplay";
+import { StyledAlert } from "$/components/Styled/StyledAlert";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import { TruthTable } from "$/components/TruthTable";
+import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
+import { operatorToLatex } from "$/core/operator";
+import { syntaxTreeRewrite } from "$/core/syntax-tree/rewrite";
+import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import type { ExprTree } from "$/types/expression-tree";
+import type { Maybe } from "$/types/generic";
+import type { RewriterRouteLoaderData } from "$/types/loader-data";
+import { Operator } from "$/types/operators";
 
 type RewriterOutputItemProps = {
   itemNum: number;
   originalLatex: string;
   result: Maybe<{ tree: ExprTree; latex: string }>;
 };
-const RewriterOutputItem: FC<RewriterOutputItemProps> = (
-  props
-) => {
+const RewriterOutputItem: FC<RewriterOutputItemProps> = (props) => {
   const { result, originalLatex, itemNum } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "rewriter-view.cards.output",
@@ -40,19 +38,14 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (
       <ExpressionCard
         primary={
           <StyledLatex>
-            {t(
-              "text.formula-cannot-be-expressed-in-the-desired-basis",
-              {
-                formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
-              }
-            )}
+            {t("text.formula-cannot-be-expressed-in-the-desired-basis", {
+              formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
+            })}
           </StyledLatex>
         }
         secondary={
           <StyledAlert severity="info">
-            <Typography>
-              {t("infos.truth-table-is-not-available")}
-            </Typography>
+            <Typography>{t("infos.truth-table-is-not-available")}</Typography>
           </StyledAlert>
         }
       />
@@ -63,13 +56,10 @@ const RewriterOutputItem: FC<RewriterOutputItemProps> = (
     <ExpressionCard
       primary={
         <StyledLatex>
-          {t(
-            "text.formula-is-expressed-as-in-the-desired-basis",
-            {
-              formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
-              result: `$$\\boxed{${result.latex}}$$`,
-            }
-          )}
+          {t("text.formula-is-expressed-as-in-the-desired-basis", {
+            formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
+            result: `$$\\boxed{${result.latex}}$$`,
+          })}
         </StyledLatex>
       }
       secondary={
@@ -91,9 +81,7 @@ type RewriterViewLayoutProps = {
   basis: Set<Operator>;
   onBasisChange: (k: Operator, v: boolean) => void;
 };
-export const RewriterViewLayout: FC<
-  RewriterViewLayoutProps
-> = (props) => {
+export const RewriterViewLayout: FC<RewriterViewLayoutProps> = (props) => {
   const { items, basis, onBasisChange } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "rewriter-view.cards",
@@ -105,17 +93,11 @@ export const RewriterViewLayout: FC<
 
   return (
     <Stack spacing={2}>
-      <Typography
-        fontWeight={900}
-        fontSize={typography.h3.fontSize}
-      >
+      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography
-        fontWeight={900}
-        fontSize={typography.h3.fontSize}
-      >
+      <Typography fontWeight={900} fontSize={typography.h3.fontSize}>
         {t("output.title")}
       </Typography>
       {validItems.length === 0 && (
@@ -128,56 +110,41 @@ export const RewriterViewLayout: FC<
       {validItems.length > 0 && (
         <Fragment>
           <FormGroup row>
-            {Object.values(Operator).map(
-              (operator, index) => (
-                <FormControlLabel
-                  key={"operator" + index}
-                  checked={basis.has(operator)}
-                  onChange={(_, value) =>
-                    onBasisChange(operator, value)
-                  }
-                  control={
-                    <Checkbox
-                      disableRipple
-                      disableFocusRipple
-                      disableTouchRipple
-                    />
-                  }
-                  label={
-                    <StyledLatex>
-                      {`$${operatorToLatex(operator)}$`}
-                    </StyledLatex>
-                  }
-                />
-              )
-            )}
+            {Object.values(Operator).map((operator, index) => (
+              <FormControlLabel
+                key={`operator${index}`}
+                checked={basis.has(operator)}
+                onChange={(_, value) => onBasisChange(operator, value)}
+                control={
+                  <Checkbox
+                    disableRipple
+                    disableFocusRipple
+                    disableTouchRipple
+                  />
+                }
+                label={
+                  <StyledLatex>{`$${operatorToLatex(operator)}$`}</StyledLatex>
+                }
+              />
+            ))}
           </FormGroup>
           {items.map((item, index) => {
             if (!item.ok) {
               return null;
             }
-            const result = syntaxTreeRewrite(
-              item.originalTree,
-              basis
-            );
+            const result = syntaxTreeRewrite(item.originalTree, basis);
             const itemNum = index + 1;
             return (
               <RewriterOutputItem
-                key={"result" + index}
+                key={`result${index}`}
                 itemNum={itemNum}
-                originalLatex={
-                  item.inputInterpretationLatex
-                }
+                originalLatex={item.inputInterpretationLatex}
                 result={
                   result.ok
                     ? {
                         ok: true,
-                        tree: exprTreeFromSyntaxTree(
-                          result.tree
-                        ),
-                        latex: syntaxTreeToLatex(
-                          result.tree
-                        ),
+                        tree: exprTreeFromSyntaxTree(result.tree),
+                        latex: syntaxTreeToLatex(result.tree),
                       }
                     : { ok: false }
                 }

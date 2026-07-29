@@ -4,7 +4,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, memo } from "react";
+import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
 type TruthTableCellProps = { value: boolean };

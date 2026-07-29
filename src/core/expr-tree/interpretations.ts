@@ -1,9 +1,6 @@
-import { SymbolTable } from "$types/syntax-tree";
+import type { SymbolTable } from "$/types/syntax-tree";
 
-export const getInterpretations = (
-  size: number,
-  symbols: string[]
-) => {
+export const getInterpretations = (size: number, symbols: string[]) => {
   const interpretations: SymbolTable[] = [];
   const intepretationCount = 1 << size;
   for (let i = 0; i < intepretationCount; i++) {

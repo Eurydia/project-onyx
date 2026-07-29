@@ -1,8 +1,5 @@
-import { ExprTree } from "$types/expression-tree";
-import {
-  SymbolTable,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import type { ExprTree } from "$/types/expression-tree";
+import { type SymbolTable, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { exprTreeToLatex } from "./to-latex";
 
 export type EvaluationStep = {
@@ -20,7 +17,7 @@ export type EvaluationStep = {
 const traverse = (
   tree: ExprTree,
   table: SymbolTable,
-  steps: EvaluationStep[]
+  steps: EvaluationStep[],
 ) => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
@@ -58,16 +55,13 @@ const traverse = (
           traverse(child, table, steps);
           childStep = steps.length;
         }
-        const substitutions: EvaluationStep["substitutions"] =
-          [];
+        const substitutions: EvaluationStep["substitutions"] = [];
         if (child.nodeType !== SyntaxTreeNodeType.CONST) {
           substitutions.push({
             repr: exprTreeToLatex(child),
             evaluated: childEval,
             stepRef: childStep,
-            substituted: `\\lnot ${
-              childEval ? "\\top" : "\\bot"
-            }
+            substituted: `\\lnot ${childEval ? "\\top" : "\\bot"}
             }`,
           });
         }
@@ -85,9 +79,7 @@ const traverse = (
         const { right, left } = tree;
 
         const leftEval = left.eval(table);
-        const leftSubstituted = leftEval
-          ? "\\top"
-          : "\\bot";
+        const leftSubstituted = leftEval ? "\\top" : "\\bot";
         let leftStep: number | false = false;
         if (
           left.nodeType !== SyntaxTreeNodeType.CONST &&
@@ -103,9 +95,7 @@ const traverse = (
           right.nodeType === SyntaxTreeNodeType.BINARY
             ? `( ${rightRawRepr} )`
             : rightRawRepr;
-        const rightSubstituted = rightEval
-          ? "\\top"
-          : "\\bot";
+        const rightSubstituted = rightEval ? "\\top" : "\\bot";
         let rightStep: number | false = false;
         if (
           right.nodeType !== SyntaxTreeNodeType.CONST &&
@@ -122,8 +112,7 @@ const traverse = (
         // True and True
         // True
 
-        const substitutions: EvaluationStep["substitutions"] =
-          [];
+        const substitutions: EvaluationStep["substitutions"] = [];
 
         if (left.nodeType !== SyntaxTreeNodeType.CONST) {
           substitutions.push({
@@ -156,7 +145,7 @@ const traverse = (
 
 export const exprTreeFlattenStepByStep = (
   tree: ExprTree,
-  symbolTable: SymbolTable
+  symbolTable: SymbolTable,
 ) => {
   const steps: EvaluationStep[] = [];
   traverse(tree, symbolTable, steps);

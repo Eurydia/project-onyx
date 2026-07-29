@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist -b gh-pages"
+    "deploy": "gh-pages -d dist -b gh-pages",
+    "check": "pnpx @biomejs/biome check --write"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

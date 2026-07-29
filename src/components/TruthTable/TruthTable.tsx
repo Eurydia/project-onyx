@@ -1,24 +1,24 @@
-import { StyledAlert } from "$components/Styled/StyledAlert";
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { exprTreeCollectSymbols } from "$core/expr-tree/collect-symbols";
-import { getInterpretations } from "$core/expr-tree/interpretations";
-import { exprTreeToLatex } from "$core/expr-tree/to-latex";
-import { ExprTree } from "$types/expression-tree";
 import {
   Button,
   Stack,
-  SxProps,
+  type SxProps,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
+  type Theme,
   useTheme,
 } from "@mui/material";
-import { FC, memo, useMemo, useState } from "react";
+import { type FC, memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledAlert } from "$/components/Styled/StyledAlert";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import { exprTreeCollectSymbols } from "$/core/expr-tree/collect-symbols";
+import { getInterpretations } from "$/core/expr-tree/interpretations";
+import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import type { ExprTree } from "$/types/expression-tree";
 import { TruthTableCell } from "./TruthTableCell";
 
 type TruthTableProps = {
@@ -47,18 +47,13 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
     return symbols.length > 3 && !userConfirmed
       ? []
       : getInterpretations(symbols.length, symbols);
-  }, [userConfirmed, symbols.length]);
+  }, [userConfirmed, symbols]);
 
   if (symbols.length > 3 && !userConfirmed) {
     return (
-      <Stack
-        spacing={1}
-        padding={1}
-      >
+      <Stack spacing={1} padding={1}>
         <StyledAlert severity="warning">
-          {t(
-            "warnings.large-truth-table-can-slow-application-down"
-          )}
+          {t("warnings.large-truth-table-can-slow-application-down")}
         </StyledAlert>
         <Button
           disableElevation
@@ -66,14 +61,12 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
           onClick={() => setUserConfirmed(true)}
           sx={{
             "&:hover": {
-              color: palette.getContrastText(
-                palette.primary.main
-              ),
+              color: palette.getContrastText(palette.primary.main),
               backgroundColor: palette.primary.main,
             },
-            "color": palette.primary.dark,
-            "backgroundColor": palette.primary.light,
-            "width": "fit-content",
+            color: palette.primary.dark,
+            backgroundColor: palette.primary.light,
+            width: "fit-content",
           }}
         >
           {t("warnings.confirm")}
@@ -89,33 +82,28 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
           <TableRow>
             {symbols.map((col, index) => (
               <TableCell
-                key={"sym" + index}
+                key={`sym${index}`}
                 align="center"
                 sx={{ whiteSpace: "nowrap" }}
               >
                 <StyledLatex>{`$${col}$`}</StyledLatex>
               </TableCell>
             ))}
-            <TableCell
-              align="center"
-              sx={{ whiteSpace: "nowrap" }}
-            >
+            <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
               <StyledLatex>{`$${exprLatex}$`}</StyledLatex>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {interpretations.map((interpretations, index) => (
-            <TableRow key={"perm" + index}>
+            <TableRow key={`perm${index}`}>
               {symbols.map((sym, index) => (
                 <TruthTableCell
-                  key={"sym" + index}
+                  key={`sym${index}`}
                   value={interpretations.get(sym) || false}
                 />
               ))}
-              <TruthTableCell
-                value={exprTree.eval(interpretations)}
-              />
+              <TruthTableCell value={exprTree.eval(interpretations)} />
             </TableRow>
           ))}
         </TableBody>
@@ -124,12 +112,6 @@ const TruthTable_: FC<TruthTableProps> = (props) => {
   );
 };
 
-export const TruthTable = memo(
-  TruthTable_,
-  (prev, next) => {
-    return (
-      exprTreeToLatex(prev.exprTree) ===
-      exprTreeToLatex(next.exprTree)
-    );
-  }
-);
+export const TruthTable = memo(TruthTable_, (prev, next) => {
+  return exprTreeToLatex(prev.exprTree) === exprTreeToLatex(next.exprTree);
+});

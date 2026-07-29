@@ -1,4 +1,3 @@
-import { StyledTooltipIconButton } from "$components/Styled/StyledIconButton";
 import {
   KeyboardArrowLeftRounded,
   KeyboardArrowRightRounded,
@@ -7,8 +6,9 @@ import {
   ReplayRounded,
 } from "@mui/icons-material";
 import { Slider, Stack, Typography } from "@mui/material";
-import { FC, memo } from "react";
+import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledTooltipIconButton } from "$/components/Styled/StyledIconButton";
 
 type GraphControlProps = {
   maxValue: number;
@@ -60,11 +60,7 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
         min={minValue}
         step={1}
       />
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems="center"
-      >
+      <Stack direction="row" spacing={1} alignItems="center">
         <StyledTooltipIconButton
           disabled={value <= minValue}
           title={t("previous")}
@@ -89,10 +85,7 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
           </StyledTooltipIconButton>
         )}
         {value !== maxValue && !isAnimationPlaying && (
-          <StyledTooltipIconButton
-            title={t("play")}
-            onClick={onAnimationPlay}
-          >
+          <StyledTooltipIconButton title={t("play")} onClick={onAnimationPlay}>
             <PlayArrowRounded />
           </StyledTooltipIconButton>
         )}
@@ -109,15 +102,12 @@ const GraphControl_: FC<GraphControlProps> = (props) => {
   );
 };
 
-export const GraphControl = memo(
-  GraphControl_,
-  (prev, next) => {
-    const keys = [
-      "value",
-      "maxValue",
-      "minValue",
-      "isAnimationPlaying",
-    ] as (keyof GraphControlProps)[];
-    return keys.every((key) => prev[key] === next[key]);
-  }
-);
+export const GraphControl = memo(GraphControl_, (prev, next) => {
+  const keys = [
+    "value",
+    "maxValue",
+    "minValue",
+    "isAnimationPlaying",
+  ] as (keyof GraphControlProps)[];
+  return keys.every((key) => prev[key] === next[key]);
+});

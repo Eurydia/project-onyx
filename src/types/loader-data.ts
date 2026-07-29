@@ -1,5 +1,5 @@
-import { Maybe } from "./generic";
-import { SyntaxTree } from "./syntax-tree";
+import type { Maybe } from "./generic";
+import type { SyntaxTree } from "./syntax-tree";
 
 export type ComparatorRouteLoaderData = {
   userInput: string;

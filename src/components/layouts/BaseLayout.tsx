@@ -1,5 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import { FC, Fragment, ReactNode } from "react";
+import { type FC, Fragment, type ReactNode } from "react";
 
 type BaseLayoutProps = {
   title: string;

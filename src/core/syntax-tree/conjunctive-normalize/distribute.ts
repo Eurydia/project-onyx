@@ -1,15 +1,13 @@
-import { Operator } from "$types/operators";
+import { Operator } from "$/types/operators";
 import {
-  SyntaxTree,
-  SyntaxTreeNodeBinary,
+  type SyntaxTree,
+  type SyntaxTreeNodeBinary,
   SyntaxTreeNodeType,
-  SyntaxTreeNodeUnary,
-} from "$types/syntax-tree";
+  type SyntaxTreeNodeUnary,
+} from "$/types/syntax-tree";
 import { AND, BINARY, CONST, NOT, OR } from "../node";
 
-const applyDoubleNegationLaw = (
-  unary: SyntaxTreeNodeUnary
-): SyntaxTree => {
+const applyDoubleNegationLaw = (unary: SyntaxTreeNodeUnary): SyntaxTree => {
   const { operand } = unary;
   switch (operand.nodeType) {
     case SyntaxTreeNodeType.CONST:
@@ -20,23 +18,15 @@ const applyDoubleNegationLaw = (
       return distributeTree(operand.operand);
     case SyntaxTreeNodeType.BINARY: {
       const expandedOp =
-        operand.operator === Operator.AND
-          ? Operator.OR
-          : Operator.AND;
+        operand.operator === Operator.AND ? Operator.OR : Operator.AND;
       return distributeTree(
-        BINARY(
-          expandedOp,
-          NOT(operand.left),
-          NOT(operand.right)
-        )
+        BINARY(expandedOp, NOT(operand.left), NOT(operand.right)),
       );
     }
   }
 };
 
-const applyDeMorgansLaw = (
-  binary: SyntaxTreeNodeBinary
-): SyntaxTree => {
+const applyDeMorgansLaw = (binary: SyntaxTreeNodeBinary): SyntaxTree => {
   const left = distributeTree(binary.left);
   const right = distributeTree(binary.right);
   if (binary.operator === Operator.AND) {
@@ -65,9 +55,7 @@ const applyDeMorgansLaw = (
   return OR(left, right);
 };
 
-export const distributeTree = (
-  tree: SyntaxTree
-): SyntaxTree => {
+export const distributeTree = (tree: SyntaxTree): SyntaxTree => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
     case SyntaxTreeNodeType.IDEN:

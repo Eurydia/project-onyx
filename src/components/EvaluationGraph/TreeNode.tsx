@@ -1,11 +1,11 @@
-import { ExprTree } from "$types/expression-tree";
-import { SymbolTable } from "$types/syntax-tree";
 import { useTheme } from "@mui/material";
 import { Group } from "@visx/group";
-import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
+import type { HierarchyPointNode } from "@visx/hierarchy/lib/types";
 import katex from "katex";
-import { FC, useEffect, useRef } from "react";
+import { type FC, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import type { ExprTree } from "$/types/expression-tree";
+import type { SymbolTable } from "$/types/syntax-tree";
 
 type TreeGraphNodeProps = {
   node: HierarchyPointNode<ExprTree>;
@@ -13,9 +13,7 @@ type TreeGraphNodeProps = {
   symbolTable: SymbolTable;
   r: number;
 };
-export const TreeGraphNode: FC<TreeGraphNodeProps> = (
-  props
-) => {
+export const TreeGraphNode: FC<TreeGraphNodeProps> = (props) => {
   const { r, order, node, symbolTable } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "graph",
@@ -30,13 +28,12 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
         .renderToString(data.repr)
         .replaceAll("span", "tspan");
     }
-  }, [ref, data.repr]);
+  }, [data.repr]);
 
   const isNodeHighlighted = data.order === order;
   const isNodeVisibleNow = data.order <= order;
   const isNodeVisibleSoon = data.order <= order + 1;
-  const isNodeVisible =
-    isNodeVisibleNow || isNodeVisibleSoon;
+  const isNodeVisible = isNodeVisibleNow || isNodeVisibleSoon;
   return (
     <Group
       top={y}
@@ -62,9 +59,7 @@ export const TreeGraphNode: FC<TreeGraphNodeProps> = (
       />
       <Group
         transform={`translate(${r / 3}, ${r / 3})`}
-        visibility={
-          data.order < order ? "visible" : "hidden"
-        }
+        visibility={data.order < order ? "visible" : "hidden"}
       >
         <rect
           width={60}

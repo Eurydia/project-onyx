@@ -1,17 +1,11 @@
-import { Maybe } from "$types/generic";
-import { Operator } from "$types/operators";
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import type { Maybe } from "$/types/generic";
+import { Operator } from "$/types/operators";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { getRewriteRulesFor } from "./helper/rewrite-rules";
 import { BINARY, NOT } from "./node";
 import { syntaxTreeNormalize } from "./normalize";
 
-const rewrite = (
-  tree: SyntaxTree,
-  basis: Set<Operator>
-): SyntaxTree | null => {
+const rewrite = (tree: SyntaxTree, basis: Set<Operator>): SyntaxTree | null => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
     case SyntaxTreeNodeType.IDEN:
@@ -50,10 +44,8 @@ const rewrite = (
       for (const rule of rules) {
         if (rule.isApplicable(tree, basis)) {
           return rewrite(
-            rule.rewrite(
-              BINARY(tree.operator, left, right)
-            ),
-            basis
+            rule.rewrite(BINARY(tree.operator, left, right)),
+            basis,
           );
         }
       }
@@ -65,7 +57,7 @@ const rewrite = (
 
 export const syntaxTreeRewrite = (
   tree: SyntaxTree,
-  basis: Set<Operator>
+  basis: Set<Operator>,
 ): Maybe<{ tree: SyntaxTree }> => {
   const normalTree = syntaxTreeNormalize(tree);
   if (

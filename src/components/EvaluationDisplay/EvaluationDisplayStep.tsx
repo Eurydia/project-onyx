@@ -1,8 +1,8 @@
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { EvaluationStep } from "$core/expr-tree/exprTreeFlattenStepByStep";
 import { Stack, Typography } from "@mui/material";
-import { FC } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import type { EvaluationStep } from "$/core/expr-tree/exprTreeFlattenStepByStep";
 import { EvaluationDisplayStepMini } from "./EvaluationDisplayStepMini";
 
 type EvaluationDisplayProps = {
@@ -10,12 +10,9 @@ type EvaluationDisplayProps = {
   step: EvaluationStep;
   references: EvaluationStep[];
 };
-export const EvaluationDisplayStep: FC<
-  EvaluationDisplayProps
-> = (props) => {
+export const EvaluationDisplayStep: FC<EvaluationDisplayProps> = (props) => {
   const { step, stepIndex, references } = props;
-  const { evaluated, repr, substitutions, connective } =
-    step;
+  const { evaluated, repr, substitutions, connective } = step;
   const { t } = useTranslation("views", {
     keyPrefix: "evaluator-view.cards.step-by-step",
   });
@@ -37,7 +34,7 @@ export const EvaluationDisplayStep: FC<
         <EvaluationDisplayStepMini
           stepIndex={stepIndex}
           subStepIndex={subStepIndex}
-          key={"sub-step" + stepIndex + subStepIndex}
+          key={`sub-step${stepIndex}${subStepIndex}`}
           subStep={subStep}
           references={references}
         />

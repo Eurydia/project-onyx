@@ -1,25 +1,13 @@
-import { exprTreeToLatex } from "$core/expr-tree/to-latex";
-import { ExprTree } from "$types/expression-tree";
-import {
-  SymbolTable,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
 import { ControlCameraRounded } from "@mui/icons-material";
-import {
-  Box,
-  Fab,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Fab, Tooltip, Typography, useTheme } from "@mui/material";
 import { Group } from "@visx/group";
-import {
-  hierarchy,
-  Tree as VisxTree,
-} from "@visx/hierarchy";
+import { hierarchy, Tree as VisxTree } from "@visx/hierarchy";
 import { Zoom } from "@visx/zoom";
-import { FC, Fragment, memo, useRef } from "react";
+import { type FC, Fragment, memo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import type { ExprTree } from "$/types/expression-tree";
+import { type SymbolTable, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { TreeGraphLink } from "./TreeLink";
 import { TreeGraphNode } from "./TreeNode";
 
@@ -65,12 +53,7 @@ const Tree_: FC<TreeProps> = (props) => {
   const nodeRadius = 30;
 
   return (
-    <Box
-      ref={viewportRef}
-      width="100%"
-      height="100%"
-      position="relative"
-    >
+    <Box ref={viewportRef} width="100%" height="100%" position="relative">
       <Zoom<SVGSVGElement>
         width={viewportWidth}
         height={viewportHeight}
@@ -87,9 +70,7 @@ const Tree_: FC<TreeProps> = (props) => {
               ref={zoom.containerRef}
               style={{
                 touchAction: "none",
-                cursor: zoom.isDragging
-                  ? "grabbing"
-                  : "grab",
+                cursor: zoom.isDragging ? "grabbing" : "grab",
               }}
               onMouseDown={zoom.dragStart}
               onMouseMove={zoom.dragMove}
@@ -97,14 +78,9 @@ const Tree_: FC<TreeProps> = (props) => {
               onMouseLeave={zoom.dragEnd}
             >
               <Group transform={zoom.toString()}>
-                <VisxTree
-                  root={data}
-                  size={[treeWidth, -treeHeight]}
-                >
+                <VisxTree root={data} size={[treeWidth, -treeHeight]}>
                   {(treeHeir) => (
-                    <Group
-                      top={treeHeight + nodeRadius * 1.5}
-                    >
+                    <Group top={treeHeight + nodeRadius * 1.5}>
                       {treeHeir.links().map((link, i) => (
                         <TreeGraphLink
                           key={`link-${i}`}
@@ -112,17 +88,15 @@ const Tree_: FC<TreeProps> = (props) => {
                           link={link}
                         />
                       ))}
-                      {treeHeir
-                        .descendants()
-                        .map((node, i) => (
-                          <TreeGraphNode
-                            key={`node-${i}`}
-                            order={order}
-                            node={node}
-                            symbolTable={symbolTable}
-                            r={nodeRadius}
-                          />
-                        ))}
+                      {treeHeir.descendants().map((node, i) => (
+                        <TreeGraphNode
+                          key={`node-${i}`}
+                          order={order}
+                          node={node}
+                          symbolTable={symbolTable}
+                          r={nodeRadius}
+                        />
+                      ))}
                     </Group>
                   )}
                 </VisxTree>
@@ -135,17 +109,15 @@ const Tree_: FC<TreeProps> = (props) => {
               <Fab
                 onClick={zoom.center}
                 sx={{
-                  "position": "absolute",
-                  "left": 16,
-                  "bottom": 16,
+                  position: "absolute",
+                  left: 16,
+                  bottom: 16,
                   "&:hover": {
-                    color: palette.getContrastText(
-                      palette.primary.main
-                    ),
+                    color: palette.getContrastText(palette.primary.main),
                     backgroundColor: palette.primary.main,
                   },
-                  "color": palette.primary.dark,
-                  "backgroundColor": palette.primary.light,
+                  color: palette.primary.dark,
+                  backgroundColor: palette.primary.light,
                 }}
               >
                 <ControlCameraRounded />
@@ -164,17 +136,12 @@ export const Tree = memo(Tree_, (prev, next) => {
   }
 
   if (
-    exprTreeToLatex(prev.tree).localeCompare(
-      exprTreeToLatex(next.tree)
-    ) !== 0
+    exprTreeToLatex(prev.tree).localeCompare(exprTreeToLatex(next.tree)) !== 0
   ) {
     return false;
   }
 
-  for (const [
-    symbol,
-    value,
-  ] of prev.symbolTable.entries()) {
+  for (const [symbol, value] of prev.symbolTable.entries()) {
     if (next.symbolTable.get(symbol) !== value) {
       return false;
     }

@@ -1,15 +1,13 @@
-import { exprTreeCollectSymbols } from "$core/expr-tree/collect-symbols";
-import { ExprTree } from "$types/expression-tree";
-import { SymbolTable } from "$types/syntax-tree";
+import { exprTreeCollectSymbols } from "$/core/expr-tree/collect-symbols";
+import type { ExprTree } from "$/types/expression-tree";
+import type { SymbolTable } from "$/types/syntax-tree";
 
 function* permutation(symbols: string[]) {
   let current = 0;
   const size = 1 << symbols.length;
   while (current < size) {
     const perm: SymbolTable = new Map();
-    const permStr = current
-      .toString(2)
-      .padStart(symbols.length, "0");
+    const permStr = current.toString(2).padStart(symbols.length, "0");
     for (let i = 0; i < size; i++) {
       perm.set(symbols[i], permStr[i] === "1");
     }

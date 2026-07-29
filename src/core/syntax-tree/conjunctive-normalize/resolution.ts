@@ -1,17 +1,9 @@
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { AND, CONST, NOT, OR } from "../node";
 import { syntaxTreeToString } from "../to-string";
 
-const findComplementPairs = (
-  a: Set<SyntaxTree>,
-  b: Set<SyntaxTree>
-) => {
-  const bStringSet = new Set(
-    [...b].map((item) => syntaxTreeToString(item))
-  );
+const findComplementPairs = (a: Set<SyntaxTree>, b: Set<SyntaxTree>) => {
+  const bStringSet = new Set([...b].map((item) => syntaxTreeToString(item)));
   const pairs = new Set<SyntaxTree>();
   for (const item of a) {
     if (
@@ -31,12 +23,20 @@ const findComplementPairs = (
 
 const toSyntaxTree = (clause: Set<SyntaxTree>) => {
   const queue = [...clause];
-  if (clause.size === 0) {
+  if (queue.length === 0) {
     return CONST(false);
   }
-  let tree = queue.shift()!;
+  let tree = queue.shift();
+
+  if (tree === undefined) {
+    throw Error("Not possible");
+  }
   while (queue.length > 0) {
-    tree = OR(tree, queue.shift()!);
+    const nextClause = queue.shift();
+    if (nextClause === undefined) {
+      throw Error("Not possible, queue.length > 0 at start of loop");
+    }
+    tree = OR(tree, nextClause);
   }
   return tree;
 };
@@ -61,20 +61,18 @@ export const resolve = (clauses: Set<Set<SyntaxTree>>) => {
 
         pairResolved = true;
         resolutions = resolutions.filter(
-          (_, index) => index !== i && index !== j
+          (_, index) => index !== i && index !== j,
         );
 
         if (pairs.size === 1) {
           const seen = new Set<string>(
-            [...a].map((item) => syntaxTreeToString(item))
+            [...a].map((item) => syntaxTreeToString(item)),
           );
           const newResolution = new Set<SyntaxTree>(
-            [...a].filter((item) => !pairs.has(item))
+            [...a].filter((item) => !pairs.has(item)),
           );
           const pairString = new Set(
-            [...pairs].map((item) =>
-              syntaxTreeToString(item)
-            )
+            [...pairs].map((item) => syntaxTreeToString(item)),
           );
           for (const item of b) {
             if (
@@ -85,9 +83,7 @@ export const resolve = (clauses: Set<Set<SyntaxTree>>) => {
             }
             if (
               item.nodeType === SyntaxTreeNodeType.UNARY &&
-              pairString.has(
-                syntaxTreeToString(item.operand)
-              )
+              pairString.has(syntaxTreeToString(item.operand))
             ) {
               continue;
             }
@@ -114,9 +110,17 @@ export const resolve = (clauses: Set<Set<SyntaxTree>>) => {
     return CONST(false);
   }
 
-  let tree = toSyntaxTree(resolutions.shift()!);
+  const treeResInit = resolutions.shift();
+  if (treeResInit === undefined) {
+    throw Error("Not possible");
+  }
+  let tree = toSyntaxTree(treeResInit);
   while (resolutions.length > 0) {
-    tree = AND(tree, toSyntaxTree(resolutions.shift()!));
+    const treeResCurr = resolutions.shift();
+    if (treeResCurr === undefined) {
+      throw Error("Not possible, resolution.length > 0 at start of loop");
+    }
+    tree = AND(tree, toSyntaxTree(treeResCurr));
   }
   return tree;
 };

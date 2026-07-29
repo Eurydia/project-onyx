@@ -1,4 +1,4 @@
-import { SyntaxTree } from "$types/syntax-tree";
+import type { SyntaxTree } from "$/types/syntax-tree";
 import { distributeTree } from "./conjunctive-normalize/distribute";
 import { resolve } from "./conjunctive-normalize/resolution";
 import { rewriteTree } from "./conjunctive-normalize/rewrite-tree";

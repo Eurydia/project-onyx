@@ -1,17 +1,12 @@
-import { AppNavGroup } from "$components/AppNavMenu";
-import { Editor } from "$components/Editor/Editor";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { ComparatorViewLayout } from "$layouts/ComparatorViewLayout";
-import { ComparatorRouteLoaderData } from "$types/loader-data";
 import { Stack } from "@mui/material";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { type FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
+import { AppNavGroup } from "$/components/AppNavMenu";
+import { Editor } from "$/components/Editor/Editor";
+import type { ComparatorRouteLoaderData } from "$/types/loader-data";
+import { BaseLayout } from "$layouts/BaseLayout";
+import { ComparatorViewLayout } from "$layouts/ComparatorViewLayout";
 
 export const ComparatorView: FC = () => {
   const { items, userInput: prevUserInput } =
@@ -51,15 +46,12 @@ export const ComparatorView: FC = () => {
       {
         method: "GET",
         action: "/comparator",
-      }
+      },
     );
   }, [submit, userInput]);
 
   return (
-    <BaseLayout
-      appHeader={<AppNavGroup />}
-      title={t("comparator")}
-    >
+    <BaseLayout appHeader={<AppNavGroup />} title={t("comparator")}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

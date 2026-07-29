@@ -1,4 +1,4 @@
-import { Operator } from "./operators";
+import type { Operator } from "./operators";
 
 export enum SyntaxTreeNodeType {
   CONST = "CONSTANT",

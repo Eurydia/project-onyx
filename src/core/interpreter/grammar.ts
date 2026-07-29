@@ -1,14 +1,11 @@
-import { Operator } from "$types/operators";
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
 import * as ohm from "ohm-js";
+import { Operator } from "$/types/operators";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 
 const collectBinaryNodes = (
   operator: Exclude<Operator, Operator.NOT>,
   left: SyntaxTree,
-  right: SyntaxTree[]
+  right: SyntaxTree[],
 ) => {
   let node: SyntaxTree = {
     nodeType: SyntaxTreeNodeType.BINARY,
@@ -27,7 +24,7 @@ const collectBinaryNodes = (
   return node;
 };
 
-export const grammar = ohm.grammar(String.raw`
+export const grammar = ohm.grammar(`
 BooleanExpressions {
   Expression
     = Iff 
@@ -86,65 +83,37 @@ semantics.addOperation("buildTree", {
   Iff(leftExpr, _, rightExpr) {
     const leftTree = leftExpr.buildTree();
     const rightTree = rightExpr.buildTree();
-    if (
-      !Array.isArray(rightTree) ||
-      rightTree.length === 0
-    ) {
+    if (!Array.isArray(rightTree) || rightTree.length === 0) {
       return leftTree;
     }
-    return collectBinaryNodes(
-      Operator.IFF,
-      leftTree,
-      rightTree
-    );
+    return collectBinaryNodes(Operator.IFF, leftTree, rightTree);
   },
 
   Implies(leftExpr, _, rightExpr) {
     const leftTree = leftExpr.buildTree();
     const rightTree = rightExpr.buildTree();
-    if (
-      !Array.isArray(rightTree) ||
-      rightTree.length === 0
-    ) {
+    if (!Array.isArray(rightTree) || rightTree.length === 0) {
       return leftTree;
     }
-    return collectBinaryNodes(
-      Operator.IMPL,
-      leftTree,
-      rightTree
-    );
+    return collectBinaryNodes(Operator.IMPL, leftTree, rightTree);
   },
 
   Or(leftExpr, _, rightExpr) {
     const leftTree = leftExpr.buildTree();
     const rightTree = rightExpr.buildTree();
-    if (
-      !Array.isArray(rightTree) ||
-      rightTree.length === 0
-    ) {
+    if (!Array.isArray(rightTree) || rightTree.length === 0) {
       return leftTree;
     }
-    return collectBinaryNodes(
-      Operator.OR,
-      leftTree,
-      rightTree
-    );
+    return collectBinaryNodes(Operator.OR, leftTree, rightTree);
   },
 
   And(leftExpr, _, rightExpr) {
     const leftTree = leftExpr.buildTree();
     const rightTree = rightExpr.buildTree();
-    if (
-      !Array.isArray(rightTree) ||
-      rightTree.length === 0
-    ) {
+    if (!Array.isArray(rightTree) || rightTree.length === 0) {
       return leftTree;
     }
-    return collectBinaryNodes(
-      Operator.AND,
-      leftTree,
-      rightTree
-    );
+    return collectBinaryNodes(Operator.AND, leftTree, rightTree);
   },
 
   Not_not(_, expr) {

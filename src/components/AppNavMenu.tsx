@@ -1,5 +1,5 @@
 import { Typography, useTheme } from "@mui/material";
-import { FC, Fragment } from "react";
+import { type FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
@@ -35,7 +35,7 @@ export const AppNavGroup: FC = () => {
       <CustomNavItem href="/" label={t("home")} />
       {NAV_ITEMS.map((id, index) => {
         return (
-          <CustomNavItem key={"item" + index} href={`/${id}`} label={t(id)} />
+          <CustomNavItem key={`item${index}`} href={`/${id}`} label={t(id)} />
         );
       })}
     </Fragment>

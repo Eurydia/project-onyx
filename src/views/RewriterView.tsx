@@ -1,19 +1,13 @@
-import { AppNavGroup } from "$components/AppNavMenu";
-import { Editor } from "$components/Editor/Editor";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { RewriterViewLayout } from "$layouts/RewriterViewLayout";
-import { RewriterRouteLoaderData } from "$types/loader-data";
-import { Operator } from "$types/operators";
 import { Stack } from "@mui/material";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { type FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
+import { AppNavGroup } from "$/components/AppNavMenu";
+import { Editor } from "$/components/Editor/Editor";
+import type { RewriterRouteLoaderData } from "$/types/loader-data";
+import { Operator } from "$/types/operators";
+import { BaseLayout } from "$layouts/BaseLayout";
+import { RewriterViewLayout } from "$layouts/RewriterViewLayout";
 
 export const RewriterView: FC = () => {
   const { userInput: prevUserInput, items } =
@@ -34,7 +28,7 @@ export const RewriterView: FC = () => {
     return new Set(
       [...basis.entries()]
         .filter(([, isIncluded]) => isIncluded)
-        .map(([k]) => k)
+        .map(([k]) => k),
     );
   }, [basis]);
 
@@ -50,26 +44,20 @@ export const RewriterView: FC = () => {
       {
         method: "GET",
         action: "/rewriter",
-      }
+      },
     );
   }, [submit, userInput]);
 
-  const handleBasisChange = useCallback(
-    (k: Operator, v: boolean) => {
-      setBasis((prev) => {
-        const next = new Map(prev);
-        next.set(k, v);
-        return next;
-      });
-    },
-    []
-  );
+  const handleBasisChange = useCallback((k: Operator, v: boolean) => {
+    setBasis((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+      return next;
+    });
+  }, []);
 
   return (
-    <BaseLayout
-      title={t("rewriter")}
-      appHeader={<AppNavGroup />}
-    >
+    <BaseLayout title={t("rewriter")} appHeader={<AppNavGroup />}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

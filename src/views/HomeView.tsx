@@ -1,8 +1,3 @@
-import { BaseLayout } from "$layouts/BaseLayout";
-import { PALETTE_CHECKER_ROUTE } from "$theme/palette-checker-route";
-import { PALETTE_COMPARATOR_ROUTE } from "$theme/palette-comparator-route";
-import { PALETTE_EVALUATOR_ROUTE } from "$theme/palette-evaluator-route";
-import { PALETTE_REWRITER_ROUTE } from "$theme/palette-rewriter-route";
 import {
   BalanceRounded,
   BorderColorRounded,
@@ -16,13 +11,18 @@ import {
   CardHeader,
   Grid2,
   Stack,
-  Theme,
+  type Theme,
   Typography,
   useTheme,
 } from "@mui/material";
-import { FC, memo, ReactElement, useCallback } from "react";
+import { type FC, memo, type ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { BaseLayout } from "$layouts/BaseLayout";
+import { PALETTE_CHECKER_ROUTE } from "$theme/palette-checker-route";
+import { PALETTE_COMPARATOR_ROUTE } from "$theme/palette-comparator-route";
+import { PALETTE_EVALUATOR_ROUTE } from "$theme/palette-evaluator-route";
+import { PALETTE_REWRITER_ROUTE } from "$theme/palette-rewriter-route";
 
 const TOOLS = [
   {
@@ -65,7 +65,7 @@ const LanguageItemCard: FC<LanguageItemCardProps> = memo(
     });
     const handleClick = useCallback(
       () => i18n.changeLanguage(lang),
-      [lang]
+      [lang, i18n.changeLanguage]
     );
     return (
       <Typography
@@ -172,7 +172,7 @@ export const HomeView: FC = () => {
           {LANGUAGES.map((lang, index) => (
             <LanguageItemCard
               lang={lang}
-              key={"lang" + index}
+              key={`lang${index}`}
             />
           ))}
         </Stack>
@@ -185,7 +185,7 @@ export const HomeView: FC = () => {
       >
         {TOOLS.map(({ id, icon, palette }, index) => (
           <Grid2
-            key={"card" + index}
+            key={`card${index}`}
             size={1}
           >
             <ToolCard

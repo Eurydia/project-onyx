@@ -1,19 +1,14 @@
-import { parse } from "$core/interpreter/parser";
-import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
-import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { EvaluatorRouteLoaderData } from "$types/loader-data";
-import { LoaderFunction } from "react-router";
+import type { LoaderFunction } from "react-router";
+import { parse } from "$/core/interpreter/parser";
+import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
+import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 
-export const evaluatorRouteLoader: LoaderFunction = ({
-  request,
-}) => {
+export const evaluatorRouteLoader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);
   const userInputRaw = url.searchParams.get("input");
 
-  if (
-    userInputRaw === null ||
-    userInputRaw.trim().length === 0
-  ) {
+  if (userInputRaw === null || userInputRaw.trim().length === 0) {
     const loaderData: EvaluatorRouteLoaderData = {
       userInput: "",
       symbols: [],
@@ -35,9 +30,9 @@ export const evaluatorRouteLoader: LoaderFunction = ({
       continue;
     }
     const { tree } = parseResult;
-    syntaxTreeCollectSymbols(tree).forEach((symbol) =>
-      symbols.add(symbol)
-    );
+    syntaxTreeCollectSymbols(tree).forEach((symbol) => {
+      symbols.add(symbol);
+    });
     expressions.push({
       ok: true,
       inputRaw: userInput.trim(),
@@ -49,9 +44,7 @@ export const evaluatorRouteLoader: LoaderFunction = ({
   const loaderData: EvaluatorRouteLoaderData = {
     userInput: userInputRaw,
     items: expressions,
-    symbols: [...symbols].toSorted((a, b) =>
-      a.localeCompare(b)
-    ),
+    symbols: [...symbols].toSorted((a, b) => a.localeCompare(b)),
   };
   return loaderData;
 };

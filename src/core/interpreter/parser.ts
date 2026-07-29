@@ -1,13 +1,8 @@
-import {
-  grammar,
-  semantics,
-} from "$core/interpreter/grammar";
-import { Maybe } from "$types/generic";
-import { SyntaxTree } from "$types/syntax-tree";
+import { grammar, semantics } from "$/core/interpreter/grammar";
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 
-export const parse = (
-  content: string
-): Maybe<{ tree: SyntaxTree }> => {
+export const parse = (content: string): Maybe<{ tree: SyntaxTree }> => {
   const m = grammar.match(content);
   if (m.succeeded()) {
     const tree = semantics(m).buildTree();

@@ -1,7 +1,7 @@
-import { ExprTree } from "$types/expression-tree";
-import { SymbolTable } from "$types/syntax-tree";
-import { Paper, Stack, SxProps } from "@mui/material";
-import { FC, useEffect, useRef, useState } from "react";
+import { Paper, Stack, type SxProps } from "@mui/material";
+import { type FC, useEffect, useRef, useState } from "react";
+import type { ExprTree } from "$/types/expression-tree";
+import type { SymbolTable } from "$/types/syntax-tree";
 import { GraphControl } from "./GraphControl";
 import { Tree } from "./Tree";
 
@@ -46,9 +46,8 @@ export const Graph: FC<GraphProps> = (props) => {
         }
       }, 750);
     }
-    return () =>
-      clearInterval(intervalRef.current ?? undefined);
-  }, [isPlaying, maxStep, step]);
+    return () => clearInterval(intervalRef.current ?? undefined);
+  }, [isPlaying, maxStep]);
 
   useEffect(() => {
     setStep(1);
@@ -57,15 +56,8 @@ export const Graph: FC<GraphProps> = (props) => {
 
   return (
     <Stack spacing={1}>
-      <Paper
-        variant="outlined"
-        sx={slotProps.container}
-      >
-        <Tree
-          order={step}
-          tree={exprTree}
-          symbolTable={symbolTable}
-        />
+      <Paper variant="outlined" sx={slotProps.container}>
+        <Tree order={step} tree={exprTree} symbolTable={symbolTable} />
       </Paper>
       <GraphControl
         maxValue={maxStep}

@@ -1,8 +1,8 @@
-import { parse } from "$core/interpreter/parser";
-import { syntaxTreeNormalize } from "$core/syntax-tree/normalize";
-import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { CheckerRouteLoaderData } from "$types/loader-data";
-import { LoaderFunction } from "react-router";
+import type { LoaderFunction } from "react-router";
+import { parse } from "$/core/interpreter/parser";
+import { syntaxTreeNormalize } from "$/core/syntax-tree/normalize";
+import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import type { CheckerRouteLoaderData } from "$/types/loader-data";
 
 export const checkerRouteLoader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);

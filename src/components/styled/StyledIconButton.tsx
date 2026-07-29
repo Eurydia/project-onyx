@@ -3,7 +3,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { FC, KeyboardEvent, ReactNode } from "react";
+import type { FC, KeyboardEvent, ReactNode } from "react";
 
 type StyledTooltipIconButtonProps = {
   title: string;

@@ -4,7 +4,7 @@ import {
   CardContent,
   Collapse,
 } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { type FC, type ReactNode, useState } from "react";
 
 type ExpressionCardProps = {
   primary: ReactNode;

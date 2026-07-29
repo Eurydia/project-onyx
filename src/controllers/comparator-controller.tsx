@@ -1,11 +1,9 @@
-import { parse } from "$core/interpreter/parser";
-import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { ComparatorRouteLoaderData } from "$types/loader-data";
-import { LoaderFunction } from "react-router";
+import type { LoaderFunction } from "react-router";
+import { parse } from "$/core/interpreter/parser";
+import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import type { ComparatorRouteLoaderData } from "$/types/loader-data";
 
-export const comparatorRouteLoader: LoaderFunction = ({
-  request,
-}) => {
+export const comparatorRouteLoader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);
   const inputRaw = url.searchParams.get("input");
 
@@ -17,8 +15,7 @@ export const comparatorRouteLoader: LoaderFunction = ({
     return loaderData;
   }
 
-  const expressions: ComparatorRouteLoaderData["items"] =
-    [];
+  const expressions: ComparatorRouteLoaderData["items"] = [];
   for (const userInput of inputRaw.split(",")) {
     const parseResult = parse(userInput);
     expressions.push(
@@ -27,14 +24,12 @@ export const comparatorRouteLoader: LoaderFunction = ({
             ok: true,
             inputRaw: userInput.trim(),
             tree: parseResult.tree,
-            inputInterpretationLatex: syntaxTreeToLatex(
-              parseResult.tree
-            ),
+            inputInterpretationLatex: syntaxTreeToLatex(parseResult.tree),
           }
         : {
             ok: false,
             inputRaw: userInput.trim(),
-          }
+          },
     );
   }
 

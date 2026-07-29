@@ -1,13 +1,8 @@
-import { Operator } from "$types/operators";
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import { Operator } from "$/types/operators";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { AND, NOT, OR } from "../node";
 
-export const rewriteTree = (
-  tree: SyntaxTree
-): SyntaxTree => {
+export const rewriteTree = (tree: SyntaxTree): SyntaxTree => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
     case SyntaxTreeNodeType.IDEN:
@@ -21,10 +16,7 @@ export const rewriteTree = (
       const right = rewriteTree(tree.right);
       switch (tree.operator) {
         case Operator.IFF:
-          return AND(
-            OR(NOT(left), right),
-            OR(NOT(right), left)
-          );
+          return AND(OR(NOT(left), right), OR(NOT(right), left));
         case Operator.IMPL:
           return OR(NOT(left), right);
         case Operator.AND:

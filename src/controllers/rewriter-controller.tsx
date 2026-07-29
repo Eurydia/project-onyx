@@ -1,17 +1,12 @@
-import { parse } from "$core/interpreter/parser";
-import { syntaxTreeToLatex } from "$core/syntax-tree/to-latex";
-import { RewriterRouteLoaderData } from "$types/loader-data";
-import { LoaderFunction } from "react-router";
+import type { LoaderFunction } from "react-router";
+import { parse } from "$/core/interpreter/parser";
+import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
+import type { RewriterRouteLoaderData } from "$/types/loader-data";
 
-export const rewriterRouteLoader: LoaderFunction = ({
-  request,
-}) => {
+export const rewriterRouteLoader: LoaderFunction = ({ request }) => {
   const url = new URL(request.url);
   const userInputRaw = url.searchParams.get("input");
-  if (
-    userInputRaw === null ||
-    userInputRaw.trim().length === 0
-  ) {
+  if (userInputRaw === null || userInputRaw.trim().length === 0) {
     const loaderData: RewriterRouteLoaderData = {
       userInput: "",
       items: [],
@@ -30,9 +25,7 @@ export const rewriterRouteLoader: LoaderFunction = ({
       ok: true,
       inputRaw: userInput,
       originalTree: parseResult.tree,
-      inputInterpretationLatex: syntaxTreeToLatex(
-        parseResult.tree
-      ),
+      inputInterpretationLatex: syntaxTreeToLatex(parseResult.tree),
     });
   }
 

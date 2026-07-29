@@ -2,7 +2,10 @@ import { checkerRouteLoader } from "$controllers/checker-controller";
 import { comparatorRouteLoader } from "$controllers/comparator-controller";
 import { evaluatorRouteLoader } from "$controllers/evaluator-controller";
 import { rewriterRouteLoader } from "$controllers/rewriter-controller";
-import "$core/interpreter/parser";
+import "$/core/interpreter/parser";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import type { FC } from "react";
+import { createHashRouter, RouterProvider } from "react-router";
 import {
   THEME_CHECKER_ROUTE,
   THEME_COMPARATOR_ROUTE,
@@ -16,12 +19,6 @@ import { ErrorView } from "$views/ErrorView";
 import { EvaluatorView } from "$views/EvaluatorView";
 import { HomeView } from "$views/HomeView";
 import { RewriterView } from "$views/RewriterView";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { FC } from "react";
-import {
-  createHashRouter,
-  RouterProvider,
-} from "react-router";
 
 const ROUTER = createHashRouter(
   [
@@ -74,7 +71,7 @@ const ROUTER = createHashRouter(
   ],
   {
     basename: "/",
-  }
+  },
 );
 
 export const App: FC = () => {

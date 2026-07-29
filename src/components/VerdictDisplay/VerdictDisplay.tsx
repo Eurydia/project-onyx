@@ -1,20 +1,15 @@
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { syntaxTreeCollectSymbols } from "$core/syntax-tree/collect-symbols";
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
-import { FC } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 
 type VerdictDisplayProps = {
   result: SyntaxTree;
   originalLatex: string;
   itemNum: number;
 };
-export const VerdictDisplay: FC<VerdictDisplayProps> = (
-  props
-) => {
+export const VerdictDisplay: FC<VerdictDisplayProps> = (props) => {
   const { itemNum, result, originalLatex } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "checker-view.cards.output.text",
@@ -22,16 +17,10 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (
 
   let resultT = t("contingent", {
     variables:
-      "$" +
-      syntaxTreeCollectSymbols(result)
-        .toSorted()
-        .join(",") +
-      "$",
+      `$${syntaxTreeCollectSymbols(result).toSorted().join(",")}$`,
   });
   if (result.nodeType === SyntaxTreeNodeType.CONST) {
-    resultT = result.value
-      ? t("tautology")
-      : t("contradiction");
+    resultT = result.value ? t("tautology") : t("contradiction");
   }
 
   return (

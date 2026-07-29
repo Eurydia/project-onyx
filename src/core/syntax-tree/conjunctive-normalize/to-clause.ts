@@ -1,15 +1,9 @@
-import { Operator } from "$types/operators";
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import { Operator } from "$/types/operators";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 import { NOT } from "../node";
 import { syntaxTreeToString } from "../to-string";
 
-const collectClause = (
-  tree: SyntaxTree,
-  clause: Set<Set<SyntaxTree>>
-) => {
+const collectClause = (tree: SyntaxTree, clause: Set<Set<SyntaxTree>>) => {
   switch (tree.nodeType) {
     case SyntaxTreeNodeType.CONST:
     case SyntaxTreeNodeType.IDEN:
@@ -30,10 +24,7 @@ const collectClause = (
       const complement = new Set<string>();
       subclause.forEach((group) => {
         group.forEach((item) => {
-          if (
-            item.nodeType == SyntaxTreeNodeType.CONST &&
-            !item.value
-          ) {
+          if (item.nodeType === SyntaxTreeNodeType.CONST && !item.value) {
             return;
           }
           flattened.add(item);
@@ -66,31 +57,21 @@ const collectClause = (
 };
 
 const setEq = (a: Set<SyntaxTree>, b: Set<SyntaxTree>) => {
-  const _aStringSet = new Set(
-    [...a].map((item) => syntaxTreeToString(item))
-  );
-  const _bStringSet = new Set(
-    [...b].map((item) => syntaxTreeToString(item))
-  );
+  const _aStringSet = new Set([...a].map((item) => syntaxTreeToString(item)));
+  const _bStringSet = new Set([...b].map((item) => syntaxTreeToString(item)));
 
   return (
-    [..._aStringSet].every((item) =>
-      _bStringSet.has(item)
-    ) &&
+    [..._aStringSet].every((item) => _bStringSet.has(item)) &&
     [..._bStringSet].every((item) => _aStringSet.has(item))
   );
 };
 
 const removeDuplicate = (
-  clauses: Set<Set<SyntaxTree>>
+  clauses: Set<Set<SyntaxTree>>,
 ): Set<Set<SyntaxTree>> => {
   const seen = new Set<Set<SyntaxTree>>();
   for (const clause of clauses) {
-    if (
-      [...seen].some((seenClause) =>
-        setEq(clause, seenClause)
-      )
-    ) {
+    if ([...seen].some((seenClause) => setEq(clause, seenClause))) {
       continue;
     }
     seen.add(clause);

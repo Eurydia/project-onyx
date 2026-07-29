@@ -1,16 +1,14 @@
-import { TruthTable } from "$components/TruthTable";
-import { ExprTree } from "$types/expression-tree";
-import { Maybe } from "$types/generic";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Typography } from "@mui/material";
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
+import { TruthTable } from "$/components/TruthTable";
+import type { ExprTree } from "$/types/expression-tree";
+import type { Maybe } from "$/types/generic";
 
 type TruthTableManyProps = {
   items: Maybe<{ tree: ExprTree }>[];
 };
-export const TruthTableMany: FC<TruthTableManyProps> = (
-  props
-) => {
+export const TruthTableMany: FC<TruthTableManyProps> = (props) => {
   const { items } = props;
 
   const [tab, setTab] = useState(0);
@@ -24,24 +22,19 @@ export const TruthTableMany: FC<TruthTableManyProps> = (
       >
         {items.map((item, index) => (
           <Tab
-            key={"tab" + index}
+            key={`tab${index}`}
             value={index}
             disableRipple
             disabled={!item.ok}
             sx={{
-              textDecorationLine: !item.ok
-                ? "line-through"
-                : undefined,
+              textDecorationLine: !item.ok ? "line-through" : undefined,
             }}
             label={`EQUATION (${index + 1})`}
           />
         ))}
       </TabList>
       {items.map((item, index) => (
-        <TabPanel
-          key={"tab-panel" + index}
-          value={index}
-        >
+        <TabPanel key={`tab-panel${index}`} value={index}>
           {item.ok && (
             <TruthTable
               exprTree={item.tree}
@@ -53,9 +46,7 @@ export const TruthTableMany: FC<TruthTableManyProps> = (
             />
           )}
           {!item.ok && (
-            <Typography fontStyle="italic">
-              No applicable
-            </Typography>
+            <Typography fontStyle="italic">No applicable</Typography>
           )}
         </TabPanel>
       ))}

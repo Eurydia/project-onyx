@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 
 type StyledOutputCardProps = {
   title: string;

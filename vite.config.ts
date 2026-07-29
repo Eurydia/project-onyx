@@ -6,5 +6,7 @@ export default defineConfig({
   base: "/project-onyx/",
   plugins: [react()],
   assetsInclude: ["**/*.md"],
-  resolve: {},
+  resolve: {
+    tsconfigPaths: true,
+  },
 });

@@ -1,4 +1,4 @@
-import { Operator } from "$types/operators";
+import { Operator } from "$/types/operators";
 
 const OPERATOR_REPR = new Map<Operator, string>([
   [Operator.NOT, "\\lnot"],

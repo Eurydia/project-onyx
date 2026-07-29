@@ -1,21 +1,19 @@
-import { EvaluationGraph } from "$components/EvaluationGraph";
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { exprTreeFlattenStepByStep } from "$core/expr-tree/collect-steps";
-import { exprTreeToLatex } from "$core/expr-tree/to-latex";
-import { ExprTree } from "$types/expression-tree";
-import { SymbolTable } from "$types/syntax-tree";
 import { Stack, Typography } from "@mui/material";
-import { FC, memo, useMemo } from "react";
+import { type FC, memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { EvaluationGraph } from "$/components/EvaluationGraph";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import { exprTreeFlattenStepByStep } from "$/core/expr-tree/collect-steps";
+import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
+import type { ExprTree } from "$/types/expression-tree";
+import type { SymbolTable } from "$/types/syntax-tree";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
 type EvaluationDisplayProps = {
   exprTree: ExprTree;
   symbolTable: SymbolTable;
 };
-const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
-  props
-) => {
+const EvaluationDisplay_: FC<EvaluationDisplayProps> = (props) => {
   const { exprTree, symbolTable } = props;
   const { t } = useTranslation("views", {
     keyPrefix: "evaluator-view.cards.step-by-step",
@@ -23,20 +21,14 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
 
   const steps = useMemo(
     () => exprTreeFlattenStepByStep(exprTree, symbolTable),
-    [exprTree, symbolTable]
+    [exprTree, symbolTable],
   );
 
-  if (steps.length === 0) {
-    return (
-      <Typography fontStyle="italic">
-        {t("no-evaluation-step-to-display")}
-      </Typography>
-    );
-  }
+  const stepLast = useMemo(() => {
+    return steps.at(-1);
+  }, [steps]);
 
-  const { evaluated, repr } = steps.at(-1)!;
-
-  return (
+  return stepLast !== undefined ? (
     <Stack spacing={2}>
       <EvaluationGraph
         exprTree={exprTree}
@@ -49,7 +41,7 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
       />
       {steps.map((step, index) => (
         <EvaluationDisplayStep
-          key={"step" + index}
+          key={`step${index}`}
           step={step}
           stepIndex={index + 1}
           references={steps}
@@ -57,28 +49,26 @@ const EvaluationDisplay_: FC<EvaluationDisplayProps> = (
       ))}
       <StyledLatex>
         {t("therefore-formula-is-value", {
-          formula: `$$${repr}$$`,
-          value: t(evaluated ? "true" : "false"),
+          formula: `$$${stepLast.repr}$$`,
+          value: t(stepLast.evaluated ? "true" : "false"),
         })}
       </StyledLatex>
     </Stack>
+  ) : (
+    <Typography fontStyle="italic">
+      {t("no-evaluation-step-to-display")}
+    </Typography>
   );
 };
 
-export const EvaluationDisplay = memo(
-  EvaluationDisplay_,
-  (prev, next) => {
-    if (
-      exprTreeToLatex(prev.exprTree) !==
-      exprTreeToLatex(next.exprTree)
-    ) {
+export const EvaluationDisplay = memo(EvaluationDisplay_, (prev, next) => {
+  if (exprTreeToLatex(prev.exprTree) !== exprTreeToLatex(next.exprTree)) {
+    return false;
+  }
+  for (const [k, v] of prev.symbolTable.entries()) {
+    if (next.symbolTable.get(k) !== v) {
       return false;
     }
-    for (const [k, v] of prev.symbolTable.entries()) {
-      if (next.symbolTable.get(k) !== v) {
-        return false;
-      }
-    }
-    return true;
   }
-);
+  return true;
+});

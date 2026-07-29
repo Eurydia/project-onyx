@@ -1,4 +1,4 @@
-import {
+import type {
   SymbolTable,
   SyntaxTreeNodeType,
 } from "./syntax-tree";

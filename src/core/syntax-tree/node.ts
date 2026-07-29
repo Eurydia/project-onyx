@@ -1,11 +1,11 @@
-import { Operator } from "$types/operators";
+import { Operator } from "$/types/operators";
 import {
-  SyntaxTree,
-  SyntaxTreeNodeBinary,
-  SyntaxTreeNodeConst,
+  type SyntaxTree,
+  type SyntaxTreeNodeBinary,
+  type SyntaxTreeNodeConst,
   SyntaxTreeNodeType,
-  SyntaxTreeNodeUnary,
-} from "$types/syntax-tree";
+  type SyntaxTreeNodeUnary,
+} from "$/types/syntax-tree";
 
 export const NOT = (operand: SyntaxTree) => {
   return {
@@ -18,7 +18,7 @@ export const NOT = (operand: SyntaxTree) => {
 export const BINARY = (
   operator: Exclude<Operator, Operator.NOT>,
   left: SyntaxTree,
-  right: SyntaxTree
+  right: SyntaxTree,
 ) => {
   return {
     nodeType: SyntaxTreeNodeType.BINARY,
@@ -28,10 +28,7 @@ export const BINARY = (
   } as SyntaxTreeNodeBinary;
 };
 
-export const AND = (
-  left: SyntaxTree,
-  right: SyntaxTree
-) => {
+export const AND = (left: SyntaxTree, right: SyntaxTree) => {
   return BINARY(Operator.AND, left, right);
 };
 
@@ -39,16 +36,10 @@ export const OR = (left: SyntaxTree, right: SyntaxTree) => {
   return BINARY(Operator.OR, left, right);
 };
 
-export const IMPLIES = (
-  left: SyntaxTree,
-  right: SyntaxTree
-) => {
+export const IMPLIES = (left: SyntaxTree, right: SyntaxTree) => {
   return BINARY(Operator.IMPL, left, right);
 };
-export const IFF = (
-  left: SyntaxTree,
-  right: SyntaxTree
-) => {
+export const IFF = (left: SyntaxTree, right: SyntaxTree) => {
   return BINARY(Operator.IFF, left, right);
 };
 

@@ -8,6 +8,7 @@ import EN_VIEWS from "./en/views";
 import { TH_COMPONENTS } from "./th/component";
 import { TH_NAV } from "./th/nav";
 import TH_VIEWS from "./th/views";
+
 i18next
   .use(Backend)
   .use(LangDectector)

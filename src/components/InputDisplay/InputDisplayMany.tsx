@@ -1,6 +1,3 @@
-import { StyledAlert } from "$components/Styled/StyledAlert";
-import { StyledLatex } from "$components/Styled/StyledLatex";
-import { Maybe } from "$types/generic";
 import {
   List,
   ListItem,
@@ -9,17 +6,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { StyledAlert } from "$/components/Styled/StyledAlert";
+import { StyledLatex } from "$/components/Styled/StyledLatex";
+import type { Maybe } from "$/types/generic";
 
 type InputDisplayManyProps = {
   items: ({ inputRaw: string } & Maybe<{
     inputInterpretationLatex: string;
   }>)[];
 };
-export const InputDisplayMany: FC<InputDisplayManyProps> = (
-  props
-) => {
+export const InputDisplayMany: FC<InputDisplayManyProps> = (props) => {
   const { items } = props;
   const { t } = useTranslation("components", {
     keyPrefix: "input-display",
@@ -33,7 +31,7 @@ export const InputDisplayMany: FC<InputDisplayManyProps> = (
         if (!item.ok) {
           return (
             <StyledLatex
-              key={"expr" + index}
+              key={`expr${index}`}
               sx={{
                 color: ({ palette }) => palette.error.main,
               }}
@@ -44,7 +42,7 @@ export const InputDisplayMany: FC<InputDisplayManyProps> = (
         }
 
         return (
-          <StyledLatex key={"expr" + index}>
+          <StyledLatex key={`expr${index}`}>
             {`$$${item.inputInterpretationLatex} \\tag{${inputNum}}$$`}
           </StyledLatex>
         );
@@ -61,11 +59,9 @@ export const InputDisplayMany: FC<InputDisplayManyProps> = (
               }
               const inputNum = index + 1;
               return (
-                <ListItem key={"invalid-input" + index}>
+                <ListItem key={`invalid-input${index}`}>
                   <ListItemIcon>
-                    <Typography>
-                      {`(${inputNum})`}
-                    </Typography>
+                    <Typography>{`(${inputNum})`}</Typography>
                   </ListItemIcon>
                   <ListItemText disableTypography>
                     {item.inputRaw.length === 0 ? (

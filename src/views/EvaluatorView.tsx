@@ -1,17 +1,12 @@
-import { AppNavGroup } from "$components/AppNavMenu";
-import { Editor } from "$components/Editor/Editor";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { EvaluatorViewLayout } from "$layouts/EvaluatorViewLayout";
-import { EvaluatorRouteLoaderData } from "$types/loader-data";
 import { Stack } from "@mui/material";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { type FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
+import { AppNavGroup } from "$/components/AppNavMenu";
+import { Editor } from "$/components/Editor/Editor";
+import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
+import { BaseLayout } from "$layouts/BaseLayout";
+import { EvaluatorViewLayout } from "$layouts/EvaluatorViewLayout";
 
 export const EvaluatorView: FC = () => {
   const {
@@ -50,27 +45,21 @@ export const EvaluatorView: FC = () => {
       {
         method: "GET",
         action: "/evaluator",
-      }
+      },
     );
   }, [submit, userInput]);
 
-  const handleSymbolChange = useCallback(
-    (k: string, v: boolean) => {
-      setSymbolTable((prev) => {
-        const next = new Map(prev);
-        next.set(k, v);
-        return next;
-      });
-      return;
-    },
-    []
-  );
+  const handleSymbolChange = useCallback((k: string, v: boolean) => {
+    setSymbolTable((prev) => {
+      const next = new Map(prev);
+      next.set(k, v);
+      return next;
+    });
+    return;
+  }, []);
 
   return (
-    <BaseLayout
-      appHeader={<AppNavGroup />}
-      title={t("evaluator")}
-    >
+    <BaseLayout appHeader={<AppNavGroup />} title={t("evaluator")}>
       <Stack spacing={8}>
         <Editor
           value={userInput}

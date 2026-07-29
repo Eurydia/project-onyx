@@ -1,15 +1,13 @@
-import {
-  SyntaxTree,
-  SyntaxTreeNodeType,
-} from "$types/syntax-tree";
+import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
 
-export const syntaxTreeCollectSymbols = (
-  tree: SyntaxTree
-) => {
+export const syntaxTreeCollectSymbols = (tree: SyntaxTree) => {
   const symbols = new Set<string>();
   const nodes = [tree];
   while (nodes.length > 0) {
-    const curr = nodes.shift()!;
+    const curr = nodes.shift();
+    if (curr === undefined) {
+      break;
+    }
     switch (curr.nodeType) {
       case SyntaxTreeNodeType.IDEN:
         symbols.add(curr.symbol);
@@ -23,7 +21,5 @@ export const syntaxTreeCollectSymbols = (
         break;
     }
   }
-  return [...symbols].toSorted((a, b) =>
-    a.localeCompare(b)
-  );
+  return [...symbols].toSorted((a, b) => a.localeCompare(b));
 };
