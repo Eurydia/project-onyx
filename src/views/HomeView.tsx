@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import { type FC, memo, type ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { BaseLayout } from "$layouts/BaseLayout";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { PALETTE_CHECKER_ROUTE } from "$theme/palette-checker-route";
 import { PALETTE_COMPARATOR_ROUTE } from "$theme/palette-comparator-route";
 import { PALETTE_EVALUATOR_ROUTE } from "$theme/palette-evaluator-route";
@@ -60,7 +60,7 @@ const LanguageItemCard: FC<LanguageItemCardProps> = memo(
     });
     const handleClick = useCallback(
       () => i18n.changeLanguage(lang),
-      [lang, i18n.changeLanguage]
+      [lang, i18n.changeLanguage],
     );
     return (
       <Typography
@@ -74,7 +74,7 @@ const LanguageItemCard: FC<LanguageItemCardProps> = memo(
       </Typography>
     );
   },
-  () => true
+  () => true,
 );
 
 type ToolCardProps = {
@@ -95,10 +95,10 @@ const ToolCard: FC<ToolCardProps> = memo(
       <Card
         elevation={0}
         sx={{
-          "height": "100%",
-          "backgroundColor": light,
-          "color": dark,
-          "transition": "all 0.2s ease-out",
+          height: "100%",
+          backgroundColor: light,
+          color: dark,
+          transition: "all 0.2s ease-out",
           "&:hover": {
             boxShadow: 20,
           },
@@ -144,7 +144,7 @@ const ToolCard: FC<ToolCardProps> = memo(
       </Card>
     );
   },
-  () => true
+  () => true,
 );
 
 export const HomeView: FC = () => {
@@ -167,29 +167,15 @@ export const HomeView: FC = () => {
           }}
         >
           {LANGUAGES.map((lang, index) => (
-            <LanguageItemCard
-              lang={lang}
-              key={`lang${index}`}
-            />
+            <LanguageItemCard lang={lang} key={`lang${index}`} />
           ))}
         </Stack>
       }
     >
-      <Grid
-        container
-        columns={{ xs: 1, md: 2 }}
-        spacing={4}
-      >
+      <Grid container columns={{ xs: 1, md: 2 }} spacing={4}>
         {TOOLS.map(({ id, icon, palette }, index) => (
-          <Grid
-            key={`card${index}`}
-            size={1}
-          >
-            <ToolCard
-              id={id}
-              icon={icon}
-              palette={palette}
-            />
+          <Grid key={`card${index}`} size={1}>
+            <ToolCard id={id} icon={icon} palette={palette} />
           </Grid>
         ))}
       </Grid>

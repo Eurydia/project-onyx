@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { SymbolTable } from "$/types/syntax-tree";
-import { StyledLatex } from "./Styled/StyledLatex";
+import { StyledLatex } from "./styled/StyledLatex";
 
 type CustomRadioGroupProps = {
   symbol: string;

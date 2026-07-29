@@ -9,12 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { type FC, memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { exprTreeCollectSymbols } from "$/core/expr-tree/collect-symbols";
 import { getInterpretations } from "$/core/expr-tree/interpretations";
 import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
 import type { ExprTree } from "$/types/expression-tree";
+import { StyledAlert } from "../styled/StyledAlert";
+import { StyledLatex } from "../styled/StyledLatex";
 import { TruthTableCell } from "./TruthTableCell";
 
 type TruthTableProps = {

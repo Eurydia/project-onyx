@@ -7,12 +7,12 @@ import { EvaluationDisplayMany } from "$/components/EvaluationDisplay";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { PropositionConfig } from "$/components/PropositionConfig";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
 import type { SymbolTable } from "$/types/syntax-tree";
+import { StyledAlert } from "../styled/StyledAlert";
+import { StyledLatex } from "../styled/StyledLatex";
 
 type EvaluatorViewLayoutProps = {
   symbolTable: SymbolTable;
@@ -32,15 +32,11 @@ export const EvaluatorViewLayout: FC<EvaluatorViewLayoutProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("output.title")}
       </Typography>
       <PropositionConfig value={symbolTable} onChange={onSymbolChange} />
@@ -83,9 +79,7 @@ export const EvaluatorViewLayout: FC<EvaluatorViewLayoutProps> = (props) => {
             />
           );
         })}
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("step-by-step.title")}
       </Typography>
       <EvaluationDisplayMany

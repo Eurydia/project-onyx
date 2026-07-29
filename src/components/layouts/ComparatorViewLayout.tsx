@@ -8,13 +8,13 @@ import { type FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$/core/expr-tree/verify-tautology";
 import { IFF } from "$/core/syntax-tree/node";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
+import { StyledAlert } from "../styled/StyledAlert";
+import { StyledLatex } from "../styled/StyledLatex";
 
 type ComparatorViewLayoutProps = {
   items: ComparatorRouteLoaderData["items"];
@@ -45,15 +45,11 @@ export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("output.title")}
       </Typography>
       {validItems.length <= 1 && (
@@ -66,7 +62,9 @@ export const ComparatorViewLayout: FC<ComparatorViewLayoutProps> = (props) => {
       {mainItemIndex !== null && validItems.length > 1 && (
         <RadioGroup
           value={mainItemIndex}
-          onChange={(_, value) => onMainItemIndexChange(Number.parseInt(value, 10))}
+          onChange={(_, value) =>
+            onMainItemIndexChange(Number.parseInt(value, 10))
+          }
         >
           {items.map((expr, index) => {
             if (!expr.ok) {

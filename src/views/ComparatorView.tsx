@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
+import { ComparatorViewLayout } from "$/components/layouts/ComparatorViewLayout";
 import type { ComparatorRouteLoaderData } from "$/types/loader-data";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { ComparatorViewLayout } from "$layouts/ComparatorViewLayout";
 
 export const ComparatorView: FC = () => {
   const { items, userInput: prevUserInput } =

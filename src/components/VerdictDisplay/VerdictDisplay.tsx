@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
 import { type SyntaxTree, SyntaxTreeNodeType } from "$/types/syntax-tree";
+import { StyledLatex } from "../styled/StyledLatex";
 
 type VerdictDisplayProps = {
   result: SyntaxTree;
@@ -16,8 +16,7 @@ export const VerdictDisplay: FC<VerdictDisplayProps> = (props) => {
   });
 
   let resultT = t("contingent", {
-    variables:
-      `$${syntaxTreeCollectSymbols(result).toSorted().join(",")}$`,
+    variables: `$${syntaxTreeCollectSymbols(result).toSorted().join(",")}$`,
   });
   if (result.nodeType === SyntaxTreeNodeType.CONST) {
     resultT = result.value ? t("tautology") : t("contradiction");

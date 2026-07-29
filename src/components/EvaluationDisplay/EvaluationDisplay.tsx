@@ -3,11 +3,11 @@ import Typography from "@mui/material/Typography";
 import { type FC, memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { EvaluationGraph } from "$/components/EvaluationGraph";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { exprTreeFlattenStepByStep } from "$/core/expr-tree/collect-steps";
 import { exprTreeToLatex } from "$/core/expr-tree/to-latex";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
+import { StyledLatex } from "../styled/StyledLatex";
 import { EvaluationDisplayStep } from "./EvaluationDisplayStep";
 
 type EvaluationDisplayProps = {

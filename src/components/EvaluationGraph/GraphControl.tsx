@@ -8,7 +8,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledTooltipIconButton } from "$/components/Styled/StyledIconButton";
+import { StyledTooltipIconButton } from "../styled/StyledIconButton";
 
 type GraphControlProps = {
   maxValue: number;

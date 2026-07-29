@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
+import { RewriterViewLayout } from "$/components/layouts/RewriterViewLayout";
 import type { RewriterRouteLoaderData } from "$/types/loader-data";
 import { Operator } from "$/types/operators";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { RewriterViewLayout } from "$layouts/RewriterViewLayout";
 
 export const RewriterView: FC = () => {
   const { userInput: prevUserInput, items } =

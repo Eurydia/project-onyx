@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
-import type { EvaluationStep } from "$/core/expr-tree/exprTreeFlattenStepByStep";
+import type { EvaluationStep } from "$/core/expr-tree/collect-steps";
+import { StyledLatex } from "../styled/StyledLatex";
 
 type EvaluationDisplayStepMiniProps = {
   references: EvaluationStep[];

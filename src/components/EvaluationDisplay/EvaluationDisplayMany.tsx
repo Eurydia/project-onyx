@@ -5,10 +5,10 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import { type FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
 import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import type { SymbolTable } from "$/types/syntax-tree";
+import { StyledAlert } from "../styled/StyledAlert";
 import { EvaluationDisplay } from "./EvaluationDisplay";
 
 type EvaluationDisplayManyProps = {

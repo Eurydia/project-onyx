@@ -1,6 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import { Group } from "@visx/group";
-import type { HierarchyPointNode } from "@visx/hierarchy/lib/types";
+import type { HierarchyPointNode } from "@visx/hierarchy";
 import katex from "katex";
 import { type FC, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

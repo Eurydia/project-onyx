@@ -8,8 +8,6 @@ import { type FC, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
-import { StyledLatex } from "$/components/Styled/StyledLatex";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { operatorToLatex } from "$/core/operator";
@@ -19,6 +17,8 @@ import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
 import type { RewriterRouteLoaderData } from "$/types/loader-data";
 import { Operator } from "$/types/operators";
+import { StyledAlert } from "../styled/StyledAlert";
+import { StyledLatex } from "../styled/StyledLatex";
 
 type RewriterOutputItemProps = {
   itemNum: number;
@@ -91,15 +91,11 @@ export const RewriterViewLayout: FC<RewriterViewLayoutProps> = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("input-interpretation.title")}
       </Typography>
       <InputDisplayMany items={items} />
-      <Typography
-        sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}
-      >
+      <Typography sx={{ fontWeight: 900, fontSize: typography.h3.fontSize }}>
         {t("output.title")}
       </Typography>
       {validItems.length === 0 && (

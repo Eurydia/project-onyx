@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
+import { CheckerViewLayout } from "$/components/layouts/CheckerViewLayout";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { CheckerViewLayout } from "$layouts/CheckerViewLayout";
 
 export const CheckerView: FC = () => {
   const { items, userInput: prevUserInput } =

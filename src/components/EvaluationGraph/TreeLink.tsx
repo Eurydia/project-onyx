@@ -1,8 +1,5 @@
 import { useTheme } from "@mui/material/styles";
-import type {
-  HierarchyPointLink,
-  HierarchyPointNode,
-} from "@visx/hierarchy/lib/types";
+import type { HierarchyPointLink, HierarchyPointNode } from "@visx/hierarchy";
 import { LinkVertical } from "@visx/shape";
 import type { FC } from "react";
 import type { ExprTree } from "$/types/expression-tree";

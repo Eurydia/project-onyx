@@ -1,7 +1,7 @@
-import { checkerRouteLoader } from "$controllers/checker-controller";
-import { comparatorRouteLoader } from "$controllers/comparator-controller";
-import { evaluatorRouteLoader } from "$controllers/evaluator-controller";
-import { rewriterRouteLoader } from "$controllers/rewriter-controller";
+import { checkerRouteLoader } from "$/controllers/checker-controller";
+import { comparatorRouteLoader } from "$/controllers/comparator-controller";
+import { evaluatorRouteLoader } from "$/controllers/evaluator-controller";
+import { rewriterRouteLoader } from "$/controllers/rewriter-controller";
 import "$/core/interpreter/parser";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
@@ -13,13 +13,13 @@ import {
   THEME_EVALUATOR_ROUTE,
   THEME_GLOBAL,
   THEME_REWRITER_ROUTE,
-} from "$theme/index";
-import { CheckerView } from "$views/CheckerView";
-import { ComparatorView } from "$views/ComparatorView";
-import { ErrorView } from "$views/ErrorView";
-import { EvaluatorView } from "$views/EvaluatorView";
-import { HomeView } from "$views/HomeView";
-import { RewriterView } from "$views/RewriterView";
+} from "$/App/theme/index";
+import { CheckerView } from "$/views/CheckerView";
+import { ComparatorView } from "$/views/ComparatorView";
+import { ErrorView } from "$/views/ErrorView";
+import { EvaluatorView } from "$/views/EvaluatorView";
+import { HomeView } from "$/views/HomeView";
+import { RewriterView } from "$/views/RewriterView";
 
 const ROUTER = createHashRouter(
   [

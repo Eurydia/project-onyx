@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useLoaderData, useSubmit } from "react-router";
 import { AppNavGroup } from "$/components/AppNavMenu";
 import { Editor } from "$/components/Editor/Editor";
+import { BaseLayout } from "$/components/layouts/BaseLayout";
+import { EvaluatorViewLayout } from "$/components/layouts/EvaluatorViewLayout";
 import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
-import { BaseLayout } from "$layouts/BaseLayout";
-import { EvaluatorViewLayout } from "$layouts/EvaluatorViewLayout";
 
 export const EvaluatorView: FC = () => {
   const {

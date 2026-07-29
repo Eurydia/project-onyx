@@ -2,10 +2,10 @@ import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { ExpressionCard } from "$/components/ExpressionCard";
-import { StyledAlert } from "$/components/Styled/StyledAlert";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import type { CheckerRouteLoaderData } from "$/types/loader-data";
+import { StyledAlert } from "../styled/StyledAlert";
 import { VerdictDisplay } from "./VerdictDisplay";
 
 type VerdictDisplayManyProps = {
