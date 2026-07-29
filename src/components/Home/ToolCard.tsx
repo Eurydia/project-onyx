@@ -1,11 +1,10 @@
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import type { Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { Link } from "@tanstack/react-router";
 import { type FC, memo, type ReactElement } from "react";
+import { RouterCardActionArea } from "$/components/router/router-card-action-area";
 
 export const ToolCard: FC<{
   palette: Theme["palette"];
@@ -30,8 +29,7 @@ export const ToolCard: FC<{
           },
         }}
       >
-        <CardActionArea
-          component={Link}
+        <RouterCardActionArea
           to={to}
           sx={{ padding: 2, height: "100%" }}
         >
@@ -65,7 +63,7 @@ export const ToolCard: FC<{
           <CardContent>
             <Typography>{description}</Typography>
           </CardContent>
-        </CardActionArea>
+        </RouterCardActionArea>
       </Card>
     );
   },

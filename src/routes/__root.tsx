@@ -1,13 +1,13 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { THEME_GLOBAL } from "$/App/theme";
+import { RouterLink } from "$/components/router/router-link";
 import { m } from "$/libs/paraglide/messages";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
 
 export const Route = createRootRoute({
   component: RootRouteComponent,
@@ -41,8 +41,7 @@ function ErrorRouteComponent() {
           }}
         />
         <CardActions disableSpacing>
-          <Typography
-            component={Link}
+          <RouterLink
             to="/"
             sx={{
               color: "primary.main",
@@ -53,7 +52,7 @@ function ErrorRouteComponent() {
             }}
           >
             {m["views.error-view.return-home"]()}
-          </Typography>
+          </RouterLink>
         </CardActions>
       </Card>
     </Box>

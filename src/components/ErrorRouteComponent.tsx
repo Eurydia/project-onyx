@@ -2,9 +2,8 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import { Link } from "@tanstack/react-router";
 import { m } from "$/libs/paraglide/messages";
+import { RouterLink } from "./router/router-link";
 
 export function ErrorRouteComponent() {
   return (
@@ -23,8 +22,7 @@ export function ErrorRouteComponent() {
           }}
         />
         <CardActions disableSpacing>
-          <Typography
-            component={Link}
+          <RouterLink
             to="/"
             sx={{
               color: "primary.main",
@@ -35,7 +33,7 @@ export function ErrorRouteComponent() {
             }}
           >
             {m["views.error-view.return-home"]()}
-          </Typography>
+          </RouterLink>
         </CardActions>
       </Card>
     </Box>
