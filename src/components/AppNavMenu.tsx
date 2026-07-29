@@ -1,55 +1,50 @@
-import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
-import { Link } from "react-router";
 import { m } from "$/paraglide/messages";
+import { RouterLink } from "./router/router-link";
 
 const NAV_ITEMS = [
   {
-    id: "evaluator",
+    to: "/evaluator",
     label: m["nav.evaluator"],
   },
   {
-    id: "comparator",
+    to: "/comparator",
     label: m["nav.comparator"],
   },
   {
-    id: "checker",
+    to: "/checker",
     label: m["nav.checker"],
   },
   {
-    id: "rewriter",
+    to: "/rewriter",
     label: m["nav.rewriter"],
   },
 ] as const;
 
 const CustomNavItem: FC<{
-  href: string;
+  to: "/" | (typeof NAV_ITEMS)[number]["to"];
   label: string;
 }> = (props) => {
-  const { href, label } = props;
+  const { to, label } = props;
   return (
-    <Typography
-      component={Link}
-      to={href}
+    <RouterLink
+      to={to}
       sx={(theme) => ({
         color: theme.palette.primary.dark,
         textTransform: "capitalize",
-        textDecorationLine: "none",
       })}
     >
       {label}
-    </Typography>
+    </RouterLink>
   );
 };
 
 export const AppNavGroup: FC = () => {
   return (
     <Fragment>
-      <CustomNavItem href="/" label={m["nav.home"]()} />
-      {NAV_ITEMS.map(({ id, label }, index) => {
-        return (
-          <CustomNavItem key={`item${index}`} href={`/${id}`} label={label()} />
-        );
+      <CustomNavItem to="/" label={m["nav.home"]()} />
+      {NAV_ITEMS.map(({ to, label }, index) => {
+        return <CustomNavItem key={`item${index}`} to={to} label={label()} />;
       })}
     </Fragment>
   );

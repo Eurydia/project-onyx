@@ -1,5 +1,6 @@
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import babel from "@rolldown/plugin-babel";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
@@ -7,6 +8,10 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "/project-onyx/",
   plugins: [
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+    }),
     paraglideVitePlugin({
       project: "./project.inlang",
       outdir: "./src/paraglide",

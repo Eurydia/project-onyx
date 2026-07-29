@@ -10,8 +10,8 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import type { Theme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { type FC, memo, type ReactElement } from "react";
-import { Link } from "react-router";
 import {
   THEME_CHECKER_ROUTE,
   THEME_COMPARATOR_ROUTE,
@@ -20,42 +20,37 @@ import {
 } from "$/App/theme";
 import { BaseLayout } from "$/components/layouts/BaseLayout";
 import { m } from "$/paraglide/messages";
-import { setLocale, type Locale } from "$/paraglide/runtime.js";
+import { type Locale, setLocale } from "$/paraglide/runtime.js";
 
 const TOOLS = [
   {
-    id: "evaluator",
+    to: "/evaluator",
     icon: <CalculateRounded fontSize="inherit" />,
     palette: THEME_EVALUATOR_ROUTE.palette,
     title: m["views.home-view.cards.evaluator.title"],
     description: m["views.home-view.cards.evaluator.desc"],
   },
   {
-    id: "comparator",
+    to: "/comparator",
     icon: <BalanceRounded fontSize="inherit" />,
     palette: THEME_COMPARATOR_ROUTE.palette,
     title: m["views.home-view.cards.comparator.title"],
     description: m["views.home-view.cards.comparator.desc"],
   },
   {
-    id: "checker",
+    to: "/checker",
     icon: <RuleRounded fontSize="inherit" />,
     palette: THEME_CHECKER_ROUTE.palette,
     title: m["views.home-view.cards.checker.title"],
     description: m["views.home-view.cards.checker.desc"],
   },
   {
-    id: "rewriter",
+    to: "/rewriter",
     icon: <BorderColorRounded fontSize="inherit" />,
     palette: THEME_REWRITER_ROUTE.palette,
     title: m["views.home-view.cards.rewriter.title"],
     description: m["views.home-view.cards.rewriter.desc"],
   },
-  // {
-  //   id: "reasoner",
-  //   icon: <EmojiObjectsRounded fontSize="inherit" />,
-  //   palette: PALETTE_REWRITER_ROUTE,
-  // },
 ] as const;
 
 const LANGUAGES = [
@@ -97,14 +92,13 @@ const LanguageItemCard: FC<{
 
 const ToolCard: FC<{
   palette: Theme["palette"];
-  id: string;
+  to: (typeof TOOLS)[number]["to"];
   icon: ReactElement;
   title: string;
   description: string;
 }> = memo(
   (props) => {
-    const { palette, id, icon, title, description } = props;
-    const href = `/${id}`;
+    const { palette, to, icon, title, description } = props;
     const { light, dark } = palette.primary;
     return (
       <Card
@@ -121,7 +115,7 @@ const ToolCard: FC<{
       >
         <CardActionArea
           component={Link}
-          to={href}
+          to={to}
           sx={{ padding: 2, height: "100%" }}
         >
           <CardContent
@@ -161,39 +155,41 @@ const ToolCard: FC<{
   () => true,
 );
 
-export const HomeView: FC = () => {
-  return (
-    <BaseLayout
-      title={m["views.home-view.boolean-algebra-interpreter"]()}
-      appHeader={
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            flexWrap: "wrap",
-            justifyContent: "flex-end",
-            width: "100%",
-          }}
-        >
-          {LANGUAGES.map(({ locale, label }) => (
-            <LanguageItemCard locale={locale} label={label()} key={locale} />
-          ))}
-        </Stack>
-      }
-    >
-      <Grid container columns={{ xs: 1, md: 2 }} spacing={4}>
-        {TOOLS.map(({ id, icon, palette, title, description }, index) => (
-          <Grid key={`card${index}`} size={1}>
-            <ToolCard
-              id={id}
-              icon={icon}
-              palette={palette}
-              title={title()}
-              description={description()}
-            />
-          </Grid>
+const HomeRouteComponent: FC = () => (
+  <BaseLayout
+    title={m["views.home-view.boolean-algebra-interpreter"]()}
+    appHeader={
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+          width: "100%",
+        }}
+      >
+        {LANGUAGES.map(({ locale, label }) => (
+          <LanguageItemCard locale={locale} label={label()} key={locale} />
         ))}
-      </Grid>
-    </BaseLayout>
-  );
-};
+      </Stack>
+    }
+  >
+    <Grid container columns={{ xs: 1, md: 2 }} spacing={4}>
+      {TOOLS.map(({ to, icon, palette, title, description }, index) => (
+        <Grid key={`card${index}`} size={1}>
+          <ToolCard
+            to={to}
+            icon={icon}
+            palette={palette}
+            title={title()}
+            description={description()}
+          />
+        </Grid>
+      ))}
+    </Grid>
+  </BaseLayout>
+);
+
+export const Route = createFileRoute("/")({
+  component: HomeRouteComponent,
+});
