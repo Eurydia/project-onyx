@@ -4,10 +4,15 @@ import type { FC } from "react";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { VerdictDisplayMany } from "$/components/VerdictDisplay";
 import { m } from "$/paraglide/messages";
-import type { CheckerRouteLoaderData } from "$/types/loader-data";
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 
 export const CheckerViewLayout: FC<{
-  items: CheckerRouteLoaderData["items"];
+  items: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    normalizedTree: SyntaxTree;
+    originalTree: SyntaxTree;
+  }>)[];
 }> = (props) => {
   const { items } = props;
   return (

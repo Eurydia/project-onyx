@@ -8,15 +8,18 @@ import { PropositionConfig } from "$/components/PropositionConfig";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { m } from "$/paraglide/messages";
-import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
-import type { SymbolTable } from "$/types/syntax-tree";
+import type { Maybe } from "$/types/generic";
+import type { SymbolTable, SyntaxTree } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
 export const EvaluatorViewLayout: FC<{
   symbolTable: SymbolTable;
   onSymbolChange: (k: string, v: boolean) => void;
-  items: EvaluatorRouteLoaderData["items"];
+  items: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    tree: SyntaxTree;
+  }>)[];
 }> = (props) => {
   const { items, symbolTable, onSymbolChange } = props;
 

@@ -4,70 +4,24 @@ import FormGroup from "@mui/material/FormGroup";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment, useMemo } from "react";
-import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
-import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { operatorToLatex } from "$/core/operator";
 import { syntaxTreeRewrite } from "$/core/syntax-tree/rewrite";
 import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
 import { m } from "$/paraglide/messages";
-import type { ExprTree } from "$/types/expression-tree";
 import type { Maybe } from "$/types/generic";
-import type { RewriterRouteLoaderData } from "$/types/loader-data";
 import { Operator } from "$/types/operators";
+import type { SyntaxTree } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
-
-const RewriterOutputItem: FC<{
-  itemNum: number;
-  originalLatex: string;
-  result: Maybe<{ tree: ExprTree; latex: string }>;
-}> = (props) => {
-  const { result, originalLatex, itemNum } = props;
-
-  const primary = result.ok ? (
-    <StyledLatex>
-      {m[
-        "views.rewriter-view.cards.output.text.formula-is-expressed-as-in-the-desired-basis"
-      ]({
-        formula: `$$${originalLatex}\\tag{${itemNum}}$$`,
-        result: `$$\\boxed{${result.latex}}$$`,
-      })}
-    </StyledLatex>
-  ) : (
-    <StyledLatex>
-      {m[
-        "views.rewriter-view.cards.output.text.formula-cannot-be-expressed-in-the-desired-basis"
-      ]({
-        formula: `$$${originalLatex} \\tag{${itemNum}}$$`,
-      })}
-    </StyledLatex>
-  );
-  const secondary = result.ok ? (
-    <TruthTable
-      exprTree={result.tree}
-      slotProps={{
-        container: {
-          maxHeight: "40vh",
-        },
-      }}
-    />
-  ) : (
-    <StyledAlert severity="info">
-      <Typography>
-        {m[
-          "views.rewriter-view.cards.output.infos.truth-table-is-not-available"
-        ]()}
-      </Typography>
-    </StyledAlert>
-  );
-
-  return <ExpressionCard primary={primary} secondary={secondary} />;
-};
+import { RewriterOutputItem } from "./RewriterOutputItem";
 
 export const RewriterViewLayout: FC<{
-  items: RewriterRouteLoaderData["items"];
+  items: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    originalTree: SyntaxTree;
+  }>)[];
   basis: Set<Operator>;
   onBasisChange: (k: Operator, v: boolean) => void;
 }> = (props) => {

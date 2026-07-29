@@ -1,73 +1,10 @@
 import MonacoEditor from "@monaco-editor/react";
-import CheckRounded from "@mui/icons-material/CheckRounded";
-import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded";
-import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import type { editor } from "monaco-editor";
 import { type FC, memo, useCallback, useState } from "react";
-import { m } from "$/paraglide/messages";
+import { ActionRibbon } from "./ActionRibbon";
 import { EditorRibbon } from "./EditorRibbon";
-
-export const CopyButton: FC<{
-  onClick: () => void;
-}> = (props) => {
-  const { onClick } = props;
-  const [hasCopied, setHasCopied] = useState(false);
-
-  return (
-    <Button
-      startIcon={hasCopied ? <CheckRounded /> : <ContentCopyRounded />}
-      onClick={() => {
-        onClick();
-        setHasCopied(true);
-        setTimeout(() => {
-          setHasCopied(false);
-        }, 1000);
-      }}
-      sx={(theme) => ({
-        "&:hover": {
-          color: theme.palette.getContrastText(theme.palette.primary.main),
-          backgroundColor: theme.palette.primary.main,
-        },
-        color: theme.palette.primary.dark,
-        backgroundColor: theme.palette.primary.light,
-      })}
-    >
-      {hasCopied
-        ? m["components.editor.copied"]()
-        : m["components.editor.copy"]()}
-    </Button>
-  );
-};
-
-const ActionRibbon: FC<{
-  onSubmit: () => void;
-  onCopy: () => void;
-}> = (props) => {
-  const { onSubmit, onCopy } = props;
-
-  return (
-    <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-      <Button
-        startIcon={<PlayArrowRounded />}
-        onClick={onSubmit}
-        sx={(theme) => ({
-          "&:hover": {
-            color: theme.palette.getContrastText(theme.palette.primary.main),
-            backgroundColor: theme.palette.primary.main,
-          },
-          color: theme.palette.primary.dark,
-          backgroundColor: theme.palette.primary.light,
-        })}
-      >
-        {m["components.editor.run"]()}
-      </Button>
-      <CopyButton onClick={onCopy} />
-    </Stack>
-  );
-};
 
 export const Editor: FC<{
   placeholder: string;

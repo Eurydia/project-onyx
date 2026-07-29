@@ -4,12 +4,17 @@ import { ExpressionCard } from "$/components/ExpressionCard";
 import { TruthTable } from "$/components/TruthTable";
 import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { m } from "$/paraglide/messages";
-import type { CheckerRouteLoaderData } from "$/types/loader-data";
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { VerdictDisplay } from "./VerdictDisplay";
 
 export const VerdictDisplayMany: FC<{
-  items: CheckerRouteLoaderData["items"];
+  items: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    normalizedTree: SyntaxTree;
+    originalTree: SyntaxTree;
+  }>)[];
 }> = (props) => {
   const { items } = props;
 

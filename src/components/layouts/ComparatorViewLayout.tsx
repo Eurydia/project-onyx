@@ -11,12 +11,16 @@ import { exprTreeFromSyntaxTree } from "$/core/expr-tree/from-syntax-tree";
 import { exprTreeVerifyTautology } from "$/core/expr-tree/verify-tautology";
 import { IFF } from "$/core/syntax-tree/node";
 import { m } from "$/paraglide/messages";
-import type { ComparatorRouteLoaderData } from "$/types/loader-data";
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 import { StyledAlert } from "../styled/StyledAlert";
 import { StyledLatex } from "../styled/StyledLatex";
 
 export const ComparatorViewLayout: FC<{
-  items: ComparatorRouteLoaderData["items"];
+  items: ({ inputRaw: string } & Maybe<{
+    inputInterpretationLatex: string;
+    tree: SyntaxTree;
+  }>)[];
   mainItemIndex: number | null;
   onMainItemIndexChange: (v: number) => void;
 }> = (props) => {

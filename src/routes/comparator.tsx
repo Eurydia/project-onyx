@@ -11,18 +11,15 @@ import { ComparatorViewLayout } from "$/components/layouts/ComparatorViewLayout"
 import { parse } from "$/core/interpreter/parser";
 import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
 import { m } from "$/paraglide/messages";
-import type { ComparatorRouteLoaderData } from "$/types/loader-data";
-
-const inputSearchSchema = z.object({
-  input: z.string().default("").catch(""),
-});
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 
 export const Route = createFileRoute("/comparator")({
-  validateSearch: inputSearchSchema,
+  validateSearch: z.object({
+    input: z.string().default("").catch(""),
+  }),
   loaderDeps: ({ search: { input } }) => ({ input }),
-  loader: ({
-    deps: { input: inputRaw },
-  }): ComparatorRouteLoaderData => {
+  loader: ({ deps: { input: inputRaw } }) => {
     if (inputRaw.trim().length === 0) {
       return {
         userInput: "",
@@ -30,7 +27,10 @@ export const Route = createFileRoute("/comparator")({
       };
     }
 
-    const expressions: ComparatorRouteLoaderData["items"] = [];
+    const expressions: ({ inputRaw: string } & Maybe<{
+      inputInterpretationLatex: string;
+      tree: SyntaxTree;
+    }>)[] = [];
     for (const userInput of inputRaw.split(",")) {
       const parseResult = parse(userInput);
       expressions.push(

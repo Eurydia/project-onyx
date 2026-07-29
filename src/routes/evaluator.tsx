@@ -12,18 +12,15 @@ import { parse } from "$/core/interpreter/parser";
 import { syntaxTreeCollectSymbols } from "$/core/syntax-tree/collect-symbols";
 import { syntaxTreeToLatex } from "$/core/syntax-tree/to-latex";
 import { m } from "$/paraglide/messages";
-import type { EvaluatorRouteLoaderData } from "$/types/loader-data";
-
-const inputSearchSchema = z.object({
-  input: z.string().default("").catch(""),
-});
+import type { Maybe } from "$/types/generic";
+import type { SyntaxTree } from "$/types/syntax-tree";
 
 export const Route = createFileRoute("/evaluator")({
-  validateSearch: inputSearchSchema,
+  validateSearch: z.object({
+    input: z.string().default("").catch(""),
+  }),
   loaderDeps: ({ search: { input } }) => ({ input }),
-  loader: ({
-    deps: { input: userInputRaw },
-  }): EvaluatorRouteLoaderData => {
+  loader: ({ deps: { input: userInputRaw } }) => {
     if (userInputRaw.trim().length === 0) {
       return {
         userInput: "",
@@ -33,7 +30,10 @@ export const Route = createFileRoute("/evaluator")({
     }
 
     const symbols = new Set<string>();
-    const expressions: EvaluatorRouteLoaderData["items"] = [];
+    const expressions: ({ inputRaw: string } & Maybe<{
+      inputInterpretationLatex: string;
+      tree: SyntaxTree;
+    }>)[] = [];
     for (const userInput of userInputRaw.split(",")) {
       const parseResult = parse(userInput);
 
