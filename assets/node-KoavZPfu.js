@@ -1,1 +1,0 @@
-import{b as e,y as t}from"./to-latex-DUFeJUpB.js";var n=n=>({nodeType:t.UNARY,operator:e.NOT,operand:n}),r=(e,n,r)=>({nodeType:t.BINARY,operator:e,left:n,right:r}),i=(t,n)=>r(e.AND,t,n),a=(t,n)=>r(e.OR,t,n),o=(t,n)=>r(e.IMPL,t,n),s=(t,n)=>r(e.IFF,t,n),c=e=>({nodeType:t.CONST,value:e});export{o as a,s as i,r as n,n as o,c as r,a as s,i as t};
