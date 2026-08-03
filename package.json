@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations",
     "build": "vite build && tsc -b",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist -b gh-pages",
