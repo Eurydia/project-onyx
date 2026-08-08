@@ -1,0 +1,1 @@
+import{v as e}from"./to-latex-ChBOpo9Q.js";var t=t=>{let n=new Set,r=[t];for(;r.length>0;){let t=r.shift();if(t===void 0)break;switch(t.nodeType){case e.IDEN:n.add(t.symbol);break;case e.UNARY:r.push(t.operand);break;case e.BINARY:r.push(t.left),r.push(t.right)}}return[...n].toSorted((e,t)=>e.localeCompare(t))};export{t};

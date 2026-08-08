@@ -1,0 +1,1 @@
+import{v as e,y as t}from"./to-latex-ChBOpo9Q.js";var n=n=>({nodeType:e.UNARY,operator:t.NOT,operand:n}),r=(t,n,r)=>({nodeType:e.BINARY,operator:t,left:n,right:r}),i=(e,n)=>r(t.AND,e,n),a=(e,n)=>r(t.OR,e,n),o=(e,n)=>r(t.IMPL,e,n),s=(e,n)=>r(t.IFF,e,n),c=t=>({nodeType:e.CONST,value:t});export{o as a,s as i,r as n,n as o,c as r,a as s,i as t};
