@@ -5,19 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc -b",
+    "build": "vite build ",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist -b gh-pages",
-    "check": "pnpx @biomejs/biome check --write"
+    "check": "pnpx @biomejs/biome check --write && tsc --noEmit",
+    "prebuild": "pnpm check"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@monaco-editor/react": "^4.7.0",
-    "@mui/icons-material": "^9.2.0",
-    "@mui/lab": "9.0.0-beta.6",
-    "@mui/material": "^9.2.0",
-    "@tanstack/react-router": "^1.170.18",
+    "@mui/icons-material": "^9.3.1",
+    "@mui/lab": "9.0.0-beta.8",
+    "@mui/material": "^9.3.1",
+    "@tanstack/react-router": "^1.170.22",
     "katex": "^0.18.1",
     "monaco-editor": "^0.56.0",
     "react": "^19.2.8",
@@ -26,23 +27,23 @@
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
-    "@biomejs/biome": "2.5.5",
-    "@inlang/paraglide-js": "^2.23.0",
+    "@biomejs/biome": "2.5.7",
+    "@inlang/paraglide-js": "^2.23.2",
     "@rolldown/plugin-babel": "^0.2.3",
-    "@tanstack/router-plugin": "^1.168.23",
+    "@tanstack/router-plugin": "^1.168.27",
     "@types/katex": "^0.16.8",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@visx/group": "^4.0.0",
     "@visx/hierarchy": "^4.0.0",
     "@visx/shape": "^4.0.0",
     "@visx/zoom": "^4.0.0",
-    "@vitejs/plugin-react": "^6.0.4",
+    "@vitejs/plugin-react": "^6.0.5",
     "babel-plugin-react-compiler": "^1.0.0",
     "gh-pages": "^6.3.0",
-    "globals": "^17.8.0",
+    "globals": "^17.9.0",
     "ohm-js": "^17.5.0",
     "typescript": "~7.0.2",
-    "vite": "^8.1.5"
+    "vite": "^8.2.1"
   }
 }

@@ -1,8 +1,8 @@
 import Typography from "@mui/material/Typography";
 import { type FC, Fragment } from "react";
+import { exprTreeFromSyntaxTree } from "$/App/core/expr-tree/from-syntax-tree";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { TruthTable } from "$/components/TruthTable";
-import { exprTreeFromSyntaxTree } from "$/App/core/expr-tree/from-syntax-tree";
 import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SyntaxTree } from "$/types/syntax-tree";

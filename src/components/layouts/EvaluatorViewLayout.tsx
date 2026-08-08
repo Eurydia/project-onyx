@@ -1,12 +1,12 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, useMemo } from "react";
+import { exprTreeFromSyntaxTree } from "$/App/core/expr-tree/from-syntax-tree";
 import { EvaluationDisplayMany } from "$/components/EvaluationDisplay";
 import { ExpressionCard } from "$/components/ExpressionCard";
 import { InputDisplayMany } from "$/components/InputDisplay";
 import { PropositionConfig } from "$/components/PropositionConfig";
 import { TruthTable } from "$/components/TruthTable";
-import { exprTreeFromSyntaxTree } from "$/App/core/expr-tree/from-syntax-tree";
 import { m } from "$/libs/paraglide/messages";
 import type { Maybe } from "$/types/generic";
 import type { SymbolTable, SyntaxTree } from "$/types/syntax-tree";

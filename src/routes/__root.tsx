@@ -1,13 +1,13 @@
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { THEME_GLOBAL } from "$/App/theme";
 import { RouterLink } from "$/components/router/router-link";
 import { m } from "$/libs/paraglide/messages";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardHeader from "@mui/material/CardHeader";
 
 export const Route = createRootRoute({
   component: RootRouteComponent,

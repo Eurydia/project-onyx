@@ -1,9 +1,9 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { type FC, memo, useMemo } from "react";
-import { EvaluationGraph } from "$/components/EvaluationGraph";
 import { exprTreeFlattenStepByStep } from "$/App/core/expr-tree/collect-steps";
 import { exprTreeToLatex } from "$/App/core/expr-tree/to-latex";
+import { EvaluationGraph } from "$/components/EvaluationGraph";
 import { m } from "$/libs/paraglide/messages";
 import type { ExprTree } from "$/types/expression-tree";
 import type { SymbolTable } from "$/types/syntax-tree";
